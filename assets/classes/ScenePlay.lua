@@ -117,6 +117,8 @@ function ScenePlay:checkMove(dx, dy)
 	
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
 
+	DEBUG("ScenePlay:checkMove", self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+
 	if not self.heroTurn then return end
 
   if self.active == "look" then 
@@ -144,6 +146,9 @@ function ScenePlay:checkMove(dx, dy)
       self.main.ranged:updateVisualState(false)
       self:attackMonster(self.hero.x + dx, self.hero.y + dy)
     elseif layer == LAYER_ENVIRONMENT then
+	
+
+	
       -- check for blocked tiles
       if tile.blocked then
         self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 

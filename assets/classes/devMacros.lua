@@ -6,7 +6,7 @@
 
 DEBUG @ |print| -- Various manually added DEBUG statements
 INFO @ |print|  -- Print all message box messages to console
-ERROR @ |--print|
+ERROR @ |print|
 
 DEBUG("DEBUG output turned on")
 INFO("INFO output turned on")

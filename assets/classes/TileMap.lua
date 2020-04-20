@@ -20,56 +20,32 @@ function WorldMap:init(hero, monsters)
 	-- needs to be consistent with Constants.lua, but also rendering.
 	local group = Sprite.new()
 	
-	local map = loadfile("level01.lua")()  -- error "attempt to call nil value" means file not found. Check spelling and refresh
-
+	self.map = NewTileMap.new("level01.lua")
 	
-	local map = NewTileMap.new("level01.lua")
-	
-	local layer,array = map:LayerFromMap(1)
-	group:addChild(layer) 
-	table.insert(self.mapLayers, layer)
-	table.insert(self.mapArrays, array)
+	local layer1,array1 = self.map:LayerFromMap(1)
+	group:addChild(layer1) 
+	table.insert(self.mapLayers, layer1)
+	table.insert(self.mapArrays, array1)
 
-	DEBUG(("TileMap:init 1 %dx%d at %d %d %d"):format(layer:getWidth(), layer:getHeight(), layer:getPosition())) 
+	--self:debugMapInfo(LAYER_TERRAIN)
 
-	layer,array = map:LayerFromMap(2)
-	group:addChild(layer) 
-	table.insert(self.mapLayers, layer)
-	table.insert(self.mapArrays, array)
+	local layer2,array2 = self.map:LayerFromMap(2)
+	group:addChild(layer2) 
+	table.insert(self.mapLayers, layer2)
+	table.insert(self.mapArrays, array2)
 
-	DEBUG(("TileMap:init 2 %dx%d at %d %d %d"):format(layer:getWidth(), layer:getHeight(), layer:getPosition())) 
-
---[[
--- TODO FIX temporarily recreate the arrays, until code refactored to use layer direcly
-	-- We won't need the arrays long term, we can just ask the layer for the meta data.
-	local array1 = {}
-	for y=1,LAYER_ROWS do
-		for x=1,LAYER_COLUMNS do
-			local i = index(x, y)
-			--DEBUG(x, y, i, layer.myGround[i])
-			array1[i] = layer.myGround[i]
-		end
-	end	
-	self.mapArrays[LAYER_TERRAIN] = array1
-
-	local array2 = {}
-	for y=1,LAYER_ROWS do
-		for x=1,LAYER_COLUMNS do
-			local i = index(x, y)
-			--DEBUG(x, y, i, layer.myGround[i])
-			array2[i] = layer.myGround[i]
-		end
-	end	
-	self.mapArrays[LAYER_ENVIRONMENT] = array2
-]]
+	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(layer, hero, monsters)
-	self.mapArrays[LAYER_HP] = self:addHP(hero, monsters)
-	self.mapArrays[LAYER_LIGHT] = self:addLight(hero)
-
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", false)
 	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)
+
+	--self:debugMapInfo(LAYER_MONSTERS)
+
+	self.mapArrays[LAYER_HP] = self:addHP(hero, monsters)
+	self.mapArrays[LAYER_LIGHT] = self:addLight(hero)
+
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "images/tileset-health-108px.png", false)
 	--group:addChild(layer) 
@@ -114,13 +90,14 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 	local i, x, y = 0, 0, 0
 	
 	--find an empty spot for each monster 
-	for key, m in ipairs(monsters.list) do
+	for key, m in pairs(monsters.list) do
 		repeat
 			x = math.random(2, LAYER_ROWS - 1)
 			y = math.random(2, LAYER_COLUMNS - 1)
 			i = index(x, y) 
 			--returns true only if there are no monsters there and it's a floor tile
 			--can't use WorldMap:blocked() because monster layer not set yet
+			DEBUG("TileMap:placeMonsters", key, m.name, i, x, y, mArray[i], envArray[i])
 			placed = (mArray[i] == 0) and (envArray[i] == 0) 	
 		until placed 
 		--then add to the array
@@ -135,6 +112,7 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 		x = math.random(5, LAYER_ROWS - 5)
 		y = math.random(5, LAYER_COLUMNS - 5)
 		i = index(x, y)	
+			DEBUG("TileMap:placeMonsters", hero.name, i, x, y, mArray[i], envArray[i])
 		placed = (mArray[i] == 0) and (envArray[i] == 0) 	
 		--can't use WorldMap:blocked() because monster layer not set yet
 	until placed 
@@ -231,31 +209,46 @@ function WorldMap:getTileInfo(x, y, layer)
 	--]]
 
 	local i = index(x, y)
+
+	DEBUG(("TileMap:getTileInfo %d,%d %d %d %d %d"):format(x, 
+					y, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
+	
 	if layer then
 		local array = self.mapArrays[layer]
+		local tile = nil
 		--return the value for the given layer
-		return array[i], layer, manual:getEntry(manual:getEntry("layers", layer), array[i])				 
+		if layer > 2 then
+			-- get tile information from constants
+			tile = manual:getEntry(manual:getEntry("layers", layer), array[i])
+		else
+			tile = self.map.tiles[array[i]]
+		end
+		if tile ~= nil then
+			DEBUG("TileMap:getTileInfo(layer)", x, y, layer, array[i], tile.id, tile.name, tile.blocked)
+		else
+			DEBUG("TileMap:getTileInfo(layer)", x, y, layer, array[i], "no tile")		
+		end			
+		return array[i], layer, tile
 	else
-	--go through the TileMaps arrays, monster layer first
+		--go through remaining layers - which come from tiled
 		for n = 3, 1, -1 do		
 			local array = self.mapArrays[n]
 			--find the first value that isn't 0
 			if array[i] ~= 0 then
-		
-				if manual:getEntry(manual:getEntry("layers", n), array[i]) ~= nil then
-					return array[i], n, manual:getEntry(manual:getEntry("layers", n), array[i])			
+				if n == 3 then
+					-- get tile information from constants
+					local tile = manual:getEntry(manual:getEntry("layers", n), array[i])
+					DEBUG("TileMap:getTileInfo(no layer)", x, y, n, tile.id, tile.name, tile.blocked)
+					return array[i], n, tile			
 				else
-					return array[i], n, manual:getEntry(manual:getEntry("layers", n), array[1])
+					local tile = self.map.tiles[array[i]]
+					DEBUG("TileMap:getTileInfo (no layer) ", x, y, n, tile.id, tile.name, tile.blocked)
+					return array[i], n, tile
 				end
-	
-				--return the value and layer it's on
-				--if i > 2 then
-				--else
-				--	return self.mapLayers[1].myGround[i]
-				--end
 			end
 		end
 	end
+	-- TODO Understand this. Basically if there is no tile, we return nothing?
 end
 
 function WorldMap:changeTile(layer, entry, x, y)
@@ -380,11 +373,10 @@ function WorldMap:blocked(x, y)
 	--return (self.mapLayers[LAYER_MONSTERS] ~= 0) or tilemap:blocked(x,y)
 
 	--getTileInfo returns the highest level layer key that isn't 0
-	local key, layer = self:getTileInfo(x, y)
+	local key, layer, tile = self:getTileInfo(x, y)
 	if layer == LAYER_MONSTERS then
 		return true
 	elseif layer == LAYER_ENVIRONMENT then
-		local tile = manual:getEntry("environment", key)			
 		if tile.blocked == true then
 			return true
 		end
@@ -540,10 +532,10 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 
 	--remove the starting x, y
 	table.remove(line, 1)
-	--DEBUG("TileMap: checking from " .. fromX .. ", " .. fromY .. " to " .. toX .. ", " .. toY .. " for cover")
+	DEBUG("TileMap: checking from " .. fromX .. ", " .. fromY .. " to " .. toX .. ", " .. toY .. " for cover")
 	for key, coordinates in pairs(line) do
 		x, y = coordinates[1], coordinates[2]
-		--DEBUG("TileMap:   checking coordinates " .. x .. ", " .. y)
+		DEBUG("TileMap:   checking coordinates " .. x .. ", " .. y)
 
 		--figure out the cover for what's in the way
 		local key, layer, tile = self:getTileInfo(x, y, LAYER_ENVIRONMENT)
@@ -566,4 +558,29 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 		--DEBUG("TileMap:   cover is  " .. totalCover .. " not blocked")
 	end
 	return totalCover, blockedX, blockedY
+end
+
+
+
+
+
+-- Debug functions
+
+function WorldMap:debugMapInfo(id)
+	DEBUG(("TileMap:debugMapInfo %d layers, %d arrays"):format(#self.mapLayers, #self.mapArrays))
+	DEBUG(("TileMap:debugMapInfo Layer %d %dx%d at %d %d %d"):format(id, self.mapLayers[id]:getWidth(), 
+		self.mapLayers[id]:getHeight(), 
+		self.mapLayers[id]:getPosition()))
+	array = self.mapArrays[id]
+
+	DEBUG(("TileMap:debugMapInfo Array %d %d"):format(id, #array)) 
+	for y = 1, LAYER_ROWS do
+		local s = ""
+		for x = 1, LAYER_COLUMNS do
+			local i = index(x,y)
+			s = s .. array[i] .. " "
+		end
+		DEBUG(s)
+	end
+
 end

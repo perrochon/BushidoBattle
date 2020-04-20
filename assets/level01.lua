@@ -118,7 +118,7 @@ return {
         {
           id = 54,
           properties = {
-            ["Description"] = "a rock",
+            ["description"] = "a rock",
             ["blocked"] = "true"
           },
           image = "../tiled/tiles/Tree_Crown_02.png",
@@ -128,7 +128,7 @@ return {
         {
           id = 55,
           properties = {
-            ["Description"] = "a rock",
+            ["description"] = "a rock",
             ["blocked"] = "true"
           },
           image = "../tiled/tiles/Tree_Crown_03.png",
@@ -138,7 +138,7 @@ return {
         {
           id = 56,
           properties = {
-            ["Description"] = "a rock",
+            ["description"] = "a rock",
             ["blocked"] = "true"
           },
           image = "../tiled/tiles/Tree_Crown_04.png",

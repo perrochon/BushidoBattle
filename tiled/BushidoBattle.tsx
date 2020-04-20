@@ -25,7 +25,7 @@
  <tile id="14">
   <properties>
    <property name="blocked" value="true"/>
-   <property name="description" value="a rock"/>
+   <property name="description" value="rock"/>
   </properties>
   <image width="100" height="100" source="tiles/Boulder_04.png"/>
  </tile>
@@ -59,21 +59,21 @@
  </tile>
  <tile id="54">
   <properties>
-   <property name="Description" value="a rock"/>
+   <property name="description" value="rock"/>
    <property name="blocked" value="true"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_02.png"/>
  </tile>
  <tile id="55">
   <properties>
-   <property name="Description" value="a rock"/>
+   <property name="description" value="rock"/>
    <property name="blocked" value="true"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_03.png"/>
  </tile>
  <tile id="56">
   <properties>
-   <property name="Description" value="a rock"/>
+   <property name="description" value="rock"/>
    <property name="blocked" value="true"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_04.png"/>

@@ -11,8 +11,8 @@ function NewTileMap:init(levelName)
 
 	-- load .lua file exported from tiled
 	DEBUG("NewTileMap:init Loading map", levelName)
-	self.map = loadfile(levelName)()  
-
+	self.map = loadfile(levelName)() -- error "attempt to call nil value" means file not found. Check spelling and refresh
+	
 	DEBUG("NewTileMap:init   "..self.map.properties["Title"])
 	DEBUG(("NewTileMap:init   Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))
 	DEBUG("NewTileMap:init   Number of tilesets: ", #self.map.tilesets)
@@ -33,20 +33,25 @@ function NewTileMap:init(levelName)
 		tile.blocked = self.tileset.tiles[i].properties.blocked == "true" and true or false
 		tile.name = self.tileset.tiles[i].properties.description
 		tile.image = self.tileset.tiles[i].image:sub(16) --- TODO FIX the path issue
+		tile.cover = self.tileset.tiles[i].blocked and self.tileset.tiles[i].blocked or 0 -- TODO FIX cover info into tilemap
 		self.tiles[tile.id] = tile                        
 	end
 
-	-- Make sure we got everything
+	-- Make sure we got everything, move this code into separate function
 	for k, v in pairs(self.tiles) do
-		--DEBUG("newTileMap:init", k, v.id, v.name, v.image, v.blocked)
-		if v.image == nil or v.name == nil or v.blocked == nil then
+		DEBUG("newTileMap:init", k, v.id, v.name, v.image, v.blocked, v.cover)
+		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
 			ERROR("ERROR: newTileMap:init Missing Data in tile", key, v.image, v.name)
+			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here
+			if v.name == nil then v.name = "thing" end
+			if v.blocked == nil then v.blocked = false end
+			if v.cover == nil then v.cover = 0 end
 			if self.pack:getTextureRegion(v.image) == nil then
 				ERROR("ERROR: newTileMap:init no image found in texture pack", key, v.image, v.name)
+				v.image = "Floor_Grass.png" -- TODO create error image and show here. Also merge with above
 			end
 		end
 	end
-	return self
 end
 
 function NewTileMap:LayerFromMap(number)
@@ -96,7 +101,6 @@ function NewTileMap:LayerFromMap(number)
 					FLIPPED_VERTICALLY_FLAG |
 					FLIPPED_DIAGONALLY_FLAG
 				)
-
 				array[i] = gid
 				image = self.tiles[gid].image
 				region = self.pack:getTextureRegion(image)
@@ -108,6 +112,8 @@ function NewTileMap:LayerFromMap(number)
 				
 				usedTiles[image] = usedTiles[image] and usedTiles[image]+1 or 0
 				--usedTiles[image] = gid
+			else
+				array[i] = 0
 			end
 		end
 	end
@@ -116,9 +122,7 @@ function NewTileMap:LayerFromMap(number)
 	for k, v in pairs(usedTiles) do
 		--DEBUG(k, v)
 	end
-
-	DEBUG("NewTileMap:NewLayerFromMap Loaded layer", number)
-
+	
 	return layer, array
 end	
 
