@@ -9,13 +9,13 @@ VERSION = "0.6"
 -- Here to run early, maybe that makes it work
 pcall(function() FBInstant=require "FBInstant" end)
 if FBInstant then
-	DEBUG("Constants: FBInstant loaded")
+	DEBUG("FBInstant loaded")
 	FBInstant.startGameAsync(function() 
-		DEBUG("Constants: Loading screen removed. FBInstantAPI loaded")
+		DEBUG("Loading screen removed. FBInstantAPI loaded")
 		FBInstantAPI=true
 	end)
 else
-	DEBUG("Constants: FBInstant not loaded")
+	DEBUG("FBInstant not loaded")
 end
 
 

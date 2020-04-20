@@ -70,7 +70,6 @@ function WorldMap:init(hero, monsters)
 
 end
 
-
 function WorldMap:placeMonsters(tilemap, hero, monsters)
 	--[[Return an array to represent the monsters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
@@ -97,7 +96,7 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 			i = index(x, y) 
 			--returns true only if there are no monsters there and it's a floor tile
 			--can't use WorldMap:blocked() because monster layer not set yet
-			DEBUG("TileMap:placeMonsters", key, m.name, i, x, y, mArray[i], envArray[i])
+			--DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
 			placed = (mArray[i] == 0) and (envArray[i] == 0) 	
 		until placed 
 		--then add to the array
@@ -112,7 +111,7 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 		x = math.random(5, LAYER_ROWS - 5)
 		y = math.random(5, LAYER_COLUMNS - 5)
 		i = index(x, y)	
-			DEBUG("TileMap:placeMonsters", hero.name, i, x, y, mArray[i], envArray[i])
+		--DEBUG(hero.name, i, x, y, mArray[i], envArray[i])
 		placed = (mArray[i] == 0) and (envArray[i] == 0) 	
 		--can't use WorldMap:blocked() because monster layer not set yet
 	until placed 
@@ -200,7 +199,6 @@ function WorldMap:returnTileMap3(mapArray, tileset, flip)
 
 end
 
-
 function WorldMap:getTileInfo(x, y, layer) 
 	--[[Return the tile key, layer and tile information for a location on the map. 
 				if no TileMap layer is specified, it returns the highest layer with a value.  
@@ -210,8 +208,7 @@ function WorldMap:getTileInfo(x, y, layer)
 
 	local i = index(x, y)
 
-	DEBUG(("TileMap:getTileInfo %d,%d %d %d %d %d"):format(x, 
-					y, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
+	--DEBUG(("%d,%d %d %d %d %d"):format(x, y, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
 	
 	if layer then
 		local array = self.mapArrays[layer]
@@ -224,9 +221,9 @@ function WorldMap:getTileInfo(x, y, layer)
 			tile = self.map.tiles[array[i]]
 		end
 		if tile ~= nil then
-			DEBUG("TileMap:getTileInfo(layer)", x, y, layer, array[i], tile.id, tile.name, tile.blocked)
+			--DEBUG(x, y, layer, array[i], tile.id, tile.name, tile.blocked)
 		else
-			DEBUG("TileMap:getTileInfo(layer)", x, y, layer, array[i], "no tile")		
+			--DEBUG(x, y, layer, array[i], "no tile")		
 		end			
 		return array[i], layer, tile
 	else
@@ -238,11 +235,11 @@ function WorldMap:getTileInfo(x, y, layer)
 				if n == 3 then
 					-- get tile information from constants
 					local tile = manual:getEntry(manual:getEntry("layers", n), array[i])
-					DEBUG("TileMap:getTileInfo(no layer)", x, y, n, tile.id, tile.name, tile.blocked)
+					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile			
 				else
 					local tile = self.map.tiles[array[i]]
-					DEBUG("TileMap:getTileInfo (no layer) ", x, y, n, tile.id, tile.name, tile.blocked)
+					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile
 				end
 			end
@@ -532,10 +529,10 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 
 	--remove the starting x, y
 	table.remove(line, 1)
-	DEBUG("TileMap: checking from " .. fromX .. ", " .. fromY .. " to " .. toX .. ", " .. toY .. " for cover")
+	--DEBUG(fromX, fromY, toX, toY, " for cover")
 	for key, coordinates in pairs(line) do
 		x, y = coordinates[1], coordinates[2]
-		DEBUG("TileMap:   checking coordinates " .. x .. ", " .. y)
+		--DEBUG(x, y)
 
 		--figure out the cover for what's in the way
 		local key, layer, tile = self:getTileInfo(x, y, LAYER_ENVIRONMENT)
@@ -553,9 +550,9 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 		end
 	end
 	if blockedX then
-		--DEBUG("TileMap:   cover is  " .. totalCover .. " blocked at " .. blockedX .. "," .. blockedY )
+		--DEBUG("cover is  ", totalCover, " blocked at ", blockedX, blockedY )
 	else
-		--DEBUG("TileMap:   cover is  " .. totalCover .. " not blocked")
+		--DEBUG("cover is  ", totalCover, " not blocked")
 	end
 	return totalCover, blockedX, blockedY
 end
@@ -566,14 +563,15 @@ end
 
 -- Debug functions
 
+
 function WorldMap:debugMapInfo(id)
-	DEBUG(("TileMap:debugMapInfo %d layers, %d arrays"):format(#self.mapLayers, #self.mapArrays))
-	DEBUG(("TileMap:debugMapInfo Layer %d %dx%d at %d %d %d"):format(id, self.mapLayers[id]:getWidth(), 
+	DEBUG(("Array %d layers, %d arrays"):format(#self.mapLayers, #self.mapArrays))
+	DEBUG(("Layer %d %dx%d at %d %d %d"):format(id, self.mapLayers[id]:getWidth(), 
 		self.mapLayers[id]:getHeight(), 
 		self.mapLayers[id]:getPosition()))
 	array = self.mapArrays[id]
 
-	DEBUG(("TileMap:debugMapInfo Array %d %d"):format(id, #array)) 
+	DEBUG(("Array %d %d"):format(id, #array)) 
 	for y = 1, LAYER_ROWS do
 		local s = ""
 		for x = 1, LAYER_COLUMNS do

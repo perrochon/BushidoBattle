@@ -8,7 +8,7 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO 
-		- Environment layer only from tiled
+		- Fix HP layer
 		- monster placed in tiled
 		- check for obstacles on diagonal moves. 
 		- update routefinding for diagonal
@@ -53,4 +53,4 @@ sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 --pixel:setPosition(650,650)
 --stage:addChild(pixel)
 
-print("\n\nBushido Battle Started.")
+INFO("\n\nBushido Battle Started.")

@@ -7,7 +7,7 @@ SceneLobby = Core.class(Sprite)
 function SceneLobby:init()
 
 	local newHero = Player.new() 
-	--DEBUG("SceneLobby: made " .. newHero.name .. " level " .. newHero.level)		
+	--DEBUG("made " .. newHero.name .. " level " .. newHero.level)		
 
 	local heroDescription = "Fresh Hero\n\n"
 	heroDescription = heroDescription .. "Name: " .. newHero.name .."\n"
@@ -66,7 +66,7 @@ function SceneLobby:init()
 		end)
 
 	else
-		print("No saved hero found.")
+		INFO("No saved hero found.")
 	end
 	
 end

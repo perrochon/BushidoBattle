@@ -8,18 +8,19 @@ function NewTileMap:init(levelName)
 	-- TODO FIX parametrize file names
 	local texturePack = "bushidobattle.png"
 	local textureIndex = "bushidobattle.txt"
-
+	
+	INFO("Map File:    ", levelName)
+	INFO("Texture Pack:", texturePack)
 	-- load .lua file exported from tiled
-	DEBUG("NewTileMap:init Loading map", levelName)
 	self.map = loadfile(levelName)() -- error "attempt to call nil value" means file not found. Check spelling and refresh
 	
-	DEBUG("NewTileMap:init   "..self.map.properties["Title"])
-	DEBUG(("NewTileMap:init   Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))
-	DEBUG("NewTileMap:init   Number of tilesets: ", #self.map.tilesets)
-	DEBUG("NewTileMap:init   Number of layers: ", #self.map.layers)
+	INFO(self.map.properties["Title"])
+	INFO(("Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))
+	INFO("Number of tilesets: ", #self.map.tilesets)
+	INFO("Number of layers: ", #self.map.layers)
 
 	-- load texture pack exported from Gideros Texture Packer
-	DEBUG("NewTileMap:init   Loading texture pack", texturePack)
+	--DEBUG("Loading texture pack", texturePack)
 	self.pack = TexturePack.new(textureIndex, texturePack)
 
 	-- Get all tiles from the editor map and look them up in the texture pack
@@ -27,7 +28,7 @@ function NewTileMap:init(levelName)
 	self.tiles = {}
 	for i = 1, self.tileset.tilecount do
 		--DEBUG(i, self.tileset.tiles[i].id, self.tileset.tiles[i].image:sub(7))
-		--DEBUG("", (pack:getTextureRegion(tileset.tiles[i].image:sub(7))):getRegion())
+		--DEBUG((pack:getTextureRegion(tileset.tiles[i].image:sub(7))):getRegion())
 		local tile = {}
 		tile.id = self.tileset.tiles[i].id
 		tile.blocked = self.tileset.tiles[i].properties.blocked == "true" and true or false
@@ -39,7 +40,7 @@ function NewTileMap:init(levelName)
 
 	-- Make sure we got everything, move this code into separate function
 	for k, v in pairs(self.tiles) do
-		DEBUG("newTileMap:init", k, v.id, v.name, v.image, v.blocked, v.cover)
+		--DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
 		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
 			ERROR("ERROR: newTileMap:init Missing Data in tile", key, v.image, v.name)
 			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here
@@ -57,8 +58,7 @@ end
 function NewTileMap:LayerFromMap(number)
 	-- Layer 1 Terrain with basic ground tiles like grass, water, stone, etc.
 	
-	DEBUG("NewTileMap:NewLayerFromMap loading layer", number)
-
+	--DEBUG(number)
 
 	local FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 	local FLIPPED_VERTICALLY_FLAG   = 0x40000000;

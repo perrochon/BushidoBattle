@@ -28,7 +28,7 @@ function Messages:add(text, type)
 				The type assigns the color
 	--]]
 	
-	INFO("                           " .. text)
+	INFO("Message                           " .. text)
 	
 	local t = tostring(text)
 	local msg = TextField.new(FONT_MEDIUM, t, true)

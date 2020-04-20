@@ -113,11 +113,9 @@ function ScenePlay:checkMove(dx, dy)
 	--]]
 	-- first we need the tile key and layer for where the hero wants to move
 	
-	--DEBUG("ScenePlay: checkMove")
-	
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
 
-	DEBUG("ScenePlay:checkMove", self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+	--DEBUG(self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
 	if not self.heroTurn then return end
 
@@ -172,8 +170,6 @@ function ScenePlay:checkMove(dx, dy)
 	--]]
 
 
-	DEBUG("ScenePlay:onMouseUp")
-
 	--only check visible parts of the map
 	local x = self.hero.x + math.ceil(event.x / TILE_WIDTH) - 6
 	local y = self.hero.y + math.ceil(event.y / TILE_HEIGHT) - 6
@@ -185,7 +181,7 @@ function ScenePlay:checkMove(dx, dy)
 		--local key, layer, tile = self.world:getTileInfo(x, y)
 		local key, layer, tile = self.world:getTileInfo(x, y)
 		
-		DEBUG("ScenePlay:onMouseUp Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
+		DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
 		
 		if self.active == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
@@ -210,12 +206,12 @@ function ScenePlay:checkMove(dx, dy)
 				else
 					if y > self.hero.y then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				DEBUG(("ScenePlay:onMouseUp Hero is at %d,%d walking %d,%d"):format(self.hero.x, self.hero.y, dx, dy))
+				DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.hero.x, self.hero.y, dx, dy))
 				self:checkMove(dx, dy)
 			end
 		end
 	else
-		DEBUG(("ScenePlay:onMouseUp Touch outside visible map at %d,%d"):format(event.x, event.y))
+		DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
 	end
 end
 
@@ -223,7 +219,7 @@ function ScenePlay:heroTurnOver()
 	--[[puts in one place all the things we want to keep track of after the hero's turn is done 
 	--]]
 
-	--DEBUG("ScenePlay:heroTurnOver")
+	--DEBUG("")
 
 	--find the monster being attacked and their index in monsters.list 
 	for id, m in pairs(self.monsters.list) do
@@ -260,7 +256,7 @@ function ScenePlay:heroTurnOver()
 		m.done = false
 		self.monsters:updateState(m, id, self.hero)
 		if (m.hp > 0) then -- redundant, as we remove dead monsters now explicitely
-			--DEBUG("ScenePlay: Playing " .. m.name .. " at " .. m.x .. " " .. m.y)
+			--DEBUG("Playing " .. m.name .. " at " .. m.x .. " " .. m.y)
 			self:monsterAI(m)
 		end	
 	end	
@@ -274,10 +270,10 @@ function ScenePlay:monsterTurnOver()
 		done = done and m.done
 	end
 	if not done then 
-		--DEBUG("ScenePlay: monsterTurnOver - not done")
+		--DEBUG("not done")
 		return
 	else
-		--DEBUG("ScenePlay: monsterTurnOver - done -------------------------------")
+		--DEBUG("done -------------------------------")
 	end
 	
 	--after all the monsters attacked, check if the hero lost
@@ -404,7 +400,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	end
 	self:addChild(p)
 	p:addEventListener("animation finished", function(event)
-		--DEBUG("ScenePlay: EventListener called")
+		--DEBUG("Anonymous EventListener")
 		event:stopPropagation()
 		if blockedX then
 			local key, layer, tile = self.world:getTileInfo(blockedX, blockedY)
@@ -437,7 +433,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 				self:rollDamage(weapon, attacker, defender, crit)
 			end
 		end
-		--DEBUG("ScenePlay: EventListener heroTurn is " .. boolToString(true))
+		--DEBUG("Anonymous EventListener heroTurn is " .. boolToString(true))
 		if self.heroTurn then 
 			self:heroTurnOver() 
 		else
@@ -539,14 +535,11 @@ function ScenePlay:cheater(want)
 
 	if self.cheatcount == want then
 		self.cheatcount += 1
-		--DEBUG("ScenePlay: cheatcount increase to " .. self.cheatcount)
+		--DEBUG("cheatcount increase to " .. self.cheatcount)
 		return true
 	else
 		self.cheatcount = 0
-		--DEBUG("ScenePlay: cheatcount reset to 0")
+		--DEBUG("cheatcount reset to 0")
 		return false
 	end
 end
-
-
-

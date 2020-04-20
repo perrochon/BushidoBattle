@@ -145,5 +145,5 @@ function Monsters:updateState(monster, id, hero)
 	end
 	local inrange
 	if monster.inrange then inrange = "yes" else inrange = "no" end
-	--DEBUG("Monsters: Monster " .. monster.name .. " state is " .. monster.state .. " - inrange " .. inrange)
+	--DEBUG("Monster " .. monster.name .. " state is " .. monster.state .. " - inrange " .. inrange)
 end

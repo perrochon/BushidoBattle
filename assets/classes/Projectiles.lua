@@ -44,7 +44,7 @@ function Projectile:init(pName, fromX, fromY, toX, toY)
 	p:setRotation(angle)
 	self:addChild(p)
 
-	DEBUG("Projectiles: Created " .. pName)
+	--DEBUG("Created " .. pName)
 	
 	self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)	
 	self:addEventListener(Event.REMOVED_FROM_STAGE, self.onRemovedFromStage, self)

@@ -41,7 +41,7 @@ function SceneStart:init()
 		text:setPosition(100, 1000)
 		text:setAlpha(0.2)
 		self:addChild(text)
-		print ("SceneStart: FBInstant loaded")
+		INFO("SceneStart: FBInstant loaded")
 
 		if FBInstantAPI then
 			local text = TextField.new(FONT_SMALL, "FBInstantAPI")
@@ -49,7 +49,7 @@ function SceneStart:init()
 			text:setPosition(100, 200)
 			text:setAlpha(0.2)
 			self:addChild(text)
-		print ("SceneStart: FBInstantAPI loaded")
+		INFO("SceneStart: FBInstantAPI loaded")
 		else
 			local text = TextField.new(FONT_SMALL, "FBInstantAPI not loaded")
 			text:setTextColor(COLOR_YELLOW)	
@@ -64,7 +64,7 @@ function SceneStart:init()
 		text:setPosition(100, 100)
 		text:setAlpha(0.2)
 		self:addChild(text)
-		print ("SceneStart: FBInstant not loaded")
+		INFO("SceneStart: FBInstant not loaded")
 	end
 
 
