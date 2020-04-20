@@ -1,0 +1,8 @@
+About player vs export differences, there are few well known ones:
+- in the player, files are uploaded independently, and neither encrypted nor compiled. During export lua files are compiled, merged together (unless excluded from execution), and then encrypted (if required)
+- in the prebuilt desktop player, all plugins are available even if not selected in the project. On export only those selected are actually exported
+- on windows, file names are not case sensitive, but they are on most other platforms
+
+About the 'exclude from execution': in Gideros all lua files are read and executed by default, you don't need to 'require' them, and if you do those files will be parsed twice. To tell Gideros that a particular file shouldn't be read and executed by default, you "exclude (it) from execution". During export, and unlike on the player, files meant to be executed on start are merged together in a single, compiled main.lua file. This shouldn't cause any trouble since they are not expected to be require'ed or loaded from some other lua code. Gideros 2020.4 will have an option to only load main.lua by default.
+
+Now about the assets folder: this is a relatively new addition. Gideros used to have a virtual file hierarchy, in which all files were just links to real files anywhere on your hard drive. This was inconvenient when working with versionning systems, archiving projects and other related stuff. Gideros now has an assets folder that is synchronized with the studio's file view. If you create files from the studio, they go in that folder. If you add files externally into this folder, then they will appear in the studio on next 'Refresh'. Links still exists though, they are marked with a little 'chain' icon in the studio.

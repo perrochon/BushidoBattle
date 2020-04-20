@@ -1,0 +1,29 @@
+<library>
+ <properties padding="0" forceSquare="0" alphaThreshold="0" extrude="0" removeAlphaBorder="0" showUnusedAreas="1"/>
+ <file file="../tiles/Well_With_Base_2x2.png"/>
+ <file file="../tiles/Tree_Crown_04.png"/>
+ <file file="../tiles/Tree_Crown_03.png"/>
+ <file file="../tiles/Tree_Crown_02.png"/>
+ <file file="../tiles/Tree_Crown_01.png"/>
+ <file file="../tiles/Roof_Thatched.png"/>
+ <file file="../tiles/Puddle_2x2_A.png"/>
+ <file file="../tiles/Path_Thin_2x2_B.png"/>
+ <file file="../tiles/Path_Thin_2x2_A.png"/>
+ <file file="../tiles/Floor_Wheat.png"/>
+ <file file="../tiles/Floor_Water.png"/>
+ <file file="../tiles/Floor_Rock.png"/>
+ <file file="../tiles/Floor_Grass.png"/>
+ <file file="../tiles/Dungeon_Straight_2x2_1-1.png"/>
+ <file file="../tiles/Dungeon_Corner_Out_2x2_1-1.png"/>
+ <file file="../tiles/Dungeon_Corner_In_2x2_1-1_Round.png"/>
+ <file file="../tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png"/>
+ <file file="../tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png"/>
+ <file file="../tiles/Building_Tower_Octagon_2sq_4x4.png"/>
+ <file file="../tiles/Building_Tower_3sq_5x5.png"/>
+ <file file="../tiles/Building_I_01_4x6.png"/>
+ <file file="../tiles/Boulder_04.png"/>
+ <file file="../tiles/Boulder_03.png"/>
+ <file file="../tiles/Boulder_02.png"/>
+ <file file="../tiles/Boulder_01.png"/>
+ <file file="../tiles/Black_Patch.png"/>
+</library>

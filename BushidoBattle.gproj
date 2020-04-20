@@ -1,0 +1,94 @@
+<project>
+ <properties html5_fbinstant="0" autorotation="0" packageName="com.yourdomain.yourapp" build_number="1" osx_installerId="" windowHeight="0" osx_signingId="" html5_fbload="50" encryptAssets="0" version_code="1" logicalHeight="1920" html5_pack="1" fps="60" version="1.0" ios_bundle="com.yourdomain." winrt_org="GiderosMobile" osx_category="5" vsync="0" html5_crash="" logicalWidth="1200" app_name="Bushido Battle" osx_bundle="com.yourdomain." mouseTouchOrder="0" scaleMode="3" encryptCode="0" orientation="1" touchToMouse="1" exportMode="0" retinaDisplay="0" iosDevice="0" html5_symbols="0" html5_host="" splash_h_image="" win_domain="giderosmobile.com" osx_org="GiderosMobile" tv_icon="" winrt_package="com.yourdomain.yourapp" backgroundColor="#000000" architecture="7" disableSplash="1" splashScaleMode="0" html5_wasm="0" splash_v_image="" mouseToTouch="1" osx_domain="giderosmobile.com" windowWidth="0" app_icon="other/Icon.png" win_org="GiderosMobile" android_template="0" html5_mem="256">
+  <imageScales/>
+  <plugins>
+   <plugin enabled="1" name="JSON"/>
+  </plugins>
+  <exports>
+   <export name="APK">
+    <property name="androidPath" value=""/>
+    <property name="androidSdk" value=""/>
+    <property name="androidTarget" value="28"/>
+    <property name="androidTools" value=""/>
+    <property name="buildAab" value="0"/>
+    <property name="buildApk" value="0"/>
+    <property name="deployApk" value="0"/>
+    <property name="javaPath" value=""/>
+    <property name="keyAlias" value=""/>
+    <property name="keyStore" value=""/>
+    <property name="packageName" value="com.zwsi.bushidobattle"/>
+    <property name="timestampApk" value="1"/>
+   </export>
+  </exports>
+ </properties>
+ <folder name="classes">
+  <file name="assets/classes/Button.lua"/>
+  <file name="assets/classes/Constants.lua"/>
+  <file name="assets/classes/MainScreen.lua"/>
+  <file name="assets/classes/Messages.lua"/>
+  <file name="assets/classes/Monsters.lua"/>
+  <file name="assets/classes/Player.lua"/>
+  <file name="assets/classes/Projectiles.lua"/>
+  <file name="assets/classes/SceneDeath.lua"/>
+  <file name="assets/classes/SceneLobby.lua"/>
+  <file name="assets/classes/ScenePlay.lua"/>
+  <file name="assets/classes/SceneStart.lua"/>
+  <file name="assets/classes/SceneVictory.lua"/>
+  <file name="assets/classes/Sounds.lua"/>
+  <file name="assets/classes/TileMap.lua"/>
+  <file name="assets/classes/dataSaver.lua"/>
+  <file name="assets/classes/devMacros.lua"/>
+  <file name="assets/classes/main.lua"/>
+  <file name="assets/classes/newTileMap.lua"/>
+  <file name="assets/classes/scenemanager.lua"/>
+ </folder>
+ <folder name="fonts">
+  <file name="assets/fonts/IMMORTAL.ttf"/>
+  <file name="assets/fonts/immortal_XL.png"/>
+  <file name="assets/fonts/immortal_XL.txt"/>
+  <file name="assets/fonts/immortal_large.png"/>
+  <file name="assets/fonts/immortal_large.txt"/>
+  <file name="assets/fonts/immortal_medium.png"/>
+  <file name="assets/fonts/immortal_medium.txt"/>
+  <file name="assets/fonts/immortal_small.png"/>
+  <file name="assets/fonts/immortal_small.txt"/>
+ </folder>
+ <folder name="images">
+  <file name="assets/images/BushidoBattleMaze.png"/>
+  <file name="assets/images/BushidoBattleMaze.txt"/>
+  <file name="assets/images/Dungeon_Floor_2x2.jpg"/>
+  <file name="assets/images/Dungeon_Floor_2x2.png"/>
+  <file name="assets/images/Sparse_Grass_Bright.jpg"/>
+  <file name="assets/images/foreground.png"/>
+  <file name="assets/images/texturepack-icons-144px.png"/>
+  <file name="assets/images/texturepack-projectiles-108px.png"/>
+  <file name="assets/images/tileset-environment-108px.png"/>
+  <file name="assets/images/tileset-health-108px.png"/>
+  <file name="assets/images/tileset-light-108px.png"/>
+  <file name="assets/images/tileset-monsters-108px.png"/>
+  <file name="assets/images/tileset-terrain-108px.png"/>
+ </folder>
+ <folder name="sounds">
+  <file name="assets/sounds/footsteps-02.wav"/>
+  <file name="assets/sounds/footsteps-03.wav"/>
+  <file name="assets/sounds/footsteps-fast.wav"/>
+  <file name="assets/sounds/footsteps-light.wav"/>
+  <file name="assets/sounds/footsteps-one.wav"/>
+  <file name="assets/sounds/melee_hit.mp3"/>
+  <file name="assets/sounds/melee_hit.wav"/>
+  <file name="assets/sounds/melee_hit2.wav"/>
+  <file name="assets/sounds/melee_miss.mp3"/>
+  <file name="assets/sounds/music-death.mp3"/>
+  <file name="assets/sounds/music-title.mp3"/>
+  <file name="assets/sounds/music-victory.mp3"/>
+ </folder>
+ <file name="assets/bushidobattle.png"/>
+ <file name="assets/bushidobattle.txt"/>
+ <file name="assets/fbapp-config.json"/>
+ <file name="assets/level01.lua"/>
+ <dependency to="assets/classes/devMacros.lua" from="assets/classes/Constants.lua"/>
+ <dependency to="assets/classes/Constants.lua" from="assets/classes/TileMap.lua"/>
+ <dependency to="assets/classes/Constants.lua" from="assets/classes/main.lua"/>
+ <dependency to="assets/classes/devMacros.lua" from="assets/classes/main.lua"/>
+ <dependency to="assets/classes/scenemanager.lua" from="assets/classes/main.lua"/>
+</project>
