@@ -20,15 +20,15 @@ function NewTileMap:init(levelName)
 	INFO("Number of layers: ", #self.map.layers)
 
 	-- load texture pack exported from Gideros Texture Packer
-	--DEBUG("Loading texture pack", texturePack)
+	DEBUG("Loading texture pack", texturePack)
 	self.pack = TexturePack.new(textureIndex, texturePack)
 
 	-- Get all tiles from the editor map and look them up in the texture pack
 	self.tileset = self.map.tilesets[1] -- Only one tile set (for now?)
 	self.tiles = {}
 	for i = 1, self.tileset.tilecount do
-		--DEBUG(i, self.tileset.tiles[i].id, self.tileset.tiles[i].image:sub(7))
-		--DEBUG((pack:getTextureRegion(tileset.tiles[i].image:sub(7))):getRegion())
+		--DEBUG("Getting tile", i, self.tileset.tiles[i].id, self.tileset.tiles[i].image:sub(16)) -- TODO FIX PATH ISSUE
+		--DEBUG((self.pack:getTextureRegion(self.tileset.tiles[i].image:sub(16))):getRegion()) -- TODO FIX PATH ISSUE
 		local tile = {}
 		tile.id = self.tileset.tiles[i].id
 		tile.blocked = self.tileset.tiles[i].properties.blocked == "true" and true or false
@@ -60,9 +60,10 @@ function NewTileMap:LayerFromMap(number)
 	
 	--DEBUG(number)
 
-	local FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
-	local FLIPPED_VERTICALLY_FLAG   = 0x40000000;
-	local FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
+	
+	--local FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+	--local FLIPPED_VERTICALLY_FLAG   = 0x40000000;
+	--local FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
 	local array  = {} -- array contains id's of the tiles
 	local usedTiles = {} -- DEBUG set of used tiles in this layer
@@ -84,34 +85,41 @@ function NewTileMap:LayerFromMap(number)
 		for x=1,layerData.width do
 			local i = x + (y - 1) * layerData.width -- TODO FIX use index() ? 
 			local gid = layerData.data[i] - 1 -- TODO FIX Get correct offset from map's ("firstgid")
-			--DEBUG(i, x, y, gid)
 			if gid > 0 then 
-			
-				-- Read flipping flags
-				flipHor = gid & FLIPPED_HORIZONTALLY_FLAG
-				flipVer = gid & FLIPPED_VERTICALLY_FLAG
-				flipDia = gid & FLIPPED_DIAGONALLY_FLAG
-				-- Convert flags to gideros style
-				if(flipHor ~= 0) then flipHor = TileMap.FLIP_HORIZONTAL end
-				if(flipVer ~= 0) then flipVer = TileMap.FLIP_VERTICAL end
-				if(flipDia ~= 0) then flipDia = TileMap.FLIP_DIAGONAL end
-				-- Clear the flags from gid so other information is healthy
-				gid = gid & ~ (
-					FLIPPED_HORIZONTALLY_FLAG |
-					FLIPPED_VERTICALLY_FLAG |
-					FLIPPED_DIAGONALLY_FLAG
-				)
+							
+				local flip = 0
+				if gid > 1000000 then 
+					-- skip bitwise comparison for non rotated tiles. Will break at 1 million tiles
+					-- Documentation on tile flipping: http://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping
+					gid64 = int64.new(gid)
+					-- Read flipping flags
+					if gid64[31] ~= gid64[28] then flip = flip | TileMap.FLIP_HORIZONTAL end -- TODO FIX there must be a better way for condition
+					if gid64[30] ~= gid64[28] then flip = flip | TileMap.FLIP_VERTICAL end
+					if gid64[29] ~= gid64[28] then flip = flip | TileMap.FLIP_DIAGONAL end							
+					-- Clear the flags from gid so other information is healthy
+					gid64[31]=0
+					gid64[30]=0
+					gid64[29]=0
+					-- gid = tonumber(tostring(gid64)) -- TODO FIX is this really necessary?
+					gid = gid64()
+					DEBUG("rotating tile", x, y, gid, gid64[31], gid64[31], gid64[31], flip)
+				end
+				
 				array[i] = gid
-				image = self.tiles[gid].image
-				region = self.pack:getTextureRegion(image)
-				tx, ty = region:getRegion()
-				
-				--DEBUG(i, x, y, gid, image, tx/100+1, ty/100+1)
-				layer:setTile(x, y, tx/100+1, ty/100+1,(flipHor | flipVer | flipDia))
-				--DEBUG(i, x, y, terrain:getTile(x, y))
-				
-				usedTiles[image] = usedTiles[image] and usedTiles[image]+1 or 0
-				--usedTiles[image] = gid
+				if gid ~= 0 then
+					image = self.tiles[gid].image
+					if image ~= nil then
+						region = self.pack:getTextureRegion(image)
+						tx, ty = region:getRegion()
+					
+						--DEBUG(i, x, y, gid, image, tx/100+1, ty/100+1)
+						layer:setTile(x, y, tx/100+1, ty/100+1, flip)
+						--DEBUG(i, x, y, terrain:getTile(x, y))
+					
+						usedTiles[image] = usedTiles[image] and usedTiles[image]+1 or 0
+						--usedTiles[image] = gid
+					end
+				end
 			else
 				array[i] = 0
 			end
