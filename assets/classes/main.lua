@@ -16,6 +16,12 @@ Main for Bushido Battle, Bushido without the talk
 		- limit ranged attacks in number (no unlimited javelins)
 		- ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
 		- use debug.getinfo in DEBUG statements
+		
+	Deployment
+		build.gradle (app)
+			Update compileSDK and build tools version
+		upgrade version code!
+		need to re-enter key information each time	
 ]]
 
 --Logical resolution and handling physical resolution
