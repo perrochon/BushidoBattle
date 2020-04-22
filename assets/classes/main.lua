@@ -8,6 +8,8 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO 
+		- Fix hero selection model
+		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
 		- monster placed in tiled
 		- check for obstacles on diagonal moves. 
@@ -40,6 +42,9 @@ application:setScaleMode("letterbox")
 --set up the global variables and functions
 manual = Cyclopedia.new()
 
+-- TODO FIX - used by the connect classes
+font = TTFont.new("fonts/IMMORTAL.ttf", 96);
+
 --define the scenes
 sceneManager = SceneManager.new({
 --these are all the separate screens in the game
@@ -49,6 +54,11 @@ sceneManager = SceneManager.new({
 [SCENE_PLAY] = ScenePlay,			--the main game scene
 [SCENE_DEATH] = SceneDeath,			--when the player dies
 [SCENE_VICTORY] = SceneVictory,		--when the player wins
+
+[SCENE_CONNECT] = SceneConnect,		-- Connect to other player(s)
+[SCENE_START_SERVER] = SceneStartServer,
+[SCENE_JOIN_SERVER] = SceneJoinServer,
+[SCENE_DRAW] = SceneDraw,
 })
 
 stage:addChild(sceneManager)

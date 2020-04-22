@@ -34,7 +34,7 @@ function SceneLobby:init()
 		dataSaver.save("|D|hero", newHero)	
 	    sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, SceneManager.overFromRight) 
 	end)
-
+	
 	local hero = dataSaver.load("|D|hero")	
 	if hero then
 		--DEBUG("SceneLobby: Found " .. hero.name .. " level " .. hero.level)	
@@ -68,5 +68,22 @@ function SceneLobby:init()
 	else
 		INFO("No saved hero found.")
 	end
+	
+	-- Multiplayer Button
+	local connectButton = TextButton.new(font, "Connect", "Connect")
+	connectButton:setPosition(APP_WIDTH / 2, APP_HEIGHT -100)
+	self:addChild(connectButton, 1)
+
+	connectButton:addEventListener("click", 
+		function()	
+			--if we are heading back, we can close the server
+			if serverlink then
+				serverlink:close()
+				serverlink = nil
+			end
+			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
+		end
+	)
+
 	
 end

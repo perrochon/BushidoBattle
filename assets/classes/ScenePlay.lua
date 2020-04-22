@@ -181,7 +181,7 @@ function ScenePlay:checkMove(dx, dy)
 		--local key, layer, tile = self.world:getTileInfo(x, y)
 		local key, layer, tile = self.world:getTileInfo(x, y)
 		
-		DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
+		--DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
 		
 		if self.active == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked

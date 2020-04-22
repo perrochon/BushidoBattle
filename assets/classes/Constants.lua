@@ -89,6 +89,11 @@ SCENE_LOBBY @ "sceneLobby"
 SCENE_PLAY @ "sceneGame"
 SCENE_DEATH @ "sceneDeath"
 SCENE_VICTORY @ "sceneVictory"
+-- Remote Play
+SCENE_CONNECT @ "sceneConnect"
+SCENE_START_SERVER @ "sceneStartServer"
+SCENE_JOIN_SERVER @ "sceneJoinServer"
+SCENE_DRAW @ "sceneDraw"
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()

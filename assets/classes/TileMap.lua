@@ -260,13 +260,19 @@ function WorldMap:shiftWorld(dx, dy)
 	--[[shift all the TileMaps by dx and dy by changing the X,Y position of the sprite
 		This is tile-based movement
 	--]]
-
+	
+	local count = 1
+	local ddx = dx * TILE_WIDTH / count
+	local ddy = dy *TILE_HEIGHT / count
+	
 	for i = 1, #self.mapLayers do
 		local layer = self.mapLayers[i]
 		layer:setX(layer:getX() - (dx * TILE_WIDTH))	
 		layer:setY(layer:getY() - (dy * TILE_HEIGHT))
 	end
+	
 end
+
 
 function WorldMap:moveHero(hero, dx, dy)
 	--[[change the mapArrays and mapLayers location of the hero and shift the TileMaps
