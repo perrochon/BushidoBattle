@@ -14,6 +14,7 @@ function ScenePlay:init(role)
 	self.server = role == "server"
 	self.client = role == "client"
 	self.remote = self.client or self.server
+	self.ready = false
 
 	if (self.server) then DEBUG("This device is a server")
 	elseif (self.client) then DEBUG("This device is a client")
@@ -35,6 +36,7 @@ function ScenePlay:init(role)
 		DEBUG_C("Adding Methods", MOVE_HERO, HERO_MOVED)
 		serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
 		serverlink:addMethod(HERO_MOVED, self.remoteHeroMoved, self)
+		serverlink:addMethod(SYNC_STATE, self.syncState, self)	
 	end
 
 	--get everything on the screen
@@ -126,7 +128,9 @@ function ScenePlay:init(role)
 	 
 	--respond to touch events
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
-
+	
+	self.ready = true
+	if self.remote then self:syncState() end
 end
 
 function ScenePlay:checkMove(dx, dy)
@@ -237,6 +241,33 @@ function ScenePlay:checkMove(dx, dy)
 			ERROR(HERO_MOVED, "should not be called locally on client")
 		end
 	end
+ end
+ 
+ function ScenePlay:syncState(x, y, sender)
+ 
+	DEBUG_C(SYNC_STATE, x, y, sender)
+	if sender then  -- this is an incoming remote call
+		if self.ready then
+			if self.client then -- server sends us update
+				self.world:moveHero(self.hero, x-self.hero.x, y-self.hero.y)
+			else -- client requests update
+				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
+				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+			end
+		end		
+	else -- this is a local call
+		if self.ready then
+			if self.server then
+				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
+				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+			end
+				DEBUG_C(SYNC_STATE, -1, -1)
+				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+		else
+			ERROR(SYNC_STATE, "should not be called locally before ready")
+		end
+	end
+ 
  end
 
  

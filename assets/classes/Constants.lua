@@ -106,6 +106,7 @@ SCENE_DRAW @ "sceneDraw"
 -- Unite Remote Methods
 MOVE_HERO @ "moveHero"
 HERO_MOVED @ "heroMoved"
+SYNC_STATE @ "syncState"
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()
