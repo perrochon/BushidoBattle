@@ -17,23 +17,26 @@ function DEBUG(...)
 	end
 end
 
+DEBUG_REMOTE = true
 -- for all debugging related to connected play
 function DEBUG_C(...)
-	local ip = "no serverlink"
-	local host ="no host"
-	if serverlink then
-		ip = serverlink.ip
-		host = serverlink.host
-	else
-		DEBUG("serverlink is nil in DEBUG_C")
-	end
+	if DEBUG_REMOTE then
+		local ip = "no serverlink"
+		local host ="no host"
+		if serverlink then
+			ip = serverlink.ip
+			host = serverlink.host
+		else
+			DEBUG("serverlink is nil in DEBUG_C")
+		end
 
-	if OUTPUT_LEVEL > 0 then
-		local debuginfo = debug.getinfo(2)
-		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
-		local currentline = debuginfo.currentline and debuginfo.currentline or -1
-		local name = debuginfo.name and debuginfo.name or "unknown"
-		print(("%s:%d: %s"):format(short_src, currentline, name), ip, host, unpack(arg)) 
+		if OUTPUT_LEVEL > 0 then
+			local debuginfo = debug.getinfo(2)
+			local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
+			local currentline = debuginfo.currentline and debuginfo.currentline or -1
+			local name = debuginfo.name and debuginfo.name or "unknown"
+			print(("%s:%d: %s"):format(short_src, currentline, name), ip, host, unpack(arg)) 
+		end
 	end
 end
 
@@ -56,4 +59,8 @@ time_ for i = 1, 1e8 do x = x + i end _time
 
 function boolToString(value)
  return value == true and "true" or value == false and "false"
+end
+
+function stringToBoolean(string)
+	if string=="true" then return true elseif string=="false" then return false else return nil end
 end

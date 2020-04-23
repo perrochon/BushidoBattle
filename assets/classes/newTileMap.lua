@@ -31,7 +31,7 @@ function NewTileMap:init(levelName)
 		--DEBUG((self.pack:getTextureRegion(self.tileset.tiles[i].image:sub(16))):getRegion()) -- TODO FIX PATH ISSUE
 		local tile = {}
 		tile.id = self.tileset.tiles[i].id
-		tile.blocked = self.tileset.tiles[i].properties.blocked or false
+		tile.blocked = stringToBoolean(self.tileset.tiles[i].properties.blocked) or false
 		tile.name = self.tileset.tiles[i].properties.description or "thing"
 		tile.image = self.tileset.tiles[i].image:sub(16) --- TODO FIX the path issue
 		tile.cover = self.tileset.tiles[i].properties.cover or 0
