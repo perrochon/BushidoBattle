@@ -31,16 +31,16 @@ function NewTileMap:init(levelName)
 		--DEBUG((self.pack:getTextureRegion(self.tileset.tiles[i].image:sub(16))):getRegion()) -- TODO FIX PATH ISSUE
 		local tile = {}
 		tile.id = self.tileset.tiles[i].id
-		tile.blocked = self.tileset.tiles[i].properties.blocked == "true" and true or false
-		tile.name = self.tileset.tiles[i].properties.description
+		tile.blocked = self.tileset.tiles[i].properties.blocked or false
+		tile.name = self.tileset.tiles[i].properties.description or "thing"
 		tile.image = self.tileset.tiles[i].image:sub(16) --- TODO FIX the path issue
-		tile.cover = self.tileset.tiles[i].blocked or 0 -- TODO FIX cover info into tilemap
+		tile.cover = self.tileset.tiles[i].properties.cover or 0
 		self.tiles[tile.id] = tile                        
 	end
 
 	-- Make sure we got everything, move this code into separate function
 	for k, v in pairs(self.tiles) do
-		--DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
+		DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
 		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
 			ERROR("ERROR: newTileMap:init Missing Data in tile", key, v.image, v.name)
 			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here

@@ -93,6 +93,7 @@
  <file name="assets/fbapp-config.json"/>
  <file excludeFromExecution="1" name="assets/level01.lua"/>
  <file excludeFromExecution="1" name="assets/level02.lua"/>
+ <file name="assets/level03.lua"/>
  <dependency from="assets/classes/Constants.lua" to="assets/classes/devMacros.lua"/>
  <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
  <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>

@@ -142,7 +142,7 @@ function ScenePlay:checkMove(dx, dy)
 	DEBUG(self.hero)
 	DEBUG(self.hero.x + dx, self.hero.y + dy)
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
-	DEBUG(self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+	DEBUG(self.active, self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
 
 	if not self.heroTurn then return end
@@ -183,7 +183,9 @@ function ScenePlay:checkMove(dx, dy)
 			self:remoteMoveHero(dx, dy)
 		else
 			self.world:moveHero(self.hero, dx, dy)
-			self:remoteHeroMoved(self.hero.x, self.hero.y)
+			if self.server then
+				self:remoteHeroMoved(self.hero.x, self.hero.y)
+			end
 			self.sounds:play("hero-steps")
 			self:heroTurnOver()
 		end
@@ -193,7 +195,9 @@ function ScenePlay:checkMove(dx, dy)
 			self:remoteMoveHero(dx, dy)
 		else
 			self.world:moveHero(self.hero, dx, dy)
-			self:remoteHeroMoved(self.hero.x, self.hero.y)
+			if self.server then
+				self:remoteHeroMoved(self.hero.x, self.hero.y)
+			end
 			self.sounds:play("hero-steps")
 			self:heroTurnOver()
 		end
@@ -267,13 +271,13 @@ function ScenePlay:checkMove(dx, dy)
  end
 
  
- function ScenePlay:syncState(x, y, sender)
+ function ScenePlay:syncState(heroX, heroY, sender)
  
-	DEBUG_C(SYNC_STATE, x, y, sender)
+	DEBUG_C(SYNC_STATE, heroX, heroY, sender)
 	if sender then  -- this is an incoming remote call
 		if self.ready then
 			if self.client then -- server sends us update
-				self.world:moveHero(self.hero, x-self.hero.x, y-self.hero.y)
+				self.world:moveHero(self.hero, heroX-self.hero.x, heroY-self.hero.y)
 			else -- client requests update
 				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
 				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
@@ -284,9 +288,10 @@ function ScenePlay:checkMove(dx, dy)
 			if self.server then
 				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
 				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
-			end
+			else
 				DEBUG_C(SYNC_STATE, -1, -1)
-				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+				serverlink:callMethod(SYNC_STATE, -1, -1)
+			end
 		else
 			ERROR(SYNC_STATE, "should not be called locally before ready")
 		end
@@ -456,7 +461,9 @@ function ScenePlay:monsterAI(monster)
 		end
 		self.world:moveMonster(monster, dx, dy)
 		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-		self:remoteMonsterMoved(monster.id, monster.x, monster.y)
+		if self.remote then
+			self:remoteMonsterMoved(monster.id, monster.x, monster.y)
+		end
 		monster.done = true
 		self:monsterTurnOver()
 	elseif monster.state == "flee" then
@@ -464,7 +471,9 @@ function ScenePlay:monsterAI(monster)
 		dx, dy = self.world:whichWay(monster, self.hero.x, self.hero.y)
 		self.world:moveMonster(monster, dx, dy)
 		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-		self:remoteMonsterMoved(monster.id, m.x, m.y)
+		if self.remote then
+			self:remoteMonsterMoved(monster.id, m.x, m.y)
+		end
 		monster.done = true
 		self:monsterTurnOver()
 	elseif monster.state == "attack" then

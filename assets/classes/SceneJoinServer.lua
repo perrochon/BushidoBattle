@@ -51,8 +51,11 @@ function SceneJoinServer:init()
 			local parent = self:getParent()
 			self:removeFromParent()
 		end
-	
-		joinButton:addEventListener("click", joinButton.click, joinButton)
+		if AUTO_CONNECT then
+			joinButton:click()
+		else
+			joinButton:addEventListener("click", joinButton.click, joinButton)
+		end
 	end
 	
 	--create client instance
@@ -68,27 +71,32 @@ function SceneJoinServer:init()
 	serverlink:addEventListener("newServer", self.onJoin, self)
 	--event to listen if server accepted our connection
 	serverlink:addEventListener("onAccepted", function()
-		--draw button
-		local drawButton = TextButton.new(font, "Draw", "Draw")
-		drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)				
-		self:addChild(drawButton)
-	
-		drawButton:addEventListener("click", 
-			function()	
-				sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION)  
-			end
-		)
-		
-		--battle button
-		local battleButton = TextButton.new(font, "Battle", "Battle")
-		battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
-		self:addChild(battleButton)
 
-		battleButton:addEventListener("click", 
-			function()	
-				sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "client"})  
-			end
-		)
+		if AUTO_CONNECT then
+			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION)
+		else
+			--draw button
+			local drawButton = TextButton.new(font, "Draw", "Draw")
+			drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)				
+			self:addChild(drawButton)
+		
+			drawButton:addEventListener("click", 
+				function()	
+					sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION)  
+				end
+			)
+			
+			--battle button
+			local battleButton = TextButton.new(font, "Battle", "Battle")
+			battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
+			self:addChild(battleButton)
+
+			battleButton:addEventListener("click", 
+				function()	
+					sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "client"})  
+				end
+			)
+		end
 	end)
 	
 	--start listening for server broadcasts

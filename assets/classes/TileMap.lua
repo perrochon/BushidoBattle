@@ -20,7 +20,7 @@ function WorldMap:init(hero, monsters)
 	-- needs to be consistent with Constants.lua, but also rendering.
 	local group = Sprite.new()
 	
-	self.map = NewTileMap.new("level02.lua")
+	self.map = NewTileMap.new("level03.lua")
 	
 	local layer1,array1 = self.map:LayerFromMap(1)
 	group:addChild(layer1) 
@@ -96,8 +96,10 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 			i = index(x, y) 
 			--returns true only if there are no monsters there and it's a floor tile
 			--can't use WorldMap:blocked() because monster layer not set yet
-			--DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
-			placed = (mArray[i] == 0) and (envArray[i] == 0) 	
+			DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
+			 placed = (mArray[i] == 0) and (envArray[i] == 0)
+			--local key, layer, tile = self:getTileInfo(x, y, LAYER_TERRAIN)
+			--placed = (mArray[i] == 0) and (envArray[i] == 0) and not tile.blocked	
 		until placed 
 		--then add to the array
 		mArray[i] = m.entry

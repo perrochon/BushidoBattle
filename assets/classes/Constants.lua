@@ -127,13 +127,13 @@ function Cyclopedia:init()
 			[4] = "health",
 			[5] = "light",
 			},
-		["terrainX"] = {
+		["terrainDEPRECATED"] = {
 			[1] = {id = -1, name = "1 patch of grass", texture = "Dungeon_Floor_2x2.png"},
 			[2] = {id = -2, name = "1 road", texture = "Dungeon_Floor_2x2.png"},
 			[3] = {id = -3, name = "1 creek", texture = "Dungeon_Floor_2x2.png"},
 			[4] = {id = -4, name = "1 thing", texture = "Dungeon_Floor_2x2.png"},
 			},
-		["environmentX"] = {
+		["environmentDEPRECATED"] = {
 			[1] = {id = -5, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_06.png"},
 			[2] = {id = -6, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_07.png"},
 			[3] = {id = -7, name = "2 new tree", blocked = true, cover = -2, texture = "Tree_Crown_01.png"},

@@ -49,7 +49,6 @@ function SceneStartServer:init()
 			local parent = self:getParent()
 			self:removeFromParent()
 		end
-	
 		acceptButton:addEventListener("click", acceptButton.click, acceptButton)
 	end
 	
