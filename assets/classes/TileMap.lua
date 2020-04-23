@@ -52,7 +52,7 @@ function WorldMap:init(hero, monsters)
 	table.insert(self.mapLayers, layer)
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "images/tileset-light-108px.png", false)
-	group:addChild(layer) 
+	--group:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
 
@@ -338,24 +338,32 @@ function WorldMap:moveMonster(monster, dx, dy)
 	local array = self.mapArrays[LAYER_MONSTERS]
 	
 	--erase the monster in the array and TileMap
-	array[index(monster.x, monster.y)] = 0
-	self.mapLayers[LAYER_MONSTERS]:clearTile(monster.x, monster.y)
-	
-	--place the monster at the new position
-	array[index(monster.x + dx, monster.y + dy)] = monster.entry
-	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1) 
-	-- TODO FIX this had an out of bounds error on Android	
 
-	--remove and move the HPbar
-	array = self.mapArrays[LAYER_HP]
-	array[index(monster.x, monster.y)] = 0
-	self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
-	array[index(monster.x + dx, monster.y + dy)] = monster.HPbar
-	self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
+	-- DEBUG Getting non-reproducible errors on the next line in HTML
+	if monster.x > LAYER_COLUMNS or monster.y > LAYER_ROWS or monster.x < 1 or monster.y < 1 then
+		ERROR("Monster current location out of bounds", monster.name, monster.x, monster.y, dx, dy)
+	elseif monster.x+dx > LAYER_COLUMNS or monster.y+dy > LAYER_ROWS or monster.x+dx < 1 or monster.y+dy < 1 then
+		ERROR("Monster new location out of bounds", monster.name, monster.x, monster.y, dx, dy)
+	else
+		array[index(monster.x, monster.y)] = 0
+		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.x, monster.y)
+		
+		--place the monster at the new position
+		array[index(monster.x + dx, monster.y + dy)] = monster.entry
+		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1) 
+		-- TODO FIX this had an out of bounds error on Android	
 
-	--update x and y
-	monster.x = monster.x + dx
-	monster.y = monster.y + dy
+		--remove and move the HPbar
+		array = self.mapArrays[LAYER_HP]
+		array[index(monster.x, monster.y)] = 0
+		self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
+		array[index(monster.x + dx, monster.y + dy)] = monster.HPbar
+		self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
+
+		--update x and y
+		monster.x = monster.x + dx
+		monster.y = monster.y + dy
+	end
 end
 
 function WorldMap:removeMonster(x, y)
