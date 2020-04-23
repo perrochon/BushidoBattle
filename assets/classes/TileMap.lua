@@ -48,7 +48,7 @@ function WorldMap:init(hero, monsters)
 
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "images/tileset-health-108px.png", false)
-	--group:addChild(layer) 
+	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "images/tileset-light-108px.png", false)
@@ -167,7 +167,7 @@ function WorldMap:returnTileMap(mapArray, tileset, flip)
 	--]]
 
 	local t = Texture.new(tileset, true)
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, t, TILE_WIDTH, TILE_HEIGHT, 8, 8)
+	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, t, TILE_WIDTH, TILE_HEIGHT, 8, 8, 0, 0)
 	
 	--use setTile to assign a tile based on the mapArray index
 	for y = 1, LAYER_ROWS do
@@ -358,7 +358,10 @@ function WorldMap:moveMonster(monster, dx, dy)
 		array[index(monster.x, monster.y)] = 0
 		self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
 		array[index(monster.x + dx, monster.y + dy)] = monster.HPbar
-		self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
+		DEBUG(monster.x, monster.y, monster.entry, monster.name, monster.HPbar)
+		if monster.HPbar ~= 0 then
+			self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
+		end
 
 		--update x and y
 		monster.x = monster.x + dx
