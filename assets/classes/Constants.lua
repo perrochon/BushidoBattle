@@ -103,11 +103,12 @@ SCENE_START_SERVER @ "sceneStartServer"
 SCENE_JOIN_SERVER @ "sceneJoinServer"
 SCENE_DRAW @ "sceneDraw"
 
--- Unite Remote Methods
+-- Unite Remote Constants
 MOVE_HERO @ "moveHero"
 HERO_MOVED @ "heroMoved"
 MONSTER_MOVED @ "monsterMoved"
 SYNC_STATE @ "syncState"
+AUTO_CONNECT @ false -- TODO REMOTE fix auto connect
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()
@@ -126,13 +127,13 @@ function Cyclopedia:init()
 			[4] = "health",
 			[5] = "light",
 			},
-		["terrain"] = {
+		["terrainX"] = {
 			[1] = {id = -1, name = "1 patch of grass", texture = "Dungeon_Floor_2x2.png"},
 			[2] = {id = -2, name = "1 road", texture = "Dungeon_Floor_2x2.png"},
 			[3] = {id = -3, name = "1 creek", texture = "Dungeon_Floor_2x2.png"},
 			[4] = {id = -4, name = "1 thing", texture = "Dungeon_Floor_2x2.png"},
 			},
-		["environment"] = {
+		["environmentX"] = {
 			[1] = {id = -5, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_06.png"},
 			[2] = {id = -6, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_07.png"},
 			[3] = {id = -7, name = "2 new tree", blocked = true, cover = -2, texture = "Tree_Crown_01.png"},
