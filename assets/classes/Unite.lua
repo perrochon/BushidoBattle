@@ -21,7 +21,6 @@ local function getIP()
 	local s = socket.udp()
 	s:setpeername("74.125.115.104",80)
 	local ip, _ = s:getsockname()
-	print(ip)
 	return ip
 end
 

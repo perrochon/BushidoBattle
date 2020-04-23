@@ -18,24 +18,24 @@ SceneStartServer = gideros.class(Sprite)
 
 function SceneStartServer:init()
 
-	local title = TextField.new(font, "Clients connected: ")
+	local title = TextField.new(font, "Server mode - clients connected: ")
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(0, 200)
+	title:setPosition(0, 100)
 	self:addChild(title)
 	
 	self.clients = {}
 	
 	function self:onAccept(e)
 		local text = TextField.new(font, e.data.host)
-		local lastHeight = #self.clients*50 + 100
-		text:setPosition(30, lastHeight)
+		text:setAnchorPoint(0.5,0.5)
+		text:setTextColor(COLOR_YELLOW)	
+		local lastHeight = #self.clients*100 + 300
+		text:setPosition(APP_WIDTH / 4, lastHeight)
 		self:addChild(text)
 		
 		--join button
 		local acceptButton = TextButton.new(font, "Accept", "Accept")
-		acceptButton.upState:setScale(0.6)
-		acceptButton.downState:setScale(0.6)
-		acceptButton:setPosition((application:getContentWidth()-acceptButton:getWidth()), lastHeight - acceptButton:getHeight()/2)
+		acceptButton:setPosition(APP_WIDTH - 200, lastHeight)
 		self:addChild(acceptButton)
 		--store id which server to accept
 		acceptButton.id = e.data.id
@@ -55,14 +55,24 @@ function SceneStartServer:init()
 	
 	--create a server instance
 	serverlink = Server.new({username = "myServer"})
+	DEBUG("Server started")
+	DEBUG_C("Server started")
+
+	serverlink:addEventListener("device", function(e)
+		DEBUG_C("Device", e.data.id, e.data.ip, e.data.host)
+	end)
+
 	--add event to monitor when new client wants to join
 	serverlink:addEventListener("newClient", self.onAccept, self)
 	--start broadcasting to discover devices
+
+
 	serverlink:startBroadcast()
 	
 	--draw button
-	local drawButton = TextButton.new(font, "Play", "Play")
-	drawButton:setPosition((application:getContentWidth()-drawButton:getWidth())/2, application:getContentHeight()-drawButton:getHeight()*5)
+	local drawButton = TextButton.new(font, "Draw", "Draw")
+	drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)
+		
 	self:addChild(drawButton)
 
 	drawButton:addEventListener("click", 
@@ -76,9 +86,25 @@ function SceneStartServer:init()
 		end
 	)
 
+	--battle button
+	local battleButton = TextButton.new(font, "Battle", "Battle")
+	battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
+	self:addChild(battleButton)
+
+	battleButton:addEventListener("click", 
+		function()
+			--if we are ready to battle we
+			--stop broadcasting
+			serverlink:stopBroadcast()
+			--and start listening to clients
+			serverlink:startListening()
+			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "server"}) 
+		end
+	)
+
 	--back button
 	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition((application:getContentWidth()-backButton:getWidth())/2, application:getContentHeight()-backButton:getHeight()*2)
+	backButton:setPosition(100, BUTTON_Y)
 	self:addChild(backButton)
 
 	backButton:addEventListener("click", 

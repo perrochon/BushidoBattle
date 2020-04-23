@@ -1,14 +1,15 @@
 SceneConnect = Core.class(Sprite)
 
 function SceneConnect:init()
-	--here we'd probably want to set up a background picture
-	--local screen = Bitmap.new(Texture.new("images/gideros_mobile.png"))
-	--self:addChild(screen)
-	--screen:setPosition((application:getContentWidth()-screen:getWidth())/2, (application:getContentHeight()-screen:getHeight())/2)
+
+	local title = TextField.new(font, "LAN/WiFi Connect")
+	title:setTextColor(COLOR_YELLOW)	
+	title:setPosition(0, 200)
+	self:addChild(title)
 
 	--create start button
-	local startButton = TextButton.new(font, "Start", "Start")
-	startButton:setPosition((application:getContentWidth()-startButton:getWidth())/2, ((application:getContentHeight()-startButton:getHeight())/2)-(startButton:getHeight()+20))
+	local startButton = TextButton.new(font, "Server", "Server")
+	startButton:setPosition(APP_WIDTH - 100 , BUTTON_Y)
 	self:addChild(startButton)
 
 	--start button on click event
@@ -20,10 +21,10 @@ function SceneConnect:init()
 	)
 	
 	--create start button
-	local optionsButton = TextButton.new(font, "Join", "Join")
-	optionsButton:setPosition((application:getContentWidth()-optionsButton:getWidth())/2, ((application:getContentHeight()-optionsButton:getHeight())/2))
+	local optionsButton = TextButton.new(font, "Client", "Client")
+	optionsButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
 	self:addChild(optionsButton)
-
+	
 	--start button on click event
 	optionsButton:addEventListener("click", 
 		function()	
@@ -34,7 +35,7 @@ function SceneConnect:init()
 	
 	--back button
 	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition((application:getContentWidth()-backButton:getWidth())/2, application:getContentHeight()-backButton:getHeight()*2)
+	backButton:setPosition(100, BUTTON_Y)
 	self:addChild(backButton)
 
 	backButton:addEventListener("click", 

@@ -15,6 +15,11 @@ function TextButton:init(font, textUp, textDown, upState, downState)
 --create the upState and downstate sprites
 	self.upState = Sprite.new()
 	self.downState = Sprite.new()
+	
+	self.pixel = Pixel.new(COLOR_BROWN, 0.5, 350,200)
+	self.pixel:setAnchorPoint(0.5, 0.5)
+	self.pixel:setPosition(0,-75)
+	self:addChild(self.pixel)
  
 -- add images to up and down states if given
  

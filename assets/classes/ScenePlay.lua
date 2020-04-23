@@ -9,16 +9,33 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 ScenePlay = Core.class(Sprite)
  
-function ScenePlay:init()
+function ScenePlay:init(role)
 
+	self.server = role == "server"
+	self.client = role == "client"
+	self.remote = self.client or self.server
+
+	if (self.server) then DEBUG("This device is a server")
+	elseif (self.client) then DEBUG("This device is a client")
+	else DEBUG("This device is playing locally") 
+	end
+	
 	self.heroTurn = true
-
+	
 	--the major gaming variables
 	self.hero = dataSaver.load("|D|hero")
 	self.monsters = Monsters.new(self.hero.level)
-	self.world = WorldMap.new(self.hero, self.monsters)	
+	self.world = WorldMap.new(self.hero, self.monsters)
+	
 	self.msg = Messages.new()
 	self.sounds = Sounds.new("game")
+
+	--add methods for remote play
+	if self.remote then
+		DEBUG_C("Adding Methods", MOVE_HERO, HERO_MOVED)
+		serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
+		serverlink:addMethod(HERO_MOVED, self.remoteHeroMoved, self)
+	end
 
 	--get everything on the screen
 	self:addChild(self.world)
@@ -36,10 +53,11 @@ function ScenePlay:init()
 	self.main.southwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(-1, 1)  end)
 	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(1, 1)  end)
 	self.main.center:addEventListener("click", function()
-		if ScenePlay:cheater(4) then 
-			self.main:displayCheats()
-		end
+		if ScenePlay:cheater(4) then self.main:displayCheats() end
 		if not self.heroTurn then return end
+		if self.client then 
+			self:remoteMoveHero(0, 0)
+		end
 		self:heroTurnOver() 
 	end)
 
@@ -63,6 +81,9 @@ function ScenePlay:init()
 			self:checkMove(1, 0)
 		elseif event.keyCode == KeyCode.SPACE then
 			if not self.heroTurn then return end
+			if self.client then 
+				self:remoteMoveHero(0, 0)
+			end
 			self:heroTurnOver()
 		end
 	end)
@@ -105,7 +126,7 @@ function ScenePlay:init()
 	 
 	--respond to touch events
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
-	
+
 end
 
 function ScenePlay:checkMove(dx, dy)
@@ -113,9 +134,11 @@ function ScenePlay:checkMove(dx, dy)
 	--]]
 	-- first we need the tile key and layer for where the hero wants to move
 	
+	DEBUG(self.hero)
+	DEBUG(self.hero.x + dx, self.hero.y + dy)
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
+	DEBUG(self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	--DEBUG(self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
 	if not self.heroTurn then return end
 
@@ -151,17 +174,71 @@ function ScenePlay:checkMove(dx, dy)
       if tile.blocked then
         self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
       else
-        self.world:moveHero(self.hero, dx, dy)
-        self.sounds:play("hero-steps")
-        self:heroTurnOver()
+		if self.client then
+			self:remoteMoveHero(dx, dy)
+		else
+			self.world:moveHero(self.hero, dx, dy)
+			self:remoteHeroMoved(self.hero.x, self.hero.y)
+			self.sounds:play("hero-steps")
+			self:heroTurnOver()
+		end
       end
     else
-      self.world:moveHero(self.hero, dx, dy)
-      self.sounds:play("hero-steps")
-      self:heroTurnOver()
+		if self.client then
+			self:remoteMoveHero(dx, dy)
+		else
+			self.world:moveHero(self.hero, dx, dy)
+			self:remoteHeroMoved(self.hero.x, self.hero.y)
+			self.sounds:play("hero-steps")
+			self:heroTurnOver()
+		end
     end
   end
  end
+ 
+ function ScenePlay:remoteMoveHero(dx, dy, sender)
+ 
+	DEBUG_C(MOVE_HERO, dx, dy, tonumber(dx), tonumber(dy), sender)
+	DEBUG_C(self.world, self.hero)
+	if sender then -- this is an incoming remote call
+		if self.server then
+			if tonumber(dx) ~= 0 or tonumber(dy) ~= 0 then
+				self:checkMove(dx, dy)
+				self.sounds:play("hero-steps")
+			end
+			self:heroTurnOver()
+		else
+			ERROR(MOVE_HERO, "should not be called remotely on client")
+		end
+	else -- this is a local call
+		if self.client then
+			serverlink:callMethod(MOVE_HERO, dx, dy)
+		else
+			ERROR(MOVE_HERO, "should not be called locally on server")
+		end
+	end
+ end
+
+ function ScenePlay:remoteHeroMoved(x, y, sender)
+
+	DEBUG_C(HERO_MOVED, x, y, sender)	
+	DEBUG_C(self.world, self.hero)
+
+	if sender then -- this is an incoming remote call
+		if self.client then
+			self.world:moveHero(self.hero, x-self.hero.x, y-self.hero.y)
+		else
+			ERROR(HERO_MOVED, "should not be remotely on server")
+		end
+	else -- this is a local call
+		if self.server then
+			serverlink:callMethod(HERO_MOVED, x, y)
+		else
+			ERROR(HERO_MOVED, "should not be called locally on client")
+		end
+	end
+ end
+
  
  function ScenePlay:onMouseUp(event)
 	--[[respond to the user touching the map.  Checks if the map part of the screen was touched, the responds depending on which button is activeButton
@@ -532,6 +609,8 @@ function ScenePlay:roll(modifier, maximum, die, crit)
 end
 
 function ScenePlay:cheater(want)
+
+	if self.remote then return end -- no cheat codes on remote play (for now)
 
 	if self.cheatcount == want then
 		self.cheatcount += 1

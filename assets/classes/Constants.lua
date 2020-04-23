@@ -15,7 +15,7 @@ if FBInstant then
 		FBInstantAPI=true
 	end)
 else
-	DEBUG("FBInstant not loaded")
+	--DEBUG("FBInstant not loaded")
 end
 
 
@@ -27,7 +27,8 @@ Constants and Global Functions
 APP_HEIGHT @ 1188
 APP_WIDTH @ 1920
 FG_BLEED @ 1000 -- 500 should be enough, but HTML can be really wide...
-FG_X @ \APP_HEIGHT + 1\
+FG_X @ \(APP_HEIGHT + 1)\
+BUTTON_Y @ \(APP_HEIGHT - 75)\
 
 -- Colors
 COLOR_BLACK @ 0x000000   -- slightly off black is 0x140C1C
@@ -46,6 +47,12 @@ COLOR_APRICOT @ 0xD2AA99 -- white skin flesh tone
 COLOR_ORANGE @ 0xD27D2C
 COLOR_YELLOW @ 0xDAD45E
 COLOR_WHITE @ 0xF9FAFA   -- slightly creamy white
+
+application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
+application:setOrientation(Application.LANDSCAPE_LEFT)
+application:setScaleMode("letterbox")					
+application:setBackgroundColor(COLOR_BLACK)
+
 
 MSG_FADE = 0.005
 MSG_DESCRIPTION @ 1
@@ -87,6 +94,7 @@ TRANSITION @ \SceneManager.fade\
 SCENE_START @ "sceneStart"
 SCENE_LOBBY @ "sceneLobby"
 SCENE_PLAY @ "sceneGame"
+--SCENE_PLAY_CLIENT @ "sceneGameClient"
 SCENE_DEATH @ "sceneDeath"
 SCENE_VICTORY @ "sceneVictory"
 -- Remote Play
@@ -94,6 +102,10 @@ SCENE_CONNECT @ "sceneConnect"
 SCENE_START_SERVER @ "sceneStartServer"
 SCENE_JOIN_SERVER @ "sceneJoinServer"
 SCENE_DRAW @ "sceneDraw"
+
+-- Unite Remote Methods
+MOVE_HERO @ "moveHero"
+HERO_MOVED @ "heroMoved"
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()

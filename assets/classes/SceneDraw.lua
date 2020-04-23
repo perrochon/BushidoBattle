@@ -51,8 +51,7 @@ function SceneDraw:init()
 	
 	--reset button
 	local resetButton = TextButton.new(font, "Reset", "Reset")
-	resetButton:setAnchorPoint(0,0.5)
-	resetButton:setPosition(100, APP_HEIGHT - 100)
+	resetButton:setPosition(APP_WIDTH - 100, BUTTON_Y)
 	self:addChild(resetButton)
 
 	resetButton:addEventListener("click", 
@@ -67,7 +66,7 @@ function SceneDraw:init()
 
 	--back button
 	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition((application:getContentWidth()-backButton:getWidth())/2, application:getContentHeight()-backButton:getHeight()*2)
+	backButton:setPosition(100, BUTTON_Y)
 	self:addChild(backButton)
 
 	backButton:addEventListener("click", 
@@ -94,7 +93,7 @@ end
 --this method is designed for assigning random colors from color table
 function SceneDraw:getColor()
 	if not self.colortable then
-		self.colortable = {0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00, 0xfff000}
+		self.colortable = {0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00, 0xffffff}
 	end
 	local rand = math.random(#self.colortable)
 	local color = self.colortable[rand]

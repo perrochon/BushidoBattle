@@ -17,14 +17,33 @@ function DEBUG(...)
 	end
 end
 
+-- for all debugging related to connected play
+function DEBUG_C(...)
+	local ip = "no serverlink"
+	local host ="no host"
+	if serverlink then
+		ip = serverlink.ip
+		host = serverlink.host
+	else
+		DEBUG("serverlink is nil in DEBUG_C")
+	end
+
+	if OUTPUT_LEVEL > 0 then
+		local debuginfo = debug.getinfo(2)
+		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
+		local currentline = debuginfo.currentline and debuginfo.currentline or -1
+		local name = debuginfo.name and debuginfo.name or "unknown"
+		print(("%s:%d: %s"):format(short_src, currentline, name), ip, host, unpack(arg)) 
+	end
+end
+
 -- DEBUG @ |printLineNumber| -- Various manually added DEBUG statements
 INFO @ |print|  -- Print all message box messages to console
 ERROR @ |print|
 
-DEBUG("DEBUG output turned on" )
-INFO("INFO output turned on")
-ERROR("ERROR output turned on")
-
+--DEBUG("DEBUG output turned on" )
+--INFO("INFO output turned on")
+--ERROR("ERROR output turned on")
 
 -- Benchmarking
 time_ @ |local _time_ = os.timer()|

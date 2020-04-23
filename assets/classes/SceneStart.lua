@@ -56,7 +56,7 @@ function SceneStart:init()
 			text:setPosition(200, 200)
 			text:setAlpha(0.2)
 			self:addChild(text)
-		DEBUG("SceneStart: FBInstantAPI not loaded")
+		ERROR("SceneStart: FBInstantAPI not loaded")
 		end
 	else
 		local text = TextField.new(FONT_SMALL, "FBInstant not loaded")
@@ -64,7 +64,7 @@ function SceneStart:init()
 		text:setPosition(100, 100)
 		text:setAlpha(0.2)
 		self:addChild(text)
-		DEBUG("SceneStart: FBInstant not loaded")
+		--DEBUG("SceneStart: FBInstant not loaded")
 	end
 
 

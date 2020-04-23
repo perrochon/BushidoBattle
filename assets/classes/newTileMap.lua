@@ -15,9 +15,9 @@ function NewTileMap:init(levelName)
 	self.map = loadfile(levelName)() -- error "attempt to call nil value" means file not found. Check spelling and refresh
 	
 	INFO(self.map.properties["Title"])
-	INFO(("Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))
-	INFO("Number of tilesets: ", #self.map.tilesets)
-	INFO("Number of layers: ", #self.map.layers)
+	INFO(("  Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))
+	INFO("  Number of tilesets: ", #self.map.tilesets)
+	INFO("  Number of map layers: ", #self.map.layers)
 
 	-- load texture pack exported from Gideros Texture Packer
 	--DEBUG("Loading texture pack", texturePack)

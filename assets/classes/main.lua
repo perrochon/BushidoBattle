@@ -8,6 +8,7 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO 
+		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
 		- Fix hero selection model
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
@@ -52,6 +53,7 @@ sceneManager = SceneManager.new({
 [SCENE_START] = SceneStart,		--first thing the player sees
 [SCENE_LOBBY] = SceneLobby,		--the character creation scene
 [SCENE_PLAY] = ScenePlay,			--the main game scene
+--[SCENE_PLAY_CLIENT] = ScenePlayClient,		--play as a client, rely on model on server
 [SCENE_DEATH] = SceneDeath,			--when the player dies
 [SCENE_VICTORY] = SceneVictory,		--when the player wins
 
@@ -63,7 +65,7 @@ sceneManager = SceneManager.new({
 
 stage:addChild(sceneManager)
 --go to start scene 
-sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION)
 
 --local pixel = Pixel.new(COLOR_GREEN, 1, 200,200)
 --pixel:setPosition(650,650)

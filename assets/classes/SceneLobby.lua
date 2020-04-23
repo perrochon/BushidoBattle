@@ -71,7 +71,7 @@ function SceneLobby:init()
 	
 	-- Multiplayer Button
 	local connectButton = TextButton.new(font, "Connect", "Connect")
-	connectButton:setPosition(APP_WIDTH / 2, APP_HEIGHT -100)
+	connectButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
 	self:addChild(connectButton, 1)
 
 	connectButton:addEventListener("click", 
