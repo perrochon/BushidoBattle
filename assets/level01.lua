@@ -83,7 +83,7 @@ return {
           id = 38,
           properties = {
             ["blocked"] = "false",
-            ["description"] = "grass"
+            ["description"] = "meadow"
           },
           image = "../tiled/tiles/Floor_Grass.png",
           width = 100,
@@ -93,7 +93,7 @@ return {
           id = 45,
           properties = {
             ["blocked"] = "false",
-            ["description"] = "rocks"
+            ["description"] = "road"
           },
           image = "../tiled/tiles/Floor_Rock.png",
           width = 100,
@@ -102,8 +102,8 @@ return {
         {
           id = 51,
           properties = {
-            ["blocked"] = "true",
-            ["description"] = "water"
+            ["blocked"] = "false",
+            ["description"] = "river"
           },
           image = "../tiled/tiles/Floor_Water.png",
           width = 100,
@@ -156,7 +156,7 @@ return {
         {
           id = 63,
           properties = {
-            ["blocked"] = "false",
+            ["blocked"] = "true",
             ["description"] = "darkness"
           },
           image = "../tiled/tiles/Black_Patch.png",
@@ -251,7 +251,7 @@ return {
         {
           id = 75,
           properties = {
-            ["blocked"] = "true",
+            ["blocked"] = "false",
             ["cover"] = 1,
             ["description"] = "corn field"
           },
@@ -263,7 +263,7 @@ return {
           id = 76,
           properties = {
             ["blocked"] = "false",
-            ["description"] = "road"
+            ["description"] = "path"
           },
           image = "../tiled/tiles/Path_Thin_2x2_A.png",
           width = 100,
@@ -273,7 +273,7 @@ return {
           id = 77,
           properties = {
             ["blocked"] = "false",
-            ["description"] = "road"
+            ["description"] = "path"
           },
           image = "../tiled/tiles/Path_Thin_2x2_B.png",
           width = 100,
