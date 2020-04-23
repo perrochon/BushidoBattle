@@ -4,6 +4,7 @@
  <tile id="11">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
    <property name="description" value="rock"/>
   </properties>
   <image width="100" height="100" source="tiles/Boulder_01.png"/>
@@ -11,6 +12,7 @@
  <tile id="12">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
    <property name="description" value="rock"/>
   </properties>
   <image width="100" height="100" source="tiles/Boulder_02.png"/>
@@ -18,6 +20,7 @@
  <tile id="13">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
    <property name="description" value="rock"/>
   </properties>
   <image width="100" height="100" source="tiles/Boulder_03.png"/>
@@ -25,6 +28,7 @@
  <tile id="14">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
    <property name="description" value="rock"/>
   </properties>
   <image width="100" height="100" source="tiles/Boulder_04.png"/>
@@ -53,28 +57,32 @@
  <tile id="53">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
    <property name="description" value="tree"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_01.png"/>
  </tile>
  <tile id="54">
   <properties>
-   <property name="description" value="tree"/>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
+   <property name="description" value="tree"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_02.png"/>
  </tile>
  <tile id="55">
   <properties>
-   <property name="description" value="tree"/>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
+   <property name="description" value="tree"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_03.png"/>
  </tile>
  <tile id="56">
   <properties>
-   <property name="description" value="tree"/>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="2"/>
+   <property name="description" value="tree"/>
   </properties>
   <image width="100" height="100" source="tiles/Tree_Crown_04.png"/>
  </tile>
@@ -88,6 +96,7 @@
  <tile id="64">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="4"/>
    <property name="description" value="building"/>
   </properties>
   <image width="100" height="100" source="tiles/Building_I_01_4x6.png"/>
@@ -95,6 +104,7 @@
  <tile id="65">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="4"/>
    <property name="description" value="building"/>
   </properties>
   <image width="100" height="100" source="tiles/Building_Tower_3sq_5x5.png"/>
@@ -102,6 +112,7 @@
  <tile id="66">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="4"/>
    <property name="description" value="building"/>
   </properties>
   <image width="100" height="100" source="tiles/Building_Tower_Octagon_2sq_4x4.png"/>
@@ -109,6 +120,7 @@
  <tile id="67">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="6"/>
    <property name="description" value="wall"/>
   </properties>
   <image width="100" height="100" source="tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png"/>
@@ -116,6 +128,7 @@
  <tile id="68">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="6"/>
    <property name="description" value="wall"/>
   </properties>
   <image width="100" height="100" source="tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png"/>
@@ -144,6 +157,7 @@
  <tile id="75">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="1"/>
    <property name="description" value="corn field"/>
   </properties>
   <image width="100" height="100" source="tiles/Floor_Wheat.png"/>
@@ -172,6 +186,7 @@
  <tile id="79">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="4"/>
    <property name="description" value="building"/>
   </properties>
   <image width="100" height="100" source="tiles/Roof_Thatched.png"/>
@@ -179,6 +194,7 @@
  <tile id="80">
   <properties>
    <property name="blocked" value="true"/>
+   <property name="cover" type="int" value="1"/>
    <property name="description" value="well"/>
   </properties>
   <image width="100" height="100" source="tiles/Well_With_Base_2x2.png"/>
