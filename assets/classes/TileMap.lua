@@ -20,7 +20,7 @@ function WorldMap:init(hero, monsters)
 	-- needs to be consistent with Constants.lua, but also rendering.
 	local group = Sprite.new()
 	
-	self.map = NewTileMap.new("level01.lua")
+	self.map = NewTileMap.new("level02.lua")
 	
 	local layer1,array1 = self.map:LayerFromMap(1)
 	group:addChild(layer1) 
