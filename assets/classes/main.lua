@@ -8,6 +8,7 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO 
+		- Initial Monster Placement (sync)
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
 		- Fix hero selection model
 		- Tiles: fix cover, especially make walls arrow proof
