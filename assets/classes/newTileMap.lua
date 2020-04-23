@@ -34,7 +34,7 @@ function NewTileMap:init(levelName)
 		tile.blocked = self.tileset.tiles[i].properties.blocked == "true" and true or false
 		tile.name = self.tileset.tiles[i].properties.description
 		tile.image = self.tileset.tiles[i].image:sub(16) --- TODO FIX the path issue
-		tile.cover = self.tileset.tiles[i].blocked and self.tileset.tiles[i].blocked or 0 -- TODO FIX cover info into tilemap
+		tile.cover = self.tileset.tiles[i].blocked or 0 -- TODO FIX cover info into tilemap
 		self.tiles[tile.id] = tile                        
 	end
 
