@@ -358,7 +358,6 @@ function WorldMap:moveMonster(monster, dx, dy)
 		array[index(monster.x, monster.y)] = 0
 		self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
 		array[index(monster.x + dx, monster.y + dy)] = monster.HPbar
-		DEBUG(monster.x, monster.y, monster.entry, monster.name, monster.HPbar)
 		if monster.HPbar ~= 0 then
 			self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
 		end

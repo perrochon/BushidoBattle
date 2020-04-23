@@ -37,6 +37,7 @@ function ScenePlay:init(role)
 		serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
 		serverlink:addMethod(HERO_MOVED, self.remoteHeroMoved, self)
 		serverlink:addMethod(SYNC_STATE, self.syncState, self)	
+		serverlink:addMethod(MONSTER_MOVED, self.remoteMonsterMoved, self)
 	end
 
 	--get everything on the screen
@@ -203,7 +204,7 @@ function ScenePlay:checkMove(dx, dy)
  function ScenePlay:remoteMoveHero(dx, dy, sender)
  
 	DEBUG_C(MOVE_HERO, dx, dy, tonumber(dx), tonumber(dy), sender)
-	DEBUG_C(self.world, self.hero)
+	
 	if sender then -- this is an incoming remote call
 		if self.server then
 			if tonumber(dx) ~= 0 or tonumber(dy) ~= 0 then
@@ -226,13 +227,12 @@ function ScenePlay:checkMove(dx, dy)
  function ScenePlay:remoteHeroMoved(x, y, sender)
 
 	DEBUG_C(HERO_MOVED, x, y, sender)	
-	DEBUG_C(self.world, self.hero)
 
 	if sender then -- this is an incoming remote call
 		if self.client then
 			self.world:moveHero(self.hero, x-self.hero.x, y-self.hero.y)
 		else
-			ERROR(HERO_MOVED, "should not be remotely on server")
+			ERROR(HERO_MOVED, "should not be called remotely on server")
 		end
 	else -- this is a local call
 		if self.server then
@@ -242,6 +242,30 @@ function ScenePlay:checkMove(dx, dy)
 		end
 	end
  end
+
+ function ScenePlay:remoteMonsterMoved(id, x, y, sender)
+
+	DEBUG_C(MONSTER_MOVED, id, x, y, sender)	
+
+	if sender then -- this is an incoming remote call
+		if self.client then
+			local m = self.monsters:getMonster(tonumber(id))
+			DEBUG_C(MONSTER_MOVED, m.id, m.name, x, y, sender)
+			self.world:moveMonster(m, x-m.x, y-m.y)
+		else
+			ERROR(MONSTER_MOVED, "should not be called remotely on server")
+		end
+	else -- this is a local call
+		if self.server then
+			local m = self.monsters:getMonster(id) -- debug
+			DEBUG_C(MONSTER_MOVED, m.id, m.name, x, y, sender)
+			serverlink:callMethod(MONSTER_MOVED, id, x, y)
+		else
+			ERROR(MONSTER_MOVED, "should not be called locally on client")
+		end
+	end
+ end
+
  
  function ScenePlay:syncState(x, y, sender)
  
@@ -431,12 +455,16 @@ function ScenePlay:monsterAI(monster)
 			end
 		end
 		self.world:moveMonster(monster, dx, dy)
+		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
+		self:remoteMonsterMoved(monster.id, monster.x, monster.y)
 		monster.done = true
 		self:monsterTurnOver()
 	elseif monster.state == "flee" then
 		--move away from the hero
 		dx, dy = self.world:whichWay(monster, self.hero.x, self.hero.y)
 		self.world:moveMonster(monster, dx, dy)
+		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
+		self:remoteMonsterMoved(monster.id, m.x, m.y)
 		monster.done = true
 		self:monsterTurnOver()
 	elseif monster.state == "attack" then

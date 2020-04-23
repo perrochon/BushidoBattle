@@ -11,13 +11,14 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 --]]
 Monster = Core.class()
 
-function Monster:init(entry)
+function Monster:init(entry, id)
 	--[[variable to hold the monster's stats
 		entry is the monster # that is created.  The # in the MANUAL and in the tileset
 	--]]
 
 	--position/key in the MM and tileset-monsters
-	self.entry = entry	
+	self.entry = entry
+	self.id = id
 	-- temporary coordinates when first created
 	self.x, self.y = 0, 0
 	self.blocked = true
@@ -65,19 +66,33 @@ function Monsters:init(level)
 --creates the Monsters variable self.list, a table of all the monsters
 
     self.list = {}
+	local id = 1
 
 	--place #2 monsters 
 	for i = 1, MONSTERS_2 + level*2 do
-		table.insert(self.list, Monster.new(2))
+		table.insert(self.list, Monster.new(2,id))
+		id += 1
 	end
 	--place #3 monsters 
 	for i = 1, MONSTERS_3 + level do
-		table.insert(self.list, Monster.new(3))
+		table.insert(self.list, Monster.new(3,id))
+		id += 1
 	end
 	--place #4 monster
 	for i = 1, MONSTERS_4 do
-		table.insert(self.list, Monster.new(4))
+		table.insert(self.list, Monster.new(4,id))
+		id += 1
 	end
+end
+
+function Monsters:getMonster(id)
+  for _, m in ipairs(self.list) do
+    if m.id == id then
+      return m
+    end
+  end
+  ERROR("No monster with id", id)
+  return nil
 end
 
 function Monsters:updateState(monster, id, hero)
