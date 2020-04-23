@@ -20,7 +20,7 @@ function NewTileMap:init(levelName)
 	INFO("Number of layers: ", #self.map.layers)
 
 	-- load texture pack exported from Gideros Texture Packer
-	DEBUG("Loading texture pack", texturePack)
+	--DEBUG("Loading texture pack", texturePack)
 	self.pack = TexturePack.new(textureIndex, texturePack)
 
 	-- Get all tiles from the editor map and look them up in the texture pack
@@ -102,7 +102,7 @@ function NewTileMap:LayerFromMap(number)
 					gid64[29]=0
 					-- gid = tonumber(tostring(gid64)) -- TODO FIX is this really necessary?
 					gid = gid64()
-					DEBUG("rotating tile", x, y, gid, gid64[31], gid64[31], gid64[31], flip)
+					--DEBUG("rotating tile", x, y, gid, gid64[31], gid64[31], gid64[31], flip)
 				end
 				
 				array[i] = gid
