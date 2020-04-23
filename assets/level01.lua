@@ -39,7 +39,8 @@ return {
           id = 11,
           properties = {
             ["blocked"] = "true",
-            ["description"] = "a rock"
+            ["cover"] = 2,
+            ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_01.png",
           width = 100,
@@ -49,7 +50,8 @@ return {
           id = 12,
           properties = {
             ["blocked"] = "true",
-            ["description"] = "a rock"
+            ["cover"] = 2,
+            ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_02.png",
           width = 100,
@@ -59,7 +61,8 @@ return {
           id = 13,
           properties = {
             ["blocked"] = "true",
-            ["description"] = "a rock"
+            ["cover"] = 2,
+            ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_03.png",
           width = 100,
@@ -69,7 +72,8 @@ return {
           id = 14,
           properties = {
             ["blocked"] = "true",
-            ["description"] = "a rock"
+            ["cover"] = 2,
+            ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_04.png",
           width = 100,
@@ -109,7 +113,8 @@ return {
           id = 53,
           properties = {
             ["blocked"] = "true",
-            ["description"] = "a rock"
+            ["cover"] = 2,
+            ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_01.png",
           width = 100,
@@ -118,8 +123,9 @@ return {
         {
           id = 54,
           properties = {
-            ["description"] = "a rock",
-            ["blocked"] = "true"
+            ["blocked"] = "true",
+            ["cover"] = 2,
+            ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_02.png",
           width = 100,
@@ -128,8 +134,9 @@ return {
         {
           id = 55,
           properties = {
-            ["description"] = "a rock",
-            ["blocked"] = "true"
+            ["blocked"] = "true",
+            ["cover"] = 2,
+            ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_03.png",
           width = 100,
@@ -138,8 +145,9 @@ return {
         {
           id = 56,
           properties = {
-            ["description"] = "a rock",
-            ["blocked"] = "true"
+            ["blocked"] = "true",
+            ["cover"] = 2,
+            ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_04.png",
           width = 100,
@@ -159,6 +167,7 @@ return {
           id = 64,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_I_01_4x6.png",
@@ -169,6 +178,7 @@ return {
           id = 65,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_Tower_3sq_5x5.png",
@@ -179,6 +189,7 @@ return {
           id = 66,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_Tower_Octagon_2sq_4x4.png",
@@ -189,6 +200,7 @@ return {
           id = 67,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 6,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png",
@@ -199,6 +211,7 @@ return {
           id = 68,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 6,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png",
@@ -239,6 +252,7 @@ return {
           id = 75,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 1,
             ["description"] = "corn field"
           },
           image = "../tiled/tiles/Floor_Wheat.png",
@@ -279,6 +293,7 @@ return {
           id = 79,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Roof_Thatched.png",
@@ -289,6 +304,7 @@ return {
           id = 80,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = 1,
             ["description"] = "well"
           },
           image = "../tiled/tiles/Well_With_Base_2x2.png",
