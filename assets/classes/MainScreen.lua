@@ -162,15 +162,21 @@ function MainScreen:init(hero)
 	self.reset:setPosition(HALFX + 150, cheatY) 
 	self.cheats:addChild(self.reset)
 	
-	--exit properly if user hits the back button
-	self:addEventListener(Event.KEY_DOWN, function(event)
-		if event.keyCode == KeyCode.BACK then
-			if application:getDeviceInfo() == "Android" then
-				application:exit()
-			end
-		end
-	end)
+	self.backButton = TextButton.new("Quit")
+	self.backButton:setAnchorPoint(0,0)
+	self.backButton:setScale(0.5)
+	self.backButton:setPosition(10,BUTTON_MARGIN+50)
+	self:addChild(self.backButton)
 
+	self.backButton:addEventListener("click", 
+		function()
+			if serverlink then
+				serverlink:close()
+				serverlink = nil
+			end
+			sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION) 
+		end
+	)
 end
 
 function MainScreen:movementButton(compass, a,b,c,d,e,f,g,h, dx, dy, r)
