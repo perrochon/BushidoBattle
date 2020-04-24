@@ -7,10 +7,13 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 Main for Bushido Battle, Bushido without the talk
 ]]
 
---[[ TODO 
+--[[ TODO
+		- Auto connect
+		- Fix hero selection model
+		- Multiple heroes
+		- remote attack update
 		- Initial Monster Placement (sync)
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
-		- Fix hero selection model
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
 		- monster placed in tiled
