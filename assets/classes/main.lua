@@ -8,7 +8,6 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO
-		- Auto connect
 		- Fix hero selection model
 		- Multiple heroes
 		- >2 devices
