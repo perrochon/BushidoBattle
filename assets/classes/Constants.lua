@@ -28,8 +28,8 @@ APP_HEIGHT @ 1188
 APP_WIDTH @ 1920
 FG_BLEED @ 1000 -- 500 should be enough, but HTML can be really wide...
 FG_X @ \(APP_HEIGHT + 1)\
-BUTTON_MARGIN @ 200
-BUTTON_Y @ \(APP_HEIGHT - BUTTON_MARGIN)\
+BUTTON_MARGIN @ 50
+MENU_MARGIN @ 200
 
 -- Colors
 COLOR_BLACK @ 0x000000   -- slightly off black is 0x140C1C
@@ -95,7 +95,7 @@ TRANSITION @ \SceneManager.fade\
 SCENE_START @ "sceneStart"
 SCENE_LOBBY @ "sceneLobby"
 SCENE_PLAY @ "sceneGame"
---SCENE_PLAY_CLIENT @ "sceneGameClient"
+SCENE_CHOOSE_HERO @ "sceneChooseHero"
 SCENE_DEATH @ "sceneDeath"
 SCENE_VICTORY @ "sceneVictory"
 -- Remote Play
@@ -109,7 +109,7 @@ MOVE_HERO @ "moveHero"
 HERO_MOVED @ "heroMoved"
 MONSTER_MOVED @ "monsterMoved"
 SYNC_STATE @ "syncState"
-AUTO_CONNECT @ true -- TODO REMOTE fix auto connect
+AUTO_CONNECT @ false
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()

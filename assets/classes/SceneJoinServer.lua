@@ -20,25 +20,35 @@ Modified by Louis Perrochon
 SceneJoinServer = gideros.class(Sprite)
 
 function SceneJoinServer:init()
-	local title = TextField.new(font, "Client mode - available servers: ")
-	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(0, BUTTON_MARGIN)
-	self:addChild(title)
+
+	self.basicGui = BasicGui.new("Client mode - available servers:", 
+						true, SCENE_CONNECT, 
+						"Battle", SCENE_PLAY, 
+						"Draw", SCENE_DRAW)
+						
+	self.battleButton = self.basicGui.button1
+	self.drawButton = self.basicGui.button2
+	self.basicGui:removeChild(self.battleButton)
+	self.basicGui:removeChild(self.drawButton)						
+	self:addChild(self.basicGui)
 	
 	self.servers = {}
 	
 	function self:onJoin(e)
-		local text = TextField.new(font, e.data.host)
-		text:setAnchorPoint(0.5,0.5)
+		local text = TextField.new(FONT_MEDIUM, e.data.host)
 		text:setTextColor(COLOR_YELLOW)	
-		local lastHeight = #self.servers*200 + 500
-		text:setPosition(BUTTON_MARGIN, lastHeight)
+		text:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
+		local lastHeight = #self.servers*200 + MENU_MARGIN+50
+		text:setPosition(MENU_MARGIN, lastHeight)
 		self:addChild(text)
 		
 		--join button
-		local joinButton = TextButton.new(font, "Join", "Join")	
-		joinButton:setPosition(APP_WIDTH - 200, lastHeight)
+		local joinButton = TextButton.new("Join")	
+		joinButton:setAnchorPoint(1,-0.5)
+		joinButton:setScale(0.5)
+		joinButton:setPosition(APP_WIDTH - MENU_MARGIN, lastHeight)
 		self:addChild(joinButton)
+
 		--store id which server to accept
 		joinButton.id = e.data.id
 		local cnt = #self.servers + 1
@@ -74,46 +84,12 @@ function SceneJoinServer:init()
 	--event to listen if server accepted our connection
 	serverlink:addEventListener("onAccepted", function()
 
-		--draw button
-		local drawButton = TextButton.new(font, "Draw", "Draw")
-		drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)				
-		self:addChild(drawButton)
-	
-		drawButton:addEventListener("click", 
-			function()	
-				sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION)  
-			end
-		)
+		self.basicGui:addChild(self.battleButton)
+		self.basicGui:addChild(self.drawButton)
 		
-		--battle button
-		local battleButton = TextButton.new(font, "Battle", "Battle")
-		battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
-		self:addChild(battleButton)
-
-		battleButton:addEventListener("click", 
-			function()	
-				sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "client"})  
-			end
-		)
 	end)
 	
 	--start listening for server broadcasts
 	serverlink:startListening()
 
-	--back button
-	local backButton = TextButton.new(font, "Back", "Back")	
-	backButton:setPosition(100, BUTTON_Y)
-
-	self:addChild(backButton)
-
-	backButton:addEventListener("click", 
-		function()	
-			--if we are heading back, we can close the server
-			if serverlink then
-				serverlink:close()
-				serverlink = nil
-			end
-			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
-		end
-	)
 end

@@ -57,7 +57,7 @@ sceneManager = SceneManager.new({
 [SCENE_START] = SceneStart,		--first thing the player sees
 [SCENE_LOBBY] = SceneLobby,		--the character creation scene
 [SCENE_PLAY] = ScenePlay,			--the main game scene
---[SCENE_PLAY_CLIENT] = ScenePlayClient,		--play as a client, rely on model on server
+[SCENE_CHOOSE_HERO] = SceneChooseHero, -- Hero management
 [SCENE_DEATH] = SceneDeath,			--when the player dies
 [SCENE_VICTORY] = SceneVictory,		--when the player wins
 

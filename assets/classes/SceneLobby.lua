@@ -6,6 +6,12 @@ SceneLobby = Core.class(Sprite)
 
 function SceneLobby:init()
 
+	local basicGui = BasicGui.new("Bushido Battle", 
+						nil, nil, 
+						"Connect", SCENE_CONNECT, 
+						"Hero", SCENE_CHOOSE_HERO)
+	self:addChild(basicGui)
+
 	local newHero = Player.new() 
 	--DEBUG("made " .. newHero.name .. " level " .. newHero.level)		
 
@@ -13,7 +19,7 @@ function SceneLobby:init()
 	heroDescription = heroDescription .. "Name: " .. newHero.name .."\n"
 	heroDescription = heroDescription .. "Level: " .. newHero.level .."\n"
 	heroDescription = heroDescription .. "Health: " .. newHero.hp .."\n"
-		heroDescription = heroDescription .. "Experience: " .. newHero.xp .."\n"
+	heroDescription = heroDescription .. "Experience: " .. newHero.xp .."\n"
 	heroDescription = heroDescription .. "Kills: " .. newHero.kills .."\n"
 	local title = TextField.new(FONT_MEDIUM, heroDescription)
 	title:setTextColor(COLOR_YELLOW)	
@@ -68,22 +74,7 @@ function SceneLobby:init()
 	else
 		INFO("No saved hero found.")
 	end
-	
-	-- Multiplayer Button
-	local connectButton = TextButton.new(font, "Connect", "Connect")
-	connectButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
-	self:addChild(connectButton, 1)
 
-	connectButton:addEventListener("click", 
-		function()	
-			--if we are heading back, we can close the server
-			if serverlink then
-				serverlink:close()
-				serverlink = nil
-			end
-			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
-		end
-	)
 
 	
 end

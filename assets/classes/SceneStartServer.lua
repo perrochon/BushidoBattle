@@ -18,27 +18,54 @@ SceneStartServer = gideros.class(Sprite)
 
 function SceneStartServer:init()
 
-	local title = TextField.new(font, "Server mode - clients connected: ")
-	title:setTextColor(COLOR_YELLOW)	
-	title:setAnchorPoint(0,0)
-	title:setPosition(BUTTON_MARGIN, BUTTON_MARGIN)
-	self:addChild(title)
-	
+	local basicGui = BasicGui.new("Server mode - clients connected:", 
+						true, SCENE_CONNECT, 
+						"Battle", nil, 
+						"Draw", nil)
+	self:addChild(basicGui)
+
+	--battle button
+	basicGui.button1:addEventListener("click", 
+		function()
+			--if we are ready to battle we
+			--stop broadcasting
+			serverlink:stopBroadcast()
+			--and start listening to clients
+			serverlink:startListening()
+			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "server"}) 
+		end
+	)
+
+	--draw button
+	basicGui.button2:addEventListener("click", 
+		function()
+			--if we are ready to draw we
+			--stop broadcasting
+			serverlink:stopBroadcast()
+			--and start listening to clients
+			serverlink:startListening()
+			sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION) 
+		end
+	)
+
 	self.clients = {}
 	
+	
 	function self:onAccept(e)
-		local text = TextField.new(font, e.data.host)
-		text:setAnchorPoint(0,0.5)
+		local text = TextField.new(FONT_MEDIUM, e.data.host)
 		text:setTextColor(COLOR_YELLOW)	
-		local lastHeight = #self.clients*200 + 500
-		text:setPosition(BUTTON_MARGIN, lastHeight)
+		text:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
+		local lastHeight = #self.clients*200 + MENU_MARGIN+50
+		text:setPosition(MENU_MARGIN, lastHeight)
 		self:addChild(text)
-		
+
 		--join button
-		local acceptButton = TextButton.new(font, "Accept", "Accept")
-		acceptButton:setPosition(APP_WIDTH - 200, lastHeight)
+		local acceptButton = TextButton.new("Accept")
+		acceptButton:setAnchorPoint(1,-0.5)
+		acceptButton:setScale(0.5)
+		acceptButton:setPosition(APP_WIDTH - MENU_MARGIN, lastHeight)
 		self:addChild(acceptButton)
-		
+
 		--store id which server to accept
 		acceptButton.id = e.data.id
 		local cnt = #self.clients + 1
@@ -78,52 +105,6 @@ function SceneStartServer:init()
 
 	serverlink:startBroadcast()
 	
-	--draw button
-	local drawButton = TextButton.new(font, "Draw", "Draw")
-	drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)
-		
-	self:addChild(drawButton)
 
-	drawButton:addEventListener("click", 
-		function()
-			--if we are ready to draw we
-			--stop broadcasting
-			serverlink:stopBroadcast()
-			--and start listening to clients
-			serverlink:startListening()
-			sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION) 
-		end
-	)
 
-	--battle button
-	local battleButton = TextButton.new(font, "Battle", "Battle")
-	battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
-	self:addChild(battleButton)
-
-	battleButton:addEventListener("click", 
-		function()
-			--if we are ready to battle we
-			--stop broadcasting
-			serverlink:stopBroadcast()
-			--and start listening to clients
-			serverlink:startListening()
-			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "server"}) 
-		end
-	)
-
-	--back button
-	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition(100, BUTTON_Y)
-	self:addChild(backButton)
-
-	backButton:addEventListener("click", 
-		function()	
-			--if we are heading back, we can close the server
-			if serverlink then
-				serverlink:close()
-				serverlink = nil
-			end
-			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
-		end
-	)
 end

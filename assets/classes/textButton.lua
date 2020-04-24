@@ -9,28 +9,37 @@ This code is MIT licensed, see <a href="http://www.opensource.org/licenses/mit-l
 ]]
  
 TextButton = gideros.class(Sprite)
+
+function TextButton:DrawGrid()
+
+	local 
+	pixel = Pixel.new(COLOR_WHITE, 1, 10,10) pixel:setAnchorPoint(0,1) pixel:setPosition(0,0) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_RED, 1, 10,10) pixel:setAnchorPoint(1,0) pixel:setPosition(100,-100) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_GREEN, 1, 10,10) pixel:setAnchorPoint(0,0) pixel:setPosition(0,-100) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_BLUE, 1, 10,10) pixel:setAnchorPoint(1,1) pixel:setPosition(100,0) self:addChild(pixel)
+end
  
-function TextButton:init(font, textUp, textDown, upState, downState)
- 
---create the upState and downstate sprites
-	self.upState = Sprite.new()
-	self.upState:setAnchorPoint(0.5,0.5)
-	self.downState = Sprite.new()
-	self.downState:setAnchorPoint(0.5,0.5)
+function TextButton:init(text)
+
+	self.back = Pixel.new(COLOR_YELLOW, 1, 400, MENU_MARGIN - BUTTON_MARGIN)
+	self.back:setAnchorPoint(0, 1)
+	self:addChild(self.back)
+
+	self.front = Pixel.new(COLOR_BROWN, 1, 400 - 10, MENU_MARGIN - BUTTON_MARGIN - 10)
+	self.front:setAnchorPoint(0, 1)
+	self.front:setPosition(5,-5)
+	self:addChild(self.front)
+
+	--self:DrawGrid()
+
+ 	local title = TextField.new(FONT_MEDIUM, text)
+	title:setTextColor(COLOR_YELLOW)	
+	title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
+	title:setPosition(200, - (MENU_MARGIN - BUTTON_MARGIN) / 2)
+	self:addChild(title)
+
 	
-	self.pixel = Pixel.new(COLOR_BROWN, 0.5, 350,200)
-	self.pixel:setAnchorPoint(0.5, 0.75)
-	self:addChild(self.pixel)
- 
--- add images to up and down states if given
- 
-	if upState and downState then
-		self.upImage = upState
-		self.downImage = downState
-		self.upState:addChild(self.upImage)
-		self.downState:addChild(self.downImage)
-	end
- 
+--[[ 
  
 --add text and position in middle if necessary 	
 	if textUp and textDown then
@@ -63,6 +72,7 @@ function TextButton:init(font, textUp, textDown, upState, downState)
 	end
  
 	self.focus = false
+]]
  
 	self:updateVisualState(false)
  
@@ -74,7 +84,9 @@ function TextButton:init(font, textUp, textDown, upState, downState)
 	self:addEventListener(Event.TOUCHES_MOVE, self.onTouchesMove, self)
 	self:addEventListener(Event.TOUCHES_END, self.onTouchesEnd, self)
 	self:addEventListener(Event.TOUCHES_CANCEL, self.onTouchesCancel, self)
+
 end
+
 
 function TextButton:onMouseDown(event)
 	if self:hitTestPoint(event.x, event.y) then
@@ -136,21 +148,9 @@ end
 -- if state is true show downState else show upState
 function TextButton:updateVisualState(state)
 	if state then
-		if self:contains(self.upState) then
-			self:removeChild(self.upState)
-		end
-		
-		if not self:contains(self.downState) then
-			self:addChild(self.downState)
-		end
+		self.front:setColor(COLOR_DKBROWN)
 	else
-		if self:contains(self.downState) then
-			self:removeChild(self.downState)
-		end
-		
-		if not self:contains(self.upState) then
-			self:addChild(self.upState)
-		end
+		self.front:setColor(COLOR_BROWN)
 	end
 end
 

@@ -24,7 +24,6 @@ function SceneDraw:init()
 	--for drawing logic
 	self.draw = Shape.new()
 	self:addChild(self.draw)
-	
 	--here we will assign each client (including ourselves) a some data
 	self.data = {}
 	--our color
@@ -49,34 +48,22 @@ function SceneDraw:init()
 	local dx = application:getLogicalTranslateX() / application:getLogicalScaleX()
 	local dy = application:getLogicalTranslateY() / application:getLogicalScaleY()
 	
-	--reset button
-	local resetButton = TextButton.new(font, "Reset", "Reset")
-	resetButton:setPosition(APP_WIDTH - 100, BUTTON_Y)
-	self:addChild(resetButton)
+	
+	
+	self.basicGui = BasicGui.new("Draw", 
+						true, SCENE_CONNECT, 
+						nil, nil, 
+						"Reset", nil)
+						
+	self:addChild(self.basicGui)
 
-	resetButton:addEventListener("click", 
+	self.basicGui.button2:addEventListener("click", 
 		function()
 			--if button clear was pressed then
 			--clear our drawing
 			self:reset()
 			--call this methid for all other clients
 			serverlink:callMethod("clear")
-		end
-	)
-
-	--back button
-	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition(100, BUTTON_Y)
-	self:addChild(backButton)
-
-	backButton:addEventListener("click", 
-		function()	
-			--if we are heading back, we can close the server
-			if serverlink then
-				serverlink:close()
-				serverlink = nil
-			end
-			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
 		end
 	)
 
