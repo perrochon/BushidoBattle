@@ -7,6 +7,8 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 	Game Logic
 --]]
 
+
+
 ScenePlay = Core.class(Sprite)
  
 function ScenePlay:init(role)
@@ -27,7 +29,6 @@ function ScenePlay:init(role)
 	self.hero = dataSaver.load("|D|hero")
 	self.monsters = Monsters.new(self.hero.level)
 	self.world = WorldMap.new(self.hero, self.monsters)
-	
 	self.msg = Messages.new()
 	self.sounds = Sounds.new("game")
 
@@ -144,7 +145,6 @@ function ScenePlay:checkMove(dx, dy)
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
 	DEBUG(self.active, self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-
 	if not self.heroTurn then return end
 
   if self.active == "look" then 
@@ -172,11 +172,9 @@ function ScenePlay:checkMove(dx, dy)
       self.main.ranged:updateVisualState(false)
       self:attackMonster(self.hero.x + dx, self.hero.y + dy)
     elseif layer == LAYER_ENVIRONMENT then
-	
-
-	
       -- check for blocked tiles
       if tile.blocked then
+		DEBUG(self.active, self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
         self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
       else
 		if self.client then
@@ -271,26 +269,41 @@ function ScenePlay:checkMove(dx, dy)
  end
 
  
- function ScenePlay:syncState(heroX, heroY, sender)
+ function ScenePlay:syncState(heroX, heroY, monstersInfo, sender)
  
-	DEBUG_C(SYNC_STATE, heroX, heroY, sender)
+	DEBUG_C(SYNC_STATE, heroX, heroY, sender, monstersInfo)
+	
 	if sender then  -- this is an incoming remote call
 		if self.ready then
 			if self.client then -- server sends us update
+
+				DEBUG("old monsters: ", self.monsters:serialize())
+				for id, m in pairs(self.monsters.list) do
+					self.world:removeMonster(m.x, m.y)	
+				end
+				self.monsters.list = {}
+				self.monsters:initFromServer(monstersInfo)
+				DEBUG("newmonsters", self.monsters:serialize())
+				for id, m in pairs(self.monsters.list) do
+					self.world:addMonster(m)
+				end
 				self.world:moveHero(self.hero, heroX-self.hero.x, heroY-self.hero.y)
-			else -- client requests update
-				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
-				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+
+			else -- client requests update. Ignore any parameters
+				monstersInfo = self.monsters:serialize()
+				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
+				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
 			end
 		end		
-	else -- this is a local call
+	else -- this is a local call. Ignore any parameters
 		if self.ready then
 			if self.server then
-				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y)
-				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y)
+				monstersInfo = self.monsters:serialize()	
+				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
+				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
 			else
-				DEBUG_C(SYNC_STATE, -1, -1)
-				serverlink:callMethod(SYNC_STATE, -1, -1)
+				DEBUG_C(SYNC_STATE, -1, -1, -1)
+				serverlink:callMethod(SYNC_STATE, -1, -1, -1)
 			end
 		else
 			ERROR(SYNC_STATE, "should not be called locally before ready")
@@ -456,12 +469,17 @@ function ScenePlay:monsterAI(monster)
 					successful = true
 				end
 				tries = tries + 1
-				if tries == 4 then successful = true end
+				if tries == 4 then 
+					successful = true 
+					dx = 0 
+					dy = 0
+					DEBUG("Not moving this turn", monster.id, monster.name, monster.x,monster.y)
+				end
 			end
 		end
 		self.world:moveMonster(monster, dx, dy)
-		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
 		if self.remote then
+			DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
 			self:remoteMonsterMoved(monster.id, monster.x, monster.y)
 		end
 		monster.done = true
@@ -470,8 +488,8 @@ function ScenePlay:monsterAI(monster)
 		--move away from the hero
 		dx, dy = self.world:whichWay(monster, self.hero.x, self.hero.y)
 		self.world:moveMonster(monster, dx, dy)
-		DEBUG("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
 		if self.remote then
+			DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
 			self:remoteMonsterMoved(monster.id, m.x, m.y)
 		end
 		monster.done = true

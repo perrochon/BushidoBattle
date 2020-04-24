@@ -20,7 +20,7 @@ function WorldMap:init(hero, monsters)
 	-- needs to be consistent with Constants.lua, but also rendering.
 	local group = Sprite.new()
 	
-	self.map = NewTileMap.new("level03.lua")
+	self.map = NewTileMap.new("level04.lua")
 	
 	local layer1,array1 = self.map:LayerFromMap(1)
 	group:addChild(layer1) 
@@ -96,7 +96,7 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 			i = index(x, y) 
 			--returns true only if there are no monsters there and it's a floor tile
 			--can't use WorldMap:blocked() because monster layer not set yet
-			DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
+			--DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
 			 placed = (mArray[i] == 0) and (envArray[i] == 0)
 			--local key, layer, tile = self:getTileInfo(x, y, LAYER_TERRAIN)
 			--placed = (mArray[i] == 0) and (envArray[i] == 0) and not tile.blocked	
@@ -287,6 +287,7 @@ function WorldMap:moveHero(hero, dx, dy)
 	--keep the hero centered on the screen by shifting all the TileMaps  
 	self:shiftWorld(dx, dy)
 	--for purposes of moving around the map, the hero is just another monster
+	--for purposes of moving around the map, the hero is just another monster
 	self:moveMonster(hero, dx, dy)
 end
 
@@ -371,7 +372,6 @@ function WorldMap:moveMonster(monster, dx, dy)
 end
 
 function WorldMap:removeMonster(x, y)
-
 	local array = self.mapArrays[LAYER_MONSTERS]
 	array[index(x, y)] = 0
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
@@ -379,6 +379,29 @@ function WorldMap:removeMonster(x, y)
 	array[index(x, y)] = 0
 	self.mapLayers[LAYER_HP]:clearTile(x, y) 	
 end
+
+function WorldMap:addMonster(monster)
+	--[[ 
+	--]]
+
+	local x = monster.x
+	local y = monster.y
+	
+	--get the array and entry
+	local array = self.mapArrays[LAYER_MONSTERS]
+	
+	--place the monster at the new position
+	array[index(monster.x, monster.y)] = monster.entry
+	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 
+
+	--remove and move the HPbar
+	array = self.mapArrays[LAYER_HP]
+	array[index(monster.x, monster.y)] = monster.HPbar
+	if monster.HPbar ~= 0 then
+		self.mapLayers[LAYER_HP]:setTile(monster.x, monster.y, monster.HPbar, 1) 
+	end
+end
+
 
 function WorldMap:blocked(x, y)
 	--[[uses getTileInfo to determine if the tile is blocked or not
@@ -388,18 +411,23 @@ function WorldMap:blocked(x, y)
 	--return (self.mapLayers[LAYER_MONSTERS] ~= 0) or tilemap:blocked(x,y)
 
 	--getTileInfo returns the highest level layer key that isn't 0
+
+	if x < 1 or x > LAYER_COLUMNS or y < 1 or y > LAYER_ROWS then
+		DEBUG("x,y outside bounds", x,y)
+		ERROR("Testing blocked on tile outside bound", x, y)
+		return true
+	end
+
 	local key, layer, tile = self:getTileInfo(x, y)
+	DEBUG(x, y, key, layer, tile.name, tile.blocked)
+	
 	if layer == LAYER_MONSTERS then
 		return true
-	elseif layer == LAYER_ENVIRONMENT then
-		if tile.blocked == true then
-			return true
-		end
+	elseif layer == LAYER_ENVIRONMENT and tile.blocked then
+		return true
 	else
 		return false
 	end
-
-	
 end
 
 function WorldMap:whichWay(monster, tX, tY)
@@ -458,6 +486,7 @@ function WorldMap:whichWay(monster, tX, tY)
 	--finally choose a non-blocked move
 	for i, move in ipairs(moves) do
 		dx, dy = move[1], move[2]
+		DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))
 		if not self:blocked(x + dx, y + dy) then		-- if not blocked then move in that direction 
 			break
 		end

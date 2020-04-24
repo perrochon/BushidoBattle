@@ -9,6 +9,11 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 		Monster class with stats for each monster 
 		Monsters class which is a list of the monsters in play
 --]]
+
+if not json then
+	require "json"
+end
+
 Monster = Core.class()
 
 function Monster:init(entry, id)
@@ -60,6 +65,24 @@ function Monster:init(entry, id)
 	self.seesHero = false
 end
 
+function Monster:serialize()
+	local array = {}
+	array["id"] = self.id
+	array["entry"] = self.entry
+	array["x"] = self.x
+	array["y"] = self.y
+	array["hp"] = self.hp
+	return array
+end
+
+function Monster:deserialize(m)
+	if (self.id ~= m["id"]) then DEBUG("Monster mismatch", self.id, m["id"]) return end
+	self.entry = m["entry"]
+	self.x = m["x"]
+	self.y = m["y"]
+	self.hp = m["hp"]
+end
+
 Monsters = Core.class(Sprite)
 
 function Monsters:init(level)
@@ -82,6 +105,47 @@ function Monsters:init(level)
 	for i = 1, MONSTERS_4 do
 		table.insert(self.list, Monster.new(4,id))
 		id += 1
+	end
+
+	self:Test()
+end
+
+function Monsters:initFromServer(monstersInfo)
+	local info = json.decode(monstersInfo)
+	self.list = {}
+	for k, m in pairs(info) do
+		local monster = Monster.new(m["entry"], k)
+		monster:deserialize(m)
+		table.insert(self.list, monster)
+	end
+end
+
+
+function Monsters:Test()
+	info1 = self:serialize()
+	self:deserialize(info1)
+	info2 = self:serialize()
+	if info1 == info2 then 
+		DEBUG("Test Passed")
+	else
+		DEBUG ("Serialization/Deserializatin failed")
+	end
+end
+
+function Monsters:serialize()
+	local array = {}
+	for key, m in ipairs(self.list) do
+		array[m.id] = m:serialize()
+	end
+	local string = json.encode(array)
+	return string
+end
+
+function Monsters:deserialize(monstersInfo)
+	local info = json.decode(monstersInfo)
+	for k, m in pairs(info) do
+		local monster = self:getMonster(m["id"])
+		monster:deserialize(m)
 	end
 end
 
