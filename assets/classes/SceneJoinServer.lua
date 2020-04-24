@@ -22,7 +22,7 @@ SceneJoinServer = gideros.class(Sprite)
 function SceneJoinServer:init()
 	local title = TextField.new(font, "Client mode - available servers: ")
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(0, 100)
+	title:setPosition(0, BUTTON_MARGIN)
 	self:addChild(title)
 	
 	self.servers = {}
@@ -31,8 +31,8 @@ function SceneJoinServer:init()
 		local text = TextField.new(font, e.data.host)
 		text:setAnchorPoint(0.5,0.5)
 		text:setTextColor(COLOR_YELLOW)	
-		local lastHeight = #self.servers*100 + 300
-		text:setPosition(APP_WIDTH / 4, lastHeight)
+		local lastHeight = #self.servers*200 + 500
+		text:setPosition(BUTTON_MARGIN, lastHeight)
 		self:addChild(text)
 		
 		--join button
@@ -51,17 +51,19 @@ function SceneJoinServer:init()
 			local parent = self:getParent()
 			self:removeFromParent()
 		end
+
+		joinButton:addEventListener("click", joinButton.click, joinButton)
 		if AUTO_CONNECT then
-			joinButton:click()
-		else
-			joinButton:addEventListener("click", joinButton.click, joinButton)
+			joinButton:dispatchEvent(Event.new("click"))
 		end
 	end
 	
 	--create client instance
-	serverlink = Client.new({username = "IAmAClient"})
-	DEBUG("Client started")
-	DEBUG_C("Client started")
+	local os, sdk, mfg, model = application:getDeviceInfo()
+	local name = "Client On" .. os .. (model and model or "")
+	name = name:gsub("%s+", "")
+	serverlink = Client.new({username = name})
+	DEBUG_C(name, "started")
 	
 	serverlink:addEventListener("device", function(e)
 		DEBUG_C("Device", e.data.id, e.data.ip, e.data.host)
@@ -72,31 +74,27 @@ function SceneJoinServer:init()
 	--event to listen if server accepted our connection
 	serverlink:addEventListener("onAccepted", function()
 
-		if AUTO_CONNECT then
-			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION)
-		else
-			--draw button
-			local drawButton = TextButton.new(font, "Draw", "Draw")
-			drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)				
-			self:addChild(drawButton)
+		--draw button
+		local drawButton = TextButton.new(font, "Draw", "Draw")
+		drawButton:setPosition(APP_WIDTH - 100, BUTTON_Y)				
+		self:addChild(drawButton)
+	
+		drawButton:addEventListener("click", 
+			function()	
+				sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION)  
+			end
+		)
 		
-			drawButton:addEventListener("click", 
-				function()	
-					sceneManager:changeScene(SCENE_DRAW, TRANSITION_TIME, TRANSITION)  
-				end
-			)
-			
-			--battle button
-			local battleButton = TextButton.new(font, "Battle", "Battle")
-			battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
-			self:addChild(battleButton)
+		--battle button
+		local battleButton = TextButton.new(font, "Battle", "Battle")
+		battleButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
+		self:addChild(battleButton)
 
-			battleButton:addEventListener("click", 
-				function()	
-					sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "client"})  
-				end
-			)
-		end
+		battleButton:addEventListener("click", 
+			function()	
+				sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION, nil, {userData = "client"})  
+			end
+		)
 	end)
 	
 	--start listening for server broadcasts

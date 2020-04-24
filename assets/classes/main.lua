@@ -11,6 +11,7 @@ Main for Bushido Battle, Bushido without the talk
 		- Auto connect
 		- Fix hero selection model
 		- Multiple heroes
+		- >2 devices
 		- remote attack update
 		- Initial Monster Placement (sync)
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)

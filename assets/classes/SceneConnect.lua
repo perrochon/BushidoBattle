@@ -2,14 +2,16 @@ SceneConnect = Core.class(Sprite)
 
 function SceneConnect:init()
 
-	local title = TextField.new(font, "LAN/WiFi Connect")
+	local title = TextField.new(font, "Connect with Friends")
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(0, 200)
+	title:setAnchorPoint(0,0)
+	title:setPosition(BUTTON_MARGIN, BUTTON_MARGIN)
 	self:addChild(title)
 
 	--create start button
 	local startButton = TextButton.new(font, "Server", "Server")
-	startButton:setPosition(APP_WIDTH - 100 , BUTTON_Y)
+	startButton:setAnchorPoint(0.5,0)
+	startButton:setPosition(APP_WIDTH - BUTTON_MARGIN, BUTTON_Y)
 	self:addChild(startButton)
 
 	--start button on click event
@@ -22,6 +24,7 @@ function SceneConnect:init()
 	
 	--create start button
 	local optionsButton = TextButton.new(font, "Client", "Client")
+	optionsButton:setAnchorPoint(0.5,0)
 	optionsButton:setPosition(APP_WIDTH / 2, BUTTON_Y)
 	self:addChild(optionsButton)
 	
@@ -35,7 +38,8 @@ function SceneConnect:init()
 	
 	--back button
 	local backButton = TextButton.new(font, "Back", "Back")
-	backButton:setPosition(100, BUTTON_Y)
+	backButton:setAnchorPoint(0,0)
+	backButton:setPosition(BUTTON_MARGIN,APP_HEIGHT - BUTTON_MARGIN)
 	self:addChild(backButton)
 
 	backButton:addEventListener("click", 

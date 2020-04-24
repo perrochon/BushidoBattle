@@ -20,42 +20,53 @@ function SceneStartServer:init()
 
 	local title = TextField.new(font, "Server mode - clients connected: ")
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(0, 100)
+	title:setAnchorPoint(0,0)
+	title:setPosition(BUTTON_MARGIN, BUTTON_MARGIN)
 	self:addChild(title)
 	
 	self.clients = {}
 	
 	function self:onAccept(e)
 		local text = TextField.new(font, e.data.host)
-		text:setAnchorPoint(0.5,0.5)
+		text:setAnchorPoint(0,0.5)
 		text:setTextColor(COLOR_YELLOW)	
-		local lastHeight = #self.clients*100 + 300
-		text:setPosition(APP_WIDTH / 4, lastHeight)
+		local lastHeight = #self.clients*200 + 500
+		text:setPosition(BUTTON_MARGIN, lastHeight)
 		self:addChild(text)
 		
 		--join button
 		local acceptButton = TextButton.new(font, "Accept", "Accept")
 		acceptButton:setPosition(APP_WIDTH - 200, lastHeight)
 		self:addChild(acceptButton)
+		
 		--store id which server to accept
 		acceptButton.id = e.data.id
 		local cnt = #self.clients + 1
 		self.clients[cnt] = {}
 		self.clients[cnt].text = text
 		self.clients[cnt].button = acceptButton
+		
 		function acceptButton:click()
 			--accept client with this id
 			serverlink:accept(self.id)
 			local parent = self:getParent()
 			self:removeFromParent()
 		end
+
 		acceptButton:addEventListener("click", acceptButton.click, acceptButton)
+
+		if AUTO_CONNECT then
+			acceptButton:dispatchEvent(Event.new("click"))
+		end
+
 	end
 	
 	--create a server instance
-	serverlink = Server.new({username = "myServer"})
-	DEBUG("Server started")
-	DEBUG_C("Server started")
+	local os, sdk, mfg, model = application:getDeviceInfo()
+	local name = "ServerOn" .. os .. (model and model or "")
+	name = name:gsub("%s+", "")
+	serverlink = Server.new({username = name})
+	DEBUG_C(name, "started")
 
 	serverlink:addEventListener("device", function(e)
 		DEBUG_C("Device", e.data.id, e.data.ip, e.data.host)
@@ -64,7 +75,6 @@ function SceneStartServer:init()
 	--add event to monitor when new client wants to join
 	serverlink:addEventListener("newClient", self.onAccept, self)
 	--start broadcasting to discover devices
-
 
 	serverlink:startBroadcast()
 	

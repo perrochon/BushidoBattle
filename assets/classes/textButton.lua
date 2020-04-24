@@ -14,11 +14,12 @@ function TextButton:init(font, textUp, textDown, upState, downState)
  
 --create the upState and downstate sprites
 	self.upState = Sprite.new()
+	self.upState:setAnchorPoint(0.5,0.5)
 	self.downState = Sprite.new()
+	self.downState:setAnchorPoint(0.5,0.5)
 	
 	self.pixel = Pixel.new(COLOR_BROWN, 0.5, 350,200)
-	self.pixel:setAnchorPoint(0.5, 0.5)
-	self.pixel:setPosition(0,-75)
+	self.pixel:setAnchorPoint(0.5, 0.75)
 	self:addChild(self.pixel)
  
 -- add images to up and down states if given
@@ -38,6 +39,7 @@ function TextButton:init(font, textUp, textDown, upState, downState)
 		self.textUp:setAnchorPoint(0.5,0.5)
 
 		self.textDown = TextField.new(font, textDown)
+		self.textDown:setAnchorPoint(0.5, 0.5)
 		self.upState:addChild(self.textUp)
 		self.downState:addChild(self.textDown)
 		if upState and downState then -- center text in middle of images
@@ -54,8 +56,8 @@ function TextButton:init(font, textUp, textDown, upState, downState)
 			local downtextLength = self.textDown:getWidth()
 			local downtextHeight = self.textDown:getHeight()
  
-			self.textUp:setPosition((upimageLength-uptextLength)/2,(upimageHeight-uptextHeight)/2)
-			self.textDown:setPosition((downimageLength-downtextLength)/2,(downimageHeight-downtextHeight)/2)
+			--self.textUp:setPosition((upimageLength-uptextLength)/2,(upimageHeight-uptextHeight)/2)
+			--self.textDown:setPosition((downimageLength-downtextLength)/2,(downimageHeight-downtextHeight)/2)
 		end
  
 	end
