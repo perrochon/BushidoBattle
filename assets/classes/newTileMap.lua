@@ -12,7 +12,7 @@ function NewTileMap:init(levelName)
 	INFO("Map File:    ", levelName)
 	INFO("Texture Pack:", texturePack)
 	-- load .lua file exported from tiled
-	self.map = loadfile(levelName)() -- error "attempt to call nil value" means file not found. Check spelling and refresh
+	self.map = loadfile(currentMapFileName..".lua")() -- error "attempt to call nil value" means file not found. Check spelling and refresh
 	
 	INFO(self.map.properties["Title"])
 	INFO(("  Size: %dx%d\n  Tile size: %dx%d"):format(self.map.width, self.map.height, self.map.tilewidth, self.map.tileheight))

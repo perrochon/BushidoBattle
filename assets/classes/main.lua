@@ -47,8 +47,12 @@ application:setScaleMode("letterbox")
 
 --set up the global variables and functions
 manual = Cyclopedia.new()
+
 currentHero = 1
 currentHeroFileName = "|D|hero"..currentHero
+
+currentMap = 1
+currentMapFileName = "level01"
 
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
@@ -61,6 +65,7 @@ sceneManager = SceneManager.new({
 [SCENE_LOBBY] = SceneLobby,		--the character creation scene
 [SCENE_PLAY] = ScenePlay,			--the main game scene
 [SCENE_CHOOSE_HERO] = SceneChooseHero, -- Hero management
+[SCENE_CHOOSE_MAP] = SceneChooseMap, -- Hero management
 [SCENE_DEATH] = SceneDeath,			--when the player dies
 [SCENE_VICTORY] = SceneVictory,		--when the player wins
 

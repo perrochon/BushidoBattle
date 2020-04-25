@@ -1,5 +1,5 @@
 <project>
- <properties iosDevice="0" logicalWidth="1200" orientation="1" android_template="0" html5_symbols="0" packageName="com.yourdomain.yourapp" html5_host="" app_icon="other/Icon.png" app_name="Bushido Battle" scaleMode="3" vsync="0" html5_mem="256" win_org="GiderosMobile" osx_org="GiderosMobile" architecture="7" windowWidth="0" ios_bundle="com.yourdomain." osx_bundle="com.yourdomain." exportMode="0" touchToMouse="1" encryptAssets="0" build_number="1" osx_signingId="" tv_icon="" logicalHeight="1920" win_domain="giderosmobile.com" windowHeight="0" mouseTouchOrder="0" html5_fbinstant="0" osx_installerId="" html5_wasm="0" encryptCode="0" retinaDisplay="0" winrt_org="GiderosMobile" autorotation="0" osx_category="5" mouseToTouch="1" backgroundColor="#000000" html5_pack="0" disableSplash="1" version_code="1" splashScaleMode="0" fps="60" splash_h_image="" winrt_package="com.yourdomain.yourapp" html5_crash="" osx_domain="giderosmobile.com" splash_v_image="" version="1.0" html5_fbload="50">
+ <properties version="1.0" splash_v_image="" html5_host="" version_code="1" architecture="7" encryptAssets="0" osx_installerId="" touchToMouse="1" ios_bundle="com.yourdomain." html5_fbinstant="0" html5_mem="256" exportMode="0" orientation="1" vsync="0" splash_h_image="" autorotation="0" html5_crash="" html5_fbload="50" winrt_package="com.yourdomain.yourapp" osx_signingId="" app_name="Bushido Battle" mouseTouchOrder="0" windowWidth="0" osx_domain="giderosmobile.com" tv_icon="" html5_symbols="0" backgroundColor="#000000" logicalWidth="1200" iosDevice="0" osx_category="5" encryptCode="0" app_icon="other/Icon.png" win_domain="giderosmobile.com" html5_wasm="0" splashScaleMode="0" disableSplash="1" logicalHeight="1920" scaleMode="3" win_org="GiderosMobile" winrt_org="GiderosMobile" mouseToTouch="1" windowHeight="0" packageName="com.yourdomain.yourapp" fps="60" osx_org="GiderosMobile" android_template="0" build_number="1" retinaDisplay="0" html5_pack="0" osx_bundle="com.yourdomain.">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -32,6 +32,7 @@
   <file name="assets/classes/Player.lua"/>
   <file name="assets/classes/Projectiles.lua"/>
   <file name="assets/classes/SceneChooseHero.lua"/>
+  <file name="assets/classes/SceneChooseMap.lua"/>
   <file name="assets/classes/SceneConnect.lua"/>
   <file name="assets/classes/SceneDeath.lua"/>
   <file name="assets/classes/SceneDraw.lua"/>
@@ -93,16 +94,16 @@
  <file name="assets/bushidobattle.png"/>
  <file name="assets/bushidobattle.txt"/>
  <file name="assets/fbapp-config.json"/>
- <file name="assets/level01.lua" excludeFromExecution="1"/>
- <file name="assets/level02.lua" excludeFromExecution="1"/>
- <file name="assets/level03.lua" excludeFromExecution="1"/>
- <file name="assets/level04.lua" excludeFromExecution="1"/>
- <dependency to="assets/classes/Constants.lua" from="assets/classes/BasicGui.lua"/>
- <dependency to="assets/classes/devMacros.lua" from="assets/classes/Constants.lua"/>
- <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
- <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
- <dependency to="assets/classes/Constants.lua" from="assets/classes/TileMap.lua"/>
- <dependency to="assets/classes/scenemanager.lua" from="assets/classes/main.lua"/>
- <dependency to="assets/classes/Constants.lua" from="assets/classes/main.lua"/>
- <dependency to="assets/classes/devMacros.lua" from="assets/classes/main.lua"/>
+ <file excludeFromExecution="1" name="assets/level01.lua"/>
+ <file excludeFromExecution="1" name="assets/level02.lua"/>
+ <file excludeFromExecution="1" name="assets/level03.lua"/>
+ <file excludeFromExecution="1" name="assets/level04.lua"/>
+ <dependency from="assets/classes/BasicGui.lua" to="assets/classes/Constants.lua"/>
+ <dependency from="assets/classes/Constants.lua" to="assets/classes/devMacros.lua"/>
+ <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
+ <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>
+ <dependency from="assets/classes/TileMap.lua" to="assets/classes/Constants.lua"/>
+ <dependency from="assets/classes/main.lua" to="assets/classes/Constants.lua"/>
+ <dependency from="assets/classes/main.lua" to="assets/classes/devMacros.lua"/>
+ <dependency from="assets/classes/main.lua" to="assets/classes/scenemanager.lua"/>
 </project>

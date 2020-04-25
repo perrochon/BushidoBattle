@@ -1,16 +1,20 @@
-SceneChooseHero = Core.class(Sprite)
+SceneChooseMap = Core.class(Sprite)
 
-function SceneChooseHero:init()
+function SceneChooseMap:init()
 
 	local basicGui = BasicGui.new("Choose a Hero", 
 					true, SCENE_LOBBY, 
 					"Battle", SCENE_PLAY, 
-					"Map", SCENE_CHOOSE_MAP)
+					"Hero", SCENE_CHOOSE_HERO)
 	self:addChild(basicGui)
 	
 	self.panels = {}
 	
 	for i=1,4 do
+	
+		self.panels[i] = self:displayHero("Map "..i, i)
+
+		--[[
 		local heroFileName = "|D|hero"..i
 		DEBUG("Loading", heroFileName)
 		local hero = dataSaver.load(heroFileName)	
@@ -25,16 +29,17 @@ function SceneChooseHero:init()
 			dataSaver.save(heroFileName, hero)		
 			self.panels[i] = self:displayHero(hero, i)
 		end
+		]]
 		
 	end
 	
-	self:updateVisualState(true, currentHero)
+	self:updateVisualState(true, currentMap)
 
 	--basicGui:drawGrid()
 
 end
 
-function SceneChooseHero:displayHero(hero, slot)
+function SceneChooseMap:displayHero(hero, slot)
 
 	local yGap = BUTTON_MARGIN
 	local heroWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
@@ -54,15 +59,10 @@ function SceneChooseHero:displayHero(hero, slot)
 	panel.front:setPosition(5,-5)
 	panel:addChild(panel.front)
 
-	local heroDescription = ""
-	heroDescription = heroDescription .. hero.name .."\n"
-	heroDescription = heroDescription .. "Level: " .. hero.level .."\n"
-	heroDescription = heroDescription .. "HP: " .. hero.hp .."\n"
-	heroDescription = heroDescription .. "XP: " .. hero.xp .."\n"
-	heroDescription = heroDescription .. "Kills: " .. hero.kills .."\n"
+	local heroDescription = hero
 
 	local title = TextField.new(FONT_MEDIUM, heroDescription)
-	title:setLayout({flags = FontBase.TLF_REF_TOP |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
+	title:setLayout({flags = FontBase.TLF_REF_TOP |FontBase.TLF_LEFT})
 	title:setTextColor(COLOR_YELLOW)	
 	title:setPosition(15, -heroHeight+20) 
 	panel:addChild(title)
@@ -73,69 +73,53 @@ function SceneChooseHero:displayHero(hero, slot)
 	pixel:setPosition(x-5, y-5)
 	--stage:addChild(pixel)
 
-	resetButton = TextButton.new("Reset")
-	resetButton:setAnchorPoint(0.5,1)
-	resetButton:setScale(0.5)
-	resetButton:setAlpha(0.5)
-	resetButton:setPosition(heroWidth / 2, 300)
-	panel:addChild(resetButton)
-
-	resetButton:addEventListener("click", function()
-			local heroFileName = "|D|hero"..slot
-			DEBUG("Resetting", heroFileName)
-			hero = Player.new(slot) 
-			dataSaver.save(heroFileName, hero)
-			sceneManager:changeScene(SCENE_CHOOSE_HERO, TRANSITION_TIME, TRANSITION) 
-			end
-		)
-
 	panel.front.slot = slot
 
 	self.focus = false 
-	panel.front:addEventListener(Event.MOUSE_DOWN, SceneChooseHero.onMouseDown, panel.front)
-	panel.front:addEventListener(Event.MOUSE_MOVE, SceneChooseHero.onMouseMove, panel.front)
-	panel.front:addEventListener(Event.MOUSE_UP, SceneChooseHero.onMouseUp, panel.front)
+	panel.front:addEventListener(Event.MOUSE_DOWN, SceneChooseMap.onMouseDown, panel.front)
+	panel.front:addEventListener(Event.MOUSE_MOVE, SceneChooseMap.onMouseMove, panel.front)
+	panel.front:addEventListener(Event.MOUSE_UP, SceneChooseMap.onMouseUp, panel.front)
  
 	return panel
 end
 
-function SceneChooseHero:onMouseDown(event)
+function SceneChooseMap:onMouseDown(event)
 	if self:hitTestPoint(event.x, event.y) then
 		DEBUG("Mouse down on panel", self.slot)
 		self.focus = true
-		self:getParent():getParent():updateVisualState(false, currentHero)
+		self:getParent():getParent():updateVisualState(false, currentMap)
 		self:getParent():getParent():updateVisualState(true, self.slot)
 		event:stopPropagation()
 	end
 end
 
-function SceneChooseHero:onMouseMove(event)
+function SceneChooseMap:onMouseMove(event)
 	if self.focus then
 		DEBUG("Mouse move on panel", self.slot)
 		if not self:hitTestPoint(event.x, event.y) then
 			DEBUG("Mouse left panel", i)
 			self.focus = false;
 			self:getParent():getParent():updateVisualState(false, self.slot)
-			self:getParent():getParent():updateVisualState(true, currentHero)
+			self:getParent():getParent():updateVisualState(true, currentMap)
 		end
 		event:stopPropagation()
 	end
 end
 
-function SceneChooseHero:onMouseUp(event)
+function SceneChooseMap:onMouseUp(event)
 	if self.focus then
 		DEBUG("Mouse up on panel", self.slot)
 		self.focus = false;
-		self:getParent():getParent():updateVisualState(false, currentHero)
+		self:getParent():getParent():updateVisualState(false, currentMap)
 		self:getParent():getParent():updateVisualState(true, self.slot)
-		currentHero = self.slot
-		currentHeroFileName = "|D|hero"..self.slot
+		currentMap = self.slot
+		currentMapFileName = "level0"..self.slot -- TODO FIX will break with map 10
 		
 		event:stopPropagation()
 	end
 end
 
-function SceneChooseHero:updateVisualState(state, slot)
+function SceneChooseMap:updateVisualState(state, slot)
 	if state then
 		self.panels[slot].front:setColor(COLOR_GREY)
 	else

@@ -54,7 +54,6 @@ application:setOrientation(Application.LANDSCAPE_LEFT)
 application:setScaleMode("letterbox")					
 application:setBackgroundColor(COLOR_BLACK)
 
-
 MSG_FADE = 0.005
 MSG_DESCRIPTION @ 1
 MSG_ATTACK @ 2
@@ -96,6 +95,7 @@ SCENE_START @ "sceneStart"
 SCENE_LOBBY @ "sceneLobby"
 SCENE_PLAY @ "sceneGame"
 SCENE_CHOOSE_HERO @ "sceneChooseHero"
+SCENE_CHOOSE_MAP @ "sceneChooseMap"
 SCENE_DEATH @ "sceneDeath"
 SCENE_VICTORY @ "sceneVictory"
 -- Remote Play
