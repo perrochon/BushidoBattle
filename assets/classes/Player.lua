@@ -16,7 +16,7 @@ function Player:init(slot)
 	--]]
 
 	self.slot = slot
-	names = {"ArcherYP", "YummySake", "Lupus", "Legolas"}
+	names = {"ArcherYP", "YummySake", "Lupus", "Kiga"}
 	self.name = names[slot]
 
 	--position/key in the MM and tileset-monsters
