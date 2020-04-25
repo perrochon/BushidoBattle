@@ -26,7 +26,7 @@ function ScenePlay:init(role)
 	self.heroTurn = true
 	
 	--the major gaming variables
-	self.hero = dataSaver.load("|D|hero")
+	self.hero = dataSaver.load(currentHeroFileName)
 	self.monsters = Monsters.new(self.hero.level)
 	self.world = WorldMap.new(self.hero, self.monsters)
 	self.msg = Messages.new()
@@ -69,7 +69,7 @@ function ScenePlay:init(role)
 	self.main.death:addEventListener("click", function () self.cheat = "D" end)
 	self.main.victory:addEventListener("click", function () self.cheat = "V" end)
 	self.main.reset:addEventListener("click", function () 			
-		os.remove("|D|hero.json")
+		os.remove(currentHeroFileName)
 		sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, SceneManager.flip) 
 	end)
 
@@ -140,10 +140,10 @@ function ScenePlay:checkMove(dx, dy)
 	--]]
 	-- first we need the tile key and layer for where the hero wants to move
 	
-	DEBUG(self.hero)
-	DEBUG(self.hero.x + dx, self.hero.y + dy)
+	--DEBUG(self.hero)
+	--DEBUG(self.hero.x + dx, self.hero.y + dy)
 	local entry, layer, tile = self.world:getTileInfo(self.hero.x + dx, self.hero.y + dy)
-	DEBUG(self.active, self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+	--DEBUG(self.active, self.hero.x + dx, self.hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
 	if not self.heroTurn then return end
 
@@ -299,10 +299,10 @@ function ScenePlay:checkMove(dx, dy)
 		if self.ready then
 			if self.server then
 				monstersInfo = self.monsters:serialize()	
-				DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
+				--DEBUG_C(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
 				serverlink:callMethod(SYNC_STATE, self.hero.x, self.hero.y, monstersInfo)
 			else
-				DEBUG_C(SYNC_STATE, -1, -1, -1)
+				--DEBUG_C(SYNC_STATE, -1, -1, -1)
 				serverlink:callMethod(SYNC_STATE, -1, -1, -1)
 			end
 		else
@@ -385,7 +385,7 @@ function ScenePlay:heroTurnOver()
 	
 	-- check if the player won 
 	if #self.monsters.list == 0 or self.cheat == "V" then
-		dataSaver.save("|D|hero", self.hero)
+		dataSaver.save(currentHeroFileName, self.hero)
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 
@@ -429,7 +429,7 @@ function ScenePlay:monsterTurnOver()
 	--after all the monsters attacked, check if the hero lost
 	if self.hero.hp < 1 or self.cheat == "D" then
 		self.msg:add("you died", MSG_DEATH)
-		dataSaver.save("|D|hero", self.hero)
+		dataSaver.save(currentHeroFileName, self.hero)
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
 
@@ -473,7 +473,7 @@ function ScenePlay:monsterAI(monster)
 					successful = true 
 					dx = 0 
 					dy = 0
-					DEBUG("Not moving this turn", monster.id, monster.name, monster.x,monster.y)
+					--DEBUG("Not moving this turn", monster.id, monster.name, monster.x,monster.y)
 				end
 			end
 		end

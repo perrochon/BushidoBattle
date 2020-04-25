@@ -3,7 +3,7 @@ SceneDeath = Core.class(Sprite)
 
 function SceneDeath:init(hero)
 
-	self.hero = dataSaver.load("|D|hero")
+	self.hero = dataSaver.load(currentHeroFileName)
 	--cycles of time/touches that have passed
 	self.time = 0	
 	--setAlpha value for the words on this screen
@@ -23,8 +23,8 @@ function SceneDeath:init(hero)
 	self.words:setAlpha(self.a)
 	self:addChild(self.words)
 	
-	local hero = dataSaver.load("|D|hero")
-	dataSaver.save("|D|hero", hero)
+	local hero = dataSaver.load(currentHeroFileName)
+	dataSaver.save(currentHeroFileName, hero)
 
 
 	self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)

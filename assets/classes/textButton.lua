@@ -2,7 +2,6 @@
 A generic text button class
  
 Adapted from the generic button class
-*Now includes Text and font support (added by <a href="/profile/joelghill%29">@joelghill)</a>
  
 This code is MIT licensed, see <a href="http://www.opensource.org/licenses/mit-license.php" target="_blank" rel="nofollow">http://www.opensource.org/licenses/mit-license.php</a>
 (C) 2010 - 2012 Gideros Mobile 
@@ -30,7 +29,7 @@ function TextButton:init(text)
 	self:addChild(title)
 
 	self:updateVisualState(false)
- 
+	self.focus = false 
 	self:addEventListener(Event.MOUSE_DOWN, self.onMouseDown, self)
 	self:addEventListener(Event.MOUSE_MOVE, self.onMouseMove, self)
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
@@ -41,7 +40,6 @@ function TextButton:init(text)
 	self:addEventListener(Event.TOUCHES_CANCEL, self.onTouchesCancel, self)
 
 end
-
 
 function TextButton:onMouseDown(event)
 	if self:hitTestPoint(event.x, event.y) then

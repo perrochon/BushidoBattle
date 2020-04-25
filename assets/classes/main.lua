@@ -47,7 +47,8 @@ application:setScaleMode("letterbox")
 
 --set up the global variables and functions
 manual = Cyclopedia.new()
-hero = 1
+currentHero = 1
+currentHeroFileName = "|D|hero"..currentHero
 
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
@@ -71,7 +72,7 @@ sceneManager = SceneManager.new({
 
 stage:addChild(sceneManager)
 --go to start scene 
-sceneManager:changeScene(SCENE_CHOOSE_HERO, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
 
 --local pixel = Pixel.new(COLOR_GREEN, 1, 200,200)
 --pixel:setPosition(650,650)

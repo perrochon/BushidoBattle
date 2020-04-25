@@ -419,7 +419,7 @@ function WorldMap:blocked(x, y)
 	end
 
 	local key, layer, tile = self:getTileInfo(x, y)
-	DEBUG(x, y, key, layer, tile.name, tile.blocked)
+	--DEBUG(x, y, key, layer, tile.name, tile.blocked)
 	
 	if layer == LAYER_MONSTERS then
 		return true
@@ -486,7 +486,7 @@ function WorldMap:whichWay(monster, tX, tY)
 	--finally choose a non-blocked move
 	for i, move in ipairs(moves) do
 		dx, dy = move[1], move[2]
-		DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))
+		--DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))
 		if not self:blocked(x + dx, y + dy) then		-- if not blocked then move in that direction 
 			break
 		end

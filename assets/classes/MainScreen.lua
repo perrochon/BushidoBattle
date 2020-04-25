@@ -39,7 +39,13 @@ function MainScreen:init(hero)
 	self.tagLine:setPosition(HALFX, 190 ) -- halfway
 	self:addChild(self.tagLine)
 
-	local level = TextField.new(FONT_SMALL, "Level: " .. self.hero.level)
+	local level = TextField.new(FONT_SMALL, self.hero.name)
+	level:setTextColor(COLOR_LTGREY)	
+	level:setAnchorPoint(0.5,0.5)
+	level:setPosition(HALFX, 250) 
+	self:addChild(level)
+
+	level = TextField.new(FONT_SMALL, "Level: " .. self.hero.level)
 	level:setTextColor(COLOR_LTGREY)	
 	level:setAnchorPoint(0.5,0.5)
 	level:setPosition(HALFX, 300) 

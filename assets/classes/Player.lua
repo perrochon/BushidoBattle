@@ -9,17 +9,20 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 Player = Core.class()
 
-function Player:init()
+function Player:init(slot)
 	--[[Holding the player's stats
 		entry is the monster # that is created and used in the manual and in the tileset
 		entry = 1 for hero
 	--]]
 
+	self.slot = slot
+	names = {"ArcherYP", "YummySake", "Lupus", "Legolas"}
+	self.name = names[slot]
+
 	--position/key in the MM and tileset-monsters
 	self.entry = 1
 	local info = manual:getEntry("monsters", self.entry)	
 	
-	self.name = "ArcherYP"
 	self.tactics = "player"
 	self.x = 6
 	self.y = 6
@@ -32,7 +35,7 @@ function Player:init()
 	self.bloodied = math.ceil(self.hp / 2)
 	self.HPbar = 0
 	
-	self.kills = 0
+	self.kills = math.random(100)
 	self.level = 1
 
 	--prof is attack proficiency used by basicAttack
