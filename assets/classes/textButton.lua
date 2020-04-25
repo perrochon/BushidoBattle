@@ -10,15 +10,6 @@ This code is MIT licensed, see <a href="http://www.opensource.org/licenses/mit-l
  
 TextButton = gideros.class(Sprite)
 
-function TextButton:DrawGrid()
-
-	local 
-	pixel = Pixel.new(COLOR_WHITE, 1, 10,10) pixel:setAnchorPoint(0,1) pixel:setPosition(0,0) self:addChild(pixel)
-	pixel = Pixel.new(COLOR_RED, 1, 10,10) pixel:setAnchorPoint(1,0) pixel:setPosition(100,-100) self:addChild(pixel)
-	pixel = Pixel.new(COLOR_GREEN, 1, 10,10) pixel:setAnchorPoint(0,0) pixel:setPosition(0,-100) self:addChild(pixel)
-	pixel = Pixel.new(COLOR_BLUE, 1, 10,10) pixel:setAnchorPoint(1,1) pixel:setPosition(100,0) self:addChild(pixel)
-end
- 
 function TextButton:init(text)
 
 	self.back = Pixel.new(COLOR_YELLOW, 1, 400, MENU_MARGIN - BUTTON_MARGIN)
@@ -38,42 +29,6 @@ function TextButton:init(text)
 	title:setPosition(200, - (MENU_MARGIN - BUTTON_MARGIN) / 2)
 	self:addChild(title)
 
-	
---[[ 
- 
---add text and position in middle if necessary 	
-	if textUp and textDown then
-		self.textUp =TextField.new(font, textUp)
-		self.textUp:setTextColor(COLOR_YELLOW)	
-		self.textUp:setAnchorPoint(0.5,0.5)
-
-		self.textDown = TextField.new(font, textDown)
-		self.textDown:setAnchorPoint(0.5, 0.5)
-		self.upState:addChild(self.textUp)
-		self.downState:addChild(self.textDown)
-		if upState and downState then -- center text in middle of images
-			--set local variables
-			local upimageLength = self.upImage:getWidth()
-			local upimageHeight = self.upImage:getHeight()
- 
-			local downimageLength = self.downImage:getWidth()
-			local downimageHeight = self.downImage:getHeight()
- 
-			local uptextLength = self.textUp:getWidth()
-			local uptextHeight = self.textUp:getHeight()
- 
-			local downtextLength = self.textDown:getWidth()
-			local downtextHeight = self.textDown:getHeight()
- 
-			--self.textUp:setPosition((upimageLength-uptextLength)/2,(upimageHeight-uptextHeight)/2)
-			--self.textDown:setPosition((downimageLength-downtextLength)/2,(downimageHeight-downtextHeight)/2)
-		end
- 
-	end
- 
-	self.focus = false
-]]
- 
 	self:updateVisualState(false)
  
 	self:addEventListener(Event.MOUSE_DOWN, self.onMouseDown, self)
@@ -153,4 +108,13 @@ function TextButton:updateVisualState(state)
 		self.front:setColor(COLOR_BROWN)
 	end
 end
+
+function TextButton:DrawGrid()
+	local 
+	pixel = Pixel.new(COLOR_WHITE, 1, 10,10) pixel:setAnchorPoint(0,1) pixel:setPosition(0,0) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_RED, 1, 10,10) pixel:setAnchorPoint(1,0) pixel:setPosition(100,-100) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_GREEN, 1, 10,10) pixel:setAnchorPoint(0,0) pixel:setPosition(0,-100) self:addChild(pixel)
+	pixel = Pixel.new(COLOR_BLUE, 1, 10,10) pixel:setAnchorPoint(1,1) pixel:setPosition(100,0) self:addChild(pixel)
+end
+ 
 

@@ -14,6 +14,7 @@ Main for Bushido Battle, Bushido without the talk
 		- remote attack update
 		- Initial Monster Placement (sync)
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
+		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
 		- monster placed in tiled
@@ -46,6 +47,7 @@ application:setScaleMode("letterbox")
 
 --set up the global variables and functions
 manual = Cyclopedia.new()
+hero = 1
 
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
@@ -69,7 +71,7 @@ sceneManager = SceneManager.new({
 
 stage:addChild(sceneManager)
 --go to start scene 
-sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_CHOOSE_HERO, TRANSITION_TIME, TRANSITION)
 
 --local pixel = Pixel.new(COLOR_GREEN, 1, 200,200)
 --pixel:setPosition(650,650)
