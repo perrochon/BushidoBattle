@@ -7,7 +7,7 @@ SceneLobby = Core.class(Sprite)
 function SceneLobby:init()
 
 	local basicGui = BasicGui.new("Bushido Battle", 
-						true, nil, 
+						"Quit", nil, 
 						"Hero", SCENE_CHOOSE_HERO,
 						"Map", SCENE_CHOOSE_MAP)
 	self:addChild(basicGui)

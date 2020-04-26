@@ -168,7 +168,7 @@ function MainScreen:init(hero)
 	self.reset:setPosition(HALFX + 150, cheatY) 
 	self.cheats:addChild(self.reset)
 	
-	self.backButton = TextButton.new("Quit")
+	self.backButton = TextButton.new("Lobby")
 	self.backButton:setAnchorPoint(0,0)
 	self.backButton:setScale(0.5)
 	self.backButton:setPosition(10,BUTTON_MARGIN+50)

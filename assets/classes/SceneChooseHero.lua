@@ -3,7 +3,7 @@ SceneChooseHero = Core.class(Sprite)
 function SceneChooseHero:init()
 
 	local basicGui = BasicGui.new("Choose a Hero", 
-					true, SCENE_LOBBY, 
+					"Lobby", SCENE_LOBBY, 
 					"Battle", SCENE_PLAY, 
 					"Map", SCENE_CHOOSE_MAP)
 	self:addChild(basicGui)

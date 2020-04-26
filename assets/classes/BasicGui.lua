@@ -10,7 +10,7 @@ function BasicGui:init(title, back, backToScene, text1, scene1, text2, scene2)
 
 	--back button
 	if back then
-		self.backButton = TextButton.new("Back")
+		self.backButton = TextButton.new(back)
 		self.backButton:setAnchorPoint(0,0)
 		self.backButton:setPosition(BUTTON_MARGIN,APP_HEIGHT - BUTTON_MARGIN)
 		self:addChild(self.backButton)

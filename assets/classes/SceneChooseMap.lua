@@ -2,8 +2,8 @@ SceneChooseMap = Core.class(Sprite)
 
 function SceneChooseMap:init()
 
-	local basicGui = BasicGui.new("Choose a Hero", 
-					true, SCENE_LOBBY, 
+	local basicGui = BasicGui.new("Choose a Map", 
+					"Lobby", SCENE_LOBBY, 
 					"Battle", SCENE_PLAY, 
 					"Hero", SCENE_CHOOSE_HERO)
 	self:addChild(basicGui)
@@ -14,7 +14,7 @@ function SceneChooseMap:init()
 		
 		local fileName = "level0"..i..".lua"
 		local map = loadfile(fileName)() 
-		self.panels[i] = self:displayHero(map.properties["Title"], i)
+		self.panels[i] = self:displayMap(map.properties["Title"], i)
 		
 	end
 	
@@ -24,36 +24,36 @@ function SceneChooseMap:init()
 
 end
 
-function SceneChooseMap:displayHero(hero, slot)
+function SceneChooseMap:displayMap(map, slot)
 
 	local yGap = BUTTON_MARGIN
-	local heroWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
-	local heroHeight = 400	
+	local mapWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
+	local mapHeight = 400	
 
 	panel = Sprite.new()
 	panel:setAnchorPoint(0,1) -- TODO Why does it not matter what this is set to?
-	panel:setPosition(BUTTON_MARGIN + (heroWidth + yGap) * (slot-1) , MENU_MARGIN + heroHeight)
+	panel:setPosition(BUTTON_MARGIN + (mapWidth + yGap) * (slot-1) , MENU_MARGIN + mapHeight)
 	self:addChild(panel)
 	
-	panel.back = Pixel.new(COLOR_BROWN, 1, heroWidth, heroHeight)
+	panel.back = Pixel.new(COLOR_BROWN, 1, mapWidth, mapHeight)
 	panel.back:setAnchorPoint(0, 1)
 	panel:addChild(panel.back)
 
-	panel.front = Pixel.new(COLOR_DKGREY, 1, heroWidth - 10, heroHeight - 10)
+	panel.front = Pixel.new(COLOR_DKGREY, 1, mapWidth - 10, mapHeight - 10)
 	panel.front:setAnchorPoint(0, 1)
 	panel.front:setPosition(5,-5)
 	panel:addChild(panel.front)
 
-	local heroDescription = hero
+	local mapDescription = map
 
-	local title = TextField.new(FONT_MEDIUM, heroDescription)
+	local title = TextField.new(FONT_MEDIUM, mapDescription)
 	title:setLayout({flags = FontBase.TLF_REF_TOP |FontBase.TLF_LEFT})
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(15, -heroHeight+20) 
+	title:setPosition(15, -mapHeight+20) 
 	panel:addChild(title)
 
 	local x,y,w,h = panel:getBounds(self)
-	DEBUG(yGap, heroWidth, heroHeight, " : ", x, y, w, h)
+	DEBUG(yGap, mapWidth, mapHeight, " : ", x, y, w, h)
 	pixel = Pixel.new(COLOR_BLUE, 0.6, w+10, h+10)
 	pixel:setPosition(x-5, y-5)
 	--stage:addChild(pixel)

@@ -51,7 +51,7 @@ function SceneDraw:init()
 	
 	
 	self.basicGui = BasicGui.new("Draw", 
-						true, SCENE_CONNECT, 
+						"Back", SCENE_CONNECT, 
 						nil, nil, 
 						"Reset", nil)
 						
