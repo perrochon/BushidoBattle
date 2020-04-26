@@ -15,7 +15,7 @@ function SceneChooseHero:init()
 		DEBUG("Loading", heroFileName)
 		local hero = dataSaver.load(heroFileName)	
 		DEBUG(hero)
-		if false then
+		if hero then
 			DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
 			hero.hp = hero.maxHP -- heal whatever hero we found
 			self.panels[i] = self:displayHero(hero, i)	
