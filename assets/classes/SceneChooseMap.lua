@@ -11,8 +11,12 @@ function SceneChooseMap:init()
 	self.panels = {}
 	
 	for i=1,4 do
+		
+		local fileName = "level0"..i..".lua"
+		local map = loadfile(fileName)() 
+		-- error "attempt to call nil value" means file not found. Check spelling and refresh
 	
-		self.panels[i] = self:displayHero("Map "..i, i)
+		self.panels[i] = self:displayHero(map.properties["Title"], i)
 
 		--[[
 		local heroFileName = "|D|hero"..i
