@@ -34,10 +34,10 @@ function TextButton:init(text)
 	self:addEventListener(Event.MOUSE_MOVE, self.onMouseMove, self)
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
  
-	self:addEventListener(Event.TOUCHES_BEGIN, self.onTouchesBegin, self)
-	self:addEventListener(Event.TOUCHES_MOVE, self.onTouchesMove, self)
-	self:addEventListener(Event.TOUCHES_END, self.onTouchesEnd, self)
-	self:addEventListener(Event.TOUCHES_CANCEL, self.onTouchesCancel, self)
+	--self:addEventListener(Event.TOUCHES_BEGIN, self.onTouchesBegin, self)
+	--self:addEventListener(Event.TOUCHES_MOVE, self.onTouchesMove, self)
+	--self:addEventListener(Event.TOUCHES_END, self.onTouchesEnd, self)
+	--self:addEventListener(Event.TOUCHES_CANCEL, self.onTouchesCancel, self)
 
 end
 
@@ -67,6 +67,8 @@ function TextButton:onMouseUp(event)
 		event:stopPropagation()
 	end
 end
+
+--[[
 
 -- if button is on focus, stop propagation of touch events
 function TextButton:onTouchesBegin(event)
@@ -98,6 +100,8 @@ function TextButton:onTouchesCancel(event)
 	end
 end
 
+]]
+
 -- if state is true show downState else show upState
 function TextButton:updateVisualState(state)
 	if state then
@@ -106,6 +110,7 @@ function TextButton:updateVisualState(state)
 		self.front:setColor(COLOR_BROWN)
 	end
 end
+
 
 function TextButton:DrawGrid()
 	local 
