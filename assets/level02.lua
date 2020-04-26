@@ -11,7 +11,7 @@ return {
   nextlayerid = 4,
   nextobjectid = 1,
   properties = {
-    ["Title"] = "Bushido Battle Level 2"
+    ["Title"] = "Forest Hunt"
   },
   tilesets = {
     {

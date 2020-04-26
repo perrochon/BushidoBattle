@@ -4,7 +4,7 @@
   <export target="../assets/level02.lua" format="lua"/>
  </editorsettings>
  <properties>
-  <property name="Title" value="Bushido Battle Level 2"/>
+  <property name="Title" value="Forest Hunt"/>
  </properties>
  <tileset firstgid="1" source="BushidoBattle.tsx"/>
  <layer id="1" name="Ground" width="36" height="36">

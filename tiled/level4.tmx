@@ -4,7 +4,7 @@
   <export target="../assets/level04.lua" format="lua"/>
  </editorsettings>
  <properties>
-  <property name="Title" value="Bushido Battle Level 2"/>
+  <property name="Title" value="Temple Grounds"/>
  </properties>
  <tileset firstgid="1" source="BushidoBattle.tsx"/>
  <layer id="1" name="Ground" width="36" height="36" locked="1">
