@@ -8,22 +8,22 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO
-		- Fix hero selection model
 		- Multiple heroes
 		- >2 devices
 		- remote attack update
-		- Initial Monster Placement (sync)
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
 		- monster placed in tiled
 		- check for obstacles on diagonal moves. 
-		- update routefinding for diagonal
+		- update routefinding for diagonal and more complex maps
 		- New graphics for monsters, environment, terrain, projectiles
 		- limit ranged attacks in number (no unlimited javelins)
 		- ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
-		- use debug.getinfo in DEBUG statements
+
+	Dev Stuff
+		- Automated Tests
 		
 	Deployment
 		build.gradle (app)

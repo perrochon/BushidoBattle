@@ -14,26 +14,7 @@ function SceneChooseMap:init()
 		
 		local fileName = "level0"..i..".lua"
 		local map = loadfile(fileName)() 
-		-- error "attempt to call nil value" means file not found. Check spelling and refresh
-	
 		self.panels[i] = self:displayHero(map.properties["Title"], i)
-
-		--[[
-		local heroFileName = "|D|hero"..i
-		DEBUG("Loading", heroFileName)
-		local hero = dataSaver.load(heroFileName)	
-		DEBUG(hero)
-		if false then
-			DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
-			hero.hp = hero.maxHP -- heal whatever hero we found
-			self.panels[i] = self:displayHero(hero, i)	
-		else
-			hero = Player.new(i) 
-			DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
-			dataSaver.save(heroFileName, hero)		
-			self.panels[i] = self:displayHero(hero, i)
-		end
-		]]
 		
 	end
 	
