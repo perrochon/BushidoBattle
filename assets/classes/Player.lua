@@ -16,17 +16,17 @@ function Player:init(slot)
 	--]]
 
 	self.slot = slot
-	names = {"ArcherYP", "YummySake", "Lupus", "Kiga"}
+	names = {"ArcherYP", "YummySake", "Lupus", "Kiga", "Remote San"}
 	self.name = names[slot]
 
 	--position/key in the MM and tileset-monsters
-	self.entry = 1
-	local info = manual:getEntry("monsters", self.entry)	
+	self.entry = slot
+	local info = manual:getEntry("monsters", 1)	-- TODO HEROFIX all heroes are the same (for now)
 	
 	self.tactics = "player"
 	self.x = 6
 	self.y = 6
-	self.light = manual:getEntry("light-source", "daylight")
+	self.light = manual:getEntry("light-source", "torch")
 	self.blocked = true
 	
 	self.xp = 0

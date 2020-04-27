@@ -30,8 +30,9 @@ function ScenePlay:init(role)
 	
 	--the major gaming variables
 	self.heroes[1] = dataSaver.load(currentHeroFileName)
+	self.heroes[2] = Player.new(5)
 	self.monsters = Monsters.new(self.heroes[1].level)
-	self.world = WorldMap.new(self.heroes[1], self.monsters) -- HEROFIX
+	self.world = WorldMap.new(self.heroes, self.monsters) -- HEROFIX
 	self.msg = Messages.new()
 	self.sounds = Sounds.new("game")
 
@@ -177,7 +178,7 @@ function ScenePlay:checkMove(dx, dy)
     elseif layer == LAYER_ENVIRONMENT then
       -- check for blocked tiles
       if tile.blocked then
-		DEBUG(self.active, self.heroes[1].x + dx, self.heroes[1].y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+		--DEBUG(self.active, self.heroes[1].x + dx, self.heroes[1].y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
         self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
       else
 		if self.client then
@@ -359,12 +360,12 @@ function ScenePlay:checkMove(dx, dy)
 				else
 					if y > self.heroes[1].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[1].x, self.heroes[1].y, dx, dy))
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[1].x, self.heroes[1].y, dx, dy))
 				self:checkMove(dx, dy)
 			end
 		end
 	else
-		DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
+		--DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
 	end
 end
 

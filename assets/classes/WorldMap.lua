@@ -9,7 +9,7 @@ WorldMap class and all the functions associated with it: changing tiles, generat
 
 WorldMap = Core.class(Sprite)
 
-function WorldMap:init(hero, monsters)
+function WorldMap:init(heroes, monsters)
 	--[[Create tables for map content (self.mapArrays) and for each TileMap (self.mapLayers)	
 	--]]
 	
@@ -36,15 +36,15 @@ function WorldMap:init(hero, monsters)
 
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
-	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(layer, hero, monsters)
-	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", false)
+	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(layer, heroes, monsters)
+	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
 	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
 	--self:debugMapInfo(LAYER_MONSTERS)
 
-	self.mapArrays[LAYER_HP] = self:addHP(hero, monsters)
-	self.mapArrays[LAYER_LIGHT] = self:addLight(hero)
+	self.mapArrays[LAYER_HP] = self:addHP()
+	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[1])
 
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "images/tileset-health-108px.png", false)
@@ -52,7 +52,7 @@ function WorldMap:init(hero, monsters)
 	table.insert(self.mapLayers, layer)
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "images/tileset-light-108px.png", false)
-	--group:addChild(layer) 
+	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
 
@@ -64,16 +64,16 @@ function WorldMap:init(hero, monsters)
 	self:addChild(group)
 	
 	--this is the initial location of the TileMaps, centered around the hero
-	self:shiftWorld(hero.x - 6, hero.y - 6)
+	self:shiftWorld(heroes[1].x - 6, heroes[1].y - 6)
 
 	-- TODO FIX why no return self here?
 
 end
 
-function WorldMap:placeMonsters(tilemap, hero, monsters)
+function WorldMap:placeMonsters(tilemap, heroes, monsters)
 	--[[Return an array to represent the monsters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
-		Changes hero.x, hero.y and each monster.x, monster.y
+		Changes heroes[].x, heroes[].y and each monster.x, monster.y
 	--]]
 
 	--this is the array without monsters
@@ -108,22 +108,38 @@ function WorldMap:placeMonsters(tilemap, hero, monsters)
 		m.HPbar = 0
 	end
 	
-	--then repeat for the hero
+	--then repeat for the heroes
 	repeat
 		x = math.random(5, LAYER_ROWS - 5)
 		y = math.random(5, LAYER_COLUMNS - 5)
 		i = index(x, y)	
-		--DEBUG(hero.name, i, x, y, mArray[i], envArray[i])
+		DEBUG(heroes[1].name, i, x, y, mArray[i], envArray[i])
 		placed = (mArray[i] == 0) and (envArray[i] == 0) 	
 		--can't use WorldMap:blocked() because monster layer not set yet
 	until placed 
-	mArray[i] = hero.entry
-	hero.x, hero.y = x, y
+	mArray[i] = 1 -- TODO HEROFIX all heroes are the same entry for now
+	heroes[1].x, heroes[1].y = x, y
+
+	if heroes[2] then
+		--repeat
+			--x = math.random(5, LAYER_ROWS - 5)
+			--y = math.random(5, LAYER_COLUMNS - 5)
+			--i = index(x, y)	
+			--placed = (mArray[i] == 0) and (envArray[i] == 0) 	
+			--can't use WorldMap:blocked() because monster layer not set yet
+		--until placed 
+		x = x+1
+		y = y+1
+		i = index(x, y)	
+		DEBUG(heroes[2].name, i, x, y, mArray[i], envArray[i])
+		mArray[i] = 1 -- TODO HEROFIX all heroes are the same entry for now
+		heroes[2].x, heroes[2].y = x, y
+	end
 	
 	return mArray
 end
 
-function WorldMap:addHP(hero, monsters)
+function WorldMap:addHP()
 
   --tiles are 0 at the start
   local hArray = {}
@@ -135,7 +151,12 @@ function WorldMap:addHP(hero, monsters)
   return hArray
 end
 
-function WorldMap:addLight(hero)
+function WorldMap:addLight(hero) 
+	-- TODO HEROFIX how to handle light for two players?
+	-- Maybe remote player is in heroes[1] on their end and switch on transfer? heroes[2] is the other guy?
+	-- Or save index of the hero displayed on this device?
+	-- Either way, addLight only takes one hero, just pass in heroes[localHero]
+
 	--[[Logic:  returns an array filled with light tile values with the area near the hero visible
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
 	--]]
@@ -163,7 +184,7 @@ function WorldMap:addLight(hero)
 	return lArray
 end
 
-function WorldMap:returnTileMap(mapArray, tileset, flip)
+function WorldMap:returnTileMap(mapArray, tileset, herohack)
 	--[[Logic:  return a TileMap for a given tileset	
 		Returns a TileMap
 	--]]
@@ -183,8 +204,8 @@ function WorldMap:returnTileMap(mapArray, tileset, flip)
 				--and tX values < 16
 				tX = tX - (tY - 1) * 16
 				local f = 0
-				if (flip) then
-					f = math.random(0,7)
+				if herohack and tX == 1 and x % 2 == 0 then -- TODO HEROFIX
+					f = TileMap.FLIP_HORIZONTAL
 				end
 				tilemap:setTile(x, y, tX, tY, f)
 			end
@@ -277,16 +298,18 @@ end
 
 
 function WorldMap:moveHero(hero, dx, dy)
-	--[[change the mapArrays and mapLayers location of the hero and shift the TileMaps
-		Calls shiftWorld
-		Changes hero.x, hero.y too
+	--[[change the mapArrays and mapLayers location of a hero and 
+		if it's the local hero, shift the TileMap and the light
+
+		Changes hero.x, hero.y, position of the world
 	--]]
 
-	--move the torchlight
-	self:adjustLight(hero, dx, dy)
-	--keep the hero centered on the screen by shifting all the TileMaps  
-	self:shiftWorld(dx, dy)
-	--for purposes of moving around the map, the hero is just another monster
+	if hero.entry == localHero then 
+		--move the torchlight
+		self:adjustLight(hero, dx, dy)
+		--keep the hero centered on the screen by shifting all the TileMaps  
+		self:shiftWorld(dx, dy)
+	end
 	--for purposes of moving around the map, the hero is just another monster
 	self:moveMonster(hero, dx, dy)
 end
@@ -296,6 +319,12 @@ function WorldMap:adjustLight(hero, dx, dy)
 		Uses the hero's old position and the hero.light.radius to change array values
 		Called from moveHero
 	--]]	
+	
+	if hero.entry ~= localHero then
+		ERROR("Trying to adjust light for the wrong hero")
+		return
+	end
+	
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0
 

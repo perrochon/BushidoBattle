@@ -54,6 +54,8 @@ currentHeroFileName = "|D|hero"..currentHero
 currentMap = 1 -- index pointing to the maps we have saved
 currentMapFileName = "level01"
 
+localHero = 1 -- This hero gets moved, and the map centers around her
+
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
 
