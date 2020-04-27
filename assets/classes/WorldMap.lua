@@ -113,14 +113,15 @@ function WorldMap:placeMonsters(tilemap, heroes, monsters)
 		x = math.random(5, LAYER_ROWS - 5)
 		y = math.random(5, LAYER_COLUMNS - 5)
 		i = index(x, y)	
-		DEBUG(heroes[1].name, i, x, y, mArray[i], envArray[i])
-		placed = (mArray[i] == 0) and (envArray[i] == 0) 	
+		i2 = index(x+1, y+1) -- TODO HEROFIX for second hero
+		--DEBUG(heroes[1].name, i, x, y, mArray[i], envArray[i])
+		placed = (mArray[i] == 0) and (envArray[i] == 0) and (mArray[i2] == 0) and (envArray[i2] == 0) 	
 		--can't use WorldMap:blocked() because monster layer not set yet
 	until placed 
-	mArray[i] = 1 -- TODO HEROFIX all heroes are the same entry for now
-	heroes[1].x, heroes[1].y = x, y
+	mArray[i] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+	heroes[localHero].x, heroes[localHero].y = x, y
 
-	if heroes[2] then
+	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
 		--repeat
 			--x = math.random(5, LAYER_ROWS - 5)
 			--y = math.random(5, LAYER_COLUMNS - 5)
@@ -131,9 +132,9 @@ function WorldMap:placeMonsters(tilemap, heroes, monsters)
 		x = x+1
 		y = y+1
 		i = index(x, y)	
-		DEBUG(heroes[2].name, i, x, y, mArray[i], envArray[i])
-		mArray[i] = 1 -- TODO HEROFIX all heroes are the same entry for now
-		heroes[2].x, heroes[2].y = x, y
+		--DEBUG(heroes[2].name, i, x, y, mArray[i], envArray[i])
+		mArray[i] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		heroes[3-localHero].x, heroes[3-localHero].y = x, y
 	end
 	
 	return mArray
@@ -184,7 +185,7 @@ function WorldMap:addLight(hero)
 	return lArray
 end
 
-function WorldMap:returnTileMap(mapArray, tileset, herohack)
+function WorldMap:returnTileMap(mapArray, tileset, TODOunused)
 	--[[Logic:  return a TileMap for a given tileset	
 		Returns a TileMap
 	--]]
@@ -203,10 +204,6 @@ function WorldMap:returnTileMap(mapArray, tileset, herohack)
 				local tY = math.ceil(tX / 16) 
 				--and tX values < 16
 				tX = tX - (tY - 1) * 16
-				local f = 0
-				if herohack and tX == 1 and x % 2 == 0 then -- TODO HEROFIX
-					f = TileMap.FLIP_HORIZONTAL
-				end
 				tilemap:setTile(x, y, tX, tY, f)
 			end
 		end
@@ -304,7 +301,9 @@ function WorldMap:moveHero(hero, dx, dy)
 		Changes hero.x, hero.y, position of the world
 	--]]
 
-	if hero.entry == localHero then 
+	DEBUG("Moving Hero", hero, hero.heroIdx, dx, dy, "to", hero.x+dx, hero.y+dy)
+
+	if hero.heroIdx == localHero then 
 		--move the torchlight
 		self:adjustLight(hero, dx, dy)
 		--keep the hero centered on the screen by shifting all the TileMaps  
@@ -320,7 +319,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 		Called from moveHero
 	--]]	
 	
-	if hero.entry ~= localHero then
+	if hero.heroIdx ~= localHero then
 		ERROR("Trying to adjust light for the wrong hero")
 		return
 	end
@@ -371,7 +370,7 @@ function WorldMap:moveMonster(monster, dx, dy)
 	
 	--erase the monster in the array and TileMap
 
-	-- DEBUG Getting non-reproducible errors on the next line in HTML
+	-- DEBUG Getting non-reproducible errors on the next line in HTML - Checking for possible conditions
 	if monster.x > LAYER_COLUMNS or monster.y > LAYER_ROWS or monster.x < 1 or monster.y < 1 then
 		ERROR("Monster current location out of bounds", monster.name, monster.x, monster.y, dx, dy)
 	elseif monster.x+dx > LAYER_COLUMNS or monster.y+dy > LAYER_ROWS or monster.x+dx < 1 or monster.y+dy < 1 then
@@ -382,8 +381,7 @@ function WorldMap:moveMonster(monster, dx, dy)
 		
 		--place the monster at the new position
 		array[index(monster.x + dx, monster.y + dy)] = monster.entry
-		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1) 
-		-- TODO FIX this had an out of bounds error on Android	
+		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1, monster.flip) 
 
 		--remove and move the HPbar
 		array = self.mapArrays[LAYER_HP]

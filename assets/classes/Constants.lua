@@ -109,7 +109,7 @@ MOVE_HERO @ "moveHero"
 HERO_MOVED @ "heroMoved"
 MONSTER_MOVED @ "monsterMoved"
 SYNC_STATE @ "syncState"
-AUTO_CONNECT @ false
+AUTO_CONNECT @ true
 
 -- The layer lookup "table"
 Cyclopedia = Core.class()

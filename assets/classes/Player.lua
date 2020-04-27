@@ -15,13 +15,16 @@ function Player:init(slot)
 		entry = 1 for hero
 	--]]
 
-	self.slot = slot
+	self.slot = slot -- position in Hero selection and file name for stored/reset heroes
+	self.entry = 1 	--position/key in tileset-monsters and monster array. HEROFIX all heroes are the same (for now)
+	self.heroIdx = -1 -- position in ScenePlay.heroes
+	self.flip = 0 -- don't flip the icon 
+
 	names = {"ArcherYP", "YummySake", "Lupus", "Kiga", "Remote San"}
 	self.name = names[slot]
 
-	--position/key in the MM and tileset-monsters
-	self.entry = slot
-	local info = manual:getEntry("monsters", 1)	-- TODO HEROFIX all heroes are the same (for now)
+	local info = manual:getEntry("monsters", self.entry)	
+	if slot == 5 then flip = TileMap.FLIP_HORIZONTAL end -- HEROFIX temporarily, we flip the remote hero.
 	
 	self.tactics = "player"
 	self.x = 6

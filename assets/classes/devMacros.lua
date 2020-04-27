@@ -42,7 +42,18 @@ end
 
 -- DEBUG @ |printLineNumber| -- Various manually added DEBUG statements
 INFO @ |print|  -- Print all message box messages to console
-ERROR @ |print|
+
+function ERROR(...)
+	if OUTPUT_LEVEL > 0 then
+		local debuginfo = debug.getinfo(2)
+		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
+		local currentline = debuginfo.currentline and debuginfo.currentline or -1
+		local name = debuginfo.name and debuginfo.name or "unknown"
+		print(("%s:%d: %s"):format(short_src, currentline, name), "ERROR", unpack(arg)) 
+	end
+end
+
+
 
 --DEBUG("DEBUG output turned on" )
 --INFO("INFO output turned on")

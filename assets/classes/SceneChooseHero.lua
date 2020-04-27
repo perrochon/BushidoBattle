@@ -142,3 +142,13 @@ function SceneChooseHero:updateVisualState(state, slot)
 		self.panels[slot].front:setColor(COLOR_DKGREY)
 	end
 end
+
+function SceneChooseHero:resetAllHeroes()
+
+	for i=1, 5 do
+		local heroFileName = "|D|hero"..i
+		DEBUG("Resetting", heroFileName)
+		hero = Player.new(i) 
+		dataSaver.save(heroFileName, hero)
+	end
+end

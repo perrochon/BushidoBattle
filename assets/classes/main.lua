@@ -9,6 +9,7 @@ Main for Bushido Battle, Bushido without the talk
 
 --[[ TODO
 		- Multiple heroes
+			-- Client should not draw map before it gets sync. Or wipe lights at that eime.
 		- >2 devices
 		- remote attack update
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
@@ -55,6 +56,9 @@ currentMap = 1 -- index pointing to the maps we have saved
 currentMapFileName = "level01"
 
 localHero = 1 -- This hero gets moved, and the map centers around her
+
+-- Reset all heroes
+SceneChooseHero:resetAllHeroes()
 
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
