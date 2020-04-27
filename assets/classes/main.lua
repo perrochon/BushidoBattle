@@ -48,10 +48,10 @@ application:setScaleMode("letterbox")
 --set up the global variables and functions
 manual = Cyclopedia.new()
 
-currentHero = 1
+currentHero = 1 -- index pointing to the 4 slots we can save, not the array of heroes
 currentHeroFileName = "|D|hero"..currentHero
 
-currentMap = 1
+currentMap = 1 -- index pointing to the maps we have saved
 currentMapFileName = "level01"
 
 -- TODO FIX - used by the connect classes
