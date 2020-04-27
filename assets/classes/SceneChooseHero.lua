@@ -17,7 +17,7 @@ function SceneChooseHero:init()
 		DEBUG(hero)
 		if hero then
 			DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
-			hero.hp = hero.maxHP -- heal whatever hero we found
+			-- hero.hp = hero.maxHP -- heal whatever hero we found. If we do, we have to save it back...
 			self.panels[i] = self:displayHero(hero, i)	
 		else
 			hero = Player.new(i) 
