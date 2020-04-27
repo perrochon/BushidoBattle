@@ -46,12 +46,9 @@ function SceneDeath:onMouseUp(event)
 	self.words:setAlpha(1)
 	if self.time == 1 then
 		--after the first touch, report the score
-		local s = self.hero.kills .. " monsters killed."
-		if score == 1 then 
-			s = self.hero.kills .. " monster killed." 
-		end
-		self.words = TextField.new(FONT_XL, s)	
-		self.words:setTextColor(COLOR_YELLOW)	
+		local s = "Dying is easy. Living is hard."
+		self.words = TextField.new(FONT_LARGE, s)	
+		self.words:setTextColor(COLOR_WHITE)	
 		self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2 + 200)
 		self.words:setAlpha(self.a)
 		self:addChild(self.words)
