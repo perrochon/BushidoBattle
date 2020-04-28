@@ -5,6 +5,32 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 --[[
 	Game Logic
+	
+	Remote Play:
+	- Supports 2 players (for now), one on Server, one on client
+	- Turn based. Server player goes first every turn.
+	- Both devices have full game state and sync every turn.
+	- Hero Moves and Attacks are calculated locally on player's device and synced
+	- Monster Moves and Attacks are calculated on server, and synced 
+	- On both devices, ScenePlay.heroes[1] is hero on Server, #2 is hero on client
+	  1. Both devices start up, load map (and monsters, for now)
+	  2. Server syncs hero and monster location to client
+			remoteSyncState()
+	  3. Server player plays. Results calculated on server and sent to client
+			remoteHeroMoved()
+	  4. Client player plays. Results calculated on client and sent to server
+			remoteMoveHero() TODO HEROFIX why not the same as above?
+	  5. Monsters calculated on server
+	  6. Goto 3
+	  
+	  7. Ranged attack animation are sent separately TODO HEROFIX
+			remoteRangedAttack
+	  
+	  Victory, death, or quitting ends the remote session and a new one needs to be 
+	  started from the lobby. TODO HEROFIX
+	  
+	
+	
 --]]
 
 
@@ -42,16 +68,17 @@ function ScenePlay:init()
 		localHero = 1
 	end
 	
-	self.heroTurn = true
 	
 	--the major gaming variables
 	self.heroes[localHero] = dataSaver.load(currentHeroFileName)
-	
+
+	self.heroes[1].heroTurn = true	
 	self.heroes[1].heroIdx = 1
 	if self.remote then
 		self.heroes[2].heroIdx = 2
+		self.heroes[2].heroTurn = false
 	end
-	
+
 	self.monsters = Monsters.new(self.heroes[localHero].level) -- TODO HEROFIX maybe use sum of all levels?
 	self.world = WorldMap.new(self.heroes, self.monsters) -- HEROFIX what? why?
 	self.msg = Messages.new()
@@ -61,7 +88,7 @@ function ScenePlay:init()
 	if self.remote then
 		serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
 		serverlink:addMethod(HERO_MOVED, self.remoteHeroMoved, self)
-		serverlink:addMethod(SYNC_STATE, self.syncState, self)	
+		serverlink:addMethod(SYNC_STATE, self.remoteSyncState, self)	
 		serverlink:addMethod(MONSTER_MOVED, self.remoteMonsterMoved, self)
 	end
 
@@ -82,7 +109,7 @@ function ScenePlay:init()
 	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], 1, 1)  end)
 	self.main.center:addEventListener("click", function()
 		if ScenePlay:cheater(4) then self.main:displayCheats() end
-		if not self.heroTurn then return end
+		if not self.heroes[localHero].heroTurn  then return end
 		if self.client then 
 			self:remoteMoveHero(localHero, 0, 0)
 		end
@@ -108,7 +135,7 @@ function ScenePlay:init()
 		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D then
 			self:checkMove(self.heroes[localHero], 1, 0)
 		elseif event.keyCode == KeyCode.SPACE then
-			if not self.heroTurn then return end
+			if not self.heroes[localHero].heroTurn  then return end
 			if self.client then 
 				self:remoteMoveHero(localHero, 0, 0)
 			end
@@ -156,7 +183,7 @@ function ScenePlay:init()
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
 	
 	self.ready = true
-	if self.remote then self:syncState() end
+	if self.remote then self:remoteSyncState() end
 end
 
 function ScenePlay:checkMove(hero, dx, dy)
@@ -169,7 +196,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
 	--DEBUG(self.active, hero.x + dx, hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	if not self.heroTurn then return end
+	if not hero.heroTurn then return end
 
   if self.active == "look" then 
     self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
@@ -303,7 +330,7 @@ function ScenePlay:checkMove(hero, dx, dy)
  end
 
  
- function ScenePlay:syncState(hero1X, hero1Y, hero2X, hero2Y, monstersInfo, sender) -- HEROFIX for >2 heroes
+ function ScenePlay:remoteSyncState(hero1X, hero1Y, hero2X, hero2Y, monstersInfo, sender) -- HEROFIX for >2 heroes
  
 	DEBUG_C(SYNC_STATE, hero1X, hero1Y, hero2X, hero2Y, sender, monstersInfo)
 	
@@ -425,7 +452,7 @@ function ScenePlay:heroTurnOver()
 	end
 
 	-- prepare for monster's turn
-	self.heroTurn = false
+	self.heroes[localHero].heroTurn  = false
 	self.main.north:setAlpha(0.5)	
 	self.main.south:setAlpha(0.5)
 	self.main.east:setAlpha(0.5)
@@ -473,7 +500,7 @@ function ScenePlay:monsterTurnOver()
 	end
 
 	-- enable hero again
-	self.heroTurn = true
+	self.heroes[localHero].heroTurn  = true
 	self.main.north:setAlpha(1)	
 	self.main.south:setAlpha(1)
 	self.main.east:setAlpha(1)
@@ -576,7 +603,7 @@ function ScenePlay:basicAttack(attacker, defender)
 			self.sounds:play("melee-hit")
 			self:rollDamage(weapon, attacker, defender, crit)
 		end
-		if self.heroTurn then 
+		if self.heroes[localHero].heroTurn  then 
 			self:heroTurnOver() 
 		else
 			attacker.done = true
@@ -639,8 +666,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 				self:rollDamage(weapon, attacker, defender, crit)
 			end
 		end
-		--DEBUG("Anonymous EventListener heroTurn is " .. boolToString(true))
-		if self.heroTurn then 
+		if self.heroes[localHero].heroTurn  then 
 			self:heroTurnOver() 
 		else
 			attacker.done = true
