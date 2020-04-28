@@ -8,8 +8,10 @@ Main for Bushido Battle, Bushido without the talk
 ]]
 
 --[[ TODO
+		- auto connect all the way to Battle...
 		- Multiple heroes
 			-- Client should not draw map before it gets sync. Or wipe lights at that eime.
+		- Settings Screen with AutoConnect
 		- >2 devices
 		- remote attack update
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
