@@ -18,7 +18,7 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 			syncState()
 	  3. Server player plays. Results calculated on server and sent to client
 			Player turn passes with this call.
-			syncHero()
+			syncTurn()
 	  4. Client player plays. Results calculated on client and sent to server
 			Player turn passes with this call.
 			remoteMoveHero() TODO HEROFIX why not the same as above?
@@ -86,7 +86,7 @@ function ScenePlay:init()
 	--add methods for remote play
 	if self.remote then
 		--serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
-		serverlink:addMethod(HERO_MOVED, self.syncHero, self)
+		serverlink:addMethod(SYNC_TURN, self.syncTurn, self)
 		serverlink:addMethod(SYNC_STATE, self.syncState, self)	
 		serverlink:addMethod(MONSTER_MOVED, self.syncMonster, self)
 	end
@@ -242,8 +242,9 @@ function ScenePlay:checkMove(hero, dx, dy)
 		-- we move
 		self.world:moveHero(hero, dx, dy)
 
-		if self.remote then 
-			self:syncHero(hero.heroIdx, hero.x, hero.y) 
+		if self.remote then
+			DEBUG("MOVE", "Hero", hero.heroIdx, hero.x, hero.y, "Monster", nil, nil)
+			self:syncTurn(hero.heroIdx, hero.x, hero.y, 0, 0, 0) 
 		else
 			self.heroes[localHero].heroTurn = true
 			self:enableArrows()
@@ -253,19 +254,30 @@ function ScenePlay:checkMove(hero, dx, dy)
 end
  
 
- function ScenePlay:syncHero(heroIdx, x, y, sender)
-	-- After one device moved it's hero, tell the other.
+ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)
+	-- Update the other device about the player turn. If the player 
+		-- moved: id and location of hero
+		-- attacked: id and location of here, id and new hp of monster
 	
 	heroIdx = tonumber(heroIdx)
 
-	DEBUG_C(HERO_MOVED, heroIdx, self.heroes[heroIdx].name, self.heroes[heroIdx].x, self.heroes[heroIdx].y, sender)	
+	DEBUG_C(SYNC_TURN, "Hero:", heroIdx, x, y, "Monster", monsterIdx, monsterHp, sender)	
+	
+	monsterIdx = tonumber(monsterIdx)
 
 	if sender then -- this is an incoming remote call
-		ASSERT(heroIdx ~= localHero, "Remote trying to update local hero's position")
-		DEBUG(HERO_MOVED, "Updating remote hero's move locally.")
+		if not ASSERT(heroIdx ~= localHero, "Remote trying to update local hero's position") then return end
+		DEBUG_C(SYNC_TURN, "Updating remote hero's move locally.")
 		
 		self.world:moveHero(self.heroes[heroIdx], x-self.heroes[heroIdx].x, y-self.heroes[heroIdx].y)
 		self.sounds:play("hero-steps")
+		
+		if monsterIdx ~= 0 then
+			m = self.monsters:getMonster(monsterIdx)
+			m.hp = monsterHp
+			m.HPbar = monsterHpBar
+			self.world:changeTile(LAYER_HP, m.HPbar, m.x, m.y)
+		end
 		
 		if self.client then 
 			self.heroes[3-localHero].heroTurn = false
@@ -276,10 +288,10 @@ end
 			self:heroesTurnOver()
 		end
 	else -- this is a local call - ignoring parameters
-		ASSERT(heroIdx == localHero, "Trying to update remote hero's position remotely")
-		DEBUG(HERO_MOVED, "Updating local hero's move on remote.")
+		if not ASSERT(heroIdx == localHero, "Trying to update remote hero's position remotely") then return end
+		DEBUG_C(SYNC_TURN, "Updating local move on remote.")
 
-		serverlink:callMethod(HERO_MOVED, localHero, x, y)
+		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
 		
 		self.heroes[3-localHero].heroTurn = true
 		self.heroes[localHero].heroTurn = false
@@ -551,6 +563,8 @@ function ScenePlay:basicAttack(attacker, defender)
 		Calls roll, world:changeTile, 
 		Changes defender.hp, .HPbar
 	--]]
+	
+	if ASSERT(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon
@@ -578,8 +592,9 @@ function ScenePlay:basicAttack(attacker, defender)
 			self:rollDamage(weapon, attacker, defender, crit)
 		end
 		if self.heroes[localHero].heroTurn  then 		
-			if self.remote then 
-				self:syncHero(attacker.heroIdx, attacker.x, attacker.y) -- HEROFIX add attacker.id and attacker.hp 
+			if self.remote then
+				DEBUG("Basic Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
+				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
 			else
 				self:heroesTurnOver()
 			end

@@ -301,7 +301,7 @@ function WorldMap:moveHero(hero, dx, dy)
 		Changes hero.x, hero.y, position of the world
 	--]]
 
-	DEBUG("Moving Hero", hero, hero.heroIdx, dx, dy, "to", hero.x+dx, hero.y+dy)
+	--DEBUG("Moving Hero", hero, hero.heroIdx, dx, dy, "to", hero.x+dx, hero.y+dy)
 
 	if hero.heroIdx == localHero then 
 		--move the torchlight

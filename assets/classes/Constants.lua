@@ -105,8 +105,7 @@ SCENE_JOIN_SERVER @ "sceneJoinServer"
 SCENE_DRAW @ "sceneDraw"
 
 -- Unite Remote Constants
-MOVE_HERO @ "moveHero"
-HERO_MOVED @ "heroMoved"
+SYNC_TURN @ "syncTurn"
 MONSTER_MOVED @ "monsterMoved"
 SYNC_STATE @ "syncState"
 AUTO_CONNECT @ true

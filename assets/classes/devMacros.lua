@@ -60,9 +60,11 @@ function ASSERT(...)
 		local name = debuginfo.name and debuginfo.name or "unknown"
 		print(("%s:%d: %s"):format(short_src, currentline, name), "ASSERT FAIL", unpack(arg)) 
 	end
+	return condition
 end
 --ASSERT(true, "Condition True") -- Will do nothing
 --ASSERT(false, "Condition False") -- will print message to console
+if not ASSERT(true) then return end
 
 
 --DEBUG("DEBUG output turned on" )
