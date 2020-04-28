@@ -15,10 +15,12 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 	- On both devices, ScenePlay.heroes[1] is hero on Server, #2 is hero on client
 	  1. Both devices start up, load map (and monsters, for now)
 	  2. Server syncs hero and monster location to client
-			remoteSyncState()
+			syncState()
 	  3. Server player plays. Results calculated on server and sent to client
-			remoteHeroMoved()
+			Player turn passes with this call.
+			syncHero()
 	  4. Client player plays. Results calculated on client and sent to server
+			Player turn passes with this call.
 			remoteMoveHero() TODO HEROFIX why not the same as above?
 	  5. Monsters calculated on server
 	  6. Goto 3
@@ -86,10 +88,10 @@ function ScenePlay:init()
 
 	--add methods for remote play
 	if self.remote then
-		serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
-		serverlink:addMethod(HERO_MOVED, self.remoteHeroMoved, self)
-		serverlink:addMethod(SYNC_STATE, self.remoteSyncState, self)	
-		serverlink:addMethod(MONSTER_MOVED, self.remoteMonsterMoved, self)
+		--serverlink:addMethod(MOVE_HERO, self.remoteMoveHero, self)
+		serverlink:addMethod(HERO_MOVED, self.syncHero, self)
+		serverlink:addMethod(SYNC_STATE, self.syncState, self)	
+		serverlink:addMethod(MONSTER_MOVED, self.syncMonster, self)
 	end
 
 	--get everything on the screen
@@ -110,10 +112,7 @@ function ScenePlay:init()
 	self.main.center:addEventListener("click", function()
 		if ScenePlay:cheater(4) then self.main:displayCheats() end
 		if not self.heroes[localHero].heroTurn  then return end
-		if self.client then 
-			self:remoteMoveHero(localHero, 0, 0)
-		end
-		self:heroTurnOver() 
+		self:checkMove(self.heroes[localHero], 0, 0)
 	end)
 
 	self.cheat = ""
@@ -136,10 +135,7 @@ function ScenePlay:init()
 			self:checkMove(self.heroes[localHero], 1, 0)
 		elseif event.keyCode == KeyCode.SPACE then
 			if not self.heroes[localHero].heroTurn  then return end
-			if self.client then 
-				self:remoteMoveHero(localHero, 0, 0)
-			end
-			self:heroTurnOver()
+			self:checkMove(self.heroes[localHero], 0, 0)
 		end
 	end)
 	
@@ -183,27 +179,32 @@ function ScenePlay:init()
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
 	
 	self.ready = true
-	if self.remote then self:remoteSyncState() end
+	if self.remote then self:syncState() end
 end
 
 function ScenePlay:checkMove(hero, dx, dy)
 	--[[move the hero if the tile isn't blocked
 	--]]
 	
+	local pass = dx == 0 and dy == 0
 	-- first we need the tile key and layer for where the hero wants to move
-	--DEBUG(hero)
-	--DEBUG(hero.x + dx, hero.y + dy)
-	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
-	--DEBUG(self.active, hero.x + dx, hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+	--DEBUG(hero, dx, dy, pass)
+	--DEBUG(hero, dx, dy, pass, hero.x + dx, hero.y + dy, self.active)
 
 	if not hero.heroTurn then return end
+	ASSERT(hero.heroIdx == localHero, "called with remote hero")
+
+	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
+	--DEBUG(entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
   if self.active == "look" then 
     self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
+	return
   elseif self.active == "attack" then 
     if layer == LAYER_MONSTERS then
       self:attackMonster(hero.x + dx, hero.y + dy)
-    else
+	  return
+    else -- change mode to "move" on the fly
 	  -- self.msg:add("Not a monster", MSG_DESCRIPTION)
 	  self.active = "move"
       self.main.melee:updateVisualState(false)
@@ -212,8 +213,9 @@ function ScenePlay:checkMove(hero, dx, dy)
       self.main.ranged:updateVisualState(false)
     end
   end
+  
   if self.active == "move" then
-    if layer == LAYER_MONSTERS then
+    if layer == LAYER_MONSTERS and not pass then -- LAYER_MONSTERS contains the hero itself...
       -- allow them to bump and melee attack when moving
       self.active = "attack"
       hero.weapon = hero.weapons[1]
@@ -222,40 +224,58 @@ function ScenePlay:checkMove(hero, dx, dy)
       self.main.look:updateVisualState(false)
       self.main.ranged:updateVisualState(false)
       self:attackMonster(hero.x + dx, hero.y + dy)
+	  return
     elseif layer == LAYER_ENVIRONMENT then
       -- check for blocked tiles
       if tile.blocked then
 		--DEBUG(self.active, hero.x + dx, hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
         self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
+		return
+	--[[
       else
+		self.world:moveHero(hero, dx, dy)
+		if self.remote then 
+			self:syncHero(hero.heroIdx, hero.x, hero.y) 
+		end
+		self:heroTurnOver()
 		if self.client then
 			self.world:moveHero(hero, dx, dy)
 			self:remoteMoveHero(hero.heroIdx, dx, dy)
 		else
 			self.world:moveHero(hero, dx, dy)
 			if self.server then
-				self:remoteHeroMoved(localHero, hero.x, hero.y) -- HEROFIX no need to pass x, y separately... or even hero, it's always the local hero
+				self:syncHero(hero.heroIdx, hero.x, hero.y)
 			end
 			self.sounds:play("hero-steps")
 			self:heroTurnOver()
 		end
+		]]
       end
-    else
+    end
+    --else
+		self.world:moveHero(hero, dx, dy)
+		if self.server then 
+			self:syncHero(hero.heroIdx, hero.x, hero.y) 
+		end
+		self:heroesTurnOver()
+		--[[
 		if self.client then
 			self.world:moveHero(hero, dx, dy)
 			self:remoteMoveHero(hero.heroIdx, dx, dy)
 		else
 			self.world:moveHero(hero, dx, dy)
 			if self.server then
-				self:remoteHeroMoved(localHero, hero.x, hero.y) -- HEROFIX no need to pass x, y separately..., it's always the local hero
+				self:syncHero(localHero, hero.x, hero.y) -- HEROFIX no need to pass x, y separately..., it's always the local hero
 			end
 			self.sounds:play("hero-steps")
 			self:heroTurnOver()
 		end
-    end
+		]]
+    --end
   end
  end
  
+ --[[
  function ScenePlay:remoteMoveHero(heroIdx, dx, dy, sender)
 	-- Used by client to send client hero movement to server
 
@@ -283,28 +303,36 @@ function ScenePlay:checkMove(hero, dx, dy)
 	end
  end
 
- function ScenePlay:remoteHeroMoved(heroIdx, x, y, sender)
-	-- Used by server to update client about server hero movement
+]]
+
+ function ScenePlay:syncHero(heroIdx, x, y, sender)
+	-- After one device moved it's hero, tell the other.
 	
 	heroIdx = tonumber(heroIdx)
-	DEBUG_C(self.heroes[heroIdx].name, self.heroes[heroIdx].x, self.heroes[heroIdx].y)	
+
+	DEBUG_C(HERO_MOVED, heroIdx, self.heroes[heroIdx].name, self.heroes[heroIdx].x, self.heroes[heroIdx].y, sender)	
 
 	if sender then -- this is an incoming remote call
-		if self.client then
+		ASSERT(heroIdx ~= localHero, "Remote trying to update local hero's position")
+		--if self.client then
+			DEBUG(HERO_MOVED, "Updating remote hero's move locally.")
 			self.world:moveHero(self.heroes[heroIdx], x-self.heroes[heroIdx].x, y-self.heroes[heroIdx].y)
-		else
-			ERROR(HERO_MOVED, "should not be called remotely on server")
-		end
-	else -- this is a local call
-		if self.server then
+			self.sounds:play("hero-steps")
+		--else
+			--ERROR(HERO_MOVED, "should not be called remotely on server")
+		--end
+	else -- this is a local call - ignoring parameters
+		ASSERT(heroIdx == localHero, "Trying to update remote hero's position remotely")
+		--if self.server then
+			DEBUG(HERO_MOVED, "Updating local hero's move on remote.")
 			serverlink:callMethod(HERO_MOVED, localHero, x, y)
-		else
-			ERROR(HERO_MOVED, "should not be called locally on client")
-		end
+		--else
+			--ERROR(HERO_MOVED, "should not be called locally on client")
+		--end
 	end
  end
 
- function ScenePlay:remoteMonsterMoved(id, x, y, sender)
+ function ScenePlay:syncMonster(id, x, y, sender)
 
 	id = tonumber(id)
 
@@ -330,48 +358,46 @@ function ScenePlay:checkMove(hero, dx, dy)
  end
 
  
- function ScenePlay:remoteSyncState(hero1X, hero1Y, hero2X, hero2Y, monstersInfo, sender) -- HEROFIX for >2 heroes
+ function ScenePlay:syncState(hero1X, hero1Y, hero2X, hero2Y, monstersInfo, sender) -- HEROFIX for >2 heroes
+	-- Used by server to send full game state to client and by client to request initial sync
  
-	DEBUG_C(SYNC_STATE, hero1X, hero1Y, hero2X, hero2Y, sender, monstersInfo)
+	DEBUG_C(SYNC_STATE, hero1X, hero1Y, hero2X, hero2Y, monstersInfo, sender)
 	
-	if sender then  -- this is an incoming remote call
+	if sender then  -- this is an incoming remote call.
 		if self.ready then
-			if self.client then -- server sends us update
-
-				DEBUG("old monsters: ", self.monsters:serialize())
+			if self.client then -- server sends update to client
+				--DEBUG("old monsters: ", self.monsters:serialize())
 				for id, m in pairs(self.monsters.list) do
 					self.world:removeMonster(m.x, m.y)	
 				end
 				self.monsters.list = {}
 				self.monsters:initFromServer(monstersInfo)
-				DEBUG("newmonsters", self.monsters:serialize())
+				--DEBUG("newmonsters", self.monsters:serialize())
 				for id, m in pairs(self.monsters.list) do
 					self.world:addMonster(m)
 				end
 				self.world:moveHero(self.heroes[1], hero1X-self.heroes[1].x, hero1Y-self.heroes[1].y)
 				self.world:moveHero(self.heroes[2], hero2X-self.heroes[2].x, hero2Y-self.heroes[2].y)
-
-			else -- client requests update. Ignore any parameters
+			else -- client requests update. Ignore any parameters and send out update
 				monstersInfo = self.monsters:serialize()
 				DEBUG_C(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
 				serverlink:callMethod(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
 			end
 		end		
-	else -- this is a local call. Ignore any parameters
+	else -- this is a local call.
 		if self.ready then
-			if self.server then
+			if self.server then -- ignore parameters and send update to client
 				monstersInfo = self.monsters:serialize()	
 				DEBUG_C(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
 				serverlink:callMethod(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
-			else
-				--DEBUG_C(SYNC_STATE, -1, -1, -1)
+			else -- request update from server. Parameters don't matter
+				DEBUG_C(SYNC_STATE, -1, -1, -1)
 				serverlink:callMethod(SYNC_STATE, -1, -1, -1, -1, -1)
 			end
 		else
 			ERROR(SYNC_STATE, "should not be called locally before ready")
 		end
-	end
- 
+	end 
  end
 
  
@@ -427,12 +453,10 @@ function ScenePlay:checkMove(hero, dx, dy)
 	end
 end
 
-function ScenePlay:heroTurnOver()
-	--[[puts in one place all the things we want to keep track of after the hero's turn is done 
+function ScenePlay:heroesTurnOver()
+	--[[puts in one place all the things we want to keep track of after the heroes' turn is done 
 	--]]
-
-	--DEBUG("")
-
+	
 	--find the monster being attacked and their index in monsters.list 
 	for id, m in pairs(self.monsters.list) do
 		if m.hp < 1 then		
@@ -450,18 +474,26 @@ function ScenePlay:heroTurnOver()
 		dataSaver.save(currentHeroFileName, self.heroes[localHero])
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
+	
+	-- turn off local movement arrows
+	self:enableArrows(false)
 
-	-- prepare for monster's turn
-	self.heroes[localHero].heroTurn  = false
-	self.main.north:setAlpha(0.5)	
-	self.main.south:setAlpha(0.5)
-	self.main.east:setAlpha(0.5)
-	self.main.west:setAlpha(0.5)
-	self.main.northwest:setAlpha(0.5)	
-	self.main.southwest:setAlpha(0.5)
-	self.main.northeast:setAlpha(0.5)
-	self.main.southeast:setAlpha(0.5)
-	self.main.center:setAlpha(0.5)
+	if self.client then -- Don't play monsters on client
+		self.heroes[localHero].heroTurn = false
+		return
+	end
+
+	if self.server then
+		if self.heroes[localHero].heroTurn then -- first time called after local hero played
+			self.heroes[localHero].heroTurn = false
+			self.heroes[3-localHero].heroTurn = true
+			return
+		else -- second time called after remote hero played
+			self.heroes[3-localHero].heroTurn = false			
+		end
+	else
+		self.heroes[localHero].heroTurn  = false
+	end
 
 	-- first set all monsters to not done
 	for id, m in pairs(self.monsters.list) do
@@ -476,6 +508,24 @@ function ScenePlay:heroTurnOver()
 			self:monsterAI(m)
 		end	
 	end	
+end
+
+function ScenePlay:enableArrows(on)
+	local alpha = on and 1 or 0.5
+	
+	--if on then alpha = 1 else alpha = 0.5 end
+	
+	DEBUG(on, alpha)
+	
+	self.main.north:setAlpha(alpha)	
+	self.main.south:setAlpha(alpha)
+	self.main.east:setAlpha(alpha)
+	self.main.west:setAlpha(alpha)
+	self.main.northwest:setAlpha(alpha)	
+	self.main.southwest:setAlpha(alpha)
+	self.main.northeast:setAlpha(alpha)
+	self.main.southeast:setAlpha(alpha)
+	self.main.center:setAlpha(alpha)
 end
 
 function ScenePlay:monsterTurnOver()
@@ -501,15 +551,7 @@ function ScenePlay:monsterTurnOver()
 
 	-- enable hero again
 	self.heroes[localHero].heroTurn  = true
-	self.main.north:setAlpha(1)	
-	self.main.south:setAlpha(1)
-	self.main.east:setAlpha(1)
-	self.main.west:setAlpha(1)
-	self.main.northwest:setAlpha(1)	
-	self.main.southwest:setAlpha(1)
-	self.main.northeast:setAlpha(1)
-	self.main.southeast:setAlpha(1)
-	self.main.center:setAlpha(1)
+	self:enableArrows(true)
 	
 end
   
@@ -550,7 +592,7 @@ function ScenePlay:monsterAI(monster)
 		self.world:moveMonster(monster, dx, dy)
 		if self.server then
 			DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-			self:remoteMonsterMoved(monster.id, monster.x, monster.y)
+			self:syncMonster(monster.id, monster.x, monster.y)
 		end
 		monster.done = true
 		self:monsterTurnOver()
@@ -560,7 +602,7 @@ function ScenePlay:monsterAI(monster)
 		self.world:moveMonster(monster, dx, dy)
 		if self.remote then
 			DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-			self:remoteMonsterMoved(monster.id, m.x, m.y)
+			self:syncMonster(monster.id, m.x, m.y)
 		end
 		monster.done = true
 		self:monsterTurnOver()
@@ -604,7 +646,7 @@ function ScenePlay:basicAttack(attacker, defender)
 			self:rollDamage(weapon, attacker, defender, crit)
 		end
 		if self.heroes[localHero].heroTurn  then 
-			self:heroTurnOver() 
+			self:heroesTurnOver() 
 		else
 			attacker.done = true
 			self:monsterTurnOver()
@@ -667,7 +709,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 			end
 		end
 		if self.heroes[localHero].heroTurn  then 
-			self:heroTurnOver() 
+			self:heroesTurnOver() 
 		else
 			attacker.done = true
 			self:monsterTurnOver()

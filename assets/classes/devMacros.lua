@@ -44,15 +44,25 @@ end
 INFO @ |print|  -- Print all message box messages to console
 
 function ERROR(...)
-	if OUTPUT_LEVEL > 0 then
+	local debuginfo = debug.getinfo(2)
+	local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
+	local currentline = debuginfo.currentline and debuginfo.currentline or -1
+	local name = debuginfo.name and debuginfo.name or "unknown"
+	print(("%s:%d: %s"):format(short_src, currentline, name), "ERROR", unpack(arg)) 
+end
+
+function ASSERT(...)
+	local condition = unpack(arg)
+	if not condition then
 		local debuginfo = debug.getinfo(2)
 		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
 		local currentline = debuginfo.currentline and debuginfo.currentline or -1
 		local name = debuginfo.name and debuginfo.name or "unknown"
-		print(("%s:%d: %s"):format(short_src, currentline, name), "ERROR", unpack(arg)) 
+		print(("%s:%d: %s"):format(short_src, currentline, name), "ASSERT FAIL", unpack(arg)) 
 	end
 end
-
+--ASSERT(true, "Condition True") -- Will do nothing
+--ASSERT(false, "Condition False") -- will print message to console
 
 
 --DEBUG("DEBUG output turned on" )
@@ -75,6 +85,7 @@ end
 function stringToBoolean(string)
 	if string=="true" then return true elseif string=="false" then return false else return nil end
 end
+
 
 function dump(t,indent)
     local names = {}
