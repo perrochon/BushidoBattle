@@ -18,7 +18,7 @@ SceneStartServer = gideros.class(Sprite)
 
 function SceneStartServer:init()
 
-	local basicGui = BasicGui.new("Server mode - clients connected:", 
+	local basicGui = BasicGui.new("Server mode - clients:", 
 						"Back", SCENE_CONNECT, 
 						"Battle", nil, 
 						"Draw", nil)

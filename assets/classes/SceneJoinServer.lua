@@ -21,7 +21,7 @@ SceneJoinServer = gideros.class(Sprite)
 
 function SceneJoinServer:init()
 
-	self.basicGui = BasicGui.new("Client mode - available servers:", 
+	self.basicGui = BasicGui.new("Client mode - servers:", 
 						"Back", SCENE_CONNECT, 
 						"Battle", SCENE_PLAY, 
 						"Draw", SCENE_DRAW)
