@@ -87,6 +87,12 @@ function SceneJoinServer:init()
 		self.basicGui:addChild(self.battleButton)
 		self.basicGui:addChild(self.drawButton)
 		
+		if AUTO_CONNECT then
+			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME * 5, TRANSITION)
+		end
+			
+
+		
 	end)
 	
 	--start listening for server broadcasts

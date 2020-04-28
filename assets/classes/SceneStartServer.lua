@@ -18,14 +18,14 @@ SceneStartServer = gideros.class(Sprite)
 
 function SceneStartServer:init()
 
-	local basicGui = BasicGui.new("Server mode - clients:", 
+	self.basicGui = BasicGui.new("Server mode - clients:", 
 						"Back", SCENE_CONNECT, 
 						"Battle", nil, 
 						"Draw", nil)
-	self:addChild(basicGui)
+	self:addChild(self.basicGui)
 
 	--battle button
-	basicGui.button1:addEventListener("click", 
+	self.basicGui.button1:addEventListener("click", 
 		function()
 			--if we are ready to battle we
 			--stop broadcasting
@@ -37,7 +37,7 @@ function SceneStartServer:init()
 	)
 
 	--draw button
-	basicGui.button2:addEventListener("click", 
+	self.basicGui.button2:addEventListener("click", 
 		function()
 			--if we are ready to draw we
 			--stop broadcasting
@@ -78,6 +78,12 @@ function SceneStartServer:init()
 			serverlink:accept(self.id)
 			local parent = self:getParent()
 			self:removeFromParent()
+			
+			if AUTO_CONNECT then
+				sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME * 5, TRANSITION)
+			end
+			
+			
 		end
 
 		acceptButton:addEventListener("click", acceptButton.click, acceptButton)
