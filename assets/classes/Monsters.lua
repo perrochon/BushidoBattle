@@ -72,15 +72,17 @@ function Monster:serialize()
 	array["x"] = self.x
 	array["y"] = self.y
 	array["hp"] = self.hp
+	array["HPbar"] = self.HPbar
 	return array
 end
 
 function Monster:deserialize(m)
 	if (self.id ~= m["id"]) then DEBUG("Monster mismatch", self.id, m["id"]) return end
 	self.entry = m["entry"]
-	self.x = m["x"]
-	self.y = m["y"]
-	self.hp = m["hp"]
+	self.x = tonumber(m["x"])
+	self.y = tonumber(m["y"])
+	self.hp = tonumber(m["hp"])
+	self.HPbar = tonumber(m["HPbar"])
 end
 
 Monsters = Core.class(Sprite)
@@ -92,7 +94,7 @@ function Monsters:init(level)
 	local id = 1
 
 	--place #2 monsters 
-	for i = 1, MONSTERS_2 + level*2 do
+	for i = 1, MONSTERS_2 + level*5 do
 		table.insert(self.list, Monster.new(2,id))
 		id += 1
 	end
@@ -107,37 +109,61 @@ function Monsters:init(level)
 		id += 1
 	end
 
-	self:Test()
+	self:Test1()
+	self:Test2()
 end
 
 function Monsters:initFromServer(monstersInfo)
+	DEBUG(monstersInfo)
 	local info = json.decode(monstersInfo)
 	self.list = {}
 	for k, m in pairs(info) do
-		local monster = Monster.new(m["entry"], k)
+		DEBUG(k, m, m == NULL)
+		local monster = Monster.new(m["entry"], m["id"])
 		monster:deserialize(m)
 		table.insert(self.list, monster)
 	end
 end
 
-
-function Monsters:Test()
+function Monsters:Test1()
 	info1 = self:serialize()
 	self:deserialize(info1)
 	info2 = self:serialize()
 	if info1 == info2 then 
-		DEBUG("Test Passed")
+		DEBUG("Test 1 Passed")
 	else
 		DEBUG ("Serialization/Deserializatin failed")
+	end	
+end
+
+
+function Monsters:Test2()
+	DEBUG(self:serialize())
+	table.remove(self.list, 2)
+	DEBUG(self:serialize())
+	local array = {}
+	for key, m in pairs(self.list) do
+		DEBUG(key, m, m.id)
+		table.insert(array, m:serialize())
 	end
+	DEBUG(json.encode(array))
+	local array = {}
+	for key, m in pairs(self.list) do
+		DEBUG(key, m, m.id)
+		array[tostring(m.id)] = m:serialize()
+	end
+	DEBUG(json.encode(array))
+
 end
 
 function Monsters:serialize()
 	local array = {}
-	for key, m in ipairs(self.list) do
-		array[m.id] = m:serialize()
+	for key, m in pairs(self.list) do
+		DEBUG(key, m, m.id)
+		table.insert(array, m:serialize())
 	end
 	local string = json.encode(array)
+	DEBUG(string)
 	return string
 end
 

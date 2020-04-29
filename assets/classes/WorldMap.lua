@@ -416,7 +416,8 @@ function WorldMap:addMonster(monster)
 	
 	--get the array and entry
 	local array = self.mapArrays[LAYER_MONSTERS]
-	
+
+	DEBUG(x, y)
 	--place the monster at the new position
 	array[index(monster.x, monster.y)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 

@@ -7,6 +7,10 @@
 -- 1 = DEBUG, 2 = INFO, 3 = ERROR
 OUTPUT_LEVEL @ 1
 
+-- for debugging. Automatically make no move
+CLIENT_REST = false
+SERVER_REST = false -- not implemented
+
 function DEBUG(...)
 	if OUTPUT_LEVEL > 0 then
 		local debuginfo = debug.getinfo(2)

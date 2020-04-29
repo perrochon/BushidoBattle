@@ -75,7 +75,6 @@ function MainScreen:init(hero)
 	self.xy :setPosition(FG_X, APP_HEIGHT) 
 	self:addChild(self.xy)
 
-
 	self:addEventListener(Event.ENTER_FRAME, function(event)
 		self.kills:setText("Kills: " .. self.hero.kills )
 		self.xp:setText("Experience: " .. self.hero.xp)
