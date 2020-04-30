@@ -10,8 +10,7 @@ function SceneChooseMap:init()
 	
 	self.panels = {}
 	
-	for i=1,4 do
-		
+	for i=1,5 do		
 		local fileName = "level0"..i..".lua"
 		local map = loadfile(fileName)() 
 		self.panels[i] = self:displayMap(map.properties["Title"], i)
@@ -26,13 +25,18 @@ end
 
 function SceneChooseMap:displayMap(map, slot)
 
+	local col = (slot-1) % 4
+	local row = (slot-1) // 4
+
 	local yGap = BUTTON_MARGIN
+	local xGap = BUTTON_MARGIN
 	local mapWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
-	local mapHeight = 400	
+	local mapHeight = 200	
 
 	panel = Sprite.new()
 	panel:setAnchorPoint(0,1) -- TODO Why does it not matter what this is set to?
-	panel:setPosition(BUTTON_MARGIN + (mapWidth + yGap) * (slot-1) , MENU_MARGIN + mapHeight)
+	panel:setPosition(BUTTON_MARGIN +             (mapWidth + xGap) * col, 
+						MENU_MARGIN + mapHeight + (mapHeight + yGap) * row)
 	self:addChild(panel)
 	
 	panel.back = Pixel.new(COLOR_BROWN, 1, mapWidth, mapHeight)

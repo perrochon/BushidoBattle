@@ -536,7 +536,9 @@ function ScenePlay:monsterTurnOver()
 
 	-- Push everything to client
 	  -- takes care of all monsters that moved and any inconcistencies that might have accrued
-	self:syncState()
+	if self.remote then
+		self:syncState()
+	end
 		
 end
   
@@ -639,6 +641,7 @@ function ScenePlay:basicAttack(attacker, defender)
 				self:removeDeadMonsters(localHero)
 			else
 				self:removeDeadMonsters(localHero)
+				self.heroes[localHero].heroTurn = false
 				self:heroesTurnOver()
 			end
 		else
@@ -702,12 +705,32 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 				self:rollDamage(weapon, attacker, defender, crit)
 			end
 		end
+
+		if self.heroes[localHero].heroTurn  then 		
+			if self.remote then
+				DEBUG("Range Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
+				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
+				self:removeDeadMonsters(localHero)
+			else
+				self:removeDeadMonsters(localHero)
+				self.heroes[localHero].heroTurn = false
+				self:heroesTurnOver()
+			end
+		else
+			attacker.done = true
+			self:monsterTurnOver()
+		end
+
+--[[
+
 		if self.heroes[localHero].heroTurn  then 
 			self:heroesTurnOver() 
 		else
 			attacker.done = true
 			self:monsterTurnOver()
 		end
+
+]]
 	end)
 end
 
