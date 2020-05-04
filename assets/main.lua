@@ -6,11 +6,14 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 --[[
 Main for Bushido Battle, Bushido without the talk
 ]]
+print("main.lua")
 
 --[[ TODO
 		- auto connect all the way to Battle...
-		- Multiple heroes
-			-- Client should not draw map before it gets sync. Or wipe lights at that eime.
+		- Remote Play
+			-- Monster AI with multiple heroes
+			-- Ensure same map on client
+			-- Client should not draw map before it gets sync. Or wipe lights at that time.
 		- Settings Screen with AutoConnect
 		- >2 devices
 		- remote attack update
@@ -39,14 +42,8 @@ Main for Bushido Battle, Bushido without the talk
 application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
 application:setOrientation(Application.LANDSCAPE_LEFT)
 application:setScaleMode("letterbox")					
---application:setBackgroundColor(COLOR_GREY)
+application:setBackgroundColor(COLOR_BLACK)
 
---local pixel = Pixel.new(COLOR_BLUE, 1, 200,200)
---pixel:setPosition(275,275)
---stage:addChild(pixel)
-
---local layer = NewTileMap.new()
---stage:addChild(layer)
 
 --set up the global variables and functions
 manual = Cyclopedia.new()
@@ -85,7 +82,7 @@ sceneManager = SceneManager.new({
 
 stage:addChild(sceneManager)
 --go to start scene 
-sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
 --local pixel = Pixel.new(COLOR_GREEN, 1, 200,200)
 --pixel:setPosition(650,650)

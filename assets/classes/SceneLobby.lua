@@ -28,16 +28,17 @@ function SceneLobby:init()
 		end
 	)
 
-	self.map = TextButton.new("Connect")
-	self.map:setAnchorPoint(0.5,0)
-	self.map:setPosition(APP_WIDTH / 3 * 2, APP_HEIGHT / 2)
-	self:addChild(self.map)
-	self.map:addEventListener("click", 
-		function()
-			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
-		end
-	)
-
+	if SOCKETS then
+		self.map = TextButton.new("Connect")
+		self.map:setAnchorPoint(0.5,0)
+		self.map:setPosition(APP_WIDTH / 3 * 2, APP_HEIGHT / 2)
+		self:addChild(self.map)
+		self.map:addEventListener("click", 
+			function()
+				sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
+			end
+		)
+	end
 
 
 	--exit properly if user hits the back button

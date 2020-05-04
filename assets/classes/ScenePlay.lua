@@ -487,7 +487,7 @@ function ScenePlay:heroesTurnOver()
 	--each monster gets a turn
 	for id, m in pairs(self.monsters.list) do
 		m.done = false
-		self.monsters:updateState(m, id, self.heroes[localHero])
+		self.monsters:updateState(m, id, self.heroes, self.remote)
 		if (m.hp > 0) then -- redundant, as we remove dead monsters now explicitely
 			--DEBUG("Playing " .. m.name .. " at " .. m.x .. " " .. m.y)
 			self:monsterAI(m)
@@ -554,7 +554,7 @@ function ScenePlay:monsterAI(monster)
 		if monster.seesHero then
 			--move towards the hero
 			self.sounds:play("monster-steps")
-			dx, dy = self.world:whichWay(monster, self.heroes[localHero].x, self.heroes[localHero].y)
+			dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
 		else
 			--move randomly in one of four directions
 			local directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
@@ -585,7 +585,7 @@ function ScenePlay:monsterAI(monster)
 		self:monsterTurnOver()
 	elseif monster.state == "flee" then
 		--move away from the hero
-		dx, dy = self.world:whichWay(monster, self.heroes[localHero].x, self.heroes[localHero].y)
+		dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
 		self.world:moveMonster(monster, dx, dy)
 		if self.remote then
 			--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
@@ -595,7 +595,7 @@ function ScenePlay:monsterAI(monster)
 		self:monsterTurnOver()
 	elseif monster.state == "attack" then
 		--attack the hero
-		self:basicAttack(monster, self.heroes[localHero])
+		self:basicAttack(monster, monster.target)
 	end
 end
 

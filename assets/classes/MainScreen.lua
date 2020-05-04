@@ -22,7 +22,6 @@ function MainScreen:init(hero)
 	local cheatY = 230
 
 	-- Compass
-	--local fg = Bitmap.new(Texture.new("images/foreground.png", true))
 	local fg = Pixel.new(COLOR_BLACK, 1, APP_WIDTH - FG_X + FG_BLEED, APP_HEIGHT + 2 * FG_BLEED)
 	fg:setPosition(FG_X, -FG_BLEED)
 	self:addChild(fg)
@@ -170,7 +169,7 @@ function MainScreen:init(hero)
 	self.backButton = TextButton.new("Lobby")
 	self.backButton:setAnchorPoint(0,0)
 	self.backButton:setScale(0.5)
-	self.backButton:setPosition(10,BUTTON_MARGIN+50)
+	self.backButton:setPosition(10-DX,BUTTON_MARGIN+50)
 	self:addChild(self.backButton)
 
 	self.backButton:addEventListener("click", 

@@ -185,7 +185,7 @@ function Monsters:getMonster(id)
   return nil
 end
 
-function Monsters:updateState(monster, id, hero)
+function Monsters:updateState(monster, id, heroes, remote)
 --[[update the 'State' variables for each monster:
 		.bloodied 
 		.inrange  
@@ -209,7 +209,32 @@ function Monsters:updateState(monster, id, hero)
 		end
 	end
 	--check if the hero can been seen
-	monster.seesHero = (math.abs(monster.x - hero.x) <= 6 or math.abs(monster.y - hero.y) <= 6)
+	if not remote then
+		local hero = heroes[1]
+		monster.seesHero = (math.abs(monster.x - hero.x) <= 6 or math.abs(monster.y - hero.y) <= 6)
+		monster.target = hero
+	else
+		local d = {}
+		d[1] = math.sqrt(math.pow(monster.x - heroes[1].x,2) + math.pow(monster.y - heroes[1].y,2))
+		d[2] = math.sqrt(math.pow(monster.x - heroes[2].x,2) + math.pow(monster.y - heroes[2].y,2))
+
+		local closer = 0
+		if d[1] < d[2] then
+			closer = 1
+		else
+			closer = 2
+		end
+
+		if d[closer] < 6 then
+			monster.seesHero = true
+			monster.taget = heroes[closer]
+		else
+			monster.seesHero = false
+			monster.taget = nil
+		
+		end
+	end
+	
 	--if not, just move
 	if not monster.seesHero then
 		monster.state = "move"
@@ -241,7 +266,8 @@ function Monsters:updateState(monster, id, hero)
 		end
 		
 		--next check if the hero is in range
-		monster.inrange = math.sqrt(math.pow(monster.x - hero.x,2) + math.pow(monster.y - hero.y,2)) <= monster.weapon.reach 
+		monster.inrange = 
+			math.sqrt(math.pow(monster.x - monster.target.x,2) + math.pow(monster.y - monster.target.y,2)) <= monster.weapon.reach 
 
 		--so far the states have been changed to flee or move. update to attack if in range.
 		if monster.inrange and not (monster.state == 'flee') then

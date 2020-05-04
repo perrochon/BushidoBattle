@@ -98,7 +98,7 @@ function SceneStartServer:init()
 	local os, sdk, mfg, model = application:getDeviceInfo()
 	local name = "ServerOn" .. os .. (model and model or "")
 	name = name:gsub("%s+", "")
-	serverlink = Server.new({username = name})
+	serverlink = Server.new({username = name, maxClients = 1})
 	DEBUG_C(name, "started")
 
 	serverlink:addEventListener("device", function(e)
