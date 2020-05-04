@@ -100,8 +100,7 @@ function ScenePlay:init()
 	if self.remote then
 		self.cs = TextField.new(FONT_SMALL, self.server and "S" or "C")
 		self.cs :setTextColor(COLOR_DKGREY)	
-		self.cs :setAnchorPoint(0,1)
-		self.cs :setPosition(APP_WIDTH-50, APP_HEIGHT) 
+		self.cs :setPosition(MINX + 20, MAXY - self.cs:getHeight()) 
 		self:addChild(self.cs)
 	end
 	

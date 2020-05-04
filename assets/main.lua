@@ -38,12 +38,6 @@ print("main.lua")
 		need to re-enter key information each time	
 ]]
 
---Logical resolution and handling physical resolution
-application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
-application:setOrientation(Application.LANDSCAPE_LEFT)
-application:setScaleMode("letterbox")					
-application:setBackgroundColor(COLOR_BLACK)
-
 
 --set up the global variables and functions
 manual = Cyclopedia.new()
@@ -82,17 +76,11 @@ sceneManager = SceneManager.new({
 
 stage:addChild(sceneManager)
 
--- Add version number on top of everything
-version = TextField.new(FONT_SMALL, VERSION)
-version:setTextColor(COLOR_YELLOW)	
-version:setPosition(APP_WIDTH - version:getWidth(), APP_HEIGHT- version:getHeight() - 100)
-version:setAlpha(0.2)
-stage:addChild(version)
+drawVersion()
 
+drawGrid()
 
 --go to start scene 
-sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
-
-
+sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
 
 INFO("\n\nBushido Battle Started.")

@@ -4,12 +4,10 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 print("init.lua")
-
 VERSION = "0.6"
 
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")
-
 if SOCKETS then
 	err = dofile("classes/socket.lua")
 	err = dofile("classes/Unite.lua")
@@ -17,18 +15,38 @@ else
 	print("HTML version. Not loading multi-player support")
 end
 
--- Facebook code to remove the loader
--- Here to run early, maybe that makes it work
-pcall(function() FBInstant=require "FBInstant" end)
-if FBInstant then
-	DEBUG("FBInstant loaded")
-	FBInstant.startGameAsync(function() 
-		DEBUG("Loading screen removed. FBInstantAPI loaded")
-		FBInstantAPI=true
-	end)
-else
-	--DEBUG("FBInstant not loaded")
-end
+-- Screen Sizes
+-- http://forum.giderosmobile.com/discussion/comment/62021/#Comment_62021
+-- KEEP APP_HEIGHT and APP_WIDTH, but shift UX on the map out if letterboxed...
+-- TODO if letterboxed on the side, move FG_X to the right, and lobby button to the left
+-- 11 tiles high and wide + 712 to get to 1920. Image is 920 wide for wide-screen 			
+
+-- Logical App screen - We will letterbox this
+APP_HEIGHT @ 1188
+APP_WIDTH @ 1920
+BUTTON_MARGIN @ 50
+MENU_MARGIN @ 200
+PLAY_UX_WIDTH @ 700
+
+print("Logical Screen", APP_WIDTH, APP_HEIGHT)
+
+MINX, MINY, MAXX, MAXY = application:getDeviceSafeArea(true)
+
+MINX = math.floor(MINX + 0.5)
+MINY = math.floor(MINY + 0.5)
+MAXX = math.floor(MAXX + 0.5)
+MAXY = math.floor(MAXY + 0.5)
+
+print("Device Safe Area", MINX, MINY, MAXX, MAXY)
+
+FG_X @ \(MAXX-PLAY_UX_WIDTH)\
+
+FG_BLEED @ 1000 -- 500 should be enough, but HTML can be really wide...
+
+--Logical resolution and handling physical resolution
+application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
+application:setOrientation(Application.LANDSCAPE_LEFT)
+application:setScaleMode("letterbox")					
 
 
 --[[
@@ -53,36 +71,7 @@ COLOR_ORANGE @ 0xD27D2C
 COLOR_YELLOW @ 0xDAD45E
 COLOR_WHITE @ 0xF9FAFA   -- slightly creamy white
 
-
--- http://forum.giderosmobile.com/discussion/comment/62021/#Comment_62021
--- KEEP APP_HEIGHT and APP_WIDTH, but shift UX on the map out if letterboxed...
--- TODO if letterboxed on the side, move FG_X to the right, and lobby button to the left
--- 11 tiles high and wide + 712 to get to 1920. Image is 920 wide for wide-screen 			
-APP_HEIGHT @ 1188
-APP_WIDTH @ 1920
-FG_BLEED @ 1000 -- 500 should be enough, but HTML can be really wide...
-BUTTON_MARGIN @ 50
-MENU_MARGIN @ 200
-
-MINX, MINY, MAXX, MAXY = application:getDeviceSafeArea(true)
-
-if MINX < 0 then
-DX = - MINX
-else
-DX = 0
-end
---print("Logical Screen", APP_WIDTH, APP_HEIGHT)
---print("Device Screen ", MINX, MINY, MAXX, MAXY)
-
---FG_X @ \(APP_HEIGHT + 1)\
-FG_X = APP_HEIGHT + DX + 1
-
-
---application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
---application:setOrientation(Application.LANDSCAPE_LEFT)
---application:setScaleMode("letterbox")					
---application:setBackgroundColor(COLOR_BLACK)
-
+application:setBackgroundColor(COLOR_BLACK)
 
 
 MSG_FADE = 0.005
@@ -107,6 +96,22 @@ LAYER_ROWS @ 36			--the number of rows in each array of tile
 index = function (x, y) --index of cell (x,y)
 	return x + (y - 1) * LAYER_COLUMNS 
 end
+
+
+
+-- Facebook code to remove the loader
+-- Here to run early, maybe that makes it work
+pcall(function() FBInstant=require "FBInstant" end)
+if FBInstant then
+	DEBUG("FBInstant loaded")
+	FBInstant.startGameAsync(function() 
+		DEBUG("Loading screen removed. FBInstantAPI loaded")
+		FBInstantAPI=true
+	end)
+else
+	--DEBUG("FBInstant not loaded")
+end
+
 
 -- don't change these, as layers are inserted in this order in TileMap.lua
 LAYER_TERRAIN @ 1		-- terrain layer (dirt, floors, water)

@@ -5,17 +5,16 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 MainScreen = Core.class(Sprite)
 
-MAIN_SCREEN_WIDTH @ \(APP_WIDTH - FG_X)\
-HALFX @ \(FG_X + MAIN_SCREEN_WIDTH / 2)\
-COMPASS_Y @ 928
+HALFX @ \(FG_X + PLAY_UX_WIDTH / 2)\
 COMPASS_OFFSET @ 166
+COMPASS_Y @ \(MAXY - BUTTON_MARGIN - 144 / 2 - COMPASS_OFFSET)\
 
 function MainScreen:init(hero)
 
 	self.hero = hero
 	
---	local MAIN_SCREEN_WIDTH = APP_WIDTH - FG_X
---	local halfX = FG_X + MAIN_SCREEN_WIDTH / 2
+--	local PLAY_UX_WIDTH = APP_WIDTH - FG_X
+--	local halfX = FG_X + PLAY_UX_WIDTH / 2
 	local actionY = 520
 --	local COMPASS_Y = 928
 --	local COMPASS_OFFSET = 166
@@ -70,8 +69,7 @@ function MainScreen:init(hero)
 
 	self.xy = TextField.new(FONT_SMALL, self.hero.x .. ",".. self.hero.y)
 	self.xy :setTextColor(COLOR_DKGREY)	
-	self.xy :setAnchorPoint(0,1)
-	self.xy :setPosition(FG_X, APP_HEIGHT) 
+	self.xy :setPosition(FG_X, MAXY - version:getHeight()) 
 	self:addChild(self.xy)
 
 	self:addEventListener(Event.ENTER_FRAME, function(event)
@@ -167,9 +165,9 @@ function MainScreen:init(hero)
 	self.cheats:addChild(self.reset)
 	
 	self.backButton = TextButton.new("Lobby")
-	self.backButton:setAnchorPoint(0,0)
+	self.backButton:setAnchorPoint(0,-1)
 	self.backButton:setScale(0.5)
-	self.backButton:setPosition(10-DX,BUTTON_MARGIN+50)
+	self.backButton:setPosition(MINX + BUTTON_MARGIN, MINY+BUTTON_MARGIN)
 	self:addChild(self.backButton)
 
 	self.backButton:addEventListener("click", 

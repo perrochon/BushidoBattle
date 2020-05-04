@@ -138,32 +138,32 @@ end
 
 
 function Monsters:Test2()
-	DEBUG(self:serialize())
+	--DEBUG(self:serialize())
 	table.remove(self.list, 2)
-	DEBUG(self:serialize())
+	--DEBUG(self:serialize())
 	local array = {}
 	for key, m in pairs(self.list) do
-		DEBUG(key, m, m.id)
+		--DEBUG(key, m, m.id)
 		table.insert(array, m:serialize())
 	end
-	DEBUG(json.encode(array))
+	--DEBUG(json.encode(array))
 	local array = {}
 	for key, m in pairs(self.list) do
-		DEBUG(key, m, m.id)
+		--DEBUG(key, m, m.id)
 		array[tostring(m.id)] = m:serialize()
 	end
-	DEBUG(json.encode(array))
+	--DEBUG(json.encode(array))
 
 end
 
 function Monsters:serialize()
 	local array = {}
 	for key, m in pairs(self.list) do
-		DEBUG(key, m, m.id)
+		--DEBUG(key, m, m.id)
 		table.insert(array, m:serialize())
 	end
 	local string = json.encode(array)
-	DEBUG(string)
+	--DEBUG(string)
 	return string
 end
 
