@@ -58,7 +58,7 @@ function BasicGui:init(title, back, backToScene, text1, scene1, text2, scene2)
 			)
 		end
 	end
-	
+
 	--self:drawGrid()
 
 end

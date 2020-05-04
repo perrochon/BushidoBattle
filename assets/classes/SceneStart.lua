@@ -29,12 +29,6 @@ function SceneStart:init()
 	self.version:setAlpha(0.2)
 	self:addChild(self.version)
 
-	self.version = TextField.new(FONT_SMALL, VERSION)
-	self.version:setTextColor(COLOR_YELLOW)	
-	self.version:setPosition(APP_WIDTH - self.version:getWidth(), APP_HEIGHT- self.version:getHeight())
-	self.version:setAlpha(0.2)
-	self:addChild(self.version)
-
 	if FBInstant then
 		local text = TextField.new(FONT_SMALL, "FBInstant")
 		text:setTextColor(COLOR_YELLOW)	

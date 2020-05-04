@@ -26,7 +26,6 @@
  <folder name="classes">
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
-  <file name="assets/classes/Constants.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
   <file name="assets/classes/Messages.lua"/>
   <file name="assets/classes/Monsters.lua"/>
@@ -102,7 +101,6 @@
  <file name="assets/level05.lua" excludeFromExecution="1"/>
  <file name="assets/main.lua"/>
  <dependency from="assets/init.lua" to="assets/classes/devMacros.lua"/>
- <dependency from="assets/classes/BasicGui.lua" to="assets/classes/Constants.lua"/>
  <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
  <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>
 </project>

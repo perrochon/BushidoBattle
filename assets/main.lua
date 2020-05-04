@@ -81,11 +81,18 @@ sceneManager = SceneManager.new({
 })
 
 stage:addChild(sceneManager)
+
+-- Add version number on top of everything
+version = TextField.new(FONT_SMALL, VERSION)
+version:setTextColor(COLOR_YELLOW)	
+version:setPosition(APP_WIDTH - version:getWidth(), APP_HEIGHT- version:getHeight() - 100)
+version:setAlpha(0.2)
+stage:addChild(version)
+
+
 --go to start scene 
 sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
---local pixel = Pixel.new(COLOR_GREEN, 1, 200,200)
---pixel:setPosition(650,650)
---stage:addChild(pixel)
+
 
 INFO("\n\nBushido Battle Started.")

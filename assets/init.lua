@@ -1,26 +1,21 @@
-print("init.lua")
-
-SOCKETS @ false
-
-if SOCKETS then
-	print("loading sockets and unite")
-	err = dofile("classes/socket.lua")
-	print("Error:", err)
-	err = dofile("classes/Unite.lua")
-	print("Error:", err)
-else
-	print("not loading sockets and unite")
-
-end
-
 --[[
 This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
 (C) 2010 - 2020 Louis Perrochon
 ]]
 
-print("Constants.lua")
+print("init.lua")
 
 VERSION = "0.6"
+
+-- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
+SOCKETS = (application:getDeviceInfo() ~= "Web")
+
+if SOCKETS then
+	err = dofile("classes/socket.lua")
+	err = dofile("classes/Unite.lua")
+else
+	print("HTML version. Not loading multi-player support")
+end
 
 -- Facebook code to remove the loader
 -- Here to run early, maybe that makes it work
