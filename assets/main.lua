@@ -53,9 +53,6 @@ localHero = 1 -- This hero gets moved, and the map centers around her
 -- Reset all heroes
 --SceneChooseHero:resetAllHeroes()
 
--- TODO FIX - used by the connect classes
-font = TTFont.new("fonts/IMMORTAL.ttf", 96);
-
 --define the scenes
 sceneManager = SceneManager.new({
 --these are all the separate screens in the game
