@@ -17,6 +17,8 @@ function Sounds:init(scene)
 		self:add("music-death", "sounds/music-death.mp3")
 	elseif scene == "title" then
 		self:add("music-title", "sounds/music-title.mp3")
+	elseif scene == "lobby" then
+		self:add("music-lobby", "sounds/Ninja-Game-Intro.mp3")
 	end
 end
 

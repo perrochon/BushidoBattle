@@ -14,7 +14,7 @@ function SceneStart:init()
 	
 	--play the music of the scene
 	local sounds = Sounds.new("title")
-	--self.music = sounds:play("music-title")
+	self.music = sounds:play("music-title")
 	
 	--fade in the words
 	self.words = TextField.new(FONT_MEDIUM, "All you want to do is kill...")
@@ -103,7 +103,7 @@ end
 	
 function SceneStart:onMouseUp()
 	--this will be called when they're ready to play
-	--self.music:stop()
+	self.music:stop()
 	self.words = TextField.new(FONT_MEDIUM, "Good luck!")	
 	self.words:setTextColor(COLOR_RED)
 	self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2 + 400)

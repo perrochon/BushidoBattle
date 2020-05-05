@@ -6,6 +6,10 @@ SceneLobby = Core.class(Sprite)
 
 function SceneLobby:init()
 
+	--play the music of the scene
+	--local sounds = Sounds.new("lobby")
+	--self.music = sounds:play("music-lobby")
+
 	local basicGui = BasicGui.new("Bushido Battle", 
 						"Quit", nil, 
 						"Hero", SCENE_CHOOSE_HERO,

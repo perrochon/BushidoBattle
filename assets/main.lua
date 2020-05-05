@@ -51,7 +51,7 @@ currentMapFileName = "level01"
 localHero = 1 -- This hero gets moved, and the map centers around her
 
 -- Reset all heroes
-SceneChooseHero:resetAllHeroes()
+--SceneChooseHero:resetAllHeroes()
 
 -- TODO FIX - used by the connect classes
 font = TTFont.new("fonts/IMMORTAL.ttf", 96);
@@ -78,9 +78,9 @@ stage:addChild(sceneManager)
 
 drawVersion()
 
-drawGrid()
+--drawGrid()
 
 --go to start scene 
-sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
 INFO("\n\nBushido Battle Started.")

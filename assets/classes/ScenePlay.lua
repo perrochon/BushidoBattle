@@ -30,6 +30,8 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 	  
 	  Victory, death, or quitting ends the remote session and a new one needs to be 
 	  started from the lobby. TODO HEROFIX
+	  
+	  Music from: https://soundimage.org/ need attribution
 --]]
 
 

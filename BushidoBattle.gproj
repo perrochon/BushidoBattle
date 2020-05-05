@@ -1,5 +1,5 @@
 <project>
- <properties app_name="Bushido Battle" windowHeight="0" encryptCode="0" html5_mem="256" ios_bundle="com.yourdomain." exportMode="0" vsync="0" splash_h_image="" architecture="7" html5_host="" iosDevice="0" splashScaleMode="0" scaleMode="3" winrt_package="com.yourdomain.yourapp" android_template="0" osx_org="GiderosMobile" autorotation="0" build_number="1" splash_v_image="" osx_installerId="" win_org="GiderosMobile" version="1.0" html5_crash="" encryptAssets="0" html5_symbols="0" mouseTouchOrder="0" logicalWidth="1200" disableSplash="1" backgroundColor="#000000" html5_pack="0" version_code="1" logicalHeight="1920" mouseToTouch="1" tv_icon="" win_domain="giderosmobile.com" html5_wasm="0" fps="60" winrt_org="GiderosMobile" orientation="1" osx_bundle="com.yourdomain." html5_fbload="50" app_icon="other/Icon.png" html5_fbinstant="0" touchToMouse="1" osx_domain="giderosmobile.com" osx_signingId="" packageName="com.yourdomain.yourapp" windowWidth="0" retinaDisplay="0" osx_category="5">
+ <properties app_name="Bushido Battle" windowHeight="0" encryptCode="0" html5_mem="256" ios_bundle="com.yourdomain." exportMode="0" vsync="0" splash_h_image="" architecture="7" html5_host="" iosDevice="0" splashScaleMode="0" scaleMode="3" winrt_package="com.yourdomain.yourapp" android_template="0" osx_org="GiderosMobile" autorotation="0" build_number="1" splash_v_image="" osx_installerId="" win_org="GiderosMobile" version="1.0" html5_crash="" encryptAssets="0" html5_symbols="0" mouseTouchOrder="0" logicalWidth="1200" disableSplash="1" backgroundColor="#000000" html5_pack="0" version_code="1" logicalHeight="1920" mouseToTouch="1" tv_icon="" win_domain="giderosmobile.com" html5_wasm="0" fps="60" winrt_org="GiderosMobile" orientation="1" osx_bundle="com.yourdomain." html5_fbload="50" app_icon="other/Icon.png" html5_fbinstant="1" touchToMouse="1" osx_domain="giderosmobile.com" osx_signingId="" packageName="com.yourdomain.yourapp" windowWidth="0" retinaDisplay="0" osx_category="5">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -47,6 +47,7 @@
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
+  <file name="assets/classes/init.lua"/>
   <file name="assets/classes/newTileMap.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
   <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
@@ -77,6 +78,7 @@
   <file name="assets/images/tileset-terrain-108px.png"/>
  </folder>
  <folder name="sounds">
+  <file name="assets/sounds/Ninja-Game-Intro.mp3"/>
   <file name="assets/sounds/footsteps-02.wav"/>
   <file name="assets/sounds/footsteps-03.wav"/>
   <file name="assets/sounds/footsteps-fast.wav"/>
