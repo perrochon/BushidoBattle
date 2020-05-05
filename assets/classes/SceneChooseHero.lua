@@ -12,16 +12,16 @@ function SceneChooseHero:init()
 	
 	for i=1,4 do
 		local heroFileName = "|D|hero"..i
-		DEBUG("Loading", heroFileName)
+		--DEBUG("Loading", heroFileName)
 		local hero = dataSaver.load(heroFileName)	
-		DEBUG(hero)
+		--DEBUG(hero)
 		if hero then
-			DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
+			--DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
 			-- hero.hp = hero.maxHP -- heal whatever hero we found. If we do, we have to save it back...
 			self.panels[i] = self:displayHero(hero, i)	
 		else
 			hero = Player.new(i) 
-			DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
+			--DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
 			dataSaver.save(heroFileName, hero)		
 			self.panels[i] = self:displayHero(hero, i)
 		end
@@ -54,21 +54,49 @@ function SceneChooseHero:displayHero(hero, slot)
 	panel.front:setPosition(5,-5)
 	panel:addChild(panel.front)
 
+	heroName = TextButton.new(hero.name)
+	heroName:setAnchorPoint(0,-1)
+	heroName:setScale(0.5)
+	--heroName:setAlpha(0.5)
+	heroName.back:setColor(COLOR_DKGREY)
+	heroName.front:setColor(COLOR_BROWN)
+	heroName.title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
+	heroName.title:setX(15)
+	heroName.back:setWidth(heroWidth * 2 - 60) -- TODO This works, but makes no sense to me
+	heroName.front:setWidth(heroName.back:getWidth() - 10)
+	heroName:setPosition(15, -heroHeight+20)
+	panel:addChild(heroName)
+	
+	heroName:addEventListener("click", function ()
+		local textInputDialog = TextInputDialog.new("Change Hero Name", "Enter Hero Name", 
+			hero.name, "Cancel", "Save")
+		textInputDialog:addEventListener(Event.COMPLETE, function(event)
+			if event.buttonIndex ~= nil then
+				hero.name = event.text:sub(1,8)
+				
+				local heroFileName = "|D|hero"..slot
+				dataSaver.save(heroFileName, hero)
+				sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 				
+			end
+		end)
+		textInputDialog:show()
+	end)
+
+
 	local heroDescription = ""
-	heroDescription = heroDescription .. hero.name .."\n"
 	heroDescription = heroDescription .. "Level: " .. hero.level .."\n"
 	heroDescription = heroDescription .. "HP: " .. hero.hp .."\n"
 	heroDescription = heroDescription .. "XP: " .. hero.xp .."\n"
 	heroDescription = heroDescription .. "Kills: " .. hero.kills .."\n"
 
-	local title = TextField.new(FONT_MEDIUM, heroDescription)
+	local title = TextField.new(FONT_SMALL, heroDescription)
 	title:setLayout({flags = FontBase.TLF_REF_TOP |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
 	title:setTextColor(COLOR_YELLOW)	
-	title:setPosition(15, -heroHeight+20) 
+	title:setPosition(15, -heroHeight+150) 
 	panel:addChild(title)
 
 	local x,y,w,h = panel:getBounds(self)
-	DEBUG(yGap, heroWidth, heroHeight, " : ", x, y, w, h)
+	--DEBUG(yGap, heroWidth, heroHeight, " : ", x, y, w, h)
 	pixel = Pixel.new(COLOR_BLUE, 0.6, w+10, h+10)
 	pixel:setPosition(x-5, y-5)
 	--stage:addChild(pixel)
@@ -82,10 +110,10 @@ function SceneChooseHero:displayHero(hero, slot)
 
 	resetButton:addEventListener("click", function()
 			local heroFileName = "|D|hero"..slot
-			DEBUG("Resetting", heroFileName)
+			--DEBUG("Resetting", heroFileName)
 			hero = Player.new(slot) 
 			dataSaver.save(heroFileName, hero)
-			sceneManager:changeScene(SCENE_CHOOSE_HERO, TRANSITION_TIME, TRANSITION) 
+			sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
 			end
 		)
 
@@ -101,7 +129,7 @@ end
 
 function SceneChooseHero:onMouseDown(event)
 	if self:hitTestPoint(event.x, event.y) then
-		DEBUG("Mouse down on panel", self.slot)
+		--DEBUG("Mouse down on panel", self.slot)
 		self.focus = true
 		self:getParent():getParent():updateVisualState(false, currentHero)
 		self:getParent():getParent():updateVisualState(true, self.slot)
@@ -111,9 +139,9 @@ end
 
 function SceneChooseHero:onMouseMove(event)
 	if self.focus then
-		DEBUG("Mouse move on panel", self.slot)
+		--DEBUG("Mouse move on panel", self.slot)
 		if not self:hitTestPoint(event.x, event.y) then
-			DEBUG("Mouse left panel", i)
+			--DEBUG("Mouse left panel", i)
 			self.focus = false;
 			self:getParent():getParent():updateVisualState(false, self.slot)
 			self:getParent():getParent():updateVisualState(true, currentHero)
@@ -124,7 +152,7 @@ end
 
 function SceneChooseHero:onMouseUp(event)
 	if self.focus then
-		DEBUG("Mouse up on panel", self.slot)
+		--DEBUG("Mouse up on panel", self.slot)
 		self.focus = false;
 		self:getParent():getParent():updateVisualState(false, currentHero)
 		self:getParent():getParent():updateVisualState(true, self.slot)
@@ -147,7 +175,7 @@ function SceneChooseHero:resetAllHeroes()
 
 	for i=1, 5 do
 		local heroFileName = "|D|hero"..i
-		DEBUG("Resetting", heroFileName)
+		--DEBUG("Resetting", heroFileName)
 		hero = Player.new(i) 
 		dataSaver.save(heroFileName, hero)
 	end

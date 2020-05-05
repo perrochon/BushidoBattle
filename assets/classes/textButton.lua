@@ -22,11 +22,11 @@ function TextButton:init(text)
 
 	--self:DrawGrid()
 
- 	local title = TextField.new(FONT_MEDIUM, text)
-	title:setTextColor(COLOR_YELLOW)	
-	title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
-	title:setPosition(200, - (MENU_MARGIN - BUTTON_MARGIN) / 2)
-	self:addChild(title)
+ 	self.title = TextField.new(FONT_MEDIUM, text)
+	self.title:setTextColor(COLOR_YELLOW)	
+	self.title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
+	self.title:setPosition(200, - (MENU_MARGIN - BUTTON_MARGIN) / 2)
+	self:addChild(self.title)
 
 	self:updateVisualState(false)
 	self.focus = false 
