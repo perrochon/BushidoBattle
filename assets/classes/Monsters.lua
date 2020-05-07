@@ -87,11 +87,26 @@ end
 
 Monsters = Core.class(Sprite)
 
-function Monsters:init(level)
+function Monsters:init(mapData)
 --creates the Monsters variable self.list, a table of all the monsters
 
     self.list = {}
-	local id = 1
+	local id = 1 -- FIX we are inserting at the end, why do we need i?
+	
+	--DEBUG(json.encode(mapData.spawns))
+
+	for _, v in pairs(mapData.spawns) do
+		if v.type ~= 1 then
+			--DEBUG(json.encode(v))
+			local m = Monster.new(v.type, id)
+			m.x = v.x
+			m.y = v.y
+			table.insert(self.list, m)
+			id += 1
+		end
+	end
+	
+	--[[
 
 	--place #2 monsters 
 	for i = 1, MONSTERS_2 + level*5 do
@@ -108,9 +123,9 @@ function Monsters:init(level)
 		table.insert(self.list, Monster.new(4,id))
 		id += 1
 	end
+	
+	--]]
 
-	self:Test1()
-	self:Test2()
 end
 
 function Monsters:initFromServer(monstersInfo)
@@ -130,7 +145,7 @@ function Monsters:Test1()
 	self:deserialize(info1)
 	info2 = self:serialize()
 	if info1 == info2 then 
-		DEBUG("Test 1 Passed")
+		--DEBUG("Test 1 Passed")
 	else
 		DEBUG ("Serialization/Deserializatin failed")
 	end	

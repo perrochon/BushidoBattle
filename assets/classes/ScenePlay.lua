@@ -40,6 +40,11 @@ ScenePlay = Core.class(Sprite)
  
 function ScenePlay:init()
 
+	-- read the level file
+	self.mapData= MapData.new(currentMapFileName) 
+
+	-- FIX move the hero creation/placement stuff out of init into Heroes.lua
+
 	ScenePlay.heroes = {} 
 	-- HEROFIX > 2 - heroes[1] will be on the server. heroes[2] on the client
 
@@ -69,19 +74,37 @@ function ScenePlay:init()
 		localHero = 1
 	end
 	
-	
-	--the major gaming variables
+		--the major gaming variables
 	self.heroes[localHero] = dataSaver.load(currentHeroFileName)
+	
+	local x, y
+	for _, v in pairs(self.mapData.spawns) do
+		if v.type == 1 then
+			x = v.x
+			y = v.y
+			break
+		end
+	end
+	
+	DEBUG("Hero Spawn", x, y)
 
 	self.heroes[1].heroTurn = true	
 	self.heroes[1].heroIdx = 1
+	self.heroes[1].x = x
+	self.heroes[1].y = y	
 	if self.remote then
 		self.heroes[2].heroIdx = 2
 		self.heroes[2].heroTurn = false
+		self.heroes[2].x = x+1
+		self.heroes[2].y = y+1	
 	end
+		
+	-- load monsters -- TODO HEROFIX double monsters when there are two players.
+	self.monsters = Monsters.new(self.mapData)
 
-	self.monsters = Monsters.new(self.heroes[localHero].level) -- TODO HEROFIX maybe use sum of all levels?
-	self.world = WorldMap.new(self.heroes, self.monsters) -- HEROFIX what? why?
+	-- Create the TileMaps and the arrays
+	self.world = WorldMap.new(self.mapData, self.heroes, self.monsters)
+
 	self.msg = Messages.new()
 	self.sounds = Sounds.new("game")
 

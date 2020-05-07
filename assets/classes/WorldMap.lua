@@ -9,34 +9,35 @@ WorldMap class and all the functions associated with it: changing tiles, generat
 
 WorldMap = Core.class(Sprite)
 
-function WorldMap:init(heroes, monsters)
-	--[[Create tables for map content (self.mapArrays) and for each TileMap (self.mapLayers)	
-	--]]
+function WorldMap:init(level, heroes, monsters)
+
+	--Create tables for map content (self.mapArrays) and for each TileMap (self.mapLayers)	
+	--self.level = Level.new(currentMapFileName) -- read the file
 	
+	self.level = level
+
 	self.mapArrays = {} -- a numeric key indicating what's in this place - defined in tiled maps and constants.lua
 	self.mapLayers = {} -- the actual tile that is painted
 
 	-- assign TileMaps to self.mapLayers. table.insert ads at the end, so the order here matters
 	-- needs to be consistent with Constants.lua, but also rendering.
-	local group = Sprite.new()
+	local group = Sprite.new() -- self is a sprite, so could just add to self, no?
 	
-	self.map = NewTileMap.new(currentMapFileName)
-	
-	local layer1,array1 = self.map:LayerFromMap(1)
+	local layer1,array1 = self.level:layerFromMap(1)
 	group:addChild(layer1) 
 	table.insert(self.mapLayers, layer1)
 	table.insert(self.mapArrays, array1)
 
 	--self:debugMapInfo(LAYER_TERRAIN)
 
-	local layer2,array2 = self.map:LayerFromMap(2)
+	local layer2,array2 = self.level:layerFromMap(2)
 	group:addChild(layer2) 
 	table.insert(self.mapLayers, layer2)
 	table.insert(self.mapArrays, array2)
 
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
-	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(layer, heroes, monsters)
+	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
 	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)
@@ -67,10 +68,9 @@ function WorldMap:init(heroes, monsters)
 	self:shiftWorld(heroes[1].x - 6, heroes[1].y - 6)
 
 	-- TODO FIX why no return self here?
-
 end
 
-function WorldMap:placeMonsters(tilemap, heroes, monsters)
+function WorldMap:placeMonsters(heroes, monsters)
 	--[[Return an array to represent the monsters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
 		Changes heroes[].x, heroes[].y and each monster.x, monster.y
@@ -84,57 +84,15 @@ function WorldMap:placeMonsters(tilemap, heroes, monsters)
 			mArray[index(x, y)] = 0
 		end
 	end
-		
-	local envArray = self.mapArrays[LAYER_ENVIRONMENT]
-	local i, x, y = 0, 0, 0
 	
-	--find an empty spot for each monster 
-	for key, m in pairs(monsters.list) do
-		repeat
-			x = math.random(2, LAYER_ROWS - 1)
-			y = math.random(2, LAYER_COLUMNS - 1)
-			i = index(x, y) 
-			--returns true only if there are no monsters there and it's a floor tile
-			--can't use WorldMap:blocked() because monster layer not set yet
-			--DEBUG(key, m.name, i, x, y, mArray[i], envArray[i])
-			 placed = (mArray[i] == 0) and (envArray[i] == 0)
-			--local key, layer, tile = self:getTileInfo(x, y, LAYER_TERRAIN)
-			--placed = (mArray[i] == 0) and (envArray[i] == 0) and not tile.blocked	
-		until placed 
-		--then add to the array
-		mArray[i] = m.entry
-		--and modify the monster variable
-		m.x, m.y = x, y
-		m.HPbar = 0
+	for _, m in pairs(monsters.list) do
+		mArray[index(m.x, m.y)] = m.entry
 	end
 	
-	--then repeat for the heroes
-	repeat
-		x = math.random(5, LAYER_ROWS - 5)
-		y = math.random(5, LAYER_COLUMNS - 5)
-		i = index(x, y)	
-		i2 = index(x+1, y+1) -- TODO HEROFIX for second hero
-		--DEBUG(heroes[1].name, i, x, y, mArray[i], envArray[i])
-		placed = (mArray[i] == 0) and (envArray[i] == 0) and (mArray[i2] == 0) and (envArray[i2] == 0) 	
-		--can't use WorldMap:blocked() because monster layer not set yet
-	until placed 
-	mArray[i] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
-	heroes[localHero].x, heroes[localHero].y = x, y
+	mArray[index(heroes[localHero].x, heroes[localHero].y)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 
 	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
-		--repeat
-			--x = math.random(5, LAYER_ROWS - 5)
-			--y = math.random(5, LAYER_COLUMNS - 5)
-			--i = index(x, y)	
-			--placed = (mArray[i] == 0) and (envArray[i] == 0) 	
-			--can't use WorldMap:blocked() because monster layer not set yet
-		--until placed 
-		x = x+1
-		y = y+1
-		i = index(x, y)	
-		--DEBUG(heroes[2].name, i, x, y, mArray[i], envArray[i])
-		mArray[i] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
-		heroes[3-localHero].x, heroes[3-localHero].y = x, y
+		mArray[index(heroes[3-localHero].x, heroes[3-localHero].y)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 	end
 	
 	return mArray
@@ -238,7 +196,7 @@ function WorldMap:getTileInfo(x, y, layer)
 			-- get tile information from constants
 			tile = manual:getEntry(manual:getEntry("layers", layer), array[i])
 		else
-			tile = self.map.tiles[array[i]]
+			tile = self.level.tiles[array[i]] -- FIX replace with getFunction
 		end
 		if tile ~= nil then
 			--DEBUG(x, y, layer, array[i], tile.id, tile.name, tile.blocked)
@@ -258,7 +216,7 @@ function WorldMap:getTileInfo(x, y, layer)
 					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile			
 				else
-					local tile = self.map.tiles[array[i]]
+					local tile = self.level.tiles[array[i]] -- FIX replace with getFunction
 					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile
 				end

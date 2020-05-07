@@ -30,6 +30,7 @@ print("main.lua")
 
 	Dev Stuff
 		- Automated Tests
+		- Style Guide: http://lua-users.org/wiki/LuaStyleGuide
 		
 	Deployment
 		build.gradle (app)
@@ -77,7 +78,9 @@ drawVersion()
 
 --drawGrid()
 
+dofile("classes/Tests.lua")
+
 --go to start scene 
+INFO("\n**********************\nBushido Battle Started\n**********************\n")
 sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
-INFO("\n\nBushido Battle Started.")

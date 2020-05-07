@@ -55,7 +55,7 @@ function ERROR(...)
 	print(("%s:%d: %s"):format(short_src, currentline, name), "ERROR", unpack(arg)) 
 end
 
-function ASSERT(...)
+function ASSERT(...) -- FIX split into ASSERT EQUAL and NOT EQUAL and print both arguments
 	local condition = unpack(arg)
 	if not condition then
 		local debuginfo = debug.getinfo(2)
