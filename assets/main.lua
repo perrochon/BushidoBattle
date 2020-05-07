@@ -15,6 +15,7 @@ print("main.lua")
 			-- Ensure same map on client
 			-- Client should not draw map before it gets sync. Or wipe lights at that time.
 		- Settings Screen with AutoConnect
+		- Something wrong with light layer on large map going to beyond and back doesn't remember...
 		- >2 devices
 		- remote attack update
 		- Sockets don't export well to HTML. Fix, either export, or don't use feature (will it workin browser?)
