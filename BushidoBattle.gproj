@@ -1,25 +1,25 @@
 <project>
- <properties backgroundColor="#000000" autorotation="0" fps="60" tv_icon="" version="1.0" vsync="0" encryptCode="0" encryptAssets="0" splash_h_image="" scaleMode="3" win_domain="giderosmobile.com" mouseTouchOrder="0" app_name="Bushido Battle" osx_signingId="" version_code="1" logicalHeight="1920" packageName="com.yourdomain.yourapp" windowHeight="0" html5_host="" osx_org="GiderosMobile" osx_domain="giderosmobile.com" android_template="0" html5_wasm="0" html5_symbols="0" iosDevice="0" splash_v_image="" osx_installerId="" logicalWidth="1200" exportMode="0" html5_fbinstant="1" touchToMouse="1" mouseToTouch="1" splashScaleMode="0" html5_pack="0" winrt_package="com.yourdomain.yourapp" osx_category="5" orientation="1" ios_bundle="com.yourdomain." retinaDisplay="0" build_number="1" html5_mem="256" html5_fbload="50" windowWidth="0" winrt_org="GiderosMobile" disableSplash="1" win_org="GiderosMobile" html5_crash="" architecture="0" app_icon="other/Icon.png" osx_bundle="com.yourdomain.">
+ <properties tv_icon="" retinaDisplay="0" exportMode="0" osx_domain="giderosmobile.com" win_org="GiderosMobile" logicalHeight="1920" build_number="1" encryptCode="0" html5_host="" mouseTouchOrder="0" architecture="7" html5_wasm="0" android_template="0" fps="60" version_code="1" mouseToTouch="1" html5_fbload="50" win_domain="giderosmobile.com" autorotation="0" encryptAssets="0" app_name="Bushido Battle" packageName="com.yourdomain.yourapp" html5_pack="0" html5_symbols="0" html5_mem="256" version="1.0" winrt_org="GiderosMobile" ios_bundle="com.yourdomain." html5_fbinstant="0" backgroundColor="#000000" orientation="1" vsync="0" touchToMouse="1" html5_crash="" splash_h_image="" iosDevice="0" disableSplash="1" windowWidth="0" osx_org="GiderosMobile" osx_installerId="" osx_signingId="" splash_v_image="" scaleMode="3" windowHeight="0" splashScaleMode="0" winrt_package="com.yourdomain.yourapp" osx_category="5" logicalWidth="1200" app_icon="other/Icon.png" osx_bundle="com.yourdomain.">
   <imageScales/>
   <plugins>
-   <plugin name="JSON" enabled="1"/>
-   <plugin name="Lua Socket" enabled="1"/>
-   <plugin name="SceneManager" enabled="1"/>
+   <plugin enabled="1" name="JSON"/>
+   <plugin enabled="1" name="Lua Socket"/>
+   <plugin enabled="1" name="SceneManager"/>
   </plugins>
   <exports>
    <export name="APK">
-    <property value="" name="androidPath"/>
-    <property value="" name="androidSdk"/>
-    <property value="28" name="androidTarget"/>
-    <property value="" name="androidTools"/>
-    <property value="0" name="buildAab"/>
-    <property value="0" name="buildApk"/>
-    <property value="0" name="deployApk"/>
-    <property value="" name="javaPath"/>
-    <property value="" name="keyAlias"/>
-    <property value="" name="keyStore"/>
-    <property value="com.zwsi.bushidobattle" name="packageName"/>
-    <property value="1" name="timestampApk"/>
+    <property name="androidPath" value=""/>
+    <property name="androidSdk" value=""/>
+    <property name="androidTarget" value="28"/>
+    <property name="androidTools" value=""/>
+    <property name="buildAab" value="0"/>
+    <property name="buildApk" value="0"/>
+    <property name="deployApk" value="0"/>
+    <property name="javaPath" value=""/>
+    <property name="keyAlias" value=""/>
+    <property name="keyStore" value=""/>
+    <property name="packageName" value="com.zwsi.bushidobattle"/>
+    <property name="timestampApk" value="1"/>
    </export>
   </exports>
  </properties>
@@ -101,8 +101,10 @@
  <file excludeFromExecution="1" name="assets/level03.lua"/>
  <file excludeFromExecution="1" name="assets/level04.lua"/>
  <file excludeFromExecution="1" name="assets/level05.lua"/>
+ <file name="assets/level06.lua"/>
  <file name="assets/main.lua"/>
- <dependency from="assets/init.lua" to="assets/classes/devMacros.lua"/>
- <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
- <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>
+ <file name="assets/test.lua"/>
+ <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
+ <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
+ <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
 </project>

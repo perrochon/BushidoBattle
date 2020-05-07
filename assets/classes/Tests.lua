@@ -1,7 +1,7 @@
 DEBUG("Tests are running")
 
 -- Can we read all level files successfully?
-for i = 1, 5 do
+for i = 1, 6 do
 	local mapFile = string.format("level%02d", i)
 	mapData=MapData.new(mapFile)
 	mapData:layerFromMap(1)

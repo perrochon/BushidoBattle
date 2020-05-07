@@ -91,8 +91,8 @@ FONT_SMALL @ \Font.new("fonts/immortal_small.txt", "fonts/immortal_small.png")\
 -- Terrain Size
 TILE_WIDTH @ 100
 TILE_HEIGHT @ 100
-LAYER_COLUMNS @ 36		--the number of columns in each array of tiles
-LAYER_ROWS @ 36			--the number of rows in each array of tile
+LAYER_COLUMNS = -1		--the number of columns in each array of tiles
+LAYER_ROWS = -1			--the number of rows in each array of tile
 index = function (x, y) --index of cell (x,y)
 	return x + (y - 1) * LAYER_COLUMNS 
 end

@@ -21,6 +21,7 @@ print("main.lua")
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
+		- Monsters with no way to move should not move (left Samurai on map 6)
 		- monster placed in tiled
 		- check for obstacles on diagonal moves. 
 		- update routefinding for diagonal and more complex maps

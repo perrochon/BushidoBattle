@@ -18,6 +18,9 @@ function MapData:loadMapFile(mapDataFile)
 	-- error "attempt to call nil value" means file not found. Check spelling and refresh
 	INFO("Map File:    ", mapDataFile)
 	local file = loadfile(mapDataFile..".lua")() 
+	
+	LAYER_COLUMNS = file.width
+	LAYER_ROWS = file.height
 
 	INFO("  " .. file.properties["Title"])
 	INFO(("  Size: %dx%d\n  Tile size: %dx%d"):format(file.width, file.height, file.tilewidth, file.tileheight))

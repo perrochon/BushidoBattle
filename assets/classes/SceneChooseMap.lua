@@ -10,11 +10,10 @@ function SceneChooseMap:init()
 	
 	self.panels = {}
 	
-	for i=1,5 do		
-		local fileName = "level0"..i..".lua"
-		local map = loadfile(fileName)() 
-		self.panels[i] = self:displayMap(map.properties["Title"], i)
-		
+	for i=1,6 do		
+		local mapFile = string.format("level%02d.lua", i)
+		local map = loadfile(mapFile)() 
+		self.panels[i] = self:displayMap(map.properties["Title"], i)		
 	end
 	
 	self:updateVisualState(true, currentMap)
