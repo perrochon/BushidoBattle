@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Hero" type="1" width="50" height="50">
+  <properties>
+   <property name="Description" value="Place one. Make sure south-east tile is empty, too, for second hero"/>
+  </properties>
+ </object>
+</template>

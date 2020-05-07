@@ -424,6 +424,229 @@ return {
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 1610612808, 0, 0, 0, 0, 0, 3221225543, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 1610612807, 0, 0, 0, 0, 0, 2684354632,
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 2684354630, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 70, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 2684354630, 3221225544, 3221225544, 3221225544, 3221225544, 3221225544, 70
       }
+    },
+    {
+      type = "objectgroup",
+      id = 4,
+      name = "Monsters",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 26,
+          name = "Hero",
+          type = "1",
+          shape = "rectangle",
+          x = 1817.95,
+          y = 1331.71,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place one. Make sure south-east tile is empty, too, for second hero"
+          }
+        },
+        {
+          id = 27,
+          name = "Samurai",
+          type = "4",
+          shape = "rectangle",
+          x = 1636.29,
+          y = 2311.74,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place one. This is the boss of the level"
+          }
+        },
+        {
+          id = 28,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1219.83,
+          y = 1929.12,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 29,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1425.49,
+          y = 1932.61,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 30,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 618.726,
+          y = 122.276,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 31,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1821.65,
+          y = 513.876,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 32,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1404.03,
+          y = 1237.22,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 33,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 3322.56,
+          y = 3326.17,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 34,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 3128.1,
+          y = 2221.52,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 35,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1527.05,
+          y = 3331.04,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 36,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 2428.17,
+          y = 2629.52,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 37,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 2928.41,
+          y = 132.673,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 38,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 3429.97,
+          y = 139.567,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 39,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1028.15,
+          y = 1928,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        }
+      }
     }
   }
 }

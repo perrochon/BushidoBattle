@@ -87,4 +87,20 @@
 64,64,64,64,64,64,64,64,64,64,64,2684354630,3221225544,3221225544,3221225544,3221225544,3221225544,70,64,64,64,64,64,64,64,64,64,64,64,2684354630,3221225544,3221225544,3221225544,3221225544,3221225544,70
 </data>
  </layer>
+ <objectgroup color="#ff0000" id="4" name="Monsters">
+  <object id="26" template="Hero.tx" x="1817.95" y="1331.71"/>
+  <object id="27" template="Samurai.tx" x="1636.29" y="2311.74"/>
+  <object id="28" template="Peasant.tx" x="1219.83" y="1929.12"/>
+  <object id="29" template="Peasant.tx" x="1425.49" y="1932.61"/>
+  <object id="30" template="Peasant.tx" x="618.726" y="122.276"/>
+  <object id="31" template="Peasant.tx" x="1821.65" y="513.876"/>
+  <object id="32" template="Peasant.tx" x="1404.03" y="1237.22"/>
+  <object id="33" template="Soldier.tx" x="3322.56" y="3326.17"/>
+  <object id="34" template="Soldier.tx" x="3128.1" y="2221.52"/>
+  <object id="35" template="Soldier.tx" x="1527.05" y="3331.04"/>
+  <object id="36" template="Soldier.tx" x="2428.17" y="2629.52"/>
+  <object id="37" template="Peasant.tx" x="2928.41" y="132.673"/>
+  <object id="38" template="Peasant.tx" x="3429.97" y="139.567"/>
+  <object id="39" template="Peasant.tx" x="1028.15" y="1928"/>
+ </objectgroup>
 </map>

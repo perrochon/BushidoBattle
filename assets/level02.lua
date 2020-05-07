@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 1,
+  nextobjectid = 6,
   properties = {
     ["Title"] = "Forest Hunt"
   },
@@ -39,7 +39,7 @@ return {
           id = 11,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_01.png",
@@ -50,7 +50,7 @@ return {
           id = 12,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_02.png",
@@ -61,7 +61,7 @@ return {
           id = 13,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_03.png",
@@ -72,7 +72,7 @@ return {
           id = 14,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "rock"
           },
           image = "../tiled/tiles/Boulder_04.png",
@@ -113,7 +113,7 @@ return {
           id = 53,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_01.png",
@@ -124,7 +124,7 @@ return {
           id = 54,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_02.png",
@@ -135,7 +135,7 @@ return {
           id = 55,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_03.png",
@@ -146,7 +146,7 @@ return {
           id = 56,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 2,
+            ["cover"] = -2,
             ["description"] = "tree"
           },
           image = "../tiled/tiles/Tree_Crown_04.png",
@@ -157,6 +157,7 @@ return {
           id = 63,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = -10,
             ["description"] = "darkness"
           },
           image = "../tiled/tiles/Black_Patch.png",
@@ -167,7 +168,7 @@ return {
           id = 64,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 4,
+            ["cover"] = -4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_I_01_4x6.png",
@@ -178,7 +179,7 @@ return {
           id = 65,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 4,
+            ["cover"] = -4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_Tower_3sq_5x5.png",
@@ -189,7 +190,7 @@ return {
           id = 66,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 4,
+            ["cover"] = -4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Building_Tower_Octagon_2sq_4x4.png",
@@ -200,7 +201,7 @@ return {
           id = 67,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 6,
+            ["cover"] = -10,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png",
@@ -211,7 +212,7 @@ return {
           id = 68,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 6,
+            ["cover"] = -10,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png",
@@ -222,6 +223,7 @@ return {
           id = 69,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = -10,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Dungeon_Corner_In_2x2_1-1_Round.png",
@@ -232,6 +234,7 @@ return {
           id = 70,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = -10,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Dungeon_Corner_Out_2x2_1-1.png",
@@ -242,6 +245,7 @@ return {
           id = 71,
           properties = {
             ["blocked"] = "true",
+            ["cover"] = -10,
             ["description"] = "wall"
           },
           image = "../tiled/tiles/Dungeon_Straight_2x2_1-1.png",
@@ -252,7 +256,7 @@ return {
           id = 75,
           properties = {
             ["blocked"] = "false",
-            ["cover"] = 1,
+            ["cover"] = -1,
             ["description"] = "corn field"
           },
           image = "../tiled/tiles/Floor_Wheat.png",
@@ -293,7 +297,7 @@ return {
           id = 79,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 4,
+            ["cover"] = -4,
             ["description"] = "building"
           },
           image = "../tiled/tiles/Roof_Thatched.png",
@@ -304,7 +308,7 @@ return {
           id = 80,
           properties = {
             ["blocked"] = "true",
-            ["cover"] = 1,
+            ["cover"] = -1,
             ["description"] = "well"
           },
           image = "../tiled/tiles/Well_With_Base_2x2.png",
@@ -389,8 +393,8 @@ return {
         56, 57, 0, 0, 0, 0, 56, 57, 57, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 0, 57, 57, 55, 56, 54, 54, 56, 57, 54, 2684354638, 54, 0, 55, 56, 57, 54,
         57, 0, 0, 0, 0, 0, 0, 56, 57, 54, 54, 54, 54, 54, 57, 55, 56, 54, 54, 0, 55, 55, 56, 57, 54, 55, 56, 57, 57, 2684354638, 54, 54, 0, 0, 0, 54,
         56, 0, 0, 0, 55, 56, 39, 0, 0, 57, 57, 57, 57, 54, 55, 54, 54, 57, 54, 0, 55, 55, 56, 57, 54, 55, 56, 55, 56, 2684354638, 57, 54, 0, 0, 0, 57,
-        55, 0, 0, 55, 56, 54, 39, 0, 0, 0, 55, 56, 57, 54, 54, 54, 56, 57, 54, 0, 0, 55, 56, 54, 54, 54, 55, 55, 56, 2684354638, 57, 54, 54, 54, 0, 55,
-        55, 0, 55, 56, 57, 54, 39, 56, 0, 0, 55, 56, 57, 54, 57, 55, 56, 57, 54, 0, 55, 56, 57, 54, 56, 57, 55, 56, 55, 2684354638, 57, 57, 57, 54, 0, 54,
+        55, 0, 0, 55, 56, 54, 39, 0, 0, 0, 55, 56, 57, 54, 54, 54, 56, 0, 54, 0, 54, 0, 56, 54, 54, 54, 55, 55, 56, 2684354638, 57, 54, 54, 54, 0, 55,
+        55, 0, 55, 56, 57, 54, 39, 56, 0, 0, 55, 56, 57, 54, 57, 55, 56, 57, 54, 0, 55, 56, 57, 54, 56, 57, 55, 0, 55, 2684354638, 57, 0, 57, 54, 0, 54,
         54, 0, 55, 56, 57, 54, 39, 56, 57, 0, 0, 0, 0, 54, 54, 54, 55, 56, 0, 0, 0, 0, 0, 0, 56, 57, 55, 56, 57, 2684354638, 55, 56, 57, 54, 54, 55,
         54, 0, 55, 56, 54, 54, 39, 56, 57, 55, 55, 0, 0, 54, 0, 0, 0, 0, 0, 1610612804, 69, 69, 68, 0, 0, 0, 0, 55, 56, 2684354638, 55, 56, 57, 57, 54, 56,
         56, 55, 56, 57, 54, 54, 39, 56, 57, 55, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1610612805, 66, 0, 3221225540, 69, 69, 69, 0, 0, 39, 2684354638, 39, 39, 39, 39, 0, 54,
@@ -419,6 +423,304 @@ return {
         56, 57, 54, 54, 54, 0, 0, 80, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 55, 55, 55, 55, 56, 57, 55, 0, 0, 54, 54, 0, 0, 0, 55, 56, 57, 54,
         55, 55, 56, 57, 54, 54, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 56, 57, 55,
         54, 55, 55, 56, 57, 54, 55, 56, 56, 57, 56, 54, 56, 55, 54, 55, 57, 54, 57, 54, 54, 54, 54, 56, 55, 55, 56, 54, 56, 54, 54, 57, 54, 54, 55, 55
+      }
+    },
+    {
+      type = "objectgroup",
+      id = 4,
+      name = "Monsters",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 26,
+          name = "Hero",
+          type = "1",
+          shape = "rectangle",
+          x = 928.141,
+          y = 129.692,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place one. Make sure south-east tile is empty, too, for second hero"
+          }
+        },
+        {
+          id = 27,
+          name = "Samurai",
+          type = "4",
+          shape = "rectangle",
+          x = 730.879,
+          y = 2424.92,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place one. This is the boss of the level"
+          }
+        },
+        {
+          id = 28,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 732,
+          y = 2936,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 29,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 844,
+          y = 3240,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 30,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 3440.34,
+          y = 723.284,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 31,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 315.23,
+          y = 3023.28,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 32,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 1236.21,
+          y = 3317.33,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 33,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 2136.15,
+          y = 1226.54,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 34,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 2129.02,
+          y = 1039.02,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 35,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1125.07,
+          y = 2616.85,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 36,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1230.05,
+          y = 2028.51,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 37,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 134.109,
+          y = 913.203,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 38,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 218.092,
+          y = 2621.65,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 39,
+          name = "Peasant",
+          type = "2",
+          shape = "rectangle",
+          x = 2323.83,
+          y = 1736.77,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 1,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1826.44,
+          y = 2525.01,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 2,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1724.97,
+          y = 616.619,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 3,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 2130.85,
+          y = 632.229,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 4,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 2720.15,
+          y = 725.893,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 5,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 3129.93,
+          y = 725.893,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        }
       }
     }
   }

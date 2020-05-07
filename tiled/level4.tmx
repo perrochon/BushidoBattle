@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="3">
  <editorsettings>
   <export target="../assets/level04.lua" format="lua"/>
  </editorsettings>
@@ -87,4 +87,22 @@
 54,55,55,56,57,54,55,56,56,57,56,54,56,55,54,55,57,54,57,54,54,54,54,56,55,55,56,54,56,54,54,57,54,54,55,55
 </data>
  </layer>
+ <objectgroup color="#ff0000" id="4" name="Monsters">
+  <object id="26" template="Hero.tx" x="432.504" y="3232.3"/>
+  <object id="27" template="Samurai.tx" x="524.039" y="1730.25"/>
+  <object id="28" template="Peasant.tx" x="1442.28" y="3427.73"/>
+  <object id="29" template="Peasant.tx" x="1203.04" y="3208.78"/>
+  <object id="30" template="Peasant.tx" x="923.133" y="1230.63"/>
+  <object id="31" template="Peasant.tx" x="217.664" y="228.982"/>
+  <object id="32" template="Peasant.tx" x="3218.76" y="324"/>
+  <object id="33" template="Soldier.tx" x="633.631" y="1527.05"/>
+  <object id="34" template="Soldier.tx" x="1430.44" y="1331.72"/>
+  <object id="35" template="Soldier.tx" x="621.631" y="2027.55"/>
+  <object id="36" template="Soldier.tx" x="1432.99" y="2227.55"/>
+  <object id="37" template="Peasant.tx" x="2624" y="320"/>
+  <object id="38" template="Peasant.tx" x="3028" y="924"/>
+  <object id="39" template="Peasant.tx" x="3330.72" y="1717.26"/>
+  <object id="1" template="Soldier.tx" x="316.115" y="2013.77"/>
+  <object id="2" template="Soldier.tx" x="316.115" y="1904.49"/>
+ </objectgroup>
 </map>
