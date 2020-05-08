@@ -38,7 +38,7 @@ function Player:init(slot)
 	self.bloodied = math.ceil(self.hp / 2)
 	self.HPbar = 0
 	
-	self.kills = math.random(100)
+	self.kills = 0
 	self.level = 1
 
 	--prof is attack proficiency used by basicAttack
