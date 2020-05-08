@@ -1,0 +1,7 @@
+<library>
+ <properties alphaThreshold="0" showUnusedAreas="0" forceSquare="0" extrude="0" removeAlphaBorder="0" padding="0"/>
+ <file file="Samurai_01__ATTACK_000.png"/>
+ <file file="Samurai_03__ATTACK_000.png"/>
+ <file file="Samurai_02__ATTACK_000.png"/>
+ <file file="Ninja.png"/>
+</library>

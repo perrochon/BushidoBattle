@@ -142,7 +142,7 @@ function WorldMap:addLight(hero)
 	return lArray
 end
 
-function WorldMap:returnTileMap(mapArray, tileset, TODOunused)
+function WorldMap:returnTileMap(mapArray, tileset)
 	--[[Logic:  return a TileMap for a given tileset	
 		Returns a TileMap
 	--]]

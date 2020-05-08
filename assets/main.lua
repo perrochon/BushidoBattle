@@ -39,6 +39,15 @@ print("main.lua")
 			Update compileSDK and build tools version
 		upgrade version code!
 		need to re-enter key information each time	
+		
+	Assets
+		https://craftpix.net/product/2d-fantasy-samurai-sprite-sheets/
+		https://craftpix.net/product/ninja-and-assassin-chibi-2d-game-sprites/
+		https://craftpix.net/product/2d-fantasy-ninja-sprite-sheets/
+		https://craftpix.net/product/2d-fantasy-asassin-sprite-sheets/
+		https://craftpix.net/product/2d-fantasy-archer-sprite-sheets/
+		https://craftpix.net/product/2d-fantasy-ghosts-sprite-sheets/
+		
 ]]
 
 
@@ -80,7 +89,7 @@ drawVersion()
 
 --drawGrid()
 
-dofile("classes/Tests.lua")
+--dofile("classes/Tests.lua")
 
 --go to start scene 
 INFO("\n**********************\nBushido Battle Started\n**********************\n")
