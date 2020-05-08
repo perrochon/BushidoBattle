@@ -115,7 +115,7 @@ function MapData:layerFromMap(number)
 
 	for y=1,layerData.height do
 		for x=1,layerData.width do
-			local i = x + (y - 1) * layerData.width -- TODO FIX use index() ? 
+			local i = x + (y - 1) * LAYER_COLUMNS 
 			local gid = layerData.data[i] - 1 -- TODO FIX Get correct offset from map's ("firstgid")
 			if gid > 0 then 
 							
@@ -132,7 +132,6 @@ function MapData:layerFromMap(number)
 					gid64[31]=0
 					gid64[30]=0
 					gid64[29]=0
-					-- gid = tonumber(tostring(gid64)) -- TODO FIX is this really necessary?
 					gid = gid64()
 					--DEBUG("rotating tile", x, y, gid, gid64[31], gid64[31], gid64[31], flip)
 				end
