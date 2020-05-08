@@ -7,7 +7,7 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 Various tests for Bushido Battle
 ]]
 
-RUN_TESTS @ false
+RUN_TESTS @ true
 
 if RUN_TESTS then
 	DEBUG("Tests are running")
