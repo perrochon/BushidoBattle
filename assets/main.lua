@@ -49,7 +49,7 @@ currentHero = 1 -- index pointing to the 4 slots we can save, not the array of h
 currentHeroFileName = "|D|hero"..currentHero
 
 currentMap = 1 -- index pointing to the maps we have saved
-currentMapFileName = "level01"
+currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, currentMap)
 
 localHero = 1 -- This hero gets moved, and the map centers around her
 

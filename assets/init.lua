@@ -73,7 +73,6 @@ COLOR_WHITE @ 0xF9FAFA   -- slightly creamy white
 
 application:setBackgroundColor(COLOR_BLACK)
 
-
 MSG_FADE = 0.005
 MSG_DESCRIPTION @ 1
 MSG_ATTACK @ 2
@@ -93,6 +92,9 @@ TILE_WIDTH @ 100
 TILE_HEIGHT @ 100
 LAYER_COLUMNS = -1		--the number of columns in each array of tiles. Set when map is loaded
 LAYER_ROWS = -1			--the number of rows in each array of tile. Set when map is loaded
+
+MAP_FILE_NAME @ "map"
+
 
 -- Facebook code to remove the loader
 -- Here to run early, maybe that makes it work

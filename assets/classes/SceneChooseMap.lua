@@ -11,7 +11,7 @@ function SceneChooseMap:init()
 	self.panels = {}
 	
 	for i=1,6 do		
-		local mapFile = string.format("level%02d.lua", i)
+		local mapFile = string.format("%s%02d.lua", MAP_FILE_NAME, i)
 		local map = loadfile(mapFile)() 
 		self.panels[i] = self:displayMap(map.properties["Title"], i)		
 	end
@@ -101,7 +101,7 @@ function SceneChooseMap:onMouseUp(event)
 		self:getParent():getParent():updateVisualState(false, currentMap)
 		self:getParent():getParent():updateVisualState(true, self.slot)
 		currentMap = self.slot
-		currentMapFileName = string.format("level%02d", self.slot)
+		currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, self.slot)
 		event:stopPropagation()
 	end
 end
