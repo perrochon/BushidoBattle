@@ -1,3 +1,11 @@
+--[[
+This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
+(C) 2020 Louis Perrochon
+]]
+
+--[[
+Various tests for Bushido Battle
+]]
 
 RUN_TESTS @ false
 

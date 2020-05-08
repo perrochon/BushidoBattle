@@ -1,3 +1,12 @@
+--[[
+This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
+(C) 2020 Louis Perrochon
+]]
+
+--[[
+Various development macros used for Bushido Battle
+]]
+
 -- Macro below (uncommented) removes all print statements
 --print @ |--|
 
