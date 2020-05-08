@@ -1,79 +1,90 @@
 -- Macro below (uncommented) removes all print statements
 --print @ |--|
 
--- uncomment inside the macro if level not desired, e.g. |--print|
--- TODO use inspection to automatically include code location
-
--- 1 = DEBUG, 2 = INFO, 3 = ERROR
-OUTPUT_LEVEL @ 1
-
--- for debugging. Automatically make no move
-CLIENT_REST = false
-SERVER_REST = false -- not implemented
-
-function DEBUG(...)
-	if OUTPUT_LEVEL > 0 then
-		local debuginfo = debug.getinfo(2)
-		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
-		local currentline = debuginfo.currentline and debuginfo.currentline or -1
-		local name = debuginfo.name and debuginfo.name or "unknown"
-		print(("%s:%d: %s"):format(short_src, currentline, name), unpack(arg)) 
-	end
-end
-
-DEBUG_REMOTE = true
--- for all debugging related to connected play
-function DEBUG_C(...)
-	if DEBUG_REMOTE then
-		local ip = "no serverlink"
-		local host ="no host"
-		if serverlink then
-			ip = serverlink.ip
-			host = serverlink.host
-		else
-			DEBUG("serverlink is nil in DEBUG_C")
-		end
-
-		if OUTPUT_LEVEL > 0 then
-			local debuginfo = debug.getinfo(2)
-			local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
-			local currentline = debuginfo.currentline and debuginfo.currentline or -1
-			local name = debuginfo.name and debuginfo.name or "unknown"
-			print(("%s:%d: %s"):format(short_src, currentline, name), ip, host, unpack(arg)) 
-		end
-	end
-end
-
--- DEBUG @ |printLineNumber| -- Various manually added DEBUG statements
-INFO @ |print|  -- Print all message box messages to console
-
-function ERROR(...)
-	local debuginfo = debug.getinfo(2)
+function debugInfo()
+	local debuginfo = debug.getinfo(3)
 	local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
 	local currentline = debuginfo.currentline and debuginfo.currentline or -1
 	local name = debuginfo.name and debuginfo.name or "unknown"
-	print(("%s:%d: %s"):format(short_src, currentline, name), "ERROR", unpack(arg)) 
+	return ("%s:%d: %s"):format(short_src, currentline, name)
 end
 
-function ASSERT(...) -- FIX split into ASSERT EQUAL and NOT EQUAL and print both arguments
+LEVEL_DEBUG @ 3
+LEVEL_INFO @ 2
+LEVEL_ERROR @ 1
+LEVEL_NONE @ 0
+
+OUTPUT_LEVEL @ LEVEL_DEBUG
+
+function DEBUG(...)
+	if OUTPUT_LEVEL >= LEVEL_DEBUG then
+		print(debugInfo(), "DEBUG", unpack(arg)) 
+	end
+end
+
+function INFO(...)
+	if OUTPUT_LEVEL >= LEVEL_INFO then
+		print(debugInfo(), "INFO", unpack(arg)) 
+	end
+end
+
+function ERROR(...)
+	if OUTPUT_LEVEL >= LEVEL_ERROR then
+		print(debugInfo(), "ERROR", unpack(arg)) 
+	end
+end
+
+--DEBUG("output turned on" )
+--INFO("output turned on")
+--ERROR("output turned on")
+
+-- for all debugging related to connected play
+REMOTE_DEBUG @ true
+function DEBUG_C(...)
+	if OUTPUT_LEVEL >= LEVEL_DEBUG and REMOTE_DEBUG then
+		local ip = serverlink and serverlink.ip or "no ip"
+		local host = serverlink and serverlink.host or "no host"
+		print(debugInfo(), ip, host, unpack(arg)) 
+	end
+end
+
+-- Make the client or server player autmatically make no move (rest in place) if true
+CLIENT_REST @ false
+SERVER_REST @ false -- not implemented
+
+function ASSERT_EQUAL(...)
+	local e1, e2 = unpack(arg)
+	if e1 ~= e2 then
+		print(debugInfo(), "ASSERT_EQUAL fail", unpack(arg))
+		return false
+	end
+	return true
+end
+
+function ASSERT_NOT_EQUAL(...)
+	local e1, e2 = unpack(arg)
+	if e1 == e2 then
+		print(debugInfo(), "ASSERT_NOT_EQUAL fail", unpack(arg)) 
+		return false
+	end
+	return true
+end
+
+function ASSERT_TRUE(...)
 	local condition = unpack(arg)
 	if not condition then
-		local debuginfo = debug.getinfo(2)
-		local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
-		local currentline = debuginfo.currentline and debuginfo.currentline or -1
-		local name = debuginfo.name and debuginfo.name or "unknown"
-		print(("%s:%d: %s"):format(short_src, currentline, name), "ASSERT FAIL", unpack(arg)) 
+		print(debugInfo(), "ASSERT_TRUE fail", unpack(arg))
+		return false
 	end
-	return condition
+	return true
 end
---ASSERT(true, "Condition True") -- Will do nothing
---ASSERT(false, "Condition False") -- will print message to console
-if not ASSERT(true) then return end
 
-
---DEBUG("DEBUG output turned on" )
---INFO("INFO output turned on")
---ERROR("ERROR output turned on")
+--ASSERT_EQUAL(1,1,"1 and 1")
+--ASSERT_EQUAL(1,0,"1 and 0")
+--ASSERT_NOT_EQUAL(1,1,"1 and 1")
+--ASSERT_NOT_EQUAL(1,0,"1 and 0")
+--ASSERT_TRUE(true, "True") -- Will do nothing
+--ASSERT_TRUE(false, "False") -- will print message to console
 
 -- Benchmarking
 time_ @ |local _time_ = os.timer()|
@@ -82,7 +93,7 @@ _time @ |print("TIME:", os.timer() - _time_)|
 --[[ Usage:
 local x = 0
 time_ for i = 1, 1e8 do x = x + i end _time
-]]
+--]]
 
 function boolToString(value)
  return value == true and "true" or value == false and "false"
@@ -91,7 +102,6 @@ end
 function stringToBoolean(string)
 	if string=="true" then return true elseif string=="false" then return false else return nil end
 end
-
 
 function dump(t,indent)
     local names = {}
