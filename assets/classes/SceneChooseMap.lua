@@ -101,8 +101,7 @@ function SceneChooseMap:onMouseUp(event)
 		self:getParent():getParent():updateVisualState(false, currentMap)
 		self:getParent():getParent():updateVisualState(true, self.slot)
 		currentMap = self.slot
-		currentMapFileName = "level0"..self.slot -- TODO FIX will break with map 10
-		
+		currentMapFileName = string.format("level%02d", self.slot)
 		event:stopPropagation()
 	end
 end
