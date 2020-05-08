@@ -227,7 +227,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 	--DEBUG(hero, dx, dy, pass, hero.x + dx, hero.y + dy, self.active)
 
 	if not hero.heroTurn then return end
-	ASSERT(hero.heroIdx == localHero, "called with remote hero")
+	ASSERT_EQUAL(hero.heroIdx, localHero, "Called with remote hero")
 
 	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
 	--DEBUG(entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
@@ -303,7 +303,7 @@ end
 	DEBUG_C(SYNC_TURN, "Hero:", heroIdx, x, y, "Monster", monsterIdx, monsterHp, monsterHpBar, sender)	
 
 	if sender then -- this is an incoming remote call
-		if not ASSERT(heroIdx ~= localHero, "Remote trying to update local hero's position") then return end
+		if not ASSERT_NOT_EQUAL(heroIdx, localHero, "Remote trying to update local hero") then return end
 		DEBUG_C(SYNC_TURN, "Updating remote hero's move locally.")
 		
 		self.world:moveHero(self.heroes[heroIdx], x-self.heroes[heroIdx].x, y-self.heroes[heroIdx].y)
@@ -333,7 +333,7 @@ end
 		end
 		
 	else -- this is a local call - ignoring parameters
-		if not ASSERT(heroIdx == localHero, "Trying to update remote hero's position remotely") then return end
+		if not ASSERT_EQUAL(heroIdx, localHero, "Trying to update remote hero's position remotely") then return end
 		DEBUG_C(SYNC_TURN, "Updating local move on remote.")
 
 		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
@@ -408,7 +408,7 @@ end
 			end
 		end		
 	else -- this is a local call.
-		ASSERT(self.ready, "should not be called locally before ready")
+		ASSERT_TRUE(self.ready, "should not be called locally before ready")
 		if self.server then -- ignore parameters and send update to client
 			monstersInfo = self.monsters:serialize()
 			DEBUG_C(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
@@ -499,9 +499,9 @@ function ScenePlay:heroesTurnOver()
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
-	ASSERT(not self.client, "called on client")
-	ASSERT(not self.heroes[1].heroTurn, "Hero 1's turn")
-	if self.remote then ASSERT(not self.heroes[2].heroTurn, "Hereo 2's turn") end
+	ASSERT_TRUE(not self.client, "called on client")
+	ASSERT_TRUE(not self.heroes[1].heroTurn, "Hero 1's turn")
+	if self.remote then ASSERT_TRUE(not self.heroes[2].heroTurn, "Hereo 2's turn") end
 
 
 	-- first set all monsters to not done
@@ -631,7 +631,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	if ASSERT(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
+	if ASSERT_TRUE(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon

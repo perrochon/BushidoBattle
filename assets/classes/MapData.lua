@@ -26,9 +26,9 @@ function MapData:loadMapFile(mapDataFile)
 	INFO(("  Size: %dx%d\n  Tile size: %dx%d"):format(file.width, file.height, file.tilewidth, file.tileheight))
 	INFO("  Number of tilesets: ", #file.tilesets)
 	INFO("  Number of map layers: ", #file.layers)
-	ASSERT(file.layers[1].name == "Ground", "Layer 1 needs to be 'Ground'")
-	ASSERT(file.layers[2].name == "Environment", "Layer 2 needs to be 'Environment'")
-	ASSERT(file.layers[3].name == "Monsters", "Layer 3 needs to be 'Monsters'")
+	ASSERT_EQUAL(file.layers[1].name, "Ground", "Layer 1 needs to be 'Ground'")
+	ASSERT_EQUAL(file.layers[2].name, "Environment", "Layer 2 needs to be 'Environment'")
+	ASSERT_EQUAL(file.layers[3].name, "Monsters", "Layer 3 needs to be 'Monsters'")
 	return file
 end
 
@@ -95,7 +95,7 @@ function MapData:layerFromMap(number)
 	--[[ Return a Gidero TileMap with layer 1 or 2 from the file
 	--]]
 	
-	ASSERT(number == 1 or number == 2)
+	ASSERT_TRUE(number == 1 or number == 2)
 	
 	local array  = {} -- array contains id's of the tiles
 	local usedTiles = {} -- DEBUG set of used tiles in this layer
