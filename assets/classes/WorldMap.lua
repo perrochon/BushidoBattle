@@ -70,6 +70,11 @@ function WorldMap:init(level, heroes, monsters)
 	-- TODO FIX why no return self here?
 end
 
+function WorldMap:idx(x, y) --index of cell (x,y)
+	return x + (y - 1) * LAYER_COLUMNS 
+end
+
+
 function WorldMap:placeMonsters(heroes, monsters)
 	--[[Return an array to represent the monsters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
@@ -81,18 +86,18 @@ function WorldMap:placeMonsters(heroes, monsters)
 
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			mArray[index(x, y)] = 0
+			mArray[self.idx(x, y)] = 0
 		end
 	end
 	
 	for _, m in pairs(monsters.list) do
-		mArray[index(m.x, m.y)] = m.entry
+		mArray[self.idx(m.x, m.y)] = m.entry
 	end
 	
-	mArray[index(heroes[localHero].x, heroes[localHero].y)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+	mArray[self.idx(heroes[localHero].x, heroes[localHero].y)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 
 	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
-		mArray[index(heroes[3-localHero].x, heroes[3-localHero].y)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		mArray[self.idx(heroes[3-localHero].x, heroes[3-localHero].y)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 	end
 	
 	return mArray
@@ -104,7 +109,7 @@ function WorldMap:addHP()
   local hArray = {}
   for y = 1, LAYER_ROWS do
     for x = 1, LAYER_COLUMNS do
-      hArray[index(x, y)] = 0
+      hArray[self.idx(x, y)] = 0
     end
   end
   return hArray
@@ -123,7 +128,7 @@ function WorldMap:addLight(hero)
 	local lArray = {}
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			lArray[index(x, y)] = 4 -- TODO such constants should really not be hard coded...
+			lArray[self.idx(x, y)] = 4 -- TODO such constants should really not be hard coded...
 		end
 	end
 	
@@ -133,7 +138,7 @@ function WorldMap:addLight(hero)
 	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
 		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
 			torchIndex = torchIndex + 1
-			local i = index(x, y)
+			local i = self.idx(x, y)
 			--only change the light array if on the screen
 			if i > 0 and i < #lArray and hero.light.array[torchIndex] ~= 0 then
 				lArray[i] = hero.light.array[torchIndex]
@@ -154,7 +159,7 @@ function WorldMap:returnTileMap(mapArray, tileset, TODOunused)
 	--use setTile to assign a tile based on the mapArray index
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			local tX = mapArray[index(x, y)] 
+			local tX = mapArray[self.idx(x, y)] 
 			--only setTiles if the mapArray value isn't 0
 			if tX ~= 0 then
 				--our tileset images are a maximum of 16 tiles wide so values > 16 need a tY > 1
@@ -184,7 +189,7 @@ function WorldMap:getTileInfo(x, y, layer)
 		Returns key, layer, tile
 	--]]
 
-	local i = index(x, y)
+	local i = self.idx(x, y)
 
 	--DEBUG(("%d,%d %d %d %d %d"):format(x, y, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
 	
@@ -230,7 +235,7 @@ function WorldMap:changeTile(layer, entry, x, y)
 --Change both the self.mapArrays entry and the tile in self.mapLayers
 
   local array = self.mapArrays[layer]
-  array[index(x, y)] = entry
+  array[self.idx(x, y)] = entry
   self.mapLayers[layer]:setTile(x, y, entry, 1)
 end
 
@@ -288,7 +293,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 	--set all previously lit tiles to 3
 	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
 		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
-			i = index(x, y)
+			i = self.idx(x, y)
 			--only change the light array and tile if on screen 
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
 				--only change if previously lit 
@@ -306,7 +311,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 	for y = hero.y + dy - hero.light.radius, hero.y + dy + hero.light.radius do
 		for x = hero.x + dx - hero.light.radius, hero.x + dx + hero.light.radius do
 			torchIndex = torchIndex + 1
-			i = index(x, y)
+			i = self.idx(x, y)
 			--only change the light array if on screen
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
 				--and needs to be updated
@@ -334,18 +339,18 @@ function WorldMap:moveMonster(monster, dx, dy)
 	elseif monster.x+dx > LAYER_COLUMNS or monster.y+dy > LAYER_ROWS or monster.x+dx < 1 or monster.y+dy < 1 then
 		ERROR("Monster new location out of bounds", monster.name, monster.x, monster.y, dx, dy)
 	else
-		array[index(monster.x, monster.y)] = 0
+		array[self.idx(monster.x, monster.y)] = 0
 		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.x, monster.y)
 		
 		--place the monster at the new position
-		array[index(monster.x + dx, monster.y + dy)] = monster.entry
+		array[self.idx(monster.x + dx, monster.y + dy)] = monster.entry
 		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1, monster.flip) 
 
 		--remove and move the HPbar
 		array = self.mapArrays[LAYER_HP]
-		array[index(monster.x, monster.y)] = 0
+		array[self.idx(monster.x, monster.y)] = 0
 		self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
-		array[index(monster.x + dx, monster.y + dy)] = monster.HPbar
+		array[self.idx(monster.x + dx, monster.y + dy)] = monster.HPbar
 		if monster.HPbar ~= 0 then
 			self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
 		end
@@ -358,10 +363,10 @@ end
 
 function WorldMap:removeMonster(x, y)
 	local array = self.mapArrays[LAYER_MONSTERS]
-	array[index(x, y)] = 0
+	array[self.idx(x, y)] = 0
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
 	array = self.mapArrays[LAYER_HP]
-	array[index(x, y)] = 0
+	array[self.idx(x, y)] = 0
 	self.mapLayers[LAYER_HP]:clearTile(x, y) 	
 end
 
@@ -377,12 +382,12 @@ function WorldMap:addMonster(monster)
 
 	DEBUG(x, y)
 	--place the monster at the new position
-	array[index(monster.x, monster.y)] = monster.entry
+	array[self.idx(monster.x, monster.y)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 
 
 	--remove and move the HPbar
 	array = self.mapArrays[LAYER_HP]
-	array[index(monster.x, monster.y)] = monster.HPbar
+	array[self.idx(monster.x, monster.y)] = monster.HPbar
 	if monster.HPbar ~= 0 then
 		self.mapLayers[LAYER_HP]:setTile(monster.x, monster.y, monster.HPbar, 1) 
 	end
@@ -393,7 +398,7 @@ function WorldMap:blocked(x, y)
 	--[[uses getTileInfo to determine if the tile is blocked or not
 		returns true or false
 	--]]
-	--local i = index(x, y)
+	--local i = self.idx(x, y)
 	--return (self.mapLayers[LAYER_MONSTERS] ~= 0) or tilemap:blocked(x,y)
 
 	--getTileInfo returns the highest level layer key that isn't 0
@@ -608,7 +613,7 @@ function WorldMap:debugMapInfo(id)
 	for y = 1, LAYER_ROWS do
 		local s = ""
 		for x = 1, LAYER_COLUMNS do
-			local i = index(x,y)
+			local i = self.idx(x,y)
 			s = s .. array[i] .. " "
 		end
 		DEBUG(s)
