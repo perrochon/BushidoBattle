@@ -56,12 +56,6 @@ function WorldMap:init(level, heroes, monsters)
 	group:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
-
-	-- TODO This should go away, too. We don't display it, but we need it in the array (or fix constants)
-	--layer = self:returnTileMap3(self.mapArrays[LAYER_ENVIRONMENT], "images/tileset-environment-108px.png", false)
-	--group:addChild(layer) 
-	-- table.insert(self.mapLayers, layer)	
-
 	self:addChild(group)
 	
 	--this is the initial location of the TileMaps, centered around the hero
@@ -172,14 +166,6 @@ function WorldMap:returnTileMap(mapArray, tileset, TODOunused)
 		end
 	end
 	return tilemap
-end
-
-function WorldMap:returnTileMap3(mapArray, tileset, flip)
-	-- TODO FIX return empty tile map until we can drop this layer
-	local pack = TexturePack.new("images/BushidoBattleMaze.txt", "images/BushidoBattleMaze.png")
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT)
-	return tilemap
-
 end
 
 function WorldMap:getTileInfo(x, y, layer) 
