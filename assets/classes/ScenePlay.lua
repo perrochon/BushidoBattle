@@ -443,7 +443,10 @@ end
 		
 		if self.active == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
-			local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
+			-- FIX remove commented line below, as the next one seems to work
+			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
+			local inReach = distance(self.heroes[localHero], event) < self.heroes[localHero].weapon.reach and
 							layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
 			if inReach then
 				self:checkMove(self.heroes[localHero], x - self.heroes[localHero].x, y - self.heroes[localHero].y)
@@ -568,8 +571,6 @@ end
   
 function ScenePlay:monsterAI(monster)
 	--[[Logic: attack or move based on monster.state
-		Called from heroTurnOver 
-		Calls world:blocked, world:moveMonster, world:whichWay, basicAttack
 	--]]
 
 	if monster.state == "move" then
@@ -631,7 +632,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	if ASSERT_TRUE(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
+	--if ASSERT_TRUE(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon

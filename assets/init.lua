@@ -219,29 +219,29 @@ function Cyclopedia:init()
 			[2] = {name = "peasant", xp = 1, hp = 4, bloodied = 2, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "stick", weapon2 = nil,
+					weapon1 = "stick", weapon2 = nil, tactics = "minion"
 					},
 			[3] = {name = "soldier", xp = 3, hp = 15, bloodied = 7,  
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "javelin", weapon2 = "shortsword",
+					weapon1 = "javelin", weapon2 = "shortsword", tactics = "soldier"
 					},
 			[4] = {name = "samurai", xp = 4, hp = 25, bloodied = 12, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "katana", weapon2 = "spear",
+					weapon1 = "katana", weapon2 = "spear",tactics = "minion"
 					},
 			},
 		["weapons"] = {
-			[1] = {name = "katana", reach = 1, modifier = 6, defense = "AC", damage = 'd10', dice = 1, bonus = 5, 
+			[1] = {name = "katana", reach = 1.5, modifier = 6, defense = "AC", damage = 'd10', dice = 1, bonus = 5, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
-			[2] = {name = "spear", reach = 1, modifier = 8, defense = "AC", damage = 6, dice = 1, bonus = 2, 
+			[2] = {name = "spear", reach = 1.5, modifier = 8, defense = "AC", damage = 6, dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},
-			[3] = {name = "shortsword", reach = 1, modifier = 4, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
+			[3] = {name = "shortsword", reach = 1.5, modifier = 4, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
 			[4] = {name = "javelin", reach = 4, modifier = 6, defense = "AC", damage = 'd8', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},
-			[5] = {name = "stick", reach = 1, modifier = 2, defense = "AC", damage = 'd4', dice = 1, bonus = 3, 
+			[5] = {name = "stick", reach = 1.5, modifier = 2, defense = "AC", damage = 'd4', dice = 1, bonus = 3, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
 			[6] = {name = "shortbow", reach = 5, modifier = 5, defense = "AC", damage = 'd6', dice = 1, bonus = 2,
 							type = "Physical", projectile = "arrow", missSound = "swish"},
@@ -272,6 +272,11 @@ function Cyclopedia:getEntry(list, entry)
 			end
 		end
 	end
+end
+
+function distance(o1, o2)
+	if not o1 or not o2 then return nil end
+	return math.floor(10*math.sqrt(math.pow(tonumber(o1.x) - tonumber(o2.x),2) + math.pow(tonumber(o1.y) - tonumber(o2.y),2)))/10
 end
 
 

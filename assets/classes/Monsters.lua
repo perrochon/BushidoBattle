@@ -214,40 +214,28 @@ function Monsters:updateState(monster, id, heroes, remote)
 
 	--update the bloodied variable
 	monster.bloodied = (monster.hp <= monster.bloodiedHP)
+
 	--check if there are friends around
 	for i = 1, #self.list do
 		if id ~= i then
 			local other = self.list[i] 
-			if math.abs(monster.x - other.x) <= 6 or math.abs(monster.y - other.y) <= 6 then 
+			if distance(monster, other) < 5 then 
 				monster.friends = true
 			end
 		end
 	end
+
 	--check if the hero can been seen
-	if not remote then
-		local hero = heroes[1]
-		monster.seesHero = (math.abs(monster.x - hero.x) <= 6 or math.abs(monster.y - hero.y) <= 6)
-		monster.target = hero
-	else
-		local d = {}
-		d[1] = math.sqrt(math.pow(monster.x - heroes[1].x,2) + math.pow(monster.y - heroes[1].y,2))
-		d[2] = math.sqrt(math.pow(monster.x - heroes[2].x,2) + math.pow(monster.y - heroes[2].y,2))
-
-		local closer = 0
-		if d[1] < d[2] then
-			closer = 1
+	do
+		local hero
+		if not remote then
+			hero = heroes[1]
 		else
-			closer = 2
+			local closerHero = distance(monster, heroes[1]) < distance(monster, heroes[2]) and 1 or 2
+			hero = heroes[closerHero]
 		end
-
-		if d[closer] < 6 then
-			monster.seesHero = true
-			monster.taget = heroes[closer]
-		else
-			monster.seesHero = false
-			monster.taget = nil
-		
-		end
+		monster.seesHero = distance(monster, hero) < 5
+		monster.target = monster.seesHero and hero or nil
 	end
 	
 	--if not, just move
@@ -262,34 +250,25 @@ function Monsters:updateState(monster, id, heroes, remote)
 			else
 				monster.state = "move"
 			end
-		elseif monster.tactics == "skirmisher" then
-			--skirmishers flee if bloodied and alone
-			if monster.bloodied and not monster.friends then
-				monster.state = "flee"
-			else
-				monster.state = "move"
-			end 
+		elseif monster.tactics == "soldier" then
 			--skirmishers change to their melee weapon if the hero is close
-			if (math.abs(monster.x - hero.x) == 1 and math.abs(monster.y - hero.y) == 1) then
+			if distance(monster, monster.target) <= monster.weapons[2].reach then
 				monster.weapon = monster.weapons[2]
+			else
+				monster.weapon = monster.weapons[1]
 			end
-		elseif monster.tactics == "soldier" and monster.bloodied then
-			--soldiers change to their berserk weapon if bloodied
-			monster.weapon = monster.weapons[2]
+			monster.state = "move"
 		else
 			monster.state = "move"
 		end
 		
 		--next check if the hero is in range
-		monster.inrange = 
-			math.sqrt(math.pow(monster.x - monster.target.x,2) + math.pow(monster.y - monster.target.y,2)) <= monster.weapon.reach 
+		monster.inrange = distance(monster, monster.target) <= monster.weapon.reach
 
 		--so far the states have been changed to flee or move. update to attack if in range.
 		if monster.inrange and not (monster.state == 'flee') then
 			monster.state = 'attack'
 		end
 	end
-	local inrange
-	if monster.inrange then inrange = "yes" else inrange = "no" end
-	--DEBUG("Monster " .. monster.name .. " state is " .. monster.state .. " - inrange " .. inrange)
+	DEBUG(monster.name, monster.x, monster.y, monster.state, distance(monster, monster.target), monster.inrange)
 end

@@ -166,6 +166,7 @@ function WorldMap:returnTileMap(mapArray, tileset)
 	return tilemap
 end
 
+
 function WorldMap:getTileInfo(x, y, layer) 
 	--[[Return the tile key, layer and tile information for a location on the map. 
 				if no TileMap layer is specified, it returns the highest layer with a value.  
