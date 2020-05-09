@@ -23,7 +23,6 @@ print("main.lua")
 		- Tiles: fix cover, especially make walls arrow proof
 		- Fix HP layer
 		- Monsters with no way to move should not move (left Samurai on map 6)
-		- monster placed in tiled
 		- check for obstacles on diagonal moves. 
 		- update routefinding for diagonal and more complex maps
 		- New graphics for monsters, environment, terrain, projectiles

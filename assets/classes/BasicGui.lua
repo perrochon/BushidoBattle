@@ -17,7 +17,7 @@ function BasicGui:init(title, back, backToScene, text1, scene1, text2, scene2)
 
 		if backToScene then
 			self.backButton:addEventListener("click", 
-				function()	-- TODO we may not need to do this on all BACK
+				function()
 					--if we are heading back, we can close the server
 					if serverlink then
 						serverlink:close()

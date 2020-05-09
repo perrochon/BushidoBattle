@@ -60,8 +60,6 @@ function WorldMap:init(level, heroes, monsters)
 	
 	--this is the initial location of the TileMaps, centered around the hero
 	self:shiftWorld(heroes[1].x - 6, heroes[1].y - 6)
-
-	-- TODO FIX why no return self here?
 end
 
 function WorldMap:idx(x, y) --index of cell (x,y)
@@ -214,7 +212,6 @@ function WorldMap:getTileInfo(x, y, layer)
 			end
 		end
 	end
-	-- TODO Understand this. Basically if there is no tile, we return nothing?
 end
 
 function WorldMap:changeTile(layer, entry, x, y)

@@ -15,12 +15,6 @@ else
 	print("HTML version. Not loading multi-player support")
 end
 
--- Screen Sizes
--- http://forum.giderosmobile.com/discussion/comment/62021/#Comment_62021
--- KEEP APP_HEIGHT and APP_WIDTH, but shift UX on the map out if letterboxed...
--- TODO if letterboxed on the side, move FG_X to the right, and lobby button to the left
--- 11 tiles high and wide + 712 to get to 1920. Image is 920 wide for wide-screen 			
-
 -- Logical App screen - We will letterbox this
 APP_HEIGHT @ 1188
 APP_WIDTH @ 1920
