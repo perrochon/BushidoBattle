@@ -1,5 +1,5 @@
 <project>
- <properties android_template="0" packageName="com.yourdomain.yourapp" html5_wasm="0" osx_category="5" osx_bundle="com.yourdomain." scaleMode="3" app_name="Bushido Battle" win_domain="giderosmobile.com" winrt_package="com.yourdomain.yourapp" exportMode="0" html5_host="" splash_h_image="" ios_bundle="com.yourdomain." mouseToTouch="1" mouseTouchOrder="0" osx_installerId="" winrt_org="GiderosMobile" html5_fbinstant="0" encryptCode="0" encryptAssets="0" architecture="7" touchToMouse="1" logicalWidth="1200" osx_domain="giderosmobile.com" tv_icon="" backgroundColor="#000000" windowHeight="0" html5_crash="" version_code="1" autorotation="0" iosDevice="0" fps="60" app_icon="other/Icon.png" disableSplash="1" osx_org="GiderosMobile" html5_pack="0" logicalHeight="1920" splash_v_image="" splashScaleMode="0" vsync="0" html5_fbload="50" osx_signingId="" html5_mem="256" build_number="1" win_org="GiderosMobile" orientation="1" version="1.0" windowWidth="0" html5_symbols="0" retinaDisplay="0">
+ <properties mouseToTouch="1" orientation="1" html5_host="" winrt_org="GiderosMobile" encryptCode="0" splashScaleMode="0" architecture="7" disableSplash="1" iosDevice="0" osx_signingId="" winrt_package="com.yourdomain.yourapp" splash_h_image="" osx_category="5" app_name="Bushido Battle" exportMode="0" win_domain="giderosmobile.com" tv_icon="" retinaDisplay="0" ios_bundle="com.yourdomain." backgroundColor="#000000" html5_symbols="0" version="1.0" logicalHeight="1920" html5_pack="0" app_icon="other/Icon.png" touchToMouse="1" html5_crash="" fps="60" windowWidth="0" build_number="1" html5_mem="256" vsync="0" packageName="com.yourdomain.yourapp" osx_domain="giderosmobile.com" windowHeight="0" scaleMode="3" win_org="GiderosMobile" autorotation="0" html5_wasm="0" mouseTouchOrder="0" html5_fbinstant="0" encryptAssets="0" splash_v_image="" osx_bundle="com.yourdomain." version_code="1" osx_org="GiderosMobile" osx_installerId="" logicalWidth="1200" android_template="0" html5_fbload="50">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -8,18 +8,18 @@
   </plugins>
   <exports>
    <export name="APK">
-    <property name="androidPath" value=""/>
-    <property name="androidSdk" value=""/>
-    <property name="androidTarget" value="28"/>
-    <property name="androidTools" value=""/>
-    <property name="buildAab" value="0"/>
-    <property name="buildApk" value="0"/>
-    <property name="deployApk" value="0"/>
-    <property name="javaPath" value=""/>
-    <property name="keyAlias" value=""/>
-    <property name="keyStore" value=""/>
-    <property name="packageName" value="com.zwsi.bushidobattle"/>
-    <property name="timestampApk" value="1"/>
+    <property value="" name="androidPath"/>
+    <property value="" name="androidSdk"/>
+    <property value="28" name="androidTarget"/>
+    <property value="" name="androidTools"/>
+    <property value="0" name="buildAab"/>
+    <property value="0" name="buildApk"/>
+    <property value="0" name="deployApk"/>
+    <property value="" name="javaPath"/>
+    <property value="" name="keyAlias"/>
+    <property value="" name="keyStore"/>
+    <property value="com.zwsi.bushidobattle" name="packageName"/>
+    <property value="1" name="timestampApk"/>
    </export>
   </exports>
  </properties>
@@ -103,6 +103,8 @@
  <file name="assets/map04.lua" excludeFromExecution="1"/>
  <file name="assets/map05.lua" excludeFromExecution="1"/>
  <file name="assets/map06.lua" excludeFromExecution="1"/>
+ <file name="assets/monsters.png"/>
+ <file name="assets/monsters.txt"/>
  <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
  <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
  <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
