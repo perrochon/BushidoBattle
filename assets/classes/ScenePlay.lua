@@ -37,8 +37,11 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 ScenePlay = Core.class(Sprite)
 
+ScenePlay.camera = nil -- This smells. TODO FIX. Possibly move camera into WorldMap, so this global goes
  
 function ScenePlay:init()
+
+	application:setBackgroundColor(COLOR_LTBLACK)
 
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
@@ -117,7 +120,14 @@ function ScenePlay:init()
 	end
 
 	--get everything on the screen
-	self:addChild(self.world)
+	-- Camera
+	self.camera = Camera.new({maxZoom=3,friction=.95}) -- higher seems to make it "more slippery" (documentation says lower).
+	self:addChild(self.camera)
+	self.camera:addChild(self.world)
+	ScenePlay.camera = self.camera -- FIX
+	self.world:shiftWorld(self.heroes[localHero])
+
+
 	self:addChild(self.msg)
 	self.main = MainScreen.new(self.heroes[localHero])
 	self:addChild(self.main)
@@ -129,12 +139,10 @@ function ScenePlay:init()
 		self:addChild(self.cs)
 	end
 	
-	
 	if self.client then
 		self:enableArrows(false)
 	end
 
-	
 	--respond to the compass directions
 	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:checkMove(self.heroes[localHero], 0, -1) end)
 	self.main.south:addEventListener("click", function() ScenePlay:cheater(1) self:checkMove(self.heroes[localHero], 0, 1)  end)
@@ -211,7 +219,8 @@ function ScenePlay:init()
 	 
 	 
 	--respond to touch events
-	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
+	-- TODO FIX needs to be more refined. Need to listen for MOUSE_DOWN first.
+	--self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
 	
 	self.ready = true
 	if self.remote then self:syncState() end
@@ -300,7 +309,7 @@ end
 	monsterHp = tonumber(monsterHp)
 	monsterHpBar = tonumber(monsterHpBar)
 
-	DEBUG_C(SYNC_TURN, "Hero:", heroIdx, x, y, "Monster", monsterIdx, monsterHp, monsterHpBar, sender)	
+	--DEBUG_C(SYNC_TURN, "Hero:", heroIdx, x, y, "Monster", monsterIdx, monsterHp, monsterHpBar, sender)	
 
 	if sender then -- this is an incoming remote call
 		if not ASSERT_NOT_EQUAL(heroIdx, localHero, "Remote trying to update local hero") then return end
@@ -395,7 +404,7 @@ end
 				end
 				self.monsters.list = {} -- TODO FIX there must be a more elegant way to replace the list
 				self.monsters:initFromServer(monstersInfo)
-				DEBUG("newmonsters", self.monsters:serialize())
+				--DEBUG("newmonsters", self.monsters:serialize())
 				for id, m in pairs(self.monsters.list) do
 					self.world:addMonster(m)
 				end
@@ -499,11 +508,12 @@ function ScenePlay:heroesTurnOver()
 	-- check if the players won 
 	if #self.monsters.list == 0 or self.cheat == "V" then
 		dataSaver.save(currentHeroFileName, self.heroes[localHero])
+		ScenePlay.camera = nil -- TODO FIX that global is really sucky...
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
 	ASSERT_TRUE(not self.client, "called on client")
-	ASSERT_TRUE(not self.heroes[1].heroTurn, "Hero 1's turn")
+	ASSERT_TRUE(not self.heroes[1].heroTurn, "Hero 1's turn - Is this why monsters attack twice?")
 	if self.remote then ASSERT_TRUE(not self.heroes[2].heroTurn, "Hereo 2's turn") end
 
 
@@ -688,14 +698,13 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 		-- launch a projectile that hits something along the way
 		-- TODO: FIX projectil should move direction defender, not direction obstacle
 		--       they are sometimes slightly different and it looks weird
-		p = Projectile.new(weapon.projectile, attacker.x - self.heroes[localHero].x, attacker.y - self.heroes[localHero].y,
-							blockedX - self.heroes[localHero].x, blockedY - self.heroes[localHero].y)
+		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, blockedX, blockedY)
 	else
 		-- launch a projectile towards the defender
-		p = Projectile.new(weapon.projectile, attacker.x - self.heroes[localHero].x, attacker.y - self.heroes[localHero].y,
-							defender.x - self.heroes[localHero].x, defender.y - self.heroes[localHero].y)	
+		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, 
+							self.heroes[localHero].x, self.heroes[localHero].y)	
 	end
-	self:addChild(p)
+	self.camera:addChild(p)
 	p:addEventListener("animation finished", function(event)
 		--DEBUG("Anonymous EventListener")
 		event:stopPropagation()

@@ -49,6 +49,7 @@ Constants and Global Functions
 
 -- Colors
 COLOR_BLACK @ 0x000000   -- slightly off black is 0x140C1C
+COLOR_LTBLACK @ 0x343234 -- color of unexplored tiles
 COLOR_DKGREY @ 0x4E4A4E  -- dark grey
 COLOR_GREY @ 0x757161    -- light grey, brown hint (main background)
 COLOR_LTGREY @ 0x8595A1  -- lighter grey, blue hint

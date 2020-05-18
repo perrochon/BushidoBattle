@@ -87,16 +87,16 @@ end
 -- Override the Sprite position functions so that we can enforce boundaries
 function Camera:setX(x) -- override
 	-- Check boundaries
-	x = math.max(x, application:getContentWidth() - self:getWidth())
-	x = math.min(x, 0)
+	x = math.max(x, FG_X / 2 - self:getWidth())
+	x = math.min(x, FG_X / 2)
 	
 	Sprite.setX(self, x)
 end
 
 function Camera:setY(y) -- override
 	-- Check boundaries
-	y = math.max(y, application:getContentHeight() - self:getHeight())
-	y = math.min(y, 0)
+	y = math.max(y, APP_HEIGHT / 2 - self:getHeight())
+	y = math.min(y, APP_HEIGHT / 2)
 	
 	Sprite.setY(self, y)
 end
@@ -109,8 +109,8 @@ end
 -- Override the Sprite setScale function so we can enforce boundaries
 function Camera:setScale(scaleX, scaleY) -- override
 	-- Calculate boundaries
-	local minScaleX = application:getContentWidth() / (self:getWidth() * (1/self:getScaleX()))
-	local minScaleY = application:getContentHeight() / (self:getHeight() * (1/self:getScaleY()))
+	local minScaleX = FG_X / (self:getWidth() * (1/self:getScaleX()))
+	local minScaleY = APP_HEIGHT / (self:getHeight() * (1/self:getScaleY()))
 	
 	-- Check the boundaries
 	scaleX = math.max(scaleX, minScaleX, minScaleY)
@@ -125,8 +125,8 @@ end
 -- Update our anchor point  that's the middle of the "camera".  This should be called
 -- whenever you change the camera position
 function Camera:updateAnchor()
-	self.anchorX = (-self:getX() + application:getContentWidth()/2) * (1/self:getScaleX())
-	self.anchorY = (-self:getY() + application:getContentHeight()/2) * (1/self:getScaleY())
+	self.anchorX = (-self:getX() + FG_X/2) * (1/self:getScaleX())
+	self.anchorY = (-self:getY() + APP_HEIGHT/2) * (1/self:getScaleY())
 end
 
 -- Center our anchor.  This should be called anytime you change the scale to recenter the
@@ -137,10 +137,10 @@ function Camera:centerAnchor()
 	self:centerPoint(self.anchorX, self.anchorY)
 end
 
--- Center the camera on a point relitive to the child element(s)
+-- Center the camera on a point relative to the child element(s)
 function Camera:centerPoint(x, y)
-	self:setX(-(x * self:getScaleX() - application:getContentWidth()/2))
-	self:setY(-(y * self:getScaleY() - application:getContentHeight()/2))
+	self:setX(-(x * self:getScaleX() - FG_X/2))
+	self:setY(-(y * self:getScaleY() - APP_HEIGHT/2))
 	
 	self:updateAnchor()
 end

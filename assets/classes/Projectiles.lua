@@ -18,10 +18,13 @@ function Projectile:init(pName, fromX, fromY, toX, toY)
 	p:setAnchorPoint(0.5, 0.5)
 	
 	--calculate the screen start and target variables
-	local startX = (6 + fromX - 0.5) * TILE_WIDTH 
-	local startY = (6 + fromY - 0.5) * TILE_HEIGHT 
-	self.targetX = (6 + toX - 0.5) * TILE_WIDTH 
-	self.targetY = (6 + toY - 0.5) * TILE_HEIGHT 
+	local startX = (fromX - 0.5) * TILE_WIDTH 
+	local startY = (fromY - 0.5) * TILE_HEIGHT 
+	self.targetX = (toX - 0.5) * TILE_WIDTH 
+	self.targetY = (toY - 0.5) * TILE_HEIGHT 
+
+
+	DEBUG("Projectile:", startX, startY, self.targetX, self.targetY, fromX, fromY, toX, toY)
 
 	-- set initial position and speed
 	self:setPosition(startX, startY)

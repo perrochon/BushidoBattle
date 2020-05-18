@@ -1,10 +1,10 @@
 <project>
- <properties mouseToTouch="1" orientation="1" html5_host="" winrt_org="GiderosMobile" encryptCode="0" splashScaleMode="0" architecture="7" disableSplash="1" iosDevice="0" osx_signingId="" winrt_package="com.yourdomain.yourapp" splash_h_image="" osx_category="5" app_name="Bushido Battle" exportMode="0" win_domain="giderosmobile.com" tv_icon="" retinaDisplay="0" ios_bundle="com.yourdomain." backgroundColor="#000000" html5_symbols="0" version="1.0" logicalHeight="1920" html5_pack="0" app_icon="other/Icon.png" touchToMouse="1" html5_crash="" fps="60" windowWidth="0" build_number="1" html5_mem="256" vsync="0" packageName="com.yourdomain.yourapp" osx_domain="giderosmobile.com" windowHeight="0" scaleMode="3" win_org="GiderosMobile" autorotation="0" html5_wasm="0" mouseTouchOrder="0" html5_fbinstant="0" encryptAssets="0" splash_v_image="" osx_bundle="com.yourdomain." version_code="1" osx_org="GiderosMobile" osx_installerId="" logicalWidth="1200" android_template="0" html5_fbload="50">
+ <properties mouseTouchOrder="0" splash_h_image="" app_icon="other/Icon.png" html5_mem="256" vsync="0" osx_bundle="com.yourdomain." winrt_org="GiderosMobile" winrt_package="com.yourdomain.yourapp" version_code="1" windowHeight="0" logicalHeight="1920" html5_crash="" encryptAssets="0" orientation="1" ios_bundle="com.yourdomain." logicalWidth="1200" backgroundColor="#000000" iosDevice="0" exportMode="0" splashScaleMode="0" touchToMouse="1" osx_category="5" android_template="0" scaleMode="3" html5_fbinstant="0" architecture="7" html5_host="" html5_fbload="50" win_domain="giderosmobile.com" osx_domain="giderosmobile.com" encryptCode="0" html5_symbols="0" tv_icon="" osx_installerId="" osx_org="GiderosMobile" splash_v_image="" osx_signingId="" win_org="GiderosMobile" windowWidth="0" disableSplash="1" build_number="1" fps="60" app_name="Bushido Battle" packageName="com.yourdomain.yourapp" version="1.0" html5_pack="0" mouseToTouch="1" retinaDisplay="0" html5_wasm="0" autorotation="0">
   <imageScales/>
   <plugins>
-   <plugin name="JSON" enabled="1"/>
-   <plugin name="Lua Socket" enabled="1"/>
-   <plugin name="SceneManager" enabled="1"/>
+   <plugin enabled="1" name="JSON"/>
+   <plugin enabled="1" name="Lua Socket"/>
+   <plugin enabled="1" name="SceneManager"/>
   </plugins>
   <exports>
    <export name="APK">
@@ -24,6 +24,7 @@
   </exports>
  </properties>
  <folder name="classes">
+  <file name="assets/classes/Camera.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
@@ -44,13 +45,13 @@
   <file name="assets/classes/SceneStartServer.lua"/>
   <file name="assets/classes/SceneVictory.lua"/>
   <file name="assets/classes/Sounds.lua"/>
-  <file name="assets/classes/Tests.lua" excludeFromExecution="1"/>
-  <file name="assets/classes/Unite.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/Tests.lua"/>
+  <file excludeFromExecution="1" name="assets/classes/Unite.lua"/>
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
-  <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/socket.lua"/>
   <file name="assets/classes/textButton.lua"/>
  </folder>
  <folder name="fonts">
@@ -78,6 +79,7 @@
   <file name="assets/images/tileset-terrain-108px.png"/>
  </folder>
  <folder name="sounds">
+  <file name="assets/sounds/3342050902_51db093366.jpg"/>
   <file name="assets/sounds/Ninja-Game-Intro.mp3"/>
   <file name="assets/sounds/footsteps-02.wav"/>
   <file name="assets/sounds/footsteps-03.wav"/>
@@ -97,12 +99,12 @@
  <file name="assets/fbapp-config.json"/>
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
- <file name="assets/map01.lua" excludeFromExecution="1"/>
- <file name="assets/map02.lua" excludeFromExecution="1"/>
- <file name="assets/map03.lua" excludeFromExecution="1"/>
- <file name="assets/map04.lua" excludeFromExecution="1"/>
- <file name="assets/map05.lua" excludeFromExecution="1"/>
- <file name="assets/map06.lua" excludeFromExecution="1"/>
+ <file excludeFromExecution="1" name="assets/map01.lua"/>
+ <file excludeFromExecution="1" name="assets/map02.lua"/>
+ <file excludeFromExecution="1" name="assets/map03.lua"/>
+ <file excludeFromExecution="1" name="assets/map04.lua"/>
+ <file excludeFromExecution="1" name="assets/map05.lua"/>
+ <file excludeFromExecution="1" name="assets/map06.lua"/>
  <file name="assets/monsters.png"/>
  <file name="assets/monsters.txt"/>
  <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>

@@ -130,9 +130,9 @@ function WorldMap:addLight(hero)
 	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
 		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
 			torchIndex = torchIndex + 1
-			local i = self:idx(x, y)
 			--only change the light array if on the screen
-			if i > 0 and i < #lArray and hero.light.array[torchIndex] ~= 0 then
+			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
+				local i = self:idx(x, y)
 				lArray[i] = hero.light.array[torchIndex]
 			end
 		end
@@ -223,21 +223,29 @@ function WorldMap:changeTile(layer, entry, x, y)
   self.mapLayers[layer]:setTile(x, y, entry, 1)
 end
 
-function WorldMap:shiftWorld(dx, dy)
-	--[[shift all the TileMaps by dx and dy by changing the X,Y position of the sprite
-		This is tile-based movement
+function WorldMap:shiftWorld(hero)
+	--[[Moves the camera. 
+		TODO FIX Maybe camera should be managed inside WorldMap to get rid of global...
 	--]]
-	
+
+	local c = ScenePlay.camera -- TODO FIX this is only for debug...
+	if c then
+		ScenePlay.camera:centerPoint(hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT)
+		--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
+		--      "camera:", c.anchorX, c.anchorY, "Position", c:getPosition(), "Scale:", c:getScale()) 
+	end
+
+--[[	TODO FIX DELETE
 	local count = 1
 	local ddx = dx * TILE_WIDTH / count
 	local ddy = dy *TILE_HEIGHT / count
 	
 	for i = 1, #self.mapLayers do
 		local layer = self.mapLayers[i]
-		layer:setX(layer:getX() - (dx * TILE_WIDTH))	
-		layer:setY(layer:getY() - (dy * TILE_HEIGHT))
+		--layer:setX(layer:getX() - (dx * TILE_WIDTH))	
+		--layer:setY(layer:getY() - (dy * TILE_HEIGHT))
 	end
-	
+	--]]
 end
 
 
@@ -250,14 +258,19 @@ function WorldMap:moveHero(hero, dx, dy)
 
 	--DEBUG("Moving Hero", hero, hero.heroIdx, dx, dy, "to", hero.x+dx, hero.y+dy)
 
+	-- TODO FIX why does this work on the pre-move coordinates?
 	if hero.heroIdx == localHero then 
 		--move the torchlight
 		self:adjustLight(hero, dx, dy)
-		--keep the hero centered on the screen by shifting all the TileMaps  
-		self:shiftWorld(dx, dy)
 	end
+
 	--for purposes of moving around the map, the hero is just another monster
 	self:moveMonster(hero, dx, dy)
+
+	if hero.heroIdx == localHero then 
+		--keep the hero centered on the screen by shifting all the TileMaps  
+		self:shiftWorld(hero, dx, dy)
+	end
 end
 
 function WorldMap:adjustLight(hero, dx, dy)
@@ -266,20 +279,20 @@ function WorldMap:adjustLight(hero, dx, dy)
 		Called from moveHero
 	--]]	
 	
-	if hero.heroIdx ~= localHero then
-		ERROR("Trying to adjust light for the wrong hero")
-		return
-	end
+	-- TODO FIX Why does this work on previous location
+	-- TODO FIX wrap around lights...
 	
+	ASSERT_EQUAL(hero.heroIdx, localHero, "Trying to adjust light for the wrong hero")
+		
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0
 
 	--set all previously lit tiles to 3
 	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
 		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
-			i = self:idx(x, y)
 			--only change the light array and tile if on screen 
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
+				i = self:idx(x, y)
 				--only change if previously lit 
 				if lArray[i] ~= 4 then
 					lArray[i] = 3
@@ -364,7 +377,7 @@ function WorldMap:addMonster(monster)
 	--get the array and entry
 	local array = self.mapArrays[LAYER_MONSTERS]
 
-	DEBUG(x, y)
+	--DEBUG(x, y)
 	--place the monster at the new position
 	array[self:idx(monster.x, monster.y)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 

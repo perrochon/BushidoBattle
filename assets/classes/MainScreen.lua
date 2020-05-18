@@ -21,9 +21,13 @@ function MainScreen:init(hero)
 	local cheatY = 230
 
 	-- Compass
-	local fg = Pixel.new(COLOR_BLACK, 1, APP_WIDTH - FG_X + FG_BLEED, APP_HEIGHT + 2 * FG_BLEED)
-	fg:setPosition(FG_X, -FG_BLEED)
-	self:addChild(fg)
+	self.fg = Pixel.new(COLOR_BLACK, 1, APP_WIDTH - FG_X + FG_BLEED, APP_HEIGHT + 2 * FG_BLEED)
+	self.fg:setPosition(FG_X, -FG_BLEED)
+	self:addChild(self.fg)
+
+	-- register to all mouse and touch events
+	self.fg:addEventListener(Event.MOUSE_DOWN, self.onMouseDown, self)
+	self.fg:addEventListener(Event.TOUCHES_BEGIN, self.onTouchesBegin, self)
 
 	local title = TextField.new(FONT_MEDIUM, "Bushido Battle")
 	title:setTextColor(COLOR_YELLOW)	
@@ -198,4 +202,22 @@ function MainScreen:displayCheats()
     self:removeChild(self.tagLine)	
 end
 
+-- Intercept all clicks on the main window (that are not buttons)
+function MainScreen:onMouseDown(event)
+	if self.fg:hitTestPoint(event.x, event.y) then
+		event:stopPropagation()
+	end
+end
 
+-- Intercept all touches on the main window (that are not buttons)
+function MainScreen:onTouchesBegin(event)
+  for i=1,#event.touches do
+    if event.touches[i].id == 1 then -- first touch
+      local x = event.touches[i].x
+      local y = event.touches[i].y
+		if self.fg:hitTestPoint(x, y) then
+			event:stopPropagation()
+		end
+    end
+  end
+end
