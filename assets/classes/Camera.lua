@@ -173,6 +173,7 @@ end
 
 -- A finger or mouse is pressed
 function Camera:onTouchesBegin(event)
+	--DEBUG("touches begin", event.touch.x, event.touch.y, self.isFocus)
 	if self:hitTestPoint(event.touch.x, event.touch.y) then
 		self.isFocus = true
 		
@@ -207,6 +208,7 @@ function Camera:onTouchesBegin(event)
 end
 
 function Camera:onTouchesMove(event)
+	--DEBUG("touches move", event.touch.x, event.touch.y, self.isFocus)
 	if self.isFocus then
 		if self.mode == Camera.DRAG then
 			-- Figure out how far we moved since last time
@@ -256,6 +258,7 @@ function Camera:onTouchesMove(event)
 end
 
 function Camera:onTouchesEnd(event)
+	--DEBUG("touches end", event.touch.x, event.touch.y, self.isFocus)
 	if self.isFocus then
 		if self.mode == Camera.DRAG then
 			if self.previousPoints and #self.previousPoints > self.minPoints then
@@ -302,8 +305,8 @@ function Camera:onTouchesEnd(event)
 end
 
 function Camera:onTouchesCancel(event)
+	--DEBUG("touches cancel", event.touch.x, event.touch.y, self.isFocus)
 	if self.isFocus then
-		print("Camera TOUCHES_CANCEL", self.mode)
 		self.isFocus = false
 		event:stopPropogation()
 	end
