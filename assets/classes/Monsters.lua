@@ -270,5 +270,5 @@ function Monsters:updateState(monster, id, heroes, remote)
 			monster.state = 'attack'
 		end
 	end
-	DEBUG(monster.name, monster.x, monster.y, monster.state, distance(monster, monster.target), monster.inrange)
+	--DEBUG(monster.name, monster.x, monster.y, monster.state, distance(monster, monster.target), monster.inrange)
 end
