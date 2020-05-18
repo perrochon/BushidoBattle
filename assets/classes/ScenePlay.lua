@@ -36,8 +36,6 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 
 ScenePlay = Core.class(Sprite)
-
-ScenePlay.camera = nil -- This smells. TODO FIX. Possibly move camera into WorldMap, so this global goes
  
 function ScenePlay:init()
 
@@ -120,13 +118,7 @@ function ScenePlay:init()
 	end
 
 	--get everything on the screen
-	-- Camera
-	self.camera = Camera.new({maxZoom=3,friction=.95}) -- higher seems to make it "more slippery" (documentation says lower).
-	self:addChild(self.camera)
-	self.camera:addChild(self.world)
-	ScenePlay.camera = self.camera -- FIX
-	self.world:shiftWorld(self.heroes[localHero])
-
+	self:addChild(self.world)
 
 	self:addChild(self.msg)
 	self.main = MainScreen.new(self.heroes[localHero])
@@ -508,7 +500,6 @@ function ScenePlay:heroesTurnOver()
 	-- check if the players won 
 	if #self.monsters.list == 0 or self.cheat == "V" then
 		dataSaver.save(currentHeroFileName, self.heroes[localHero])
-		ScenePlay.camera = nil -- TODO FIX that global is really sucky...
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
@@ -704,7 +695,10 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, 
 							self.heroes[localHero].x, self.heroes[localHero].y)	
 	end
-	self.camera:addChild(p)
+
+	-- Add the projectile to the world which takes care of scaling and dragging.
+	-- TODO this smells (encapsulation violation), so maybe projectiles should be managed by WorldMap?
+	self.world.camera:addChild(p)
 	p:addEventListener("animation finished", function(event)
 		--DEBUG("Anonymous EventListener")
 		event:stopPropagation()

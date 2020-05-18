@@ -10,6 +10,9 @@ print("main.lua")
 
 --[[ TODO
 		- auto connect all the way to Battle...
+		- Camera Follow Update
+			- re-enable ranged attacks for heroes (need proper clicks on maps)
+		- Don't require killing of peasants anymore. Maybe negative experience?
 		- Remote Play
 			-- Monster AI with multiple heroes
 			-- Ensure same map on client

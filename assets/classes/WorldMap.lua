@@ -19,47 +19,43 @@ function WorldMap:init(level, heroes, monsters)
 	self.mapArrays = {} -- a numeric key indicating what's in this place - defined in tiled maps and constants.lua
 	self.mapLayers = {} -- the actual tile that is painted
 
+
+	self.camera = Camera.new({maxZoom=3,friction=.95}) -- higher seems to make it "more slippery" (documentation says lower).
+
 	-- assign TileMaps to self.mapLayers. table.insert ads at the end, so the order here matters
 	-- needs to be consistent with Constants.lua, but also rendering.
-	local group = Sprite.new() -- self is a sprite, so could just add to self, no?
 	
-	local layer1,array1 = self.level:layerFromMap(1)
-	group:addChild(layer1) 
+	local layer1,array1 = self.level:layerFromMap(LAYER_TERRAIN)
+	self.camera:addChild(layer1) 
 	table.insert(self.mapLayers, layer1)
 	table.insert(self.mapArrays, array1)
-
 	--self:debugMapInfo(LAYER_TERRAIN)
 
-	local layer2,array2 = self.level:layerFromMap(2)
-	group:addChild(layer2) 
+	local layer2,array2 = self.level:layerFromMap(LAYER_ENVIRONMENT)
+	self.camera:addChild(layer2) 
 	table.insert(self.mapLayers, layer2)
 	table.insert(self.mapArrays, array2)
-
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
-	group:addChild(layer) 
+	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
-
 	--self:debugMapInfo(LAYER_MONSTERS)
 
 	self.mapArrays[LAYER_HP] = self:addHP()
-	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[1])
-
+	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[localHero])
+    self:shiftWorld(heroes[localHero])
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "images/tileset-health-108px.png", false)
-	group:addChild(layer) 
+	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "images/tileset-light-108px.png", false)
-	group:addChild(layer) 
+	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
-	self:addChild(group)
-	
-	--this is the initial location of the TileMaps, centered around the hero
-	self:shiftWorld(heroes[1].x - 6, heroes[1].y - 6)
+	self:addChild(self.camera)
 end
 
 function WorldMap:idx(x, y) --index of cell (x,y)
@@ -215,37 +211,24 @@ function WorldMap:getTileInfo(x, y, layer)
 	end
 end
 
-function WorldMap:changeTile(layer, entry, x, y)
---Change both the self.mapArrays entry and the tile in self.mapLayers
+function WorldMap:changeTile(layerId, entry, x, y)
+	--Change both the self.mapArrays entry and the tile in self.mapLayers
 
-  local array = self.mapArrays[layer]
-  array[self:idx(x, y)] = entry
-  self.mapLayers[layer]:setTile(x, y, entry, 1)
+	local array = self.mapArrays[layerId]
+	array[self:idx(x, y)] = entry
+	self.mapLayers[layerId]:setTile(x, y, entry, 1)
 end
 
 function WorldMap:shiftWorld(hero)
-	--[[Moves the camera. 
-		TODO FIX Maybe camera should be managed inside WorldMap to get rid of global...
+	--[[Moves the camera to the hero's location
+		May require more complexity with multiple heroes
+		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
 
-	local c = ScenePlay.camera -- TODO FIX this is only for debug...
-	if c then
-		ScenePlay.camera:centerPoint(hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT)
-		--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
-		--      "camera:", c.anchorX, c.anchorY, "Position", c:getPosition(), "Scale:", c:getScale()) 
-	end
-
---[[	TODO FIX DELETE
-	local count = 1
-	local ddx = dx * TILE_WIDTH / count
-	local ddy = dy *TILE_HEIGHT / count
-	
-	for i = 1, #self.mapLayers do
-		local layer = self.mapLayers[i]
-		--layer:setX(layer:getX() - (dx * TILE_WIDTH))	
-		--layer:setY(layer:getY() - (dy * TILE_HEIGHT))
-	end
-	--]]
+	self.camera:centerPoint(hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT)
+	--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
+	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
+	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
 end
 
 
