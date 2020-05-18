@@ -29,6 +29,7 @@
   <file name="assets/classes/Camera.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
   <file name="assets/classes/MapData.lua"/>
+  <file name="assets/classes/MapNavigation.lua"/>
   <file name="assets/classes/Messages.lua"/>
   <file name="assets/classes/Monsters.lua"/>
   <file name="assets/classes/Player.lua"/>

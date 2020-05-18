@@ -61,7 +61,7 @@ function ScenePlay:init()
 	end
 
 	self.ready = false
-	
+
 	if self.server then 
 		DEBUG("This device is a server")
 		localHero = 1
@@ -74,10 +74,10 @@ function ScenePlay:init()
 		DEBUG("This device is playing locally") 
 		localHero = 1
 	end
-	
+
 		--the major gaming variables
 	self.heroes[localHero] = dataSaver.load(currentHeroFileName)
-	
+
 	local x, y
 	for _, v in pairs(self.mapData.spawns) do
 		if v.type == 1 then
@@ -210,9 +210,11 @@ function ScenePlay:init()
 	 end)	
 	 
 	 
-	--respond to touch events
-	-- TODO FIX needs to be more refined. Need to listen for MOUSE_DOWN first.
-	--self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
+	--respond to mouse and touch events
+	local nav = MapNavigation.new(self.world)
+	self:addChild(nav)
+	
+	nav:addEventListener("line", self.onLine, self)
 	
 	self.ready = true
 	if self.remote then self:syncState() end
@@ -420,62 +422,6 @@ end
 		end
 	end 
  end
-
- 
- function ScenePlay:onMouseUp(event)
-	--[[respond to the user touching the map.  Checks if the map part of the screen was touched, the responds depending on which button is activeButton
-		Called from Event.MOUSE_UP
-		Calls checkMove, messages:add, world:getTileInfo
-	--]]
-
-
-	--only check visible parts of the map
-	local x = self.heroes[localHero].x + math.ceil(event.x / TILE_WIDTH) - 6
-	local y = self.heroes[localHero].y + math.ceil(event.y / TILE_HEIGHT) - 6
-	local key, layer = 0, 0
-	local visibleMapTouched = (event.x < FG_X and x >= 0 and x <= LAYER_COLUMNS and y >= 0 and y <= LAYER_ROWS)
-	
-	if visibleMapTouched then
-		--find the tile that was touched
-		--local key, layer, tile = self.world:getTileInfo(x, y)
-		local key, layer, tile = self.world:getTileInfo(x, y)
-		
-		--DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
-		
-		if self.active == "attack" then
-			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
-			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
-			local inReach = distance(self.heroes[localHero], event) < self.heroes[localHero].weapon.reach and
-							layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
-			if inReach then
-				self:checkMove(self.heroes[localHero], x - self.heroes[localHero].x, y - self.heroes[localHero].y)
-			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
-				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
-			end
-		elseif self.active == "look" then
-			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
-		elseif self.active == "move" then
-			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(self.heroes[localHero].x - x)
-			local deltaY = math.abs(self.heroes[localHero].y - y)
-			local dx, dy = 0, 0
-			if deltaX > 0 or deltaY > 0 then
-				--calculate the optimal dx, dy 
-				if deltaX > deltaY then
-					if x > self.heroes[localHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
-				else
-					if y > self.heroes[localHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
-				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[localHero].x, self.heroes[localHero].y, dx, dy))
-				self:checkMove(self.heroes[localHero],dx, dy)
-			end
-		end
-	else
-		--DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
-	end
-end
 
 function ScenePlay:removeDeadMonsters(heroIdx)
 
@@ -864,3 +810,92 @@ function ScenePlay:cheater(want)
 		return false
 	end
 end
+
+
+ function ScenePlay:onLine(event)
+	--[[respond to the user touching the map.  Checks if the map part of the screen was touched, the responds depending on which button is activeButton
+		Called from Event.MOUSE_UP
+		Calls checkMove, messages:add, world:getTileInfo
+	--]]
+
+	DEBUG("Line from", event.fromX, event.fromY, event.toX, event.toY)
+
+	local key, layer, tile = self.world:getTileInfo(event.toX, event.toY)
+
+		if self.active == "attack" then
+			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
+			-- FIX remove commented line below, as the next one seems to work
+			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
+			local inReach = distance({x=event.fromX,y=event.fromY},{x=event.toX,y=event.toY}) < self.heroes[localHero].weapon.reach
+			if layer == LAYER_MONSTERS and inReach then
+				self:checkMove(self.heroes[localHero], event.toX - self.heroes[localHero].x, event.toY - self.heroes[localHero].y)
+			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
+				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
+			end
+		elseif self.active == "look" then
+			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
+		elseif self.active == "move" then
+			--if a move action is selected, move the hero towards the tile 
+			local deltaX = math.abs(self.heroes[localHero].x - event.toX)
+			local deltaY = math.abs(self.heroes[localHero].y - event.toY)
+			local dx, dy = 0, 0
+			if deltaX > 0 or deltaY > 0 then
+				--calculate the optimal dx, dy 
+				if deltaX > deltaY then
+					if event.toX > self.heroes[localHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+				else
+					if event.toY > self.heroes[localHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+				end
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[localHero].x, self.heroes[localHero].y, dx, dy))
+				self:checkMove(self.heroes[localHero],dx, dy)
+			end
+		end
+
+--[[
+
+
+	if visibleMapTouched then
+		--find the tile that was touched
+		--local key, layer, tile = self.world:getTileInfo(x, y)
+		local key, layer, tile = self.world:getTileInfo(x, y)
+		
+		--DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
+		
+		if self.active == "attack" then
+			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
+			-- FIX remove commented line below, as the next one seems to work
+			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
+			local inReach = distance(self.heroes[localHero], event) < self.heroes[localHero].weapon.reach and
+							layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
+			if inReach then
+				self:checkMove(self.heroes[localHero], x - self.heroes[localHero].x, y - self.heroes[localHero].y)
+			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
+				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
+			end
+		elseif self.active == "look" then
+			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
+		elseif self.active == "move" then
+			--if a move action is selected, move the hero towards the tile 
+			local deltaX = math.abs(self.heroes[localHero].x - x)
+			local deltaY = math.abs(self.heroes[localHero].y - y)
+			local dx, dy = 0, 0
+			if deltaX > 0 or deltaY > 0 then
+				--calculate the optimal dx, dy 
+				if deltaX > deltaY then
+					if x > self.heroes[localHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+				else
+					if y > self.heroes[localHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+				end
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[localHero].x, self.heroes[localHero].y, dx, dy))
+				self:checkMove(self.heroes[localHero],dx, dy)
+			end
+		end
+	else
+		--DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
+	end
+	
+	--]]
+end
+

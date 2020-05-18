@@ -11,7 +11,8 @@ print("main.lua")
 --[[ TODO
 		- auto connect all the way to Battle...
 		- Camera Follow Update
-			- re-enable ranged attacks for heroes (need proper clicks on maps)
+			- line to move only does ortho moves, no diagonal. Need to update that
+			- click on enemies within range put a target on their head?
 		- Don't require killing of peasants anymore. Maybe negative experience?
 		- Remote Play
 			-- Monster AI with multiple heroes
