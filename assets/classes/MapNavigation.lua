@@ -3,13 +3,14 @@ MapNavigation = Core.class(Sprite)
 function MapNavigation:init(world)
 
 	self.world = world
-	local intercept = Pixel.new(COLOR_RED, 0.1, FG_X, APP_HEIGHT)
+	local intercept = Pixel.new(COLOR_RED, 0.1, FG_X-MINX, APP_HEIGHT-MINY)
+	intercept:setPosition(MINX, MINY)
 	self:addChild(intercept)
 
 	self.focus = false
 	self:addEventListener(Event.MOUSE_DOWN, self.onMouseDown, self)
 	self:addEventListener(Event.MOUSE_MOVE, self.onMouseMove, self)
-	self:addEventListener(Event.MOUSE_UP, self.onMouseUp2, self)
+	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
 	
 	self:addEventListener(Event.TOUCHES_BEGIN, self.onTouchesBegin, self)
 	self:addEventListener(Event.TOUCHES_MOVE, self.onTouchesMove, self)
@@ -18,19 +19,40 @@ function MapNavigation:init(world)
 	
 end
 
-function MapNavigation:onMouseDown(event)
-
-	if not self:hitTestPoint(event.x, event.y) then
-		return
-	end
-	-- Where did we click, and is it on the map
+function MapNavigation:visibleMapTouched(event)
+	--[[ returns
+		- point x,y in world coordinates rounded to middle of tile
+		- column, row index of tile
+		- whether the visible map was touched (i.e. left area of screen AND not outside bounds) 
+	--]]
 	local e = self.world.camera:translateEvent(event)
 	local x = math.ceil(e.x / TILE_WIDTH)
 	local y = math.ceil(e.y / TILE_HEIGHT)
 	e.x = (x-0.5) * TILE_WIDTH
 	e.y = (y-0.5) * TILE_HEIGHT
 	DEBUG("mouse down", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
-	local visibleMapTouched = (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
+	return e, x, y, (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
+end
+
+function MapNavigation:updateVisualStatus()
+	if self.line then 
+		self.world.camera:removeChild(self.line)
+		self.line = nil
+	end
+	if self.to then
+		self.world.camera:removeChild(self.to)
+		self.to = nil
+	end
+end
+
+function MapNavigation:onMouseDown(event)
+
+	if not self:hitTestPoint(event.x, event.y) then
+		return
+	end
+
+	-- Where did we click, and is it on the map
+	local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
 
 	if visibleMapTouched then
 		--find the tile that was touched
@@ -57,28 +79,21 @@ function MapNavigation:onMouseDown(event)
 end
 
 function MapNavigation:onMouseMove(event)
-	local e = self.world.camera:translateEvent(event)
-	local x = math.ceil(e.x / TILE_WIDTH) - 1
-	local y = math.ceil(e.y / TILE_HEIGHT) -1
-	e.x = (x-0.5) * TILE_WIDTH
-	e.y = (y-0.5) * TILE_HEIGHT
-	DEBUG("mouse move", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
-	local visibleMapTouched = (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
 
 	if self.focus then
-		if self.line then 
-			self.world.camera:removeChild(self.line)
-			self.line = nil
-		end
+
+		-- Where did we click, and is it on the map
+		local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
+
+		self:updateVisualStatus()
+		if not self:hitTestPoint(event.x, event.y) or not visibleMapTouched then	
+			self.focus = false
+			self.world.camera:removeChild(self.from)
 		if self.to then
 			self.world.camera:removeChild(self.to)
 			self.to = nil
 		end
-		if not self:hitTestPoint(event.x, event.y) or not visibleMapTouched then	
-			self.focus = false
-			self.world.camera:removeChild(self.from)
-			self.world.camera:removeChild(self.to)
-		else	
+	else	
 			self.to = Pixel.new(COLOR_RED, 0.8, 50, 50)
 			self.to:setAnchorPoint(0.5,0.5)
 			self.to:setPosition(e.x,e.y)
@@ -95,25 +110,15 @@ function MapNavigation:onMouseMove(event)
 	end
 end
 
-function MapNavigation:onMouseUp2(event)
-	local e = self.world.camera:translateEvent(event)
-	local x = math.ceil(e.x / TILE_WIDTH) - 1
-	local y = math.ceil(e.y / TILE_HEIGHT) - 1
-	e.x = (x-0.5) * TILE_WIDTH
-	e.y = (y-0.5) * TILE_HEIGHT
-	--DEBUG("mouse up", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
-	local visibleMapTouched = (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
+function MapNavigation:onMouseUp(event)
+
 	if self.focus then
+		-- Where did we click, and is it on the map
+		local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
+
 		self.focus = false
 		self.world.camera:removeChild(self.from)
-		if self.line then
-			self.world.camera:removeChild(self.line)
-			self.line = nil
-		end
-		if self.to then
-			self.world.camera:removeChild(self.to)
-			self.to = nil
-		end
+		self:updateVisualStatus()
 		do
 			local event = Event.new("line")
 			event.fromX = math.ceil(self.startX / TILE_WIDTH)
