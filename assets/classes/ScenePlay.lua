@@ -211,7 +211,7 @@ function ScenePlay:init()
 	 
 	 
 	--respond to mouse and touch events
-	local nav = MapNavigation.new(self.world)
+	local nav = MapNavigation.new(self.world, self.heroes)
 	self:addChild(nav)
 	
 	nav:addEventListener("line", self.onLine, self)
@@ -255,7 +255,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 
 	if self.active == "move" then
 		if layer == LAYER_MONSTERS and not pass then -- LAYER_MONSTERS contains the hero itself...
-			-- allow them to bump and melee attack when moving
+			-- allow them to bump and melee attack when moving			
 			self.active = "attack"
 			hero.weapon = hero.weapons[1]
 			self.main.melee:updateVisualState(true)
