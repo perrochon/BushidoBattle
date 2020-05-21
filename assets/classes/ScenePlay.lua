@@ -892,8 +892,7 @@ end
 
 	-- All that's left is moving towards to
 
-	local dc = (to.c - hero.x)>0 and 1 or (to.c - hero.x)<0 and -1 or 0
-	local dr = (to.r - hero.y)>0 and 1 or (to.r - hero.y)<0 and -1 or 0
+	local dc, dr = self.world:shortestPath(from, to)
 	
 	DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.x, hero.y, dc, dr))
 	self:checkMove(hero, dc, dr)

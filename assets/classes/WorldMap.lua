@@ -575,8 +575,75 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 	return totalCover, blockedX, blockedY
 end
 
+function WorldMap:shortestPath(from, to)
 
+	queue = {}
+	found = {}
+	for i = 1, LAYER_COLUMNS * LAYER_ROWS do
+		found[i] = false
+	end
 
+	from.dc = 0
+	from.dr = 0
+	table.insert(queue, from)
+	found[self:idx(from.c, from.r)] = true	
+	DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
+
+	while #queue > 0 and #queue < 1000 do
+		current = queue[1]
+		table.remove(queue, 1)
+
+		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
+
+ 		if current.c == to.c and current.r == to.r then
+			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
+			return current.dc, current.dr
+		end
+		
+		for dr = -1, 1 do
+			for dc = -1 , 1 do
+				next = {c = current.c + dc, r = current.r + dr}
+				if not found[self:idx(next.c, next.r)] 
+					and (dr or dc) 
+					and next.c > 1 and next.c < LAYER_COLUMNS 
+					and next.r > 1 and next.r < LAYER_ROWS then
+					
+					found[self:idx(next.c, next.r)] = true	
+				
+					key, layer, tile = self:getTileInfo(next.c, next.r)
+					
+					if not (layer == LAYER_MONSTERS or (layer == LAYER_ENVIRONMENT and tile.blocked)) then
+						if current.dc ~= 0 or current.dr ~= 0  then -- carry on original direction
+							next.dc = current.dc
+							next.dr = current.dr
+						else -- first set of nodes, set initial direction
+							next.dc = dc
+							next.dr = dr
+						end
+						table.insert(queue, next)
+						--DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
+					end
+				end
+			end
+		end
+	end
+
+	-- naive
+	DEBUG("Giving up BFS")
+	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
+	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
+		
+	return dc, dr
+end
+
+function WorldMap:bfs(a, q, from, to)
+
+	if from.r == to.r and from.c == to.r then
+		DEBUG("Found Target")
+		return
+	end
+
+end
 
 
 -- Debug functions

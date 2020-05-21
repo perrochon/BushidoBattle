@@ -13,6 +13,10 @@ print("main.lua")
 		- Camera Follow Update
 			- line to move only does ortho moves, no diagonal. Need to update that
 			- click on enemies within range put a target on their head?
+		- Fog of war
+			- Should not be able to drag/click into the darkness and learn what's there
+			- Hero shouldn't know shortest route through dark areas
+			- Monsters shouldn't block shortest path, unless they are right next to the hero
 		- Don't require killing of peasants anymore. Maybe negative experience?
 		- Remote Play
 			-- Monster AI with multiple heroes
@@ -32,6 +36,8 @@ print("main.lua")
 		- New graphics for monsters, environment, terrain, projectiles
 		- limit ranged attacks in number (no unlimited javelins)
 		- ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
+		- Performance
+			- Shortest path. Sort next candidates by distance from target to find direct routes quicker?
 
 	Dev Stuff
 		- Automated Tests
