@@ -526,15 +526,16 @@ function ScenePlay:monsterAI(monster)
 		if monster.seesHero then
 			--move towards the hero
 			self.sounds:play("monster-steps")
-			dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
+			-- dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
+			dx, dy = self.world:shortestPath({c = monster.x, r = monster.y}, {c = monster.target.x, r = monster.target.y})
 		else
-			--move randomly in one of four directions
-			local directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+			--move randomly in one of eight directions
+			local directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}, {-1, -1}, {-1, 1}, {1, -1}}
 			--try to move four times
 			local tries = 0
 			local successful = false
 			while not successful do
-				local d = directions[math.random(1, 4)]
+				local d = directions[math.random(1, 8)]
 				dx, dy = d[1], d[2]
 				if not self.world:blocked(monster.x + dx, monster.y + dy) then
 					successful = true

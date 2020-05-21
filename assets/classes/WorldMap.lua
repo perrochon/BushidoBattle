@@ -582,6 +582,7 @@ function WorldMap:shortestPath(from, to)
 	for i = 1, LAYER_COLUMNS * LAYER_ROWS do
 		found[i] = false
 	end
+	steps = 0
 
 	from.dc = 0
 	from.dr = 0
@@ -589,14 +590,15 @@ function WorldMap:shortestPath(from, to)
 	found[self:idx(from.c, from.r)] = true	
 	DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
 
-	while #queue > 0 and #queue < 1000 do
+	while #queue > 0 and steps < 100 do
 		current = queue[1]
 		table.remove(queue, 1)
+		steps = steps + 1
 
-		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
+		DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
 
  		if current.c == to.c and current.r == to.r then
-			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
+			DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
 			return current.dc, current.dr
 		end
 		
@@ -609,19 +611,24 @@ function WorldMap:shortestPath(from, to)
 					and next.r > 1 and next.r < LAYER_ROWS then
 					
 					found[self:idx(next.c, next.r)] = true	
-				
+
 					key, layer, tile = self:getTileInfo(next.c, next.r)
+
+					local blocked  = (layer == LAYER_ENVIRONMENT and tile.blocked)
+	
+					if current.dc ~= 0 or current.dr ~= 0  then -- carry on original direction
+						next.dc = current.dc
+						next.dr = current.dr
+					else -- first set of nodes, set initial direction
+						next.dc = dc
+						next.dr = dr					
+						-- A monster next to source stops this path of exploration...
+						blocked = blocked or (layer == LAYER_MONSTERS)
+					end
 					
-					if not (layer == LAYER_MONSTERS or (layer == LAYER_ENVIRONMENT and tile.blocked)) then
-						if current.dc ~= 0 or current.dr ~= 0  then -- carry on original direction
-							next.dc = current.dc
-							next.dr = current.dr
-						else -- first set of nodes, set initial direction
-							next.dc = dc
-							next.dr = dr
-						end
+					if not blocked then
 						table.insert(queue, next)
-						--DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
+						DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
 					end
 				end
 			end
@@ -633,18 +640,12 @@ function WorldMap:shortestPath(from, to)
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		
-	return dc, dr
-end
-
-function WorldMap:bfs(a, q, from, to)
-
-	if from.r == to.r and from.c == to.r then
-		DEBUG("Found Target")
-		return
+	if not self:blocked(from.c + dc, from.r + dr) then
+		return dc, dr
+	else
+		return 0, 0
 	end
-
 end
-
 
 -- Debug functions
 
