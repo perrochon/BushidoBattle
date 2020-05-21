@@ -14,7 +14,7 @@ function debugInfo()
 	local debuginfo = debug.getinfo(3)
 	local short_src = debuginfo.short_src and debuginfo.short_src or "unknown"
 	local currentline = debuginfo.currentline and debuginfo.currentline or -1
-	local name = debuginfo.name and debuginfo.name or "unknown"
+	local name = debuginfo.name and debuginfo.name or "-"
 	return ("%s:%d: %s"):format(short_src, currentline, name)
 end
 

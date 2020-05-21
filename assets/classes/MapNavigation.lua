@@ -46,13 +46,13 @@ function MapNavigation:visibleMapTouched(event)
 	local y = math.ceil(e.y / TILE_HEIGHT)
 	e.x = (x-0.5) * TILE_WIDTH
 	e.y = (y-0.5) * TILE_HEIGHT
-	DEBUG("mouse down", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
+	--DEBUG("mouse down", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
 	return e, x, y, (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
 end
 
 function MapNavigation:updateVisualStatus()
 
-	--local dx = (self.hero.key == 1) and TILE_WIDTH or 0
+	--local dx = (self.hero.key == 1) and TILE_WIDTH or 0 -- TODO FIX offset target for touch users
 	--local dy = (self.hero.key == 1) and TILE_HEIGHT or 0
 	
 	dx, dy = 0,0
@@ -92,7 +92,7 @@ function MapNavigation:onMouseDown(event)
 	if visibleMapTouched then
 		--find the tile that was touched
 		local key, layer, tile = self.world:getTileInfo(x, y)	
-		DEBUG("    on Map", x, y, key, manual:getEntry("layers", layer))
+		--DEBUG("    on Map", x, y, key, manual:getEntry("layers", layer))
 
 		if self.hero.index then
 		end
@@ -104,7 +104,7 @@ function MapNavigation:onMouseDown(event)
 
 			if key == 1 then
 				for key, value in ipairs(self.heroes) do
-					DEBUG("Looking for hero", key, value.x, value.y)
+					--DEBUG("Looking for hero", key, value.x, value.y)
 					if value.x == x and value.y == y then
 						self.hero.index = key
 					end
@@ -112,7 +112,7 @@ function MapNavigation:onMouseDown(event)
 			end
 			self.from.x = (self.heroes[self.hero.index].x-0.5) * TILE_WIDTH
 			self.from.y = (self.heroes[self.hero.index].y-0.5) * TILE_HEIGHT
-			DEBUG("from now is", self.from.x, self.from.y)
+			--DEBUG("from now is", self.from.x, self.from.y)
 			
 			self.focus = true
 			self:updateVisualStatus()
@@ -144,11 +144,9 @@ function MapNavigation:onMouseUp(event)
 
 		if self:hitTestPoint(event.x, event.y) and visibleMapTouched then	
 			local result = Event.new("line")
-			result.fromX = math.ceil(self.from.x / TILE_WIDTH)
-			result.fromY = math.ceil(self.from.y / TILE_HEIGHT)
-			result.toX = x
-			result.toY = y
-			DEBUG("Line from", result.fromX, result.fromY, result.toX, result.toY)
+			result.from = {c = math.ceil(self.from.x / TILE_WIDTH), r = math.ceil(self.from.y / TILE_HEIGHT)}
+			result.to = {c = x, r = y}
+			--DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
 			self:dispatchEvent(result)	-- dispatch line drawn event
 		end
 
