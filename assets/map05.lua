@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 1,
+  nextobjectid = 7,
   properties = {
     ["Title"] = "Prison"
   },
@@ -542,57 +542,12 @@ return {
           }
         },
         {
-          id = 33,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 837.52,
-          y = 920.439,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
-          id = 34,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 1328.53,
-          y = 930.693,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
-          id = 35,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 1117.58,
-          y = 930.601,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
           id = 36,
           name = "Soldier",
           type = "3",
           shape = "rectangle",
-          x = 2916,
-          y = 3332,
+          x = 2927.56,
+          y = 3424.5,
           width = 50,
           height = 50,
           rotation = 0,
@@ -644,6 +599,96 @@ return {
           visible = true,
           properties = {
             ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 1,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 933.638,
+          y = 927.857,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 2,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1029.03,
+          y = 939.419,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 3,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1422.14,
+          y = 1332.53,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 4,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1439.48,
+          y = 3335.66,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 5,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 2838.49,
+          y = 1636.04,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 6,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 2832.71,
+          y = 1841.26,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
           }
         }
       }

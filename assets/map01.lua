@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 5,
-  nextobjectid = 40,
+  nextobjectid = 45,
   properties = {
     ["Title"] = "Peaceful Meadow"
   },
@@ -501,8 +501,8 @@ return {
           name = "Peasant",
           type = "2",
           shape = "rectangle",
-          x = 728,
-          y = 1336,
+          x = 122.889,
+          y = 1820.64,
           width = 50,
           height = 50,
           rotation = 0,
@@ -644,6 +644,51 @@ return {
           visible = true,
           properties = {
             ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 41,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1232.13,
+          y = 1336.17,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 42,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1724.98,
+          y = 1322.48,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 43,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 3135.08,
+          y = 3430.79,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
           }
         }
       }

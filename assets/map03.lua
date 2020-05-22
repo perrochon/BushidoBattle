@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 1,
+  nextobjectid = 3,
   properties = {
     ["Title"] = "Temple Basement"
   },
@@ -644,6 +644,36 @@ return {
           visible = true,
           properties = {
             ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 1,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1624.47,
+          y = 3020.59,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 2,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 2228.59,
+          y = 3136.22,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
           }
         }
       }

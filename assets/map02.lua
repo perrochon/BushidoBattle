@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 6,
+  nextobjectid = 13,
   properties = {
     ["Title"] = "Forest Hunt"
   },
@@ -393,8 +393,8 @@ return {
         56, 57, 0, 0, 0, 0, 56, 57, 57, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 0, 57, 57, 55, 56, 54, 54, 56, 57, 54, 2684354638, 54, 0, 55, 56, 57, 54,
         57, 0, 0, 0, 0, 0, 0, 56, 57, 54, 54, 54, 54, 54, 57, 55, 56, 54, 54, 0, 55, 55, 56, 57, 54, 55, 56, 57, 57, 2684354638, 54, 54, 0, 0, 0, 54,
         56, 0, 0, 0, 55, 56, 39, 0, 0, 57, 57, 57, 57, 54, 55, 54, 54, 57, 54, 0, 55, 55, 56, 57, 54, 55, 56, 55, 56, 2684354638, 57, 54, 0, 0, 0, 57,
-        55, 0, 0, 55, 56, 54, 39, 0, 0, 0, 55, 56, 57, 54, 54, 54, 56, 0, 54, 0, 54, 0, 56, 54, 54, 54, 55, 55, 56, 2684354638, 57, 54, 54, 54, 0, 55,
-        55, 0, 55, 56, 57, 54, 39, 56, 0, 0, 55, 56, 57, 54, 57, 55, 56, 57, 54, 0, 55, 56, 57, 54, 56, 57, 55, 0, 55, 2684354638, 57, 0, 57, 54, 0, 54,
+        55, 0, 0, 55, 56, 54, 39, 0, 0, 0, 55, 56, 57, 54, 54, 54, 56, 0, 0, 0, 0, 0, 56, 54, 54, 54, 55, 55, 56, 2684354638, 57, 54, 54, 54, 0, 55,
+        55, 0, 55, 56, 57, 54, 39, 56, 0, 0, 55, 56, 57, 54, 57, 55, 56, 57, 54, 0, 55, 56, 57, 54, 56, 57, 55, 0, 0, 2684354638, 0, 0, 57, 54, 0, 54,
         54, 0, 55, 56, 57, 54, 39, 56, 57, 0, 0, 0, 0, 54, 54, 54, 55, 56, 0, 0, 0, 0, 0, 0, 56, 57, 55, 56, 57, 2684354638, 55, 56, 57, 54, 54, 55,
         54, 0, 55, 56, 54, 54, 39, 56, 57, 55, 55, 0, 0, 54, 0, 0, 0, 0, 0, 1610612804, 69, 69, 68, 0, 0, 0, 0, 55, 56, 2684354638, 55, 56, 57, 57, 54, 56,
         56, 55, 56, 57, 54, 54, 39, 56, 57, 55, 55, 0, 0, 0, 0, 0, 0, 0, 0, 1610612805, 66, 0, 3221225540, 69, 69, 69, 0, 0, 39, 2684354638, 39, 39, 39, 39, 0, 54,
@@ -471,8 +471,8 @@ return {
           name = "Peasant",
           type = "2",
           shape = "rectangle",
-          x = 732,
-          y = 2936,
+          x = 720.438,
+          y = 3040.06,
           width = 50,
           height = 50,
           rotation = 0,
@@ -539,51 +539,6 @@ return {
           visible = true,
           properties = {
             ["Description"] = "Place Many. Peasants are weak and melee only."
-          }
-        },
-        {
-          id = 33,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 2136.15,
-          y = 1226.54,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
-          id = 34,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 2129.02,
-          y = 1039.02,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
-          id = 35,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 1125.07,
-          y = 2616.85,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
           }
         },
         {
@@ -662,12 +617,12 @@ return {
           }
         },
         {
-          id = 2,
-          name = "Soldier",
-          type = "3",
+          id = 6,
+          name = "SoldierSentry",
+          type = "103",
           shape = "rectangle",
-          x = 1724.97,
-          y = 616.619,
+          x = 1133.08,
+          y = 2633.27,
           width = 50,
           height = 50,
           rotation = 0,
@@ -677,12 +632,12 @@ return {
           }
         },
         {
-          id = 3,
-          name = "Soldier",
-          type = "3",
+          id = 7,
+          name = "SoldierSentry",
+          type = "103",
           shape = "rectangle",
-          x = 2130.85,
-          y = 632.229,
+          x = 2127.42,
+          y = 1034.81,
           width = 50,
           height = 50,
           rotation = 0,
@@ -692,12 +647,12 @@ return {
           }
         },
         {
-          id = 4,
-          name = "Soldier",
-          type = "3",
+          id = 8,
+          name = "SoldierSentry",
+          type = "103",
           shape = "rectangle",
-          x = 2720.15,
-          y = 725.893,
+          x = 2127.42,
+          y = 1228.47,
           width = 50,
           height = 50,
           rotation = 0,
@@ -707,12 +662,57 @@ return {
           }
         },
         {
-          id = 5,
-          name = "Soldier",
-          type = "3",
+          id = 9,
+          name = "SoldierSentry",
+          type = "103",
           shape = "rectangle",
-          x = 3129.93,
-          y = 725.893,
+          x = 1719.86,
+          y = 624.353,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 10,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 2147.66,
+          y = 627.243,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 11,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 2746,
+          y = 728.411,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 12,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 3153.56,
+          y = 728.411,
           width = 50,
           height = 50,
           rotation = 0,

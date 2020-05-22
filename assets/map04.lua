@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 3,
+  nextobjectid = 7,
   properties = {
     ["Title"] = "Temple Grounds"
   },
@@ -557,42 +557,12 @@ return {
           }
         },
         {
-          id = 34,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 1430.44,
-          y = 1331.72,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
           id = 35,
           name = "Soldier",
           type = "3",
           shape = "rectangle",
           x = 621.631,
           y = 2027.55,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place many. Soldiers are range and melee."
-          }
-        },
-        {
-          id = 36,
-          name = "Soldier",
-          type = "3",
-          shape = "rectangle",
-          x = 1432.99,
-          y = 2227.55,
           width = 50,
           height = 50,
           rotation = 0,
@@ -668,6 +638,66 @@ return {
           shape = "rectangle",
           x = 316.115,
           y = 1904.49,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 3,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1425.03,
+          y = 1332.53,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 4,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1430.81,
+          y = 2240.15,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 5,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1433.7,
+          y = 1823.92,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 6,
+          name = "SoldierSentry",
+          type = "103",
+          shape = "rectangle",
+          x = 1433.7,
+          y = 1714.08,
           width = 50,
           height = 50,
           rotation = 0,

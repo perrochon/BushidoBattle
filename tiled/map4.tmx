@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="3">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="36" height="36" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="7">
  <editorsettings>
   <export target="../assets/level04.lua" format="lua"/>
  </editorsettings>
@@ -96,13 +96,15 @@
   <object id="31" template="Peasant.tx" x="217.664" y="228.982"/>
   <object id="32" template="Peasant.tx" x="3218.76" y="324"/>
   <object id="33" template="Soldier.tx" x="633.631" y="1527.05"/>
-  <object id="34" template="Soldier.tx" x="1430.44" y="1331.72"/>
   <object id="35" template="Soldier.tx" x="621.631" y="2027.55"/>
-  <object id="36" template="Soldier.tx" x="1432.99" y="2227.55"/>
   <object id="37" template="Peasant.tx" x="2624" y="320"/>
   <object id="38" template="Peasant.tx" x="3028" y="924"/>
   <object id="39" template="Peasant.tx" x="3330.72" y="1717.26"/>
   <object id="1" template="Soldier.tx" x="316.115" y="2013.77"/>
   <object id="2" template="Soldier.tx" x="316.115" y="1904.49"/>
+  <object id="3" template="SoldierSentry.tx" x="1425.03" y="1332.53"/>
+  <object id="4" template="SoldierSentry.tx" x="1430.81" y="2240.15"/>
+  <object id="5" template="SoldierSentry.tx" x="1433.7" y="1823.92"/>
+  <object id="6" template="SoldierSentry.tx" x="1433.7" y="1714.08"/>
  </objectgroup>
 </map>
