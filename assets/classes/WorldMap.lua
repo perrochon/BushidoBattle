@@ -208,6 +208,8 @@ function WorldMap:getTileInfo(x, y, layer)
 				end
 			end
 		end
+		ERROR("There is no tile in the ground layer at", x, y)
+		return 1,1,{id = 1, name = "no tile", blocked = true} 
 	end
 end
 
@@ -588,17 +590,17 @@ function WorldMap:shortestPath(from, to)
 	from.dr = 0
 	table.insert(queue, from)
 	found[self:idx(from.c, from.r)] = true	
-	DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
+	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
 
 	while #queue > 0 and steps < 100 do
 		current = queue[1]
 		table.remove(queue, 1)
 		steps = steps + 1
 
-		DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
+		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
 
  		if current.c == to.c and current.r == to.r then
-			DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
+			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
 			return current.dc, current.dr
 		end
 		
@@ -628,7 +630,7 @@ function WorldMap:shortestPath(from, to)
 					
 					if not blocked then
 						table.insert(queue, next)
-						DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
+						--DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
 					end
 				end
 			end
@@ -636,7 +638,7 @@ function WorldMap:shortestPath(from, to)
 	end
 
 	-- naive
-	DEBUG("Giving up BFS")
+	DEBUG("Giving up BFS after", steps)
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		
