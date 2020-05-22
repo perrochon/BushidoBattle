@@ -56,6 +56,8 @@ function Monster:init(entry, id)
 	
 	--these are used by the AI
 	self.tactics = info.tactics
+	self.see = info.see
+	self.alone = info.alone
 
 	--possible states: attack, flee, move
 	self.state = "move"
@@ -101,6 +103,7 @@ function Monsters:init(mapData)
 			local m = Monster.new(v.type, id)
 			m.x = v.x
 			m.y = v.y
+			m.sentry = v.sentry
 			table.insert(self.list, m)
 			id += 1
 		end
@@ -219,7 +222,7 @@ function Monsters:updateState(monster, id, heroes, remote)
 	for i = 1, #self.list do
 		if id ~= i then
 			local other = self.list[i] 
-			if distance(monster, other) < 5 then 
+			if distance(monster, other) < monster.alone then 
 				monster.friends = true
 			end
 		end
@@ -234,13 +237,12 @@ function Monsters:updateState(monster, id, heroes, remote)
 			local closerHero = distance(monster, heroes[1]) < distance(monster, heroes[2]) and 1 or 2
 			hero = heroes[closerHero]
 		end
-		monster.seesHero = distance(monster, hero) < 5
+		monster.seesHero = distance(monster, hero) < monster.see
 		monster.target = monster.seesHero and hero or nil
 	end
 	
-	--if not, just move
 	if not monster.seesHero then
-		monster.state = "move"
+			monster.state = "move"
 	else
 		--update based on their tactical role
 		if monster.tactics == "minion" then
@@ -251,24 +253,30 @@ function Monsters:updateState(monster, id, heroes, remote)
 				monster.state = "move"
 			end
 		elseif monster.tactics == "soldier" then
-			--skirmishers change to their melee weapon if the hero is close
-			if distance(monster, monster.target) <= monster.weapons[2].reach then
-				monster.weapon = monster.weapons[2]
-			else
+			--soldiers change to their melee weapon if the hero is close
+			if distance(monster, monster.target) <= monster.weapons[1].reach then
 				monster.weapon = monster.weapons[1]
+			else
+				monster.weapon = monster.weapons[2]
 			end
 			monster.state = "move"
 		else
 			monster.state = "move"
 		end
-		
+				
 		--next check if the hero is in range
 		monster.inrange = distance(monster, monster.target) <= monster.weapon.reach
 
-		--so far the states have been changed to flee or move. update to attack if in range.
+		--so far the states have been changed to flee or move or wait. update to attack if in range.
 		if monster.inrange and not (monster.state == 'flee') then
 			monster.state = 'attack'
-		end
+		end		
 	end
+	
+	if monster.sentry and monster.state == "move" then
+			monster.state = "wait"
+	end
+
+	
 	--DEBUG(monster.name, monster.x, monster.y, monster.state, distance(monster, monster.target), monster.inrange)
 end

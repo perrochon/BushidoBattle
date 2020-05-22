@@ -403,60 +403,21 @@ function WorldMap:blocked(x, y)
 	end
 end
 
-function WorldMap:whichWay(monster, tX, tY)
-	--[[return the direction (dx, dy) to move based on monster.state == 'flee' or 'wander' and the target coordinates (tX, tY)
-		this is a pathfinding function used by the monsters.  
-		. . .		The main logic is move M toward T unless a W(all) is in the way
-		T W M		Then choose left or right. Or back up.
-		. . .		A list of 4 moves are generated and the first not blocked one is chosen.
+function WorldMap:flee(monster, target)
+	--[[ Return the direction (dx, dy) to move away from target. 
+		 Chooses neighbouring tile furthest away from target
 	--]]
 
 	local x, y = monster.x, monster.y
-	local dx, dy = 0, 0			-- the direction variables to return and the default values 0, 0
-	local moves = nil			-- the table of directions to try
-	local second = true			-- the second best move to make
-	
-	--one of these directions is true
-	if x > tX and math.abs(y - tY) <= math.abs(x - tX) then 		-- forward is west 	
-		if y == tY then second = (math.random(2) == 1)				-- directly west
-		else 			second = (y > tY)							-- NW so second best move is (0, -1)
-		end				
-		if second then 	moves = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}}	--second choice is north
-		else 			moves = {{-1, 0}, {0, 1}, {0, -1}, {1, 0}}	
-		end
-	elseif tX > x and math.abs(y - tY) <= math.abs(x - tX) then		-- forward is east 
-		if y == tY then second = (math.random(2) == 1)				-- directly east
-		else 			second = (y > tY)							-- NE so second best move is (0, -1)
-		end	
-		if second then	moves = {{1, 0}, {0, -1}, {0, 1}, {-1, 0}}	--second choice is north
-		else			moves = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}}	--second choice is south
-		end	
-	elseif tY > y then												-- forward is south 
-		if x == tX then second = (math.random(2) == 1)				-- directly south
-		else 			second = (x > tX)							-- SW so second best move is (-1, 0)
-		end	
-		if second then	moves = {{0, 1}, {-1, 0}, {1, 0}, {0, -1}}	--second choice is west
-		else			moves = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}}	--second choice is east
-		end
-	else															-- forward is north
-		if x == tX then second = (math.random(2) == 1)				-- directly north
-		else 			second = (x > tX)							-- SE so second best move is (-1, 0)
-		end	
-		if second then 	moves = {{0, -1}, {-1, 0}, {1, 0}, {0, 1}}	--second choice is west
-		else			moves = {{0, -1}, {1, 0}, {-1, 0}, {0, 1}}	--second choice is east
-		end
-	end
-	
-	--the last move is backup so if fleeing just reserve the possible moves and choose backup first
-	if monster.state == "flee" then
-		local reverseMoves = {}
-		for i,v in ipairs(moves) do
-		  reverseMoves[v] = i
-		end
-		moves = reverseMoves
-	end
-	
-	--finally choose a non-blocked move
+	local dx, dy = 0, 0	-- the direction variables to return and the default values 0, 0
+	local moves = {{-1, 0}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1} } -- the table of directions to try
+
+	-- Sort by distance from the hero
+	table.sort(moves, function (p1, p2) 
+		return distance({x = x + p1[1], y = y + p1[2]},target) > distance({x = x + p2[1], y = y + p2[2]},target) 
+	end) 
+
+	-- Choose a non-blocked move
 	for i, move in ipairs(moves) do
 		dx, dy = move[1], move[2]
 		--DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))

@@ -4,7 +4,7 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 print("init.lua")
-VERSION = "0.6"
+VERSION = "0.7"
 
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")
@@ -213,6 +213,9 @@ function Cyclopedia:init()
 					modifier	attack modifier
 					defense		which defense is being attacked
 					dice, damage, bonus = 1d6+2 = 1, d6, 2
+					tactics		behavior, "minion" or "soldier". Minions flee when bloodied or alone.
+					see			how far monsters can see
+					alone  		how far other monsters need to be for this monster to feel alone
 					type		nil is physical damage, the others could be green, red, blue, white or black
 					projectile	the projectile animation used for the attack, either spear, arrow or magic
 					missSound   what the program reports for close misses
@@ -220,25 +223,30 @@ function Cyclopedia:init()
 			[2] = {name = "peasant", xp = 1, hp = 4, bloodied = 2, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "stick", weapon2 = nil, tactics = "minion"
+					weapon1 = "stick", weapon2 = nil, tactics = "minion", see = 4, alone = 5
 					},
 			[3] = {name = "soldier", xp = 3, hp = 15, bloodied = 7,  
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "javelin", weapon2 = "shortsword", tactics = "soldier"
+					weapon1 = "shortsword", weapon2 = "javelin", tactics = "soldier", see = 6, alone = 10
 					},
 			[4] = {name = "samurai", xp = 4, hp = 25, bloodied = 12, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "katana", weapon2 = "spear",tactics = "minion"
+					weapon1 = "katana", weapon2 = "spear", tactics = "soldier", see = 3, alone = 100
+					},
+			[33] = {name = "soldier", xp = 3, hp = 15, bloodied = 7,  
+					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "shortsword", weapon2 = "javelin", tactics = "soldier", see = 6, alone = 10
 					},
 			},
 		["weapons"] = {
 			[1] = {name = "katana", reach = 1.5, modifier = 6, defense = "AC", damage = 'd10', dice = 1, bonus = 5, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
-			[2] = {name = "spear", reach = 1.5, modifier = 8, defense = "AC", damage = 6, dice = 1, bonus = 2, 
+			[2] = {name = "spear", reach = 2.5, modifier = 8, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},
-			[3] = {name = "shortsword", reach = 1.5, modifier = 4, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
+			[3] = {name = "shortsword", reach = 1.5, modifier = 4, defense = "AC", damage = 'd2', dice = 1, bonus = 0, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
 			[4] = {name = "javelin", reach = 4, modifier = 6, defense = "AC", damage = 'd8', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},

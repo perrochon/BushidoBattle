@@ -444,7 +444,15 @@ function ScenePlay:heroesTurnOver()
 	--]]
 		
 	-- check if the players won 
-	if #self.monsters.list == 0 or self.cheat == "V" then
+	
+	local targets = 0
+	for i, m in pairs(self.monsters.list) do
+		if m.entry ~= 2 then targets = targets + 1 end
+	end
+	
+	DEBUG("Targets left", targets)
+	
+	if targets == 0 or self.cheat == "V" then
 		dataSaver.save(currentHeroFileName, self.heroes[localHero])
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
@@ -526,7 +534,6 @@ function ScenePlay:monsterAI(monster)
 		if monster.seesHero then
 			--move towards the hero
 			self.sounds:play("monster-steps")
-			-- dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
 			dx, dy = self.world:shortestPath({c = monster.x, r = monster.y}, {c = monster.target.x, r = monster.target.y})
 		else
 			--move randomly in one of eight directions
@@ -557,8 +564,9 @@ function ScenePlay:monsterAI(monster)
 		monster.done = true
 		self:monsterTurnOver()
 	elseif monster.state == "flee" then
-		--move away from the hero
-		dx, dy = self.world:whichWay(monster, monster.target.x, monster.target.y)
+		--move away from the hero.
+		dx, dy = self.world:flee(monster, monster.target)
+		
 		self.world:moveMonster(monster, dx, dy)
 		if self.remote then
 			--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
@@ -569,6 +577,10 @@ function ScenePlay:monsterAI(monster)
 	elseif monster.state == "attack" then
 		--attack the hero
 		self:basicAttack(monster, monster.target)
+
+	elseif monster.state == "wait" then 
+		monster.done = true
+		self:monsterTurnOver()
 	end
 end
 
@@ -873,6 +885,7 @@ end
 			self.main.look:updateVisualState(false)
 			self.main.ranged:updateVisualState(false)
 			self:attackMonster(to.c, to.r)
+			return
 		elseif distance < hero.weapons[2].reach then
 			self.active = "attack"
 			hero.weapon = hero.weapons[2]
@@ -881,13 +894,14 @@ end
 			self.main.look:updateVisualState(false)
 			self.main.ranged:updateVisualState(true)
 			self:attackMonster(to.c, to.r)
+			return
 		else -- change mode to "move" on the fly
 			self.active = "move"
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(true)
 			self.main.look:updateVisualState(false)
 			self.main.ranged:updateVisualState(false)
-			-- drop out of two ifs and continue with move
+			-- no return, drop out of two ifs and continue with move
 		end
 	end
 
