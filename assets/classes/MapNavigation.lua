@@ -4,7 +4,7 @@ function MapNavigation:init(world, heroes)
 
 	self.world = world
 	self.heroes = heroes
-	local intercept = Pixel.new(COLOR_RED, 0.1, FG_X-MINX, APP_HEIGHT-MINY)
+	local intercept = Pixel.new(COLOR_RED, 0, FG_X-MINX, MAXY-MINY)
 	intercept:setPosition(MINX, MINY)
 	self:addChild(intercept)
 
@@ -49,7 +49,16 @@ function MapNavigation:visibleMapTouched(event)
 	e.x = (x-0.5) * TILE_WIDTH
 	e.y = (y-0.5) * TILE_HEIGHT
 	--DEBUG("mouse down", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
-	return e, x, y, (event.x < FG_X and x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS)
+
+	local visibleTile = false
+	if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
+		local key, layer, tile = self.world:getTileInfo(x, y, LAYER_LIGHT)
+		--DEBUG("tile is", key, layer, tile.name)
+		if key < 4 then
+			visibleTile = true
+		end
+	end
+	return e, x, y, (event.x < FG_X and visibleTile)
 end
 
 function MapNavigation:updateVisualStatus()
