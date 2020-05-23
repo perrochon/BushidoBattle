@@ -540,7 +540,7 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 end
 
 
-function WorldMap:setMarker(point, type)
+function WorldMap:setMarker(point, type, grade)
 
 	if not self.path then
 		self.path = Sprite.new()
@@ -550,10 +550,22 @@ function WorldMap:setMarker(point, type)
 	local types = { 
 		["s"] = {color = COLOR_BLUE, alpha = 0.5},
 		["e"] = {color = COLOR_RED, alpha = 0.5},
-		["f"] = {color = COLOR_LTGREEN, alpha = 0.5},
+		["f"] = {color = COLOR_GREEN, alpha = 0.8},
 		}
 
-	local marker = Pixel.new(types[type].color, types[type].alpha, 50, 50)
+	local color
+	if grade then
+		f = 25
+		grade = grade * f
+		local r = grade><256
+		local g = ((grade-256)<>0) >< 256
+		local b = ((grade-512)<>0) >< 256
+		color = ((r*256)+g)*256+b
+		--DEBUG("Color", r, g, b, color)
+	else
+		color = types[type].color
+	end
+	local marker = Pixel.new(color, types[type].alpha, 50, 50)
 	marker:setAnchorPoint(0.5,0.5)
 	marker:setPosition((point.c - 0.5) * TILE_WIDTH, (point.r - 0.5) * TILE_HEIGHT)
 	self.path:addChild(marker)
@@ -577,21 +589,32 @@ function WorldMap:shortestPath(from, to)
 	for i = 1, LAYER_COLUMNS * LAYER_ROWS do
 		found[i] = false
 	end
-	steps = 0
+	iterations = 0
+	
+	if to.x then to.c = to.x end
+	if to.y then to.r = to.r end
 
 	from.dc = 0
 	from.dr = 0
+	from.steps = 0 
 	table.insert(queue, from)
 	found[self:idx(from.c, from.r)] = true	
 	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
 
-	while #queue > 0 and steps < 100 do
+	while #queue > 0 and iterations < 100 do
+	
+		-- Sort by possible shortest path
+		table.sort(queue, function (p1, p2)
+			local d1 = distance(p1, to) + p1.steps
+			local d2 = distance(p2, to) + p2.steps			
+			return d1 < d2
+		end) 
+
 		current = queue[1]
 		table.remove(queue, 1)
-		steps = steps + 1
-		self:setMarker(current, "f")
-
-		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
+		steps = iterations + 1
+		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, current.steps, to.c, to.r, #queue)			
+		self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
 			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
@@ -600,7 +623,7 @@ function WorldMap:shortestPath(from, to)
 		
 		for dr = -1, 1 do
 			for dc = -1 , 1 do
-				next = {c = current.c + dc, r = current.r + dr}
+				next = {c = current.c + dc, r = current.r + dr, steps = current.steps + 1}
 				if not found[self:idx(next.c, next.r)] 
 					and (dr or dc) 
 					and next.c > 1 and next.c < LAYER_COLUMNS 
@@ -632,7 +655,7 @@ function WorldMap:shortestPath(from, to)
 	end
 
 	-- naive
-	DEBUG("Giving up BFS after", steps)
+	DEBUG("Giving up BFS after", iterations)
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		
