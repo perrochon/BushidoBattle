@@ -11,7 +11,6 @@ print("main.lua")
 --[[ TODO
 		- auto connect all the way to Battle...
 		- Camera Follow Update
-			- line to move only does ortho moves, no diagonal. Need to update that
 			- click on enemies within range put a target on their head?
 		- Fog of war
 			- Should not be able to drag/click into the darkness and learn what's there

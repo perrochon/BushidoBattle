@@ -503,6 +503,7 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 		Return blockedX, blockedY if totalCover <-5
 		Return totalCover, blockedX, blockedY 
 	--]]
+
 	local totalCover = 0
 	local blockedX, blockedY = nil, nil
 	local x, y = 0, 0
@@ -538,7 +539,38 @@ function WorldMap:lineOfCover(fromX, fromY, toX, toY)
 	return totalCover, blockedX, blockedY
 end
 
+
+function WorldMap:setMarker(point, type)
+
+	if not self.path then
+		self.path = Sprite.new()
+		self.camera:addChild(self.path)
+	end
+	
+	local types = { 
+		["s"] = {color = COLOR_BLUE, alpha = 0.5},
+		["e"] = {color = COLOR_RED, alpha = 0.5},
+		["f"] = {color = COLOR_LTGREEN, alpha = 0.5},
+		}
+
+	local marker = Pixel.new(types[type].color, types[type].alpha, 50, 50)
+	marker:setAnchorPoint(0.5,0.5)
+	marker:setPosition((point.c - 0.5) * TILE_WIDTH, (point.r - 0.5) * TILE_HEIGHT)
+	self.path:addChild(marker)
+end
+
+function WorldMap:clearMarkers()
+	if self.path then
+		self.camera:removeChild(self.path)
+		self.path= nil
+	end
+end
+
 function WorldMap:shortestPath(from, to)
+
+	self:clearMarkers()
+	self:setMarker(from, "s")
+	self:setMarker(to, "e")
 
 	queue = {}
 	found = {}
@@ -557,6 +589,7 @@ function WorldMap:shortestPath(from, to)
 		current = queue[1]
 		table.remove(queue, 1)
 		steps = steps + 1
+		self:setMarker(current, "f")
 
 		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, to.c, to.r, #queue)			
 

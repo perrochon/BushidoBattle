@@ -9,8 +9,8 @@ function MapNavigation:init(world, heroes)
 	self:addChild(intercept)
 
 	self.focus = false
-	self.from = {x=1, y=10}
-	self.to = {x=1, y=11}
+	self.from = {x=1, y=10, r = 1, c = 1}
+	self.to = {x=1, y=11, r = 1, c = 1}
 	self.hero = { x = 0, y = 0, key = 1, index = 1}
 
 	self.fromMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
@@ -88,7 +88,7 @@ function MapNavigation:updateVisualStatus()
 		self.line:endPath()           -- end the path
 		self.world.camera:addChild(self.line)     -- add the shape to the stage
 	end
-
+	
 end
 
 function MapNavigation:onMouseDown(event)
@@ -98,12 +98,12 @@ function MapNavigation:onMouseDown(event)
 	end
 
 	-- Where did we click, and is it on the map
-	local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
+	local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
 
 	if visibleMapTouched then
 		--find the tile that was touched
-		local key, layer, tile = self.world:getTileInfo(x, y)	
-		--DEBUG("    on Map", x, y, key, manual:getEntry("layers", layer))
+		local key, layer, tile = self.world:getTileInfo(c, r)	
+		--DEBUG("    on Map", c, r, key, manual:getEntry("layers", layer))
 
 		if self.hero.index then
 		end
@@ -116,14 +116,16 @@ function MapNavigation:onMouseDown(event)
 			if key == 1 then
 				for key, value in ipairs(self.heroes) do
 					--DEBUG("Looking for hero", key, value.x, value.y)
-					if value.x == x and value.y == y then
+					if value.x == c and value.y == r then
 						self.hero.index = key
 					end
 				end
 			end
+			self.from.c = self.heroes[self.hero.index].x
+			self.from.r = self.heroes[self.hero.index].y			
 			self.from.x = (self.heroes[self.hero.index].x-0.5) * TILE_WIDTH
 			self.from.y = (self.heroes[self.hero.index].y-0.5) * TILE_HEIGHT
-			--DEBUG("from now is", self.from.x, self.from.y)
+			DEBUG("from now is", self.from.c, self.from.r, self.from.x, self.from.y)
 			
 			self.focus = true
 			self:updateVisualStatus()
@@ -136,7 +138,7 @@ function MapNavigation:onMouseMove(event)
 
 	if self.focus then
 		-- Where did we click, and is it on the map
-		local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
+		local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
 
 		if not self:hitTestPoint(event.x, event.y) or not visibleMapTouched then	
 			self.focus = false
@@ -144,6 +146,9 @@ function MapNavigation:onMouseMove(event)
 		self.to = e
 		self:updateVisualStatus()
 		event:stopPropagation()
+		
+		self.world:shortestPath({c = self.from.c, r = self.from.r}, {c = c, r = r})
+
 	end
 end
 
