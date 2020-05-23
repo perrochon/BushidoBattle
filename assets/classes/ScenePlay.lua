@@ -171,6 +171,12 @@ function ScenePlay:init()
 		elseif event.keyCode == KeyCode.SPACE then
 			if not self.heroes[localHero].heroTurn  then return end
 			self:checkMove(self.heroes[localHero], 0, 0)
+		elseif event.keyCode == KeyCode.Z then
+			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
+			self.world.camera:centerAnchor()
+		elseif event.keyCode == KeyCode.X then
+			self.world.camera:setScale(self.world.camera:getScaleX()*0.8,self.world.camera:getScaleY()*0.8) 
+			self.world.camera:centerAnchor()
 		end
 	end)
 	
