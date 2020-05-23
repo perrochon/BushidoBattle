@@ -603,10 +603,10 @@ function WorldMap:shortestPath(from, to)
 
 	while #queue > 0 and iterations < 100 do
 	
-		-- Sort by possible shortest path
+		-- Sort by possible shortest path. 
 		table.sort(queue, function (p1, p2)
 			local d1 = distance(p1, to) + p1.steps
-			local d2 = distance(p2, to) + p2.steps			
+			local d2 = distance(p2, to) + p2.steps
 			return d1 < d2
 		end) 
 

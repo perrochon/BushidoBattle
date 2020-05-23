@@ -248,7 +248,7 @@ function Monsters:updateState(monster, id, heroes, remote)
 		--update based on their tactical role
 		if monster.tactics == "minion" then
 			--minions flee if bloodied or alone, unless berserk
-			if not berserk and (monster.bloodied or not monster.friends) then
+			if not monster.berserk and (monster.bloodied or not monster.friends) then
 				monster.state = "flee"
 			else
 				monster.state = "move"

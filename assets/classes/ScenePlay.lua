@@ -451,6 +451,7 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 			if m.entry == 4 then
 				for id, m in pairs(self.monsters.list) do
 					if m.entry == 3 then
+						m.sentry = false
 						m.berserk = true
 					end
 				end
@@ -768,6 +769,8 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	else
 		self.msg:add("Your " .. weapon.name .. " deals " .. roll .. " damage", MSG_DEATH)
 	end
+
+	if defender.berserk then roll = roll / 2 end
 	
 	--adjust the defender's hp except for any resistances
 	defender.hp = defender.hp - roll + defender.resist[weapon.type]
