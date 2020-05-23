@@ -4,7 +4,7 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 print("init.lua")
-VERSION = "0.7"
+VERSION = "0.7.1"
 
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")
@@ -15,15 +15,15 @@ else
 	print("HTML version. Not loading multi-player support")
 end
 
--- Logical App screen - We will letterbox this
+-- Logical App size that we will letterbox
 APP_HEIGHT @ 1188
 APP_WIDTH @ 1920
 BUTTON_MARGIN @ 50
 MENU_MARGIN @ 200
 PLAY_UX_WIDTH @ 700
 
+-- Get the physical screen size so we can use all of it, e.g. in ScenePlay
 print("Logical Screen", APP_WIDTH, APP_HEIGHT)
-
 MINX, MINY, MAXX, MAXY = application:getDeviceSafeArea(true)
 
 MINX = math.floor(MINX + 0.5)
@@ -41,7 +41,6 @@ FG_BLEED @ 1000 -- 500 should be enough, but HTML can be really wide...
 application:setLogicalDimensions(APP_HEIGHT, APP_WIDTH) 
 application:setOrientation(Application.LANDSCAPE_LEFT)
 application:setScaleMode("letterbox")					
-
 
 --[[
 Constants and Global Functions

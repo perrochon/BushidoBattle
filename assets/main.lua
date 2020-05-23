@@ -16,8 +16,6 @@ print("main.lua")
 		- Fog of war
 			- Should not be able to drag/click into the darkness and learn what's there
 			- Hero shouldn't know shortest route through dark areas
-			- Monsters shouldn't block shortest path, unless they are right next to the hero
-		- Don't require killing of peasants anymore. Maybe negative experience?
 		- Remote Play
 			-- Monster AI with multiple heroes
 			-- Ensure same map on client

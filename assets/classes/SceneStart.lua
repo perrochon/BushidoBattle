@@ -23,11 +23,12 @@ function SceneStart:init()
 	self.words:setAlpha(0)
 	self:addChild(self.words)
 
-	self.version = TextField.new(FONT_SMALL, VERSION)
-	self.version:setTextColor(COLOR_YELLOW)	
-	self.version:setPosition(APP_WIDTH - self.version:getWidth(), APP_HEIGHT- self.version:getHeight())
-	self.version:setAlpha(0.2)
-	self:addChild(self.version)
+	-- TODO This code creates a second Version number ons screen. But where is the first one drawn?
+	--self.version = TextField.new(FONT_SMALL, VERSION)
+	--self.version:setTextColor(COLOR_YELLOW)	
+	--self.version:setPosition(APP_WIDTH - self.version:getWidth(), APP_HEIGHT- self.version:getHeight())
+	--self.version:setAlpha(0.2)
+	--self:addChild(self.version)
 
 	if FBInstant then
 		local text = TextField.new(FONT_SMALL, "FBInstant")
@@ -57,7 +58,7 @@ function SceneStart:init()
 		text:setTextColor(COLOR_YELLOW)	
 		text:setPosition(100, 100)
 		text:setAlpha(0.2)
-		self:addChild(text)
+		--self:addChild(text)
 		--DEBUG("SceneStart: FBInstant not loaded")
 	end
 
