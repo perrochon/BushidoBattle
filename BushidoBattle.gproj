@@ -108,6 +108,7 @@
  <file excludeFromExecution="1" name="assets/map05.lua"/>
  <file excludeFromExecution="1" name="assets/map06.lua"/>
  <file excludeFromExecution="1" name="assets/map07.lua"/>
+ <file name="assets/map08.lua"/>
  <file name="assets/monsters.png"/>
  <file name="assets/monsters.txt"/>
  <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
