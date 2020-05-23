@@ -160,21 +160,31 @@ function ScenePlay:init()
 
 	-- respond to keys pressed (mainly for easier testing on desktop)
 	self:addEventListener(Event.KEY_DOWN, function(event)
-		if event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W then
+		if event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
 			self:checkMove(self.heroes[localHero], 0, -1)
-		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S then
+		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
 			self:checkMove(self.heroes[localHero], 0, 1)
-		elseif event.keyCode == KeyCode.LEFT or event.keyCode == KeyCode.A then
+		elseif event.keyCode == KeyCode.LEFT or event.keyCode == KeyCode.A or event.keyCode == KeyCode.NUM_4 then
 			self:checkMove(self.heroes[localHero], -1, 0)
-		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D then
+		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D or event.keyCode == KeyCode.NUM_6 then
 			self:checkMove(self.heroes[localHero], 1, 0)
-		elseif event.keyCode == KeyCode.SPACE then
+			
+		elseif event.keyCode == KeyCode.C or event.keyCode == KeyCode.NUM_3 then
+			self:checkMove(self.heroes[localHero], 1, 1)
+		elseif event.keyCode == KeyCode.E or event.keyCode == KeyCode.NUM_9 then
+			self:checkMove(self.heroes[localHero], 1, -1)
+		elseif event.keyCode == KeyCode.Z or event.keyCode == KeyCode.NUM_1 then
+			self:checkMove(self.heroes[localHero], -1, 1)
+		elseif event.keyCode == KeyCode.Q or event.keyCode == KeyCode.NUM_7 then
+			self:checkMove(self.heroes[localHero], -1, -1)
+			
+		elseif event.keyCode == KeyCode.SPACE or event.keyCode == KeyCode.NUM_5 then
 			if not self.heroes[localHero].heroTurn  then return end
 			self:checkMove(self.heroes[localHero], 0, 0)
-		elseif event.keyCode == KeyCode.Z then
+		elseif event.keyCode == KeyCode.M then
 			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
 			self.world.camera:centerAnchor()
-		elseif event.keyCode == KeyCode.X then
+		elseif event.keyCode == KeyCode.N then
 			self.world.camera:setScale(self.world.camera:getScaleX()*0.8,self.world.camera:getScaleY()*0.8) 
 			self.world.camera:centerAnchor()
 		end
