@@ -54,7 +54,7 @@ function SceneDeath:onMouseUp(event)
 		self:addChild(self.words)
 	elseif self.time == 2 then
 		--after the second touch, ask to try again
-		self.words = TextField.new(FONT_LARGE, "touch to try again.")	
+		self.words = TextField.new(FONT_MEDIUM, "Touch to reset your hero and try again.")	
 		self.words:setTextColor(COLOR_WHITE)	
 		self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2 + 400)
 		self.words:setAlpha(self.a)
@@ -62,6 +62,6 @@ function SceneDeath:onMouseUp(event)
 	else
 		--after the last touch, exit the scene
 		self.music:stop()
-		sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
+		sceneManager:changeScene(SCENE_CHOOSE_HERO, TRANSITION_TIME, TRANSITION)
 	end
 end
