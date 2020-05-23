@@ -104,6 +104,7 @@ function Monsters:init(mapData)
 			m.x = v.x
 			m.y = v.y
 			m.sentry = v.sentry
+			m.berserk = v.berserk
 			table.insert(self.list, m)
 			id += 1
 		end
@@ -237,7 +238,7 @@ function Monsters:updateState(monster, id, heroes, remote)
 			local closerHero = distance(monster, heroes[1]) < distance(monster, heroes[2]) and 1 or 2
 			hero = heroes[closerHero]
 		end
-		monster.seesHero = distance(monster, hero) < monster.see
+		monster.seesHero = distance(monster, hero) < monster.see or monster.berserk
 		monster.target = monster.seesHero and hero or nil
 	end
 	
@@ -246,8 +247,8 @@ function Monsters:updateState(monster, id, heroes, remote)
 	else
 		--update based on their tactical role
 		if monster.tactics == "minion" then
-			--minions flee if bloodied or alone
-			if monster.bloodied or not monster.friends then
+			--minions flee if bloodied or alone, unless berserk
+			if not berserk and (monster.bloodied or not monster.friends) then
 				monster.state = "flee"
 			else
 				monster.state = "move"

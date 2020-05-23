@@ -81,7 +81,10 @@ function MapData:spawnsFromMap()
 	local found = {}
 
 	for _,v in ipairs(layerData.objects) do 
-		m = {type = tonumber(v.type % 100), name = v.name, x = v.x // 100 + 1, y = v.y // 100 + 1, sentry = tonumber(v.type) > 100}
+		m = {type = tonumber(v.type % 100), name = v.name, x = v.x // 100 + 1, y = v.y // 100 + 1, 
+			sentry = tonumber(v.type) > 100 and tonumber(v.type) < 200,
+			berserk = tonumber(v.type) > 200 and tonumber(v.type) < 300,
+			}
 		table.insert(spawns,m)
 		found[tonumber(v.type)] = found[tonumber(v.type)] and found[tonumber(v.type)] + 1 or 1
 	end
