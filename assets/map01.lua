@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 5,
-  nextobjectid = 45,
+  nextobjectid = 46,
   properties = {
     ["Title"] = "Peaceful Meadow"
   },
