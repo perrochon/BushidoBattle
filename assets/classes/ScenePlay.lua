@@ -447,9 +447,18 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 			self.msg:add(self.heroes[heroIdx].name, " killed the " .. m.name, MSG_DEATH)
 			self.heroes[heroIdx].xp = self.heroes[localHero].xp + m.xp
 			self.heroes[heroIdx].kills = self.heroes[heroIdx].kills + 1
+			
+			if m.entry == 4 then
+				for id, m in pairs(self.monsters.list) do
+					if m.entry == 3 then
+						m.berserk = true
+					end
+				end
+			end
+			
 			--remove the monster from the monsters.list and the map
 			table.remove(self.monsters.list, id)	
-			self.world:removeMonster(m.x, m.y)	
+			self.world:removeMonster(m.x, m.y)
 		end
 	end
 end
