@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="Peasant" type="2" width="50" height="50">
+  <properties>
+   <property name="Description" value="Place Many. Peasants are weak and melee only."/>
+  </properties>
+ </object>
+</template>

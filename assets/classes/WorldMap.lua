@@ -580,9 +580,9 @@ end
 
 function WorldMap:shortestPath(from, to)
 
-	self:clearMarkers()
-	self:setMarker(from, "s")
-	self:setMarker(to, "e")
+	--self:clearMarkers()
+	--self:setMarker(from, "s")
+	--self:setMarker(to, "e")
 
 	queue = {}
 	found = {}
@@ -614,7 +614,7 @@ function WorldMap:shortestPath(from, to)
 		table.remove(queue, 1)
 		steps = iterations + 1
 		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, current.steps, to.c, to.r, #queue)			
-		self:setMarker(current, "f", current.steps + 1)
+		--self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
 			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
