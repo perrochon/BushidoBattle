@@ -1,0 +1,24 @@
+<library>
+ <properties alphaThreshold="0" padding="0" extrude="0" showUnusedAreas="1" forceSquare="0" removeAlphaBorder="0"/>
+ <file file="Zombie_03__WALK_000.png"/>
+ <file file="Zombie_02__WALK_000.png"/>
+ <file file="Zombie_01__WALK_000.png"/>
+ <file file="Warrior_03__WALK_000.png"/>
+ <file file="Troll_03_1_WALK_000.png"/>
+ <file file="Troll_02_1_WALK_000.png"/>
+ <file file="Troll_01_1_WALK_000.png"/>
+ <file file="Shaman_Walk_000.png"/>
+ <file file="Samurai_03__WALK_000.png"/>
+ <file file="Samurai_02__WALK_000.png"/>
+ <file file="Samurai_01__WALK_000.png"/>
+ <file file="Ninja_03__WALK_000.png"/>
+ <file file="Ninja_02__WALK_000.png"/>
+ <file file="Ninja_01__WALK_000.png"/>
+ <file file="Gladiator_03__WALK_000.png"/>
+ <file file="Barbarian_01__WALK_000.png"/>
+ <file file="Asassin_03__WALK_000.png"/>
+ <file file="Asassin_02__WALK_000.png"/>
+ <file file="Asassin_01__WALK_000.png"/>
+ <file file="Archer_01__WALK_000.png"/>
+ <file file="Animal_03__WALK_000.png"/>
+</library>
