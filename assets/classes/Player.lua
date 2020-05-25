@@ -22,6 +22,10 @@ function Player:init(slot)
 
 	names = {"ArcherYP", "YummySake", "Lupus", "Kiga", "Remote San"}
 	self.name = names[slot]
+	
+	DEBUG("hero tC", manual:getEntry("monsters",1).tC)
+	self.tC = manual:getEntry("monsters",1).tC
+	self.tR = manual:getEntry("monsters",1).tR
 
 	local info = manual:getEntry("monsters", self.entry)	
 	if slot == 5 then flip = TileMap.FLIP_HORIZONTAL end -- HEROFIX temporarily, we flip the remote hero.

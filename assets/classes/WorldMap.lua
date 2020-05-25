@@ -38,7 +38,7 @@ function WorldMap:init(level, heroes, monsters)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
-	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
+	layer = self:returnTileMap2(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)
@@ -159,6 +159,33 @@ function WorldMap:returnTileMap(mapArray, tileset)
 			end
 		end
 	end
+	return tilemap
+end
+
+function WorldMap:returnTileMap2(mapArray, tilesetXX)
+	--[[Logic:  return a TileMap for a given tileset	
+		Returns a TileMap
+	--]]
+
+	local pack = manual.lists["monsters"].pack
+
+	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT, 8, 8, 0, 0)
+	
+	--use setTile to assign a tile based on the mapArray index
+	for y = 1, LAYER_ROWS do
+		for x = 1, LAYER_COLUMNS do
+
+			local key = mapArray[self:idx(x, y)]
+
+			--only setTiles if the mapArray value isn't 0
+			if key ~= 0 then
+				local monster = manual:getEntry("monsters", key)	
+				DEBUG(monster.name, monster.tC, monster.tR)
+				tilemap:setTile(x, y, monster.tC, monster.tR)
+			end
+		end
+	end
+	
 	return tilemap
 end
 
@@ -326,7 +353,7 @@ function WorldMap:moveMonster(monster, dx, dy)
 		
 		--place the monster at the new position
 		array[self:idx(monster.x + dx, monster.y + dy)] = monster.entry
-		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.entry, 1, monster.flip) 
+		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.tC, monster.tR) 
 
 		--remove and move the HPbar
 		array = self.mapArrays[LAYER_HP]

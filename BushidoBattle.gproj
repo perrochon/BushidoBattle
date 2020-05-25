@@ -1,10 +1,10 @@
 <project>
- <properties osx_signingId="" html5_host="" vsync="0" html5_symbols="0" backgroundColor="#000000" android_template="0" mouseTouchOrder="0" retinaDisplay="0" osx_installerId="" app_name="Bushido Battle" version="1.0" autorotation="0" html5_pack="0" architecture="7" touchToMouse="1" win_org="GiderosMobile" splash_v_image="" splashScaleMode="0" winrt_org="GiderosMobile" win_domain="giderosmobile.com" exportMode="0" winrt_package="com.yourdomain.yourapp" fps="60" packageName="com.yourdomain.yourapp" logicalHeight="1920" mouseToTouch="1" encryptAssets="0" encryptCode="0" ios_bundle="com.yourdomain." disableSplash="1" html5_mem="256" html5_wasm="0" html5_fbinstant="0" build_number="1" app_icon="other/Icon.png" splash_h_image="" osx_bundle="com.yourdomain." version_code="1" osx_domain="giderosmobile.com" osx_category="5" tv_icon="" osx_org="GiderosMobile" windowWidth="0" orientation="1" windowHeight="0" scaleMode="3" iosDevice="0" html5_fbload="50" logicalWidth="1200" html5_crash="">
+ <properties winrt_org="GiderosMobile" splash_h_image="" splashScaleMode="0" osx_org="GiderosMobile" osx_bundle="com.yourdomain." html5_fbload="50" logicalHeight="1920" html5_mem="256" osx_signingId="" vsync="0" windowWidth="0" mouseTouchOrder="0" win_org="GiderosMobile" retinaDisplay="0" mouseToTouch="1" disableSplash="1" win_domain="giderosmobile.com" html5_wasm="0" osx_installerId="" build_number="1" exportMode="0" ios_bundle="com.yourdomain." tv_icon="" osx_category="5" fps="60" encryptAssets="0" app_icon="other/Icon.png" app_name="Bushido Battle" touchToMouse="1" scaleMode="3" orientation="1" packageName="com.yourdomain.yourapp" html5_host="" osx_domain="giderosmobile.com" winrt_package="com.yourdomain.yourapp" html5_crash="" architecture="7" iosDevice="0" windowHeight="0" version_code="1" html5_symbols="0" logicalWidth="1200" html5_pack="0" html5_fbinstant="0" encryptCode="0" backgroundColor="#000000" android_template="0" autorotation="0" splash_v_image="" version="1.0">
   <imageScales/>
   <plugins>
-   <plugin enabled="1" name="JSON"/>
-   <plugin enabled="1" name="Lua Socket"/>
-   <plugin enabled="1" name="SceneManager"/>
+   <plugin name="JSON" enabled="1"/>
+   <plugin name="Lua Socket" enabled="1"/>
+   <plugin name="SceneManager" enabled="1"/>
   </plugins>
   <exports>
    <export name="APK">
@@ -27,6 +27,7 @@
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>
+  <file name="assets/classes/Cyclopedia.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
   <file name="assets/classes/MapData.lua"/>
   <file name="assets/classes/MapNavigation.lua"/>
@@ -46,13 +47,13 @@
   <file name="assets/classes/SceneStartServer.lua"/>
   <file name="assets/classes/SceneVictory.lua"/>
   <file name="assets/classes/Sounds.lua"/>
-  <file excludeFromExecution="1" name="assets/classes/Tests.lua"/>
-  <file excludeFromExecution="1" name="assets/classes/Unite.lua"/>
+  <file name="assets/classes/Tests.lua" excludeFromExecution="1"/>
+  <file name="assets/classes/Unite.lua" excludeFromExecution="1"/>
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
-  <file excludeFromExecution="1" name="assets/classes/socket.lua"/>
+  <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
   <file name="assets/classes/textButton.lua"/>
  </folder>
  <folder name="fonts">
@@ -70,8 +71,12 @@
   <file name="assets/images/Dungeon_Floor_2x2.jpg"/>
   <file name="assets/images/Dungeon_Floor_2x2.png"/>
   <file name="assets/images/Sparse_Grass_Bright.jpg"/>
+  <file name="assets/images/characters.png"/>
+  <file name="assets/images/characters.txt"/>
   <file name="assets/images/foreground.png"/>
   <file name="assets/images/glow120x120.png"/>
+  <file name="assets/images/monsters.png"/>
+  <file name="assets/images/monsters.txt"/>
   <file name="assets/images/redglow.png"/>
   <file name="assets/images/texturepack-icons-144px.png"/>
   <file name="assets/images/texturepack-projectiles-108px.png"/>
@@ -101,17 +106,17 @@
  <file name="assets/fbapp-config.json"/>
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
- <file excludeFromExecution="1" name="assets/map01.lua"/>
- <file excludeFromExecution="1" name="assets/map02.lua"/>
- <file excludeFromExecution="1" name="assets/map03.lua"/>
- <file excludeFromExecution="1" name="assets/map04.lua"/>
- <file excludeFromExecution="1" name="assets/map05.lua"/>
- <file excludeFromExecution="1" name="assets/map06.lua"/>
- <file excludeFromExecution="1" name="assets/map07.lua"/>
+ <file name="assets/map01.lua" excludeFromExecution="1"/>
+ <file name="assets/map02.lua" excludeFromExecution="1"/>
+ <file name="assets/map03.lua" excludeFromExecution="1"/>
+ <file name="assets/map04.lua" excludeFromExecution="1"/>
+ <file name="assets/map05.lua" excludeFromExecution="1"/>
+ <file name="assets/map06.lua" excludeFromExecution="1"/>
+ <file name="assets/map07.lua" excludeFromExecution="1"/>
  <file name="assets/map08.lua"/>
  <file name="assets/monsters.png"/>
  <file name="assets/monsters.txt"/>
- <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
- <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
- <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
+ <dependency from="assets/init.lua" to="assets/classes/devMacros.lua"/>
+ <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
+ <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>
 </project>

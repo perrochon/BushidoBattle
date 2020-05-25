@@ -32,6 +32,11 @@ function Monster:init(entry, id)
 	self.name = info.name
 	self.xp = info.xp 
 	self.attacks = info.attacks
+	
+	DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
+	
+	self.tC = info.tC
+	self.tR = info.tR
 
 	--these variables help keep track of health
 	self.hp = info.hp

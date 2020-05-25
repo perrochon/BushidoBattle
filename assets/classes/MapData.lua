@@ -22,13 +22,15 @@ function MapData:loadMapFile(mapDataFile)
 	LAYER_COLUMNS = file.width
 	LAYER_ROWS = file.height
 
-	INFO("  " .. file.properties["Title"])
-	INFO(("  Size: %dx%d\n  Tile size: %dx%d"):format(file.width, file.height, file.tilewidth, file.tileheight))
-	INFO("  Number of tilesets: ", #file.tilesets)
-	INFO("  Number of map layers: ", #file.layers)
+	INFO("Title: " .. file.properties["Title"])
+	INFO(("Size: %dx%d\n  Tile size: %dx%d"):format(file.width, file.height, file.tilewidth, file.tileheight))
+	INFO("Number of tilesets: ", #file.tilesets)
+	INFO("Number of map layers: ", #file.layers)
 	ASSERT_EQUAL(file.layers[1].name, "Ground", "Layer 1 needs to be 'Ground'")
 	ASSERT_EQUAL(file.layers[2].name, "Environment", "Layer 2 needs to be 'Environment'")
 	ASSERT_EQUAL(file.layers[3].name, "Monsters", "Layer 3 needs to be 'Monsters'")
+	-- TODO ASSERT Each tile has a ground tile
+	-- TODO ASSERT Border tiles are all blocked
 	return file
 end
 
@@ -58,13 +60,13 @@ function MapData:loadTiles(texturePack, textureIndex)
 	for k, v in pairs(tiles) do
 		--DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
 		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
-			ERROR("ERROR: MapData:init Missing Data in tile", key, v.image, v.name)
+			ERROR("ERROR: Missing Data in tile", key, v.image, v.name)
 			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here
 			if v.name == nil then v.name = "thing" end
 			if v.blocked == nil then v.blocked = false end
 			if v.cover == nil then v.cover = 0 end
 			if pack:getTextureRegion(v.image) == nil then
-				ERROR("ERROR: MapData:init no image found in texture pack", key, v.image, v.name)
+				ERROR("ERROR: No image found in texture pack", key, v.image, v.name)
 				v.image = "Floor_Grass.png" -- TODO create error image and show here. Also merge with above
 			end
 		end
@@ -90,7 +92,7 @@ function MapData:spawnsFromMap()
 	end
 	-- FIX pull names of monsters from manual
 	INFO("  Number of spawns", "Hero", found[1],"Peasants", found[2], "Soldiers", found[3],"Samurais", found[4])
-	DEBUG(json.encode(spawns))
+	--DEBUG(json.encode(spawns))
 	return spawns
 end
 
