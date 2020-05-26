@@ -45,13 +45,16 @@ function MapData:loadTiles(texturePack, textureIndex)
 	local tileset = self.file.tilesets[1] -- Only one tile set (for now?)
 	local tiles = {}
 	for i = 1, tileset.tilecount do
-		--DEBUG("Getting tile", i, tileset.tiles[i].id, tileset.tiles[i].image:sub(16)) -- TODO FIX PATH ISSUE
-		--DEBUG((pack:getTextureRegion(tileset.tiles[i].image:sub(16))):getRegion()) -- TODO FIX PATH ISSUE
+
+		-- remove path from tile names (Tiled "helpfully" puts in a long path to the orgiinal file)
+		tileset.tiles[i].image = tileset.tiles[i].image:gsub("[\.%a/]*/", "")
+		--DEBUG("Getting tile", i, tileset.tiles[i].id, tileset.tiles[i].image)
+		--DEBUG((pack:getTextureRegion(tileset.tiles[i].image)):getRegion())
 		local tile = {}
 		tile.id = tileset.tiles[i].id
 		tile.blocked = stringToBoolean(tileset.tiles[i].properties.blocked) or false
 		tile.name = tileset.tiles[i].properties.description or "thing"
-		tile.image = tileset.tiles[i].image:sub(16) --- TODO FIX the path issue
+		tile.image = tileset.tiles[i].image
 		tile.cover = tileset.tiles[i].properties.cover or 0
 		tiles[tile.id] = tile                        
 	end
@@ -88,10 +91,11 @@ function MapData:spawnsFromMap()
 			berserk = tonumber(v.type) > 200 and tonumber(v.type) < 300,
 			}
 		table.insert(spawns,m)
-		found[tonumber(v.type)] = found[tonumber(v.type)] and found[tonumber(v.type)] + 1 or 1
+		local type = v.type % 100
+		found[tonumber(type)] = found[tonumber(type)] and found[tonumber(type)] + 1 or 1
 	end
 	-- FIX pull names of monsters from manual
-	INFO("  Number of spawns", "Hero", found[1],"Peasants", found[2], "Soldiers", found[3],"Samurais", found[4])
+	INFO("  Number of spawns", "Hero", found[1],"Peasants", found[2], "Soldiers", found[3],"Samurais", found[4],"Wolves", found[5])
 	--DEBUG(json.encode(spawns))
 	return spawns
 end
@@ -145,7 +149,7 @@ function MapData:layerFromMap(number)
 				if gid ~= 0 then
 					image = self.tiles[gid].image
 					if image ~= nil then
-						region = self.pack:getTextureRegion(image)
+						local region = self.pack:getTextureRegion(image)
 						tx, ty = region:getRegion()
 					
 						--DEBUG(i, x, y, gid, image, tx/100+1, ty/100+1)
