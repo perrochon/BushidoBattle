@@ -10,9 +10,11 @@ Main for Bushido Battle, Bushido without the talk
 --[[ TODO
 		- auto connect all the way to Battle...
 		- Camera Follow Update
+			- move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 		- Bugs
 			- Monsters flee through hero (even when playing slow). Try wolves top left level 1
 		- Game Logic
+			- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 			- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 			- (low) limit ranged attacks in number (no unlimited javelins)
 			- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
@@ -32,6 +34,7 @@ Main for Bushido Battle, Bushido without the talk
 			- AutoConnect, sounds, music, (fog of war?)
 		- TODO (w/o FIX) in the code base
 		- Refactor
+			- use texture pack for health and lights
 			- (high) TODO FIX in the code base
 			- (high) factor out data and constants from init.lua to separate files
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1
@@ -101,3 +104,5 @@ drawVersion()
 INFO("\n**********************\n Bushido Battle "..VERSION.."\n**********************\n")
 sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
+-- Use the below when debugging issues with sprite loading
+--stage:addChild(manual:displayAllSprites())

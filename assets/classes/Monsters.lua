@@ -33,7 +33,7 @@ function Monster:init(entry, id)
 	self.xp = info.xp 
 	self.attacks = info.attacks
 	
-	DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
+	--DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
 	
 	self.tC = info.tC
 	self.tR = info.tR

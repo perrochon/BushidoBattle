@@ -36,13 +36,13 @@ function Cyclopedia:init()
 			},
 		["light-source"] = {
 			[1] = {name = "torch", radius = 3, array = {
-						0, 0, 2, 1, 2, 0, 0, 
-						0, 1, 1, 1, 1, 1, 0, 
+						0, 3, 2, 1, 2, 3, 0, 
+						3, 2, 1, 1, 1, 2, 3, 
 						2, 1, 1, 1, 1, 1, 2, 
 						1, 1, 1, 1, 1, 1, 1, 
 						2, 1, 1, 1, 1, 1, 2, 
-						0, 1, 1, 1, 1, 1, 0, 
-						0, 0, 2, 1, 2, 0, 0}},
+						3, 2, 1, 1, 1, 2, 3, 
+						0, 3, 2, 1, 2, 3, 0}},
 			[2] = {name = "daylight", radius = 4, array = {
 						2, 1, 1, 1, 1, 1, 1, 1, 2, 
 						1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -54,18 +54,19 @@ function Cyclopedia:init()
 						1, 1, 1, 1, 1, 1, 1, 1, 1,
 						2, 1, 1, 1, 1, 1, 1, 1, 2}},
 			},
+		["health"] = {},
 		["light"] = {
-			[1] = {name = "bright", cover = 0},
-			[2] = {name = "dim", cover = -1},
-			[3] = {name = "dark/remembered", cover = -2},
-			[4] = {name = "unexplored", cover = -6},
-			[5] = {name = "white", cover = -6},
-			[6] = {name = "black", cover = -6},
+			[1] = {name = "bright", alpha = 0, cover = 0},
+			[2] = {name = "dim", alpha = 0.4, cover = -1},
+			[3] = {name = "dark/remembered", alpha = 0.6, cover = -2},
+			[4] = {name = "unexplored", alpha = 1, cover = -6},
+			--[5] = {name = "white", alpha = 1, cover = -6},
+			--[6] = {name = "black", alpha = 1, cover = -6},
 			},
 		["monsters"] = {
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
-			[1] = {name = "hero", weapon1 = "shortsword", weapon2 = "shortbow", textureName = "Ninja_02__WALK_000.png"},
+			[1] = {name = "hero", weapon1 = "shortsword", weapon2 = "shortbow", textureName = "Samurai_02__WALK_000_BLUE.png"},
 				--[[monster stats explained:
 					xp			how much xp the hero gets
 					hp			how many hp the monster has
@@ -157,6 +158,7 @@ end
 
 function Cyclopedia:loadSprites()
 
+	-- Characters
 	local texturePack = self.lists["monsters"].texturePack
 	local textureIndex = self.lists["monsters"].textureIndex
 	INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
@@ -166,9 +168,123 @@ function Cyclopedia:loadSprites()
 		--INFO("  ", value.name, value.textureName)
 		local region = self.lists["monsters"].pack:getTextureRegion(value.textureName)
 		local tX, tY, w, h = region:getRegion()
-		value.tC = tX/108+1
-		value.tR = tY/108+1
-		--DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.textureName)		
+		value.tC = tX/TILE_WIDTH+1
+		value.tR = tY/TILE_HEIGHT+1
+		DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.textureName)		
 	end
+
+	-- Health Bars
+	local STEPS = 10 -- 0 plus 10 steps of bar
+	local D = 2 -- border width
+	local H = 5 -- height of health bar
+
+	local rt = RenderTarget.new((STEPS + 1) * TILE_WIDTH, TILE_HEIGHT )
+	local bitmap = Bitmap.new(rt)
+
+	-- first tile (full health) is clear.
+	for s = 1, STEPS do
+		local x = s * TILE_WIDTH
+		local w = math.floor((s / STEPS) * (TILE_WIDTH - 4 * D))
+		local r = math.floor(s / STEPS * 127) + 128
+		local g = math.floor((STEPS - s) / STEPS * 63)
+		local b = math.floor((STEPS - s) / STEPS * 63)
+		local color = ((r*256)+g)*256+b
+		local alpha = (s / STEPS * 0.5) + 0.5
+
+		local frame = Pixel.new(COLOR_BLACK, alpha, TILE_WIDTH - 2 * D, H + 2 * D)
+		frame:setPosition(x + D, TILE_HEIGHT - H - 3 * D)
+		rt:draw(frame)
+		
+		local bar = Pixel.new(color, alpha, w, H)
+		bar:setPosition(x + 2 * D , TILE_HEIGHT - H - 2 * D)
+		rt:draw(bar)		
+	end
+	self.lists[self:getEntry("layers", LAYER_HP)].pack = rt
+
+	-- Light
+	local STEPS = 4 -- 4 levels of light, ignore first (zero) tile.
+
+	local rt = RenderTarget.new(STEPS * TILE_WIDTH, TILE_HEIGHT )
+	local bitmap = Bitmap.new(rt)
+
+	-- first tile (full health) is clear.
+	for s = 1, STEPS do
+		local lightLevel = self:getEntry("light", s)
+		local shadow = Pixel.new(COLOR_LTBLACK, lightLevel.alpha, TILE_WIDTH, TILE_HEIGHT)
+		shadow:setPosition((s-1)*TILE_WIDTH, 0)
+		rt:draw(shadow)
+	end
+	self.lists[self:getEntry("layers", LAYER_LIGHT)].pack = rt
 	
+end
+
+function Cyclopedia:displayAllSprites()
+	-- Call this at the end of main when debugging issues with sprite loading
+
+	local ROWS = 2
+	local COLUMNS = 18
+	local D = 2
+
+	local sprites = Pixel.new(COLOR_WHITE, 1, COLUMNS * (TILE_WIDTH + D), ROWS * (TILE_HEIGHT + D))
+
+	-- Draw Grid
+	for x = 0, APP_WIDTH, TILE_WIDTH + D do
+		local line = Pixel.new(COLOR_GREEN, 0.8, D, ROWS * TILE_HEIGHT + 2 * D)
+		line:setPosition(x, 0)
+		sprites:addChild(line)
+	end
+	for y = 0, ROWS*TILE_HEIGHT + 2 * D, TILE_HEIGHT + D do
+		local line = Pixel.new(COLOR_RED, 0.6, COLUMNS * (TILE_WIDTH + D), D)
+		line:setPosition(0, y)
+		sprites:addChild(line)
+	end
+
+	-- Draw Characters
+	local x = D
+	local y = D
+	for key, value in ipairs(self.lists["monsters"]) do
+		local bitmap = self:getSprite(LAYER_MONSTERS, value.textureName)
+		sprites:addChild(bitmap)
+		bitmap:setPosition(x, y)
+		x = x + TILE_WIDTH + D
+	end
+
+	-- Draw Light Shadows
+	x = D
+	y = y + TILE_HEIGHT + D
+	local pack = self.lists["light"].pack
+	for i = 0, 5 do
+		local bitmap = self:getSprite(LAYER_LIGHT, i)
+		bitmap:setPosition(x, y)
+		sprites:addChild(bitmap)
+		--DEBUG("Bitmap", x, y, bitmap:getSize())
+		x = x + TILE_WIDTH + D
+	end
+
+	-- Draw Health Bars
+	x = x + D
+	local pack = self.lists["health"].pack
+	for i = 0, 10 do
+		local bitmap = self:getSprite(LAYER_HP, i)
+		bitmap:setPosition(x, y)
+		sprites:addChild(bitmap)
+		--DEBUG("Bitmap", x, y, bitmap:getSize())
+		x = x + TILE_WIDTH + D
+	end
+
+	
+	return sprites
+end
+
+function Cyclopedia:getSprite(layerNumber, which)
+	local pack = self.lists[self:getEntry("layers", layerNumber)].pack
+
+	local region = {}
+	if tonumber(which) then
+		region = TextureRegion.new(pack, TILE_WIDTH * which, 0 , TILE_WIDTH, TILE_HEIGHT)
+	else
+		region = pack:getTextureRegion(which)
+	end
+
+	return Bitmap.new(region)
 end

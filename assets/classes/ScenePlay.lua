@@ -777,7 +777,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	if defender.hp < 0 then
 		defender.hp = 0
 	end
-	defender.HPbar = 8 - math.floor((defender.hp / defender.maxHP) * 8)
+	defender.HPbar = 10 - math.floor((defender.hp / defender.maxHP) * 10)
 	if defender.hp > 0 then
 		self.world:changeTile(LAYER_HP, defender.HPbar, defender.x, defender.y)
 	end

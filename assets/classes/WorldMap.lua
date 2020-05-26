@@ -38,7 +38,7 @@ function WorldMap:init(level, heroes, monsters)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
-	layer = self:returnTileMap2(self.mapArrays[LAYER_MONSTERS], "images/tileset-monsters-108px.png", true)
+	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)
@@ -47,11 +47,11 @@ function WorldMap:init(level, heroes, monsters)
 	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[localHero])
     self:shiftWorld(heroes[localHero])
 
-	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "images/tileset-health-108px.png", false)
+	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "health")
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
-	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "images/tileset-light-108px.png", false)
+	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
@@ -105,13 +105,11 @@ end
 
 function WorldMap:addLight(hero) 
 	-- TODO HEROFIX how to handle light for two players?
-	-- Maybe remote player is in heroes[1] on their end and switch on transfer? heroes[2] is the other guy?
-	-- Or save index of the hero displayed on this device?
-	-- Either way, addLight only takes one hero, just pass in heroes[localHero]
 
 	--[[Logic:  returns an array filled with light tile values with the area near the hero visible
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
 	--]]
+
 	--this is the array filled with darkness of unexplored tiles
 	local lArray = {}
 	for y = 1, LAYER_ROWS do
@@ -130,46 +128,21 @@ function WorldMap:addLight(hero)
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
 				local i = self:idx(x, y)
 				lArray[i] = hero.light.array[torchIndex]
+				DEBUG(x, y, hero.light.array[torchIndex])
 			end
 		end
 	end
 	return lArray
 end
 
-function WorldMap:returnTileMap(mapArray, tileset)
+function WorldMap:returnTileMap(mapArray, layer)
 	--[[Logic:  return a TileMap for a given tileset	
 		Returns a TileMap
 	--]]
 
-	local t = Texture.new(tileset, true)
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, t, TILE_WIDTH, TILE_HEIGHT, 8, 8, 0, 0)
-	
-	--use setTile to assign a tile based on the mapArray index
-	for y = 1, LAYER_ROWS do
-		for x = 1, LAYER_COLUMNS do
-			local tX = mapArray[self:idx(x, y)] 
-			--only setTiles if the mapArray value isn't 0
-			if tX ~= 0 then
-				--our tileset images are a maximum of 16 tiles wide so values > 16 need a tY > 1
-					-- (as of now, no tileset images are actually that big)
-				local tY = math.ceil(tX / 16) 
-				--and tX values < 16
-				tX = tX - (tY - 1) * 16
-				tilemap:setTile(x, y, tX, tY, f)
-			end
-		end
-	end
-	return tilemap
-end
+	local pack = manual.lists[layer].pack
 
-function WorldMap:returnTileMap2(mapArray, tilesetXX)
-	--[[Logic:  return a TileMap for a given tileset	
-		Returns a TileMap
-	--]]
-
-	local pack = manual.lists["monsters"].pack
-
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT, 8, 8, 0, 0)
+	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT)
 	
 	--use setTile to assign a tile based on the mapArray index
 	for y = 1, LAYER_ROWS do
@@ -177,11 +150,17 @@ function WorldMap:returnTileMap2(mapArray, tilesetXX)
 
 			local key = mapArray[self:idx(x, y)]
 
+			if layer == "monsters" then
 			--only setTiles if the mapArray value isn't 0
 			if key ~= 0 then
 				local monster = manual:getEntry("monsters", key)	
-				DEBUG(monster.name, monster.tC, monster.tR)
+				--DEBUG(monster.name, monster.tC, monster.tR)
 				tilemap:setTile(x, y, monster.tC, monster.tR)
+			end
+			elseif layer == "light" then
+				tilemap:setTile(x, y, key, 1)
+			elseif layer == "health" then
+				-- do nothing at creation
 			end
 		end
 	end
@@ -394,7 +373,7 @@ function WorldMap:addMonster(monster)
 	array[self:idx(monster.x, monster.y)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 
 
-	--remove and move the HPbar
+	--add the HPbar
 	array = self.mapArrays[LAYER_HP]
 	array[self:idx(monster.x, monster.y)] = monster.HPbar
 	if monster.HPbar ~= 0 then
