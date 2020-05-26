@@ -20,20 +20,6 @@ function Cyclopedia:init()
 			[4] = "health",
 			[5] = "light",
 			},
-		["terrainDEPRECATED"] = {
-			[1] = {id = -1, name = "1 patch of grass", texture = "Dungeon_Floor_2x2.png"},
-			[2] = {id = -2, name = "1 road", texture = "Dungeon_Floor_2x2.png"},
-			[3] = {id = -3, name = "1 creek", texture = "Dungeon_Floor_2x2.png"},
-			[4] = {id = -4, name = "1 thing", texture = "Dungeon_Floor_2x2.png"},
-			},
-		["environmentDEPRECATED"] = {
-			[1] = {id = -5, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_06.png"},
-			[2] = {id = -6, name = "2 forest", blocked = true, cover = -6, texture = "Tree_Crown_07.png"},
-			[3] = {id = -7, name = "2 new tree", blocked = true, cover = -2, texture = "Tree_Crown_01.png"},
-			[4] = {id = -8, name = "2 tree", blocked = true, cover = -4, texture = "Tree_Crown_02.png"},
-			[5] = {id = -9, name = "2 new rock", blocked = true, cover = 0, texture = "Light_Moss_Rough_Well_2x2_B.png"},
-			[6] = {id = -10, name = "2 rock", blocked = false, cover = -2, texture = "Light_Moss_Rough_Well_2x2_B.png"},
-			},
 		["light-source"] = {
 			[1] = {name = "torch", radius = 3, array = {
 						0, 3, 2, 1, 2, 3, 0, 
