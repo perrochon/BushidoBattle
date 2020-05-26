@@ -19,6 +19,7 @@ Main for Bushido Battle, Bushido without the talk
 			- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
 		- Fog of war
 			- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
+			- Block line of sight at walls?
 		- Graphics
 			- Load monster graphics into cyclopedia
 			- Fix HP layer. Wrong size. Maybe different graphics?
