@@ -428,11 +428,11 @@ function WorldMap:flee(monster, target)
 		dx, dy = move[1], move[2]
 		--DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))
 		if not self:blocked(x + dx, y + dy) then		-- if not blocked then move in that direction 
-			break
+			return dx, dy
 		end
 	end
 	
-	return dx, dy
+	return 0, 0
 end
 
 function WorldMap:line(fromX, fromY, toX, toY)

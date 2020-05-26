@@ -593,13 +593,19 @@ function ScenePlay:monsterAI(monster)
 		--move away from the hero.
 		dx, dy = self.world:flee(monster, monster.target)
 		
-		self.world:moveMonster(monster, dx, dy)
-		if self.remote then
-			--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-			--self:syncMonster(monster.id, m.x, m.y)
+		if dx == 0 and dy == 0 then
+			-- can't flee, might as well fight
+			self:basicAttack(monster, monster.target)
+		else
+		
+			self.world:moveMonster(monster, dx, dy)
+			if self.remote then
+				--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
+				--self:syncMonster(monster.id, m.x, m.y)
+			end
+			monster.done = true
+			self:monsterTurnOver()
 		end
-		monster.done = true
-		self:monsterTurnOver()
 	elseif monster.state == "attack" then
 		--attack the hero
 		self:basicAttack(monster, monster.target)
