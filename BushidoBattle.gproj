@@ -68,14 +68,10 @@
   <file name="assets/fonts/immortal_small.txt"/>
  </folder>
  <folder name="images">
-  <file name="assets/images/Dungeon_Floor_2x2.jpg"/>
-  <file name="assets/images/Dungeon_Floor_2x2.png"/>
-  <file name="assets/images/Sparse_Grass_Bright.jpg"/>
   <file name="assets/images/bushidobattle.png"/>
   <file name="assets/images/bushidobattle.txt"/>
   <file name="assets/images/characters.png"/>
   <file name="assets/images/characters.txt"/>
-  <file name="assets/images/foreground.png"/>
   <file name="assets/images/glow120x120.png"/>
   <file name="assets/images/redglow.png"/>
   <file name="assets/images/texturepack-icons-144px.png"/>
