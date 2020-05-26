@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 5,
-  nextobjectid = 48,
+  nextobjectid = 49,
   properties = {
     ["Title"] = "Peaceful Meadow"
   },
@@ -42,7 +42,7 @@ return {
             ["cover"] = -2,
             ["description"] = "rock"
           },
-          image = "../tiled/tiles/Boulder_01.png",
+          image = "../../tiled/tiles/Boulder_01.png",
           width = 100,
           height = 100
         },
@@ -53,7 +53,7 @@ return {
             ["cover"] = -2,
             ["description"] = "rock"
           },
-          image = "../tiled/tiles/Boulder_02.png",
+          image = "../../tiled/tiles/Boulder_02.png",
           width = 100,
           height = 100
         },
@@ -64,7 +64,7 @@ return {
             ["cover"] = -2,
             ["description"] = "rock"
           },
-          image = "../tiled/tiles/Boulder_03.png",
+          image = "../../tiled/tiles/Boulder_03.png",
           width = 100,
           height = 100
         },
@@ -75,7 +75,7 @@ return {
             ["cover"] = -2,
             ["description"] = "rock"
           },
-          image = "../tiled/tiles/Boulder_04.png",
+          image = "../../tiled/tiles/Boulder_04.png",
           width = 100,
           height = 100
         },
@@ -85,7 +85,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "meadow"
           },
-          image = "../tiled/tiles/Floor_Grass.png",
+          image = "../../tiled/tiles/Floor_Grass.png",
           width = 100,
           height = 100
         },
@@ -95,7 +95,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "road"
           },
-          image = "../tiled/tiles/Floor_Rock.png",
+          image = "../../tiled/tiles/Floor_Rock.png",
           width = 100,
           height = 100
         },
@@ -105,7 +105,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "river"
           },
-          image = "../tiled/tiles/Floor_Water.png",
+          image = "../../tiled/tiles/Floor_Water.png",
           width = 100,
           height = 100
         },
@@ -116,7 +116,7 @@ return {
             ["cover"] = -2,
             ["description"] = "tree"
           },
-          image = "../tiled/tiles/Tree_Crown_01.png",
+          image = "../../tiled/tiles/Tree_Crown_01.png",
           width = 100,
           height = 100
         },
@@ -127,7 +127,7 @@ return {
             ["cover"] = -2,
             ["description"] = "tree"
           },
-          image = "../tiled/tiles/Tree_Crown_02.png",
+          image = "../../tiled/tiles/Tree_Crown_02.png",
           width = 100,
           height = 100
         },
@@ -138,7 +138,7 @@ return {
             ["cover"] = -2,
             ["description"] = "tree"
           },
-          image = "../tiled/tiles/Tree_Crown_03.png",
+          image = "../../tiled/tiles/Tree_Crown_03.png",
           width = 100,
           height = 100
         },
@@ -149,7 +149,7 @@ return {
             ["cover"] = -2,
             ["description"] = "tree"
           },
-          image = "../tiled/tiles/Tree_Crown_04.png",
+          image = "../../tiled/tiles/Tree_Crown_04.png",
           width = 100,
           height = 100
         },
@@ -160,7 +160,7 @@ return {
             ["cover"] = -10,
             ["description"] = "darkness"
           },
-          image = "../tiled/tiles/Black_Patch.png",
+          image = "../../tiled/tiles/Black_Patch.png",
           width = 100,
           height = 100
         },
@@ -171,7 +171,7 @@ return {
             ["cover"] = -4,
             ["description"] = "building"
           },
-          image = "../tiled/tiles/Building_I_01_4x6.png",
+          image = "../../tiled/tiles/Building_I_01_4x6.png",
           width = 100,
           height = 100
         },
@@ -182,7 +182,7 @@ return {
             ["cover"] = -4,
             ["description"] = "building"
           },
-          image = "../tiled/tiles/Building_Tower_3sq_5x5.png",
+          image = "../../tiled/tiles/Building_Tower_3sq_5x5.png",
           width = 100,
           height = 100
         },
@@ -193,7 +193,7 @@ return {
             ["cover"] = -4,
             ["description"] = "building"
           },
-          image = "../tiled/tiles/Building_Tower_Octagon_2sq_4x4.png",
+          image = "../../tiled/tiles/Building_Tower_Octagon_2sq_4x4.png",
           width = 100,
           height = 100
         },
@@ -204,7 +204,7 @@ return {
             ["cover"] = -10,
             ["description"] = "wall"
           },
-          image = "../tiled/tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png",
+          image = "../../tiled/tiles/Castle_Outer_Wall_Corner_In_Round_Thin_3x3_A.png",
           width = 100,
           height = 100
         },
@@ -215,7 +215,7 @@ return {
             ["cover"] = -10,
             ["description"] = "wall"
           },
-          image = "../tiled/tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png",
+          image = "../../tiled/tiles/Castle_Outer_Wall_Straight_Thin_3x3_A.png",
           width = 100,
           height = 100
         },
@@ -226,7 +226,7 @@ return {
             ["cover"] = -10,
             ["description"] = "wall"
           },
-          image = "../tiled/tiles/Dungeon_Corner_In_2x2_1-1_Round.png",
+          image = "../../tiled/tiles/Dungeon_Corner_In_2x2_1-1_Round.png",
           width = 100,
           height = 100
         },
@@ -237,7 +237,7 @@ return {
             ["cover"] = -10,
             ["description"] = "wall"
           },
-          image = "../tiled/tiles/Dungeon_Corner_Out_2x2_1-1.png",
+          image = "../../tiled/tiles/Dungeon_Corner_Out_2x2_1-1.png",
           width = 100,
           height = 100
         },
@@ -248,7 +248,7 @@ return {
             ["cover"] = -10,
             ["description"] = "wall"
           },
-          image = "../tiled/tiles/Dungeon_Straight_2x2_1-1.png",
+          image = "../../tiled/tiles/Dungeon_Straight_2x2_1-1.png",
           width = 100,
           height = 100
         },
@@ -259,7 +259,7 @@ return {
             ["cover"] = -1,
             ["description"] = "corn field"
           },
-          image = "../tiled/tiles/Floor_Wheat.png",
+          image = "../../tiled/tiles/Floor_Wheat.png",
           width = 100,
           height = 100
         },
@@ -269,7 +269,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "path"
           },
-          image = "../tiled/tiles/Path_Thin_2x2_A.png",
+          image = "../../tiled/tiles/Path_Thin_2x2_A.png",
           width = 100,
           height = 100
         },
@@ -279,7 +279,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "path"
           },
-          image = "../tiled/tiles/Path_Thin_2x2_B.png",
+          image = "../../tiled/tiles/Path_Thin_2x2_B.png",
           width = 100,
           height = 100
         },
@@ -289,7 +289,7 @@ return {
             ["blocked"] = "false",
             ["description"] = "puddle"
           },
-          image = "../tiled/tiles/Puddle_2x2_A.png",
+          image = "../../tiled/tiles/Puddle_2x2_A.png",
           width = 100,
           height = 100
         },
@@ -300,7 +300,7 @@ return {
             ["cover"] = -4,
             ["description"] = "building"
           },
-          image = "../tiled/tiles/Roof_Thatched.png",
+          image = "../../tiled/tiles/Roof_Thatched.png",
           width = 100,
           height = 100
         },
@@ -311,7 +311,7 @@ return {
             ["cover"] = -1,
             ["description"] = "well"
           },
-          image = "../tiled/tiles/Well_With_Base_2x2.png",
+          image = "../../tiled/tiles/Well_With_Base_2x2.png",
           width = 100,
           height = 100
         }
@@ -677,27 +677,12 @@ return {
           }
         },
         {
-          id = 46,
-          name = "Wolf",
-          type = "5",
+          id = 48,
+          name = "Peasant",
+          type = "2",
           shape = "rectangle",
-          x = 125.951,
-          y = 123.213,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place Many. Peasants are weak and melee only."
-          }
-        },
-        {
-          id = 47,
-          name = "Wolf",
-          type = "5",
-          shape = "rectangle",
-          x = 123.213,
-          y = 232.735,
+          x = 134.165,
+          y = 139.641,
           width = 50,
           height = 50,
           rotation = 0,
