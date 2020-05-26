@@ -128,7 +128,7 @@ function WorldMap:addLight(hero)
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
 				local i = self:idx(x, y)
 				lArray[i] = hero.light.array[torchIndex]
-				DEBUG(x, y, hero.light.array[torchIndex])
+				--DEBUG(x, y, hero.light.array[torchIndex])
 			end
 		end
 	end

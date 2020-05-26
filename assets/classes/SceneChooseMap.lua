@@ -56,7 +56,7 @@ function SceneChooseMap:displayMap(map, slot)
 	panel:addChild(title)
 
 	local x,y,w,h = panel:getBounds(self)
-	DEBUG(yGap, mapWidth, mapHeight, " : ", x, y, w, h)
+	--DEBUG(yGap, mapWidth, mapHeight, " : ", x, y, w, h)
 	pixel = Pixel.new(COLOR_BLUE, 0.6, w+10, h+10)
 	pixel:setPosition(x-5, y-5)
 	--stage:addChild(pixel)
