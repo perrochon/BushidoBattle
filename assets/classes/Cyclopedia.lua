@@ -114,7 +114,7 @@ function Cyclopedia:init()
 						    type = "Physical", projectile = nil, missSound = "clang"},
 			[2] = {name = "spear", reach = 2.5, modifier = 8, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},
-			[3] = {name = "shortsword", reach = 1.5, modifier = 4, defense = "AC", damage = 'd2', dice = 1, bonus = 0, 
+			[3] = {name = "shortsword", reach = 1.5, modifier = 4, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
 			[4] = {name = "javelin", reach = 4, modifier = 6, defense = "AC", damage = 'd8', dice = 1, bonus = 2, 
 						    type = "Physical", projectile = "spear", missSound = "swish"},
