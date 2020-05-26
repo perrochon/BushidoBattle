@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.4" name="Bushido" tilewidth="100" tileheight="100" tilecount="26" columns="0">
+<tileset version="1.2" tiledversion="1.3.4" name="Bushido" tilewidth="100" tileheight="100" tilecount="27" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="11">
   <properties>
@@ -202,5 +202,12 @@
    <property name="description" value="well"/>
   </properties>
   <image width="100" height="100" source="tiles/Well_With_Base_2x2.png"/>
+ </tile>
+ <tile id="81">
+  <properties>
+   <property name="blocked" value="false"/>
+   <property name="description" value="dungeon floor"/>
+  </properties>
+  <image width="100" height="100" source="tiles/Floor_Dungeon_2x2.png"/>
  </tile>
 </tileset>

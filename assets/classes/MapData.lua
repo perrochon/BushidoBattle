@@ -8,7 +8,7 @@ function MapData:init(mapDataFile)
 
 	self.file = self:loadMapFile(mapDataFile)
 	self.spawns = self:spawnsFromMap()
-	self.pack, self.tileset, self.tiles = self:loadTiles("images/bushidobattle.png", "images/bushidobattle.txt")
+	self.pack, self.tileset, self.tiles = self:loadTiles("images/map.png", "images/map.txt")
 end
 
 function MapData:loadMapFile(mapDataFile)
@@ -61,7 +61,7 @@ function MapData:loadTiles(texturePack, textureIndex)
 
 	-- Make sure we got everything, move this code into separate function
 	for k, v in pairs(tiles) do
-		--DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
+		DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
 		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
 			ERROR("ERROR: Missing Data in tile", key, v.image, v.name)
 			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here
@@ -150,6 +150,9 @@ function MapData:layerFromMap(number)
 					image = self.tiles[gid].image
 					if image ~= nil then
 						local region = self.pack:getTextureRegion(image)
+						if not region then
+							ERROR("Tile not in tilemap", x, y, image)
+						end
 						tx, ty = region:getRegion()
 					
 						--DEBUG(i, x, y, gid, image, tx/100+1, ty/100+1)

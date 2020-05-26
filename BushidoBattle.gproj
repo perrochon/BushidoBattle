@@ -68,11 +68,11 @@
   <file name="assets/fonts/immortal_small.txt"/>
  </folder>
  <folder name="images">
-  <file name="assets/images/bushidobattle.png"/>
-  <file name="assets/images/bushidobattle.txt"/>
   <file name="assets/images/characters.png"/>
   <file name="assets/images/characters.txt"/>
   <file name="assets/images/glow120x120.png"/>
+  <file name="assets/images/map.png"/>
+  <file name="assets/images/map.txt"/>
   <file name="assets/images/redglow.png"/>
   <file name="assets/images/texturepack-icons-144px.png"/>
   <file name="assets/images/texturepack-projectiles-108px.png"/>
