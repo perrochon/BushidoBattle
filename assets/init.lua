@@ -85,7 +85,7 @@ TILE_HEIGHT @ 100
 LAYER_COLUMNS = -1		--the number of columns in each array of tiles. Set when map is loaded
 LAYER_ROWS = -1			--the number of rows in each array of tile. Set when map is loaded
 
-MAP_FILE_NAME @ "map"
+MAP_FILE_NAME @ "maps/map"
 
 
 -- Facebook code to remove the loader

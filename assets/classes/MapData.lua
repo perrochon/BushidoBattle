@@ -8,7 +8,7 @@ function MapData:init(mapDataFile)
 
 	self.file = self:loadMapFile(mapDataFile)
 	self.spawns = self:spawnsFromMap()
-	self.pack, self.tileset, self.tiles = self:loadTiles("bushidobattle.png", "bushidobattle.txt")
+	self.pack, self.tileset, self.tiles = self:loadTiles("images/bushidobattle.png", "images/bushidobattle.txt")
 end
 
 function MapData:loadMapFile(mapDataFile)
