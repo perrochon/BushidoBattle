@@ -70,8 +70,12 @@
   <file name="assets/fonts/nuku1.ttf"/>
  </folder>
  <folder name="images">
+  <file name="assets/images/Ninja_01.png"/>
+  <file name="assets/images/Ninja_01.txt"/>
   <file name="assets/images/Ninja_02.png"/>
   <file name="assets/images/Ninja_02.txt"/>
+  <file name="assets/images/Ninja_03.png"/>
+  <file name="assets/images/Ninja_03.txt"/>
   <file name="assets/images/characters.png"/>
   <file name="assets/images/characters.txt"/>
   <file name="assets/images/glow120x120.png"/>

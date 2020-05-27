@@ -261,12 +261,42 @@ function Cyclopedia:displayAllSprites()
 	x = D
 	y = y + TILE_HEIGHT + D
 
-	local ca = CharacterAnimation.new()
-	ca:setPosition(x, y)
+	local n1 = CharacterAnimation.new("Ninja_01")
+	n1:setPosition(x-10, y-10)
+	n1:setScale(1.2)
+	sprites:addChild(n1)
+
+	x = x + TILE_WIDTH + D
+	local n2 = CharacterAnimation.new("Ninja_02")
+	n2:setPosition(x-18, y-18)
+	n2:setScale(1.3)
+	sprites:addChild(n2)
+
+	x = x + TILE_WIDTH + D
+	local n3 = CharacterAnimation.new("Ninja_03")
+	n3:setPosition(x-20, y-20)
+	n3:setScale(1.4)
+	sprites:addChild(n3)
 	
-	sprites:addChild(ca)
+	local on = true
+	
+	sprites:addEventListener(Event.KEY_DOWN, function(event)
+		local actions = {[KeyCode.I] = "IDLE", [KeyCode.W] = "WALK", [KeyCode.R] = "RUN", [KeyCode.J] = "JUMP", 
+						[KeyCode.A] = "ATTACK_01", [KeyCode.B] = "ATTACK_02", [KeyCode.H] = "HURT", [KeyCode.D] = "DIE"}
+		
+		--DEBUG(event.keyCode, KeyCode.I, actions[KeyCode.I], actions[event.keyCode])
+		n1:go(actions[event.keyCode])
+		n2:go(actions[event.keyCode])
+		n3:go(actions[event.keyCode])
+		if event.keyCode == KeyCode.E then
+			n1:walk()
+			n2:walk()
+			n3:walk()
+		end
+	end)
 	
 	return sprites
+	
 end
 
 function Cyclopedia:getSprite(layerNumber, which)
