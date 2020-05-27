@@ -207,7 +207,7 @@ end
 function Cyclopedia:displayAllSprites()
 	-- Call this at the end of main when debugging issues with sprite loading
 
-	local ROWS = 2
+	local ROWS = 3
 	local COLUMNS = 18
 	local D = 2
 
@@ -258,6 +258,13 @@ function Cyclopedia:displayAllSprites()
 		x = x + TILE_WIDTH + D
 	end
 
+	x = D
+	y = y + TILE_HEIGHT + D
+
+	local ca = CharacterAnimation.new()
+	ca:setPosition(x, y)
+	
+	sprites:addChild(ca)
 	
 	return sprites
 end

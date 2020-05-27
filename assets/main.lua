@@ -12,6 +12,8 @@ Main for Bushido Battle, Bushido without the talk
 		- Camera Follow Update
 		- Bugs
 			- After ranged action, hitting center icon for pass shoots an arrow to nowhere.
+			- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
+			- Hero reset button not greyed out if hero is dead...
 		- Game Logic
 			- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 			- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
@@ -106,4 +108,4 @@ INFO("\n**********************\n Bushido Battle "..VERSION.."\n*****************
 sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
 -- Use the below when debugging issues with sprite loading
---stage:addChild(manual:displayAllSprites())
+stage:addChild(manual:displayAllSprites())
