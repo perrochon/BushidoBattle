@@ -1,5 +1,5 @@
 <project>
- <properties osx_installerId="" tv_icon="" backgroundColor="#000000" html5_pack="0" orientation="1" app_name="Bushido Battle" encryptAssets="0" touchToMouse="1" vsync="0" exportMode="0" packageName="com.yourdomain.yourapp" version_code="1" disableSplash="1" html5_host="" autorotation="0" html5_symbols="0" windowHeight="0" mouseTouchOrder="0" scaleMode="3" windowWidth="0" win_org="GiderosMobile" splash_v_image="" version="1.0" winrt_org="GiderosMobile" win_domain="giderosmobile.com" osx_org="GiderosMobile" html5_mem="256" splash_h_image="" html5_fbload="50" splashScaleMode="0" osx_category="5" html5_wasm="0" fps="60" osx_domain="giderosmobile.com" logicalHeight="1920" app_icon="other/Icon.png" retinaDisplay="0" mouseToTouch="1" encryptCode="0" build_number="1" android_template="0" iosDevice="0" osx_bundle="com.yourdomain." ios_bundle="com.yourdomain." winrt_package="com.yourdomain.yourapp" osx_signingId="" architecture="7" html5_crash="" html5_fbinstant="0" logicalWidth="1200">
+ <properties backgroundColor="#000000" iosDevice="0" html5_mem="256" html5_pack="0" osx_signingId="" mouseToTouch="1" windowHeight="0" html5_fbload="50" app_name="Bushido Battle" splashScaleMode="0" windowWidth="0" vsync="0" version="1.0" osx_bundle="com.yourdomain." retinaDisplay="0" logicalHeight="1920" architecture="7" version_code="1" splash_v_image="" android_template="0" osx_domain="giderosmobile.com" autorotation="0" orientation="1" encryptAssets="0" logicalWidth="1200" splash_h_image="" winrt_package="com.yourdomain.yourapp" encryptCode="0" disableSplash="1" fps="60" html5_symbols="0" osx_category="5" win_domain="giderosmobile.com" html5_wasm="0" scaleMode="3" osx_installerId="" exportMode="0" winrt_org="GiderosMobile" app_icon="other/Icon.png" packageName="com.yourdomain.yourapp" html5_fbinstant="0" ios_bundle="com.yourdomain." touchToMouse="1" html5_crash="" mouseTouchOrder="0" tv_icon="" osx_org="GiderosMobile" build_number="1" win_org="GiderosMobile" html5_host="">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -48,13 +48,13 @@
   <file name="assets/classes/SceneStartServer.lua"/>
   <file name="assets/classes/SceneVictory.lua"/>
   <file name="assets/classes/Sounds.lua"/>
-  <file name="assets/classes/Tests.lua" excludeFromExecution="1"/>
-  <file name="assets/classes/Unite.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/Tests.lua"/>
+  <file excludeFromExecution="1" name="assets/classes/Unite.lua"/>
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
-  <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/socket.lua"/>
   <file name="assets/classes/textButton.lua"/>
  </folder>
  <folder name="fonts">
@@ -67,6 +67,7 @@
   <file name="assets/fonts/immortal_medium.txt"/>
   <file name="assets/fonts/immortal_small.png"/>
   <file name="assets/fonts/immortal_small.txt"/>
+  <file name="assets/fonts/nuku1.ttf"/>
  </folder>
  <folder name="images">
   <file name="assets/images/Ninja_02.png"/>

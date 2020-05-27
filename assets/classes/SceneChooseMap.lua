@@ -49,7 +49,7 @@ function SceneChooseMap:displayMap(map, slot)
 
 	local mapDescription = map
 
-	local title = TextField.new(FONT_MEDIUM, mapDescription)
+	local title = TextField.new(FONT_SMALL, mapDescription)
 	title:setLayout({flags = FontBase.TLF_REF_TOP |FontBase.TLF_LEFT})
 	title:setTextColor(COLOR_YELLOW)	
 	title:setPosition(15, -mapHeight+20) 

@@ -87,7 +87,7 @@ function SceneStart:onEnterFrame()
 		self:addChild(self.words)
 	elseif self.time == 2 then
 		--then display this
-		self.words = TextField.new(FONT_LARGE, "Bushido Battle")	
+		self.words = TextField.new(FONT_XL, "Bushido Battle")
 		self.words:setTextColor(COLOR_YELLOW)
 		self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2)
 		self.words:setAlpha(0)

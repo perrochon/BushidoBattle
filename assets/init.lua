@@ -74,10 +74,15 @@ MSG_X @ 0  -- \APP_HEIGHT - MSG_BOARD_WIDTH\
 MSG_Y @ \APP_HEIGHT - 300\
 
 -- Fonts
-FONT_XL @ \Font.new("fonts/immortal_XL.txt", "fonts/immortal_XL.png")\
-FONT_LARGE @ \Font.new("fonts/immortal_large.txt", "fonts/immortal_large.png")\
-FONT_MEDIUM @ \Font.new("fonts/immortal_medium.txt", "fonts/immortal_medium.png")\
-FONT_SMALL @ \Font.new("fonts/immortal_small.txt", "fonts/immortal_small.png")\
+--FONT_XL @ \Font.new("fonts/immortal_XL.txt", "fonts/immortal_XL.png")\
+--FONT_LARGE @ \Font.new("fonts/immortal_large.txt", "fonts/immortal_large.png")\
+--FONT_MEDIUM @ \Font.new("fonts/immortal_medium.txt", "fonts/immortal_medium.png")\
+--FONT_SMALL @ \Font.new("fonts/immortal_small.txt", "fonts/immortal_small.png")\
+-- TODO PERFORMANCE use bitmap fonts or cache True Type Fonts https://wiki.giderosmobile.com/index.php/Fonts_and_Text
+FONT_XL @ \TTFont.new("fonts/nuku1.ttf", 200)\
+FONT_LARGE @ \TTFont.new("fonts/nuku1.ttf", 140)\
+FONT_MEDIUM @ \TTFont.new("fonts/nuku1.ttf", 90)\
+FONT_SMALL @ \TTFont.new("fonts/nuku1.ttf", 50)\
 
 -- Terrain Size
 TILE_WIDTH @ 100
