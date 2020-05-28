@@ -140,8 +140,7 @@ end
 -- Center the camera on a point relative to the child element(s)
 function Camera:centerPoint(x, y)
 	self:setX(-(x * self:getScaleX() - FG_X/2))
-	self:setY(-(y * self:getScaleY() - APP_HEIGHT/2))
-	
+	self:setY(-(y * self:getScaleY() - APP_HEIGHT/2))	
 	self:updateAnchor()
 end
 

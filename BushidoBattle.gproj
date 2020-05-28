@@ -24,6 +24,7 @@
   </exports>
  </properties>
  <folder name="classes">
+  <file name="assets/classes/gtween.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>

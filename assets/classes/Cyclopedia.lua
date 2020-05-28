@@ -52,7 +52,7 @@ function Cyclopedia:init()
 		["monsters"] = {
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
-			[1] = {name = "hero", weapon1 = "shortsword", weapon2 = "shortbow", textureName = "Samurai_02__WALK_000_BLUE.png"},
+			[1] = {name = "hero", weapon1 = "shortsword", weapon2 = "shortbow", textureName = "Ninja_02__WALK_000.png"},
 				--[[monster stats explained:
 					xp			how much xp the hero gets
 					hp			how many hp the monster has
@@ -149,6 +149,8 @@ function Cyclopedia:loadSprites()
 	local textureIndex = self.lists["monsters"].textureIndex
 	INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
+	
+	self.heroMc = CharacterAnimation.new("Ninja_02")
 
 	for key, value in ipairs(self.lists["monsters"]) do
 		--INFO("  ", value.name, value.textureName)
@@ -310,4 +312,8 @@ function Cyclopedia:getSprite(layerNumber, which)
 	end
 
 	return Bitmap.new(region)
+end
+
+function Cyclopedia:getHeroMc()
+	return self.heroMc
 end

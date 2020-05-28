@@ -30,10 +30,14 @@ function CharacterAnimation:init(filename)
 	end
 	
 	self.mc = MovieClip.new(timeline)
-	for a = 10*slow-1, c, 10*slow do
+	self.mc:setGotoAction(10*slow-1, 1)
+	for a = 20*slow-1, c, 10*slow do
 		--self.mc:setGotoAction(a, 1)
 		self.mc:setStopAction(a)
 	end
+	
+	self.mc:setScale(1.3)
+	self.mc:setAnchorPosition(15,15)
 	
 	self:addChild(self.mc)
 	

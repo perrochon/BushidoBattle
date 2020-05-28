@@ -39,9 +39,17 @@ function WorldMap:init(level, heroes, monsters)
 
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
+	layer:setAlpha(0.5)
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)
+	
+	-- TODO FIX store this somewhere else, but not so that it gets saved
+	self.heroMc = manual:getHeroMc()
+	self.heroMc.mc:gotoAndPlay(1)
+	self.heroMc:setPosition((heroes[localHero].x - 1) * TILE_WIDTH, (heroes[localHero].y - 1) * TILE_HEIGHT)
+	self.camera:addChild(self.heroMc)
+	
 
 	self.mapArrays[LAYER_HP] = self:addHP()
 	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[localHero])
@@ -52,7 +60,7 @@ function WorldMap:init(level, heroes, monsters)
 	table.insert(self.mapLayers, layer)
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
-	self.camera:addChild(layer) 
+	--self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
 	self:addChild(self.camera)
@@ -232,8 +240,20 @@ function WorldMap:shiftWorld(hero)
 		May require more complexity with multiple heroes
 		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
-
+	
 	self.camera:centerPoint(hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT)
+	--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
+	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
+	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
+end
+
+function WorldMap:shiftWorld2(heroMc)
+	--[[Moves the camera to the hero's location
+		May require more complexity with multiple heroes
+		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
+	--]]
+	
+	self.camera:centerPoint(heroMc:getX(), heroMc:getY())
 	--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
 	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
@@ -257,10 +277,41 @@ function WorldMap:moveHero(hero, dx, dy)
 
 	--for purposes of moving around the map, the hero is just another monster
 	self:moveMonster(hero, dx, dy)
+	
+	
+	--define what to animate
+	local animate = {}
+	animate.x = (hero.x - 1) * TILE_WIDTH
+	animate.y = (hero.y - 1) * TILE_HEIGHT
+	 
+	--define GTween properties
+	local properties = {}
+	properties.delay = 0
+	--properties.ease = easing.inElastic
+	properties.dispatchEvents = true
+	 
+	--animate them
+	--- First argument: sprite to animate
+	--- Second argument: duration of animation in seconds or frames
+	--- Third argument: properties to animate
+	--- Fourth argument: GTween properties
+	self.heroMc:walk()
+ 	local tween = GTween.new(self.heroMc, 1, animate, properties)
+		--self.heroMc:setPosition((hero.x - 1) * TILE_WIDTH, (hero.y - 1) * TILE_HEIGHT)
 
+	tween:addEventListener("change", function()
+		DEBUG("Event")
+		--self:shiftWorld2(self.heroMc)
+	end)
+
+	tween.onChange = function()
+		DEBUG("CallBack", self.heroMc:getX())
+		self:shiftWorld2(self.heroMc)
+	end
+	
 	if hero.heroIdx == localHero then 
 		--keep the hero centered on the screen by shifting all the TileMaps  
-		self:shiftWorld(hero, dx, dy)
+		--self:shiftWorld(hero)
 	end
 end
 
