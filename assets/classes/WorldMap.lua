@@ -37,6 +37,7 @@ function WorldMap:init(level, heroes, monsters)
 	table.insert(self.mapArrays, array2)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
+	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
 	layer:setAlpha(0.5)
@@ -44,13 +45,14 @@ function WorldMap:init(level, heroes, monsters)
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)
 	
-	-- TODO FIX store this somewhere else, but not so that it gets saved
-	self.heroMc = manual:getHeroMc()
+	-- TODO FIX ANIMATION store this somewhere, but not so that it gets saved
+	self.heroMc = CharacterAnimation.new("Ninja_02")
 	self.heroMc.mc:gotoAndPlay(1)
 	self.heroMc:setPosition((heroes[localHero].x - 1) * TILE_WIDTH, (heroes[localHero].y - 1) * TILE_HEIGHT)
 	self.camera:addChild(self.heroMc)
 	
 
+	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_HP] = self:addHP()
 	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[localHero])
     self:shiftWorld(heroes[localHero])
@@ -59,6 +61,7 @@ function WorldMap:init(level, heroes, monsters)
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
+	-- TODD FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
 	--self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
@@ -299,13 +302,8 @@ function WorldMap:moveHero(hero, dx, dy)
  	local tween = GTween.new(self.heroMc, 1, animate, properties)
 		--self.heroMc:setPosition((hero.x - 1) * TILE_WIDTH, (hero.y - 1) * TILE_HEIGHT)
 
-	tween:addEventListener("change", function()
-		DEBUG("Event")
-		--self:shiftWorld2(self.heroMc)
-	end)
-
 	tween.onChange = function()
-		DEBUG("CallBack", self.heroMc:getX())
+		--DEBUG("Shifting world", self.heroMc:getX())
 		self:shiftWorld2(self.heroMc)
 	end
 	

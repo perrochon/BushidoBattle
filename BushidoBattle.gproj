@@ -1,30 +1,29 @@
 <project>
- <properties backgroundColor="#000000" iosDevice="0" html5_mem="256" html5_pack="0" osx_signingId="" mouseToTouch="1" windowHeight="0" html5_fbload="50" app_name="Bushido Battle" splashScaleMode="0" windowWidth="0" vsync="0" version="1.0" osx_bundle="com.yourdomain." retinaDisplay="0" logicalHeight="1920" architecture="7" version_code="1" splash_v_image="" android_template="0" osx_domain="giderosmobile.com" autorotation="0" orientation="1" encryptAssets="0" logicalWidth="1200" splash_h_image="" winrt_package="com.yourdomain.yourapp" encryptCode="0" disableSplash="1" fps="60" html5_symbols="0" osx_category="5" win_domain="giderosmobile.com" html5_wasm="0" scaleMode="3" osx_installerId="" exportMode="0" winrt_org="GiderosMobile" app_icon="other/Icon.png" packageName="com.yourdomain.yourapp" html5_fbinstant="0" ios_bundle="com.yourdomain." touchToMouse="1" html5_crash="" mouseTouchOrder="0" tv_icon="" osx_org="GiderosMobile" build_number="1" win_org="GiderosMobile" html5_host="">
+ <properties orientation="1" windowHeight="0" app_icon="other/Icon.png" splash_v_image="" winrt_package="com.yourdomain.yourapp" encryptAssets="0" html5_wasm="0" vsync="0" app_name="Bushido Battle" html5_fbinstant="0" osx_org="GiderosMobile" tv_icon="" win_org="GiderosMobile" osx_domain="giderosmobile.com" splashScaleMode="0" splash_h_image="" android_template="0" win_domain="giderosmobile.com" mouseToTouch="1" backgroundColor="#000000" version_code="1" osx_installerId="" fps="60" architecture="7" touchToMouse="1" autorotation="0" osx_category="5" html5_host="" iosDevice="0" scaleMode="3" html5_crash="" html5_pack="0" packageName="com.yourdomain.yourapp" retinaDisplay="0" html5_fbload="50" version="1.0" logicalWidth="1200" build_number="1" html5_mem="256" winrt_org="GiderosMobile" osx_signingId="" disableSplash="1" encryptCode="0" logicalHeight="1920" osx_bundle="com.yourdomain." ios_bundle="com.yourdomain." windowWidth="0" html5_symbols="0" mouseTouchOrder="0" exportMode="0">
   <imageScales/>
   <plugins>
-   <plugin name="JSON" enabled="1"/>
-   <plugin name="Lua Socket" enabled="1"/>
-   <plugin name="SceneManager" enabled="1"/>
+   <plugin enabled="1" name="JSON"/>
+   <plugin enabled="1" name="Lua Socket"/>
+   <plugin enabled="1" name="SceneManager"/>
   </plugins>
   <exports>
    <export name="APK">
-    <property name="androidPath" value=""/>
-    <property name="androidSdk" value=""/>
-    <property name="androidTarget" value="28"/>
-    <property name="androidTools" value=""/>
-    <property name="buildAab" value="0"/>
-    <property name="buildApk" value="0"/>
-    <property name="deployApk" value="0"/>
-    <property name="javaPath" value=""/>
-    <property name="keyAlias" value=""/>
-    <property name="keyStore" value=""/>
-    <property name="packageName" value="com.zwsi.bushidobattle"/>
-    <property name="timestampApk" value="1"/>
+    <property value="" name="androidPath"/>
+    <property value="" name="androidSdk"/>
+    <property value="28" name="androidTarget"/>
+    <property value="" name="androidTools"/>
+    <property value="0" name="buildAab"/>
+    <property value="0" name="buildApk"/>
+    <property value="0" name="deployApk"/>
+    <property value="" name="javaPath"/>
+    <property value="" name="keyAlias"/>
+    <property value="" name="keyStore"/>
+    <property value="com.zwsi.bushidobattle" name="packageName"/>
+    <property value="1" name="timestampApk"/>
    </export>
   </exports>
  </properties>
  <folder name="classes">
-  <file name="assets/classes/gtween.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>
@@ -54,6 +53,7 @@
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
+  <file name="assets/classes/gtween.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
   <file excludeFromExecution="1" name="assets/classes/socket.lua"/>
   <file name="assets/classes/textButton.lua"/>

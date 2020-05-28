@@ -150,7 +150,8 @@ function Cyclopedia:loadSprites()
 	INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
 	
-	self.heroMc = CharacterAnimation.new("Ninja_02")
+	-- TODO FIX ANIMATION REMOVE
+	--self.heroMc = CharacterAnimation.new("Ninja_02")
 
 	for key, value in ipairs(self.lists["monsters"]) do
 		--INFO("  ", value.name, value.textureName)
@@ -314,6 +315,7 @@ function Cyclopedia:getSprite(layerNumber, which)
 	return Bitmap.new(region)
 end
 
+-- TODO FIX ANIMATION REMOVE
 function Cyclopedia:getHeroMc()
 	return self.heroMc
 end

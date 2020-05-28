@@ -2,6 +2,9 @@ CharacterAnimation = Core.class(Sprite)
 
 function CharacterAnimation:init(filename)
 
+	self.mc = nil -- animated sprite (MovieClip) of the character
+	self.bar = nil -- health bar - lazy load, only when needed
+
 	local texturePack = "images/"..filename..".png"
 	local textureIndex = "images/"..filename..".txt"
 	INFO("Animated Character Pack:", texturePack, "Animated Character Index:", textureIndex)
@@ -38,9 +41,19 @@ function CharacterAnimation:init(filename)
 	
 	self.mc:setScale(1.3)
 	self.mc:setAnchorPosition(15,15)
-	
 	self:addChild(self.mc)
 	
+end
+
+function CharacterAnimation:setHealth(hpBar)
+
+	DEBUG("setHealth", hpBar)
+
+	if self.bar then
+		self:removeChild(self.bar)
+	end
+	self.bar = manual:getSprite(LAYER_HP, hpBar) -- TODO FIX actual hero health
+	self:addChild(self.bar)	
 end
 
 function CharacterAnimation:go(action)

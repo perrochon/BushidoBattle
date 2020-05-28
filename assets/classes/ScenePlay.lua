@@ -784,6 +784,13 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 		defender.hp = 0
 	end
 	defender.HPbar = 10 - math.floor((defender.hp / defender.maxHP) * 10)
+
+	-- TODO FIX ANIMATION need to update this on all monsters. Ideally by defender:setHPbar()
+	if defender.tactics == "player" then
+		self.world.heroMc:setHealth(defender.HPbar)
+	end
+	
+	-- TODO FIX ANIMATION won't be needed much longer
 	if defender.hp > 0 then
 		self.world:changeTile(LAYER_HP, defender.HPbar, defender.x, defender.y)
 	end
