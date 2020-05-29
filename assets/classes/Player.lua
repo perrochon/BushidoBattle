@@ -112,7 +112,7 @@ function Player:moveTo(c, r)
 	
 	self.mc:walk()
 
- 	local tween = GTween.new(self.mc, 1, animate, properties)
+ 	local tween = GTween.new(self.mc, MOVE_SPEED, animate, properties)
 	
 	return tween
 	

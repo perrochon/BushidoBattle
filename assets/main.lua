@@ -93,6 +93,7 @@ sceneManager = SceneManager.new({
 [SCENE_START_SERVER] = SceneStartServer,
 [SCENE_JOIN_SERVER] = SceneJoinServer,
 [SCENE_DRAW] = SceneDraw,
+[SCENE_SPRITES] = SceneSprites,
 })
 
 stage:addChild(sceneManager)
@@ -105,7 +106,5 @@ drawVersion()
 
 --go to start scene 
 INFO("\n**********************\n Bushido Battle "..VERSION.."\n**********************\n")
-sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_SPRITES, TRANSITION_TIME, TRANSITION)
 
--- Use the below when debugging issues with sprite loading
-stage:addChild(manual:displayAllSprites())

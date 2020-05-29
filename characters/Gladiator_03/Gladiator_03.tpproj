@@ -1,15 +1,5 @@
 <library>
- <properties extrude="0" alphaThreshold="0" forceSquare="0" removeAlphaBorder="0" showUnusedAreas="1" padding="0"/>
- <file file="Gladiator_03_JUMP_009.png"/>
- <file file="Gladiator_03_JUMP_008.png"/>
- <file file="Gladiator_03_JUMP_007.png"/>
- <file file="Gladiator_03_JUMP_006.png"/>
- <file file="Gladiator_03_JUMP_005.png"/>
- <file file="Gladiator_03_JUMP_004.png"/>
- <file file="Gladiator_03_JUMP_003.png"/>
- <file file="Gladiator_03_JUMP_002.png"/>
- <file file="Gladiator_03_JUMP_001.png"/>
- <file file="Gladiator_03_JUMP_000.png"/>
+ <properties forceSquare="0" alphaThreshold="0" removeAlphaBorder="0" extrude="0" padding="0" showUnusedAreas="1"/>
  <file file="Gladiator_03__WALK_009.png"/>
  <file file="Gladiator_03__WALK_008.png"/>
  <file file="Gladiator_03__WALK_007.png"/>
@@ -30,6 +20,16 @@
  <file file="Gladiator_03__RUN_002.png"/>
  <file file="Gladiator_03__RUN_001.png"/>
  <file file="Gladiator_03__RUN_000.png"/>
+ <file file="Gladiator_03__JUMP_009.png"/>
+ <file file="Gladiator_03__JUMP_008.png"/>
+ <file file="Gladiator_03__JUMP_007.png"/>
+ <file file="Gladiator_03__JUMP_006.png"/>
+ <file file="Gladiator_03__JUMP_005.png"/>
+ <file file="Gladiator_03__JUMP_004.png"/>
+ <file file="Gladiator_03__JUMP_003.png"/>
+ <file file="Gladiator_03__JUMP_002.png"/>
+ <file file="Gladiator_03__JUMP_001.png"/>
+ <file file="Gladiator_03__JUMP_000.png"/>
  <file file="Gladiator_03__IDLE_009.png"/>
  <file file="Gladiator_03__IDLE_008.png"/>
  <file file="Gladiator_03__IDLE_007.png"/>

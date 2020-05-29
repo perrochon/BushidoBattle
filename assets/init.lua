@@ -133,6 +133,7 @@ SCENE_CONNECT @ "sceneConnect"
 SCENE_START_SERVER @ "sceneStartServer"
 SCENE_JOIN_SERVER @ "sceneJoinServer"
 SCENE_DRAW @ "sceneDraw"
+SCENE_SPRITES @ "sceneSprites"
 
 -- Unite Remote Constants
 SYNC_TURN @ "syncTurn"

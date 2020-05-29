@@ -1,5 +1,7 @@
 CharacterAnimation = Core.class(Sprite)
 
+MOVE_SPEED @ 0.5
+
 function CharacterAnimation:init(filename)
 
 	self.mc = nil -- animated sprite (MovieClip) of the character
@@ -11,8 +13,10 @@ function CharacterAnimation:init(filename)
 	
 	local pack = TexturePack.new(textureIndex, texturePack)
 
-	local character = filename.."__"
-	local activity = {"IDLE", "WALK", "RUN", "JUMP", "ATTACK", "ATTACK_01", "ATTACK_02", "HURT", "DIE"}
+	local activity = {"WALK", "RUN", "JUMP", "ATTACK", "ATTACK_01", "ATTACK_02", "IDLE", "HURT", "DIE"}
+	-- TODO ANIMATIONS handle single vs. double attack. Right now, order above matters.
+		-- Requesting ATTACK if ATTACK not pressent will fall through to ATTACK_01. 
+		-- Requesting ATTACK_01 or ATTACK_02 if not present will fall through to IDLE 
 	
 	local timeline = {}
 	local c = 1
@@ -21,19 +25,21 @@ function CharacterAnimation:init(filename)
 	
 	self.startFrames = {}
 	
-	for a = 1, 8 do
+	--if not (filename == "Troll_03") then return nil end
+	
+	for a = 1, #activity do
 		self.startFrames[activity[a]] = c
 		for s = 0, 9 do
-			local filename = string.format("%s%s_%03d.png", character, activity[a], s)
-			DEBUG("Looking for file:", filename)
-			local region = pack:getTextureRegion(filename)
+			local texture = string.format("%s__%s_%03d.png", filename, activity[a], s)
+			--DEBUG("Looking for texture:", texture)
+			local region = pack:getTextureRegion(texture)
 			if not(region == nil) then
-				DEBUG(filename, "found")
+				--DEBUG(filename, "found")
 				local bitmap = Bitmap.new(region)
 				table.insert(timeline, {c, c+slow-1, bitmap})
 				c = c + slow
 			else
-				DEBUG(filename, "not found")
+				--DEBUG(texture, "not found")
 			end
 		end
 	end
