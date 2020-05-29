@@ -70,6 +70,41 @@ function Monster:init(entry, id)
 	self.inrange = false 
 	self.friends = false
 	self.seesHero = false
+	
+	self.mc = CharacterAnimation.new("Ninja_03")
+	self.mc.mc:gotoAndPlay(1)
+	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+end
+
+function Monster:setHealth(health)
+	self.hp = health
+	self.HPbar = 10 - math.floor((self.hp / self.maxHP) * 10)
+	self.mc:setHealth(self.HPbar)
+end
+
+function Monster:setPosition(c, r)
+	self.x = c
+	self.y = r
+	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+end
+
+function Monster:moveTo(c, r)
+
+	self.x = c
+	self.y = r
+
+	local animate = {}
+	animate.x = (self.x - 1) * TILE_WIDTH
+	animate.y = (self.y - 1) * TILE_HEIGHT
+	local properties = {}
+	properties.delay = 0
+	properties.dispatchEvents = false
+	
+	self.mc:walk()
+
+ 	local tween = GTween.new(self.mc, 1, animate, properties)
+	
+	return tween
 end
 
 function Monster:serialize()
@@ -106,8 +141,7 @@ function Monsters:init(mapData)
 		if v.type ~= 1 then
 			--DEBUG(json.encode(v))
 			local m = Monster.new(v.type, id)
-			m.x = v.x
-			m.y = v.y
+			m:setPosition(v.x, v.y)
 			m.sentry = v.sentry
 			m.berserk = v.berserk
 			table.insert(self.list, m)

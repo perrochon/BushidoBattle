@@ -76,8 +76,9 @@ function ScenePlay:init()
 	end
 
 		--the major gaming variables
-	self.heroes[localHero] = dataSaver.load(currentHeroFileName)
-
+	--self.heroes[localHero] = dataSaver.load(currentHeroFileName)
+    self.heroes[localHero] = Player.new(1)
+	
 	local x, y
 	for _, v in pairs(self.mapData.spawns) do
 		if v.type == 1 then
@@ -91,13 +92,11 @@ function ScenePlay:init()
 
 	self.heroes[1].heroTurn = true	
 	self.heroes[1].heroIdx = 1
-	self.heroes[1].x = x
-	self.heroes[1].y = y	
+	self.heroes[1]:setPosition(x,y)
 	if self.remote then
 		self.heroes[2].heroIdx = 2
 		self.heroes[2].heroTurn = false
-		self.heroes[2].x = x+1
-		self.heroes[2].y = y+1	
+		self.heroes[2]:setPosition(x+1,y+1)
 	end
 		
 	-- load monsters -- TODO HEROFIX double monsters when there are two players.
@@ -479,7 +478,7 @@ function ScenePlay:heroesTurnOver()
 	DEBUG("Targets left", targets)
 	
 	if targets == 0 or self.cheat == "V" then
-		dataSaver.save(currentHeroFileName, self.heroes[localHero])
+		self.heroes[localHero]:save(currentHeroFileName)
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
@@ -534,7 +533,7 @@ function ScenePlay:monsterTurnOver()
 	--after all the monsters attacked, check if the hero lost
 	if self.heroes[localHero].hp < 1 or self.cheat == "D" then
 		self.msg:add("you died", MSG_DEATH)
-		dataSaver.save(currentHeroFileName, self.heroes[localHero])
+		self.heroes[localHero]:save(currentHeroFileName)
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
 
@@ -779,17 +778,13 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	if defender.berserk then roll = roll / 2 end
 	
 	--adjust the defender's hp except for any resistances
-	defender.hp = defender.hp - roll + defender.resist[weapon.type]
+	defender:setHealth(defender.hp - roll + defender.resist[weapon.type])
+	
 	if defender.hp < 0 then
 		defender.hp = 0
+		defender.mc:die()
 	end
-	defender.HPbar = 10 - math.floor((defender.hp / defender.maxHP) * 10)
 
-	-- TODO FIX ANIMATION need to update this on all monsters. Ideally by defender:setHPbar()
-	if defender.tactics == "player" then
-		self.world.heroMc:setHealth(defender.HPbar)
-	end
-	
 	-- TODO FIX ANIMATION won't be needed much longer
 	if defender.hp > 0 then
 		self.world:changeTile(LAYER_HP, defender.HPbar, defender.x, defender.y)

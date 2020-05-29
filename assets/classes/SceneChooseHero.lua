@@ -13,7 +13,8 @@ function SceneChooseHero:init()
 	for i=1,4 do
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Loading", heroFileName)
-		local hero = dataSaver.load(heroFileName)	
+		--local hero = dataSaver.load(heroFileName)	
+		local hero = Player.new(1)	
 		--DEBUG(hero)
 		if hero then
 			--DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
@@ -22,7 +23,7 @@ function SceneChooseHero:init()
 		else
 			hero = Player.new(i) 
 			--DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
-			dataSaver.save(heroFileName, hero)		
+			hero:save(heroFileName)
 			self.panels[i] = self:displayHero(hero, i)
 		end
 		
@@ -75,7 +76,7 @@ function SceneChooseHero:displayHero(hero, slot)
 				hero.name = event.text:sub(1,8)
 				
 				local heroFileName = "|D|hero"..slot
-				dataSaver.save(heroFileName, hero)
+				hero:save(heroFileName)
 				sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 				
 			end
 		end)
@@ -112,7 +113,7 @@ function SceneChooseHero:displayHero(hero, slot)
 			local heroFileName = "|D|hero"..slot
 			--DEBUG("Resetting", heroFileName)
 			hero = Player.new(slot) 
-			dataSaver.save(heroFileName, hero)
+			hero:save(heroFileName)
 			sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
 			end
 		)
@@ -177,6 +178,6 @@ function SceneChooseHero:resetAllHeroes()
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Resetting", heroFileName)
 		hero = Player.new(i) 
-		dataSaver.save(heroFileName, hero)
+		hero:save(heroFileName)
 	end
 end

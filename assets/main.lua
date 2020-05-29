@@ -108,4 +108,4 @@ INFO("\n**********************\n Bushido Battle "..VERSION.."\n*****************
 sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)
 
 -- Use the below when debugging issues with sprite loading
---stage:addChild(manual:displayAllSprites())
+stage:addChild(manual:displayAllSprites())

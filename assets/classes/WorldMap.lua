@@ -46,10 +46,11 @@ function WorldMap:init(level, heroes, monsters)
 	--self:debugMapInfo(LAYER_MONSTERS)
 	
 	-- TODO FIX ANIMATION store this somewhere, but not so that it gets saved
-	self.heroMc = CharacterAnimation.new("Ninja_02")
-	self.heroMc.mc:gotoAndPlay(1)
-	self.heroMc:setPosition((heroes[localHero].x - 1) * TILE_WIDTH, (heroes[localHero].y - 1) * TILE_HEIGHT)
-	self.camera:addChild(self.heroMc)
+	self.heroMc = heroes[localHero].mc
+	--self.heroMc = CharacterAnimation.new("Ninja_02")
+	--self.heroMc.mc:gotoAndPlay(1)
+	--self.heroMc:setPosition((heroes[localHero].x - 1) * TILE_WIDTH, (heroes[localHero].y - 1) * TILE_HEIGHT)
+	--self.camera:addChild(self.heroMc)
 	
 
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
@@ -91,12 +92,15 @@ function WorldMap:placeMonsters(heroes, monsters)
 	
 	for _, m in pairs(monsters.list) do
 		mArray[self:idx(m.x, m.y)] = m.entry
+		self.camera:addChild(m.mc)
 	end
 	
 	mArray[self:idx(heroes[localHero].x, heroes[localHero].y)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		self.camera:addChild(heroes[localHero].mc)
 
 	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
 		mArray[self:idx(heroes[3-localHero].x, heroes[3-localHero].y)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		self.camera:addChild(heroes[3-localHero].mc)	
 	end
 	
 	return mArray
@@ -279,29 +283,8 @@ function WorldMap:moveHero(hero, dx, dy)
 	end
 
 	--for purposes of moving around the map, the hero is just another monster
-	self:moveMonster(hero, dx, dy)
+	local tween = self:moveMonster(hero, dx, dy)
 	
-	
-	--define what to animate
-	local animate = {}
-	animate.x = (hero.x - 1) * TILE_WIDTH
-	animate.y = (hero.y - 1) * TILE_HEIGHT
-	 
-	--define GTween properties
-	local properties = {}
-	properties.delay = 0
-	--properties.ease = easing.inElastic
-	properties.dispatchEvents = true
-	 
-	--animate them
-	--- First argument: sprite to animate
-	--- Second argument: duration of animation in seconds or frames
-	--- Third argument: properties to animate
-	--- Fourth argument: GTween properties
-	self.heroMc:walk()
- 	local tween = GTween.new(self.heroMc, 1, animate, properties)
-		--self.heroMc:setPosition((hero.x - 1) * TILE_WIDTH, (hero.y - 1) * TILE_HEIGHT)
-
 	tween.onChange = function()
 		--DEBUG("Shifting world", self.heroMc:getX())
 		self:shiftWorld2(self.heroMc)
@@ -393,8 +376,8 @@ function WorldMap:moveMonster(monster, dx, dy)
 		end
 
 		--update x and y
-		monster.x = monster.x + dx
-		monster.y = monster.y + dy
+		local tween = monster:moveTo(monster.x + dx, monster.y + dy)
+		return tween
 	end
 end
 

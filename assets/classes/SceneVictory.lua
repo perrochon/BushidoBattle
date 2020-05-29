@@ -7,10 +7,12 @@ SceneVictory = Core.class(Sprite)
 function SceneVictory:init()
 
 
-	local hero = dataSaver.load(currentHeroFileName)
+	--local hero = dataSaver.load(currentHeroFileName)
+    local hero  = Player.new(1)
+
 	hero.level = hero.level + 1
 	hero.maxHP = hero.maxHP + 20
-	dataSaver.save(currentHeroFileName, hero)
+	hero:save(currenHeroFileName)
 
 	self.time = 0	--cycles of time that have passed
 	self.a = 0		--setAlpha value for the words on this screen

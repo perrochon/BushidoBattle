@@ -12,7 +12,7 @@ function CharacterAnimation:init(filename)
 	local pack = TexturePack.new(textureIndex, texturePack)
 
 	local character = filename.."__"
-	local activity = {"IDLE", "WALK", "RUN", "JUMP", "ATTACK_01", "ATTACK_02", "HURT", "DIE"}
+	local activity = {"IDLE", "WALK", "RUN", "JUMP", "ATTACK", "ATTACK_01", "ATTACK_02", "HURT", "DIE"}
 	
 	local timeline = {}
 	local c = 1
@@ -25,10 +25,16 @@ function CharacterAnimation:init(filename)
 		self.startFrames[activity[a]] = c
 		for s = 0, 9 do
 			local filename = string.format("%s%s_%03d.png", character, activity[a], s)
-			--DEBUG(filename)
-			local bitmap = Bitmap.new(pack:getTextureRegion(filename))
-			table.insert(timeline, {c, c+slow-1, bitmap})
-			c = c + slow
+			DEBUG("Looking for file:", filename)
+			local region = pack:getTextureRegion(filename)
+			if not(region == nil) then
+				DEBUG(filename, "found")
+				local bitmap = Bitmap.new(region)
+				table.insert(timeline, {c, c+slow-1, bitmap})
+				c = c + slow
+			else
+				DEBUG(filename, "not found")
+			end
 		end
 	end
 	
@@ -63,4 +69,8 @@ end
 
 function CharacterAnimation:walk()
 	self:go("WALK")
+end
+
+function CharacterAnimation:die()
+	self:go("DIE")
 end

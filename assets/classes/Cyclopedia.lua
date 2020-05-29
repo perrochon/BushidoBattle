@@ -264,37 +264,32 @@ function Cyclopedia:displayAllSprites()
 	x = D
 	y = y + TILE_HEIGHT + D
 
-	local n1 = CharacterAnimation.new("Ninja_01")
-	n1:setPosition(x-10, y-10)
-	n1:setScale(1.2)
-	sprites:addChild(n1)
+	textures = {"Animal_03", "Archer_01", "Asassin_01", "Asassin_02", "Asassin_03", 
+				"Barbarian_01", "Gladiator_03", "Ninja_01", "Ninja_02","Ninja_03", "Samurai_01", 
+				"Samurai_02", "Samurai_03"} -- TODO FIX ANIMATIONS Troll
 
-	x = x + TILE_WIDTH + D
-	local n2 = CharacterAnimation.new("Ninja_02")
-	n2:setPosition(x-18, y-18)
-	n2:setScale(1.3)
-	sprites:addChild(n2)
+	local clips = {}
+	for i = 1, #textures do
+		clips[i] = CharacterAnimation.new(textures[i])
+		clips[i]:setPosition(x-10, y-10)
+		clips[i]:setScale(1.1)
+		sprites:addChild(clips[i])
+		x = x + TILE_WIDTH + D
+	end
 
-	x = x + TILE_WIDTH + D
-	local n3 = CharacterAnimation.new("Ninja_03")
-	n3:setPosition(x-20, y-20)
-	n3:setScale(1.4)
-	sprites:addChild(n3)
-	
 	local on = true
 	
 	sprites:addEventListener(Event.KEY_DOWN, function(event)
 		local actions = {[KeyCode.I] = "IDLE", [KeyCode.W] = "WALK", [KeyCode.R] = "RUN", [KeyCode.J] = "JUMP", 
-						[KeyCode.A] = "ATTACK_01", [KeyCode.B] = "ATTACK_02", [KeyCode.H] = "HURT", [KeyCode.D] = "DIE"}
+						[KeyCode.A] = "ATTACK", [KeyCode.NUM_1] = "ATTACK_01", [KeyCode.NUM_2] = "ATTACK_02", 
+						[KeyCode.H] = "HURT", [KeyCode.D] = "DIE"}
 		
 		--DEBUG(event.keyCode, KeyCode.I, actions[KeyCode.I], actions[event.keyCode])
-		n1:go(actions[event.keyCode])
-		n2:go(actions[event.keyCode])
-		n3:go(actions[event.keyCode])
+
+		for i = 1, #clips do
+			clips[i]:go(actions[event.keyCode])
+		end		
 		if event.keyCode == KeyCode.E then
-			n1:walk()
-			n2:walk()
-			n3:walk()
 		end
 	end)
 	

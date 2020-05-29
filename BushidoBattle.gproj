@@ -1,5 +1,5 @@
 <project>
- <properties orientation="1" windowHeight="0" app_icon="other/Icon.png" splash_v_image="" winrt_package="com.yourdomain.yourapp" encryptAssets="0" html5_wasm="0" vsync="0" app_name="Bushido Battle" html5_fbinstant="0" osx_org="GiderosMobile" tv_icon="" win_org="GiderosMobile" osx_domain="giderosmobile.com" splashScaleMode="0" splash_h_image="" android_template="0" win_domain="giderosmobile.com" mouseToTouch="1" backgroundColor="#000000" version_code="1" osx_installerId="" fps="60" architecture="7" touchToMouse="1" autorotation="0" osx_category="5" html5_host="" iosDevice="0" scaleMode="3" html5_crash="" html5_pack="0" packageName="com.yourdomain.yourapp" retinaDisplay="0" html5_fbload="50" version="1.0" logicalWidth="1200" build_number="1" html5_mem="256" winrt_org="GiderosMobile" osx_signingId="" disableSplash="1" encryptCode="0" logicalHeight="1920" osx_bundle="com.yourdomain." ios_bundle="com.yourdomain." windowWidth="0" html5_symbols="0" mouseTouchOrder="0" exportMode="0">
+ <properties orientation="1" win_domain="giderosmobile.com" winrt_org="GiderosMobile" mouseToTouch="1" html5_fbinstant="0" app_icon="other/Icon.png" splashScaleMode="0" win_org="GiderosMobile" html5_symbols="0" splash_h_image="" windowHeight="0" vsync="0" build_number="1" iosDevice="0" osx_org="GiderosMobile" logicalWidth="1200" packageName="com.yourdomain.yourapp" osx_bundle="com.yourdomain." app_name="Bushido Battle" osx_signingId="" winrt_package="com.yourdomain.yourapp" html5_mem="256" scaleMode="3" touchToMouse="1" android_template="0" windowWidth="0" splash_v_image="" html5_pack="0" exportMode="0" html5_fbload="50" logicalHeight="1920" backgroundColor="#000000" ios_bundle="com.yourdomain." osx_installerId="" retinaDisplay="0" architecture="7" fps="60" html5_wasm="0" mouseTouchOrder="0" html5_crash="" encryptAssets="0" osx_category="5" version_code="1" disableSplash="1" version="1.0" html5_host="" osx_domain="giderosmobile.com" tv_icon="" autorotation="0" encryptCode="0">
   <imageScales/>
   <plugins>
    <plugin enabled="1" name="JSON"/>
@@ -71,12 +71,34 @@
   <file name="assets/fonts/nuku1.ttf"/>
  </folder>
  <folder name="images">
+  <file name="assets/images/Animal_03.png"/>
+  <file name="assets/images/Animal_03.txt"/>
+  <file name="assets/images/Archer_01.png"/>
+  <file name="assets/images/Archer_01.txt"/>
+  <file name="assets/images/Asassin_01.png"/>
+  <file name="assets/images/Asassin_01.txt"/>
+  <file name="assets/images/Asassin_02.png"/>
+  <file name="assets/images/Asassin_02.txt"/>
+  <file name="assets/images/Asassin_03.png"/>
+  <file name="assets/images/Asassin_03.txt"/>
+  <file name="assets/images/Barbarian_01.png"/>
+  <file name="assets/images/Barbarian_01.txt"/>
+  <file name="assets/images/Gladiator_03.png"/>
+  <file name="assets/images/Gladiator_03.txt"/>
   <file name="assets/images/Ninja_01.png"/>
   <file name="assets/images/Ninja_01.txt"/>
   <file name="assets/images/Ninja_02.png"/>
   <file name="assets/images/Ninja_02.txt"/>
   <file name="assets/images/Ninja_03.png"/>
   <file name="assets/images/Ninja_03.txt"/>
+  <file name="assets/images/Samurai_01.png"/>
+  <file name="assets/images/Samurai_01.txt"/>
+  <file name="assets/images/Samurai_02.png"/>
+  <file name="assets/images/Samurai_02.txt"/>
+  <file name="assets/images/Samurai_03.png"/>
+  <file name="assets/images/Samurai_03.txt"/>
+  <file name="assets/images/Troll_03.png"/>
+  <file name="assets/images/Troll_03.txt"/>
   <file name="assets/images/characters.png"/>
   <file name="assets/images/characters.txt"/>
   <file name="assets/images/glow120x120.png"/>
