@@ -2,14 +2,47 @@ CharacterAnimation = Core.class(Sprite)
 
 MOVE_SPEED @ 0.5
 
-function CharacterAnimation:init(filename)
+CharacterAnimation.textureData = {
+	-- Center animations on their center of body. Many die to the right. They all throw to the right...
+	-- ScenePrites shows all sprites in a grid for the sole purpose of twiddling these parameters...
+	{name = "Animal_01", dx = 10, dy = 10},
+	{name = "Animal_02", dx = 0, dy = 40}, --d Eagle "run"/"jump" look more like flying. It dies high up
+	{name = "Animal_03", dx = -70, dy = 13},
+	{name = "Archer_01", dx = -90, dy = 0},
+	{name = "Archer_02", dx = -90, dy = 0},
+	{name = "Archer_03", dx = -90, dy = 0},
+	{name = "Assassin_01", dx = -70, dy = 0},
+	{name = "Assassin_02", dx = -70, dy = 0},
+	{name = "Assassin_03", dx = -70, dy = 0},
+	{name = "Barbarian_01", dx = -70, dy = 0},
+	{name = "Barbarian_02", dx = -70, dy = 0},
+	{name = "Barbarian_03", dx = -70, dy = 0},
+	{name = "Gladiator_01", dx = -70, dy = 0},
+	{name = "Gladiator_03", dx = -70, dy = 0},
+	{name = "Ninja_01", dx = -70, dy = 0},
+	{name = "Ninja_02", dx = -70, dy = 0},
+	{name = "Ninja_03", dx = -70, dy = 0},
+	{name = "Samurai_01", dx = -70, dy = 0},
+	{name = "Samurai_02", dx = -70, dy = 0},
+	{name = "Samurai_03", dx = -70, dy = 0},
+	{name = "Troll_01", dx = 0, dy = 0},
+	{name = "Troll_02", dx = 0, dy = 0},
+	{name = "Troll_03", dx = 0, dy = 0},
+	--]]
+	} 
+
+function CharacterAnimation:init(textureData)
+
+	local filename = textureData.name
 
 	self.mc = nil -- animated sprite (MovieClip) of the character
-	self.bar = nil -- health bar - lazy load, only when needed
+	self.bar = nil -- health bar - lazy load, dx = 0, dy = 0},{name = only when needed
+	
+	--DEBUG(textureData.name, textureData.dx, textureData.dy)
 
 	local texturePack = "images/"..filename..".png"
 	local textureIndex = "images/"..filename..".txt"
-	INFO("Animated Character Pack:", texturePack, "Animated Character Index:", textureIndex)
+	--INFO("Animated Character Pack:", texturePack, "Animated Character Index:", textureIndex)
 	
 	local pack = TexturePack.new(textureIndex, texturePack)
 
@@ -24,9 +57,7 @@ function CharacterAnimation:init(filename)
 	self.slow = slow
 	
 	self.startFrames = {}
-	
-	--if not (filename == "Troll_03") then return nil end
-	
+		
 	for a = 1, #activity do
 		self.startFrames[activity[a]] = c
 		for s = 0, 9 do
@@ -52,7 +83,7 @@ function CharacterAnimation:init(filename)
 	end
 	
 	self.mc:setScale(1.3)
-	self.mc:setAnchorPosition(15,15)
+	self.mc:setAnchorPosition(textureData.dx,textureData.dy)
 	self:addChild(self.mc)
 	
 end
