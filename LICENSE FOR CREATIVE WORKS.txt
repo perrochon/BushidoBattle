@@ -1,0 +1,5 @@
+While the code of this project is under MIT license, that is not the case for the creative assets.
+
+The creative assets have various licensing restrictions. They are ok to use for BushidoBattle (either because they were free to use, or paid for).
+
+Please do not use these assets for any other projects without checking licenses first.
