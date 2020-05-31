@@ -5,26 +5,27 @@ MOVE_SPEED @ 0.5
 CharacterAnimation.textureData = {
 	-- Center animations on their center of body. Many die to the right. They all throw to the right...
 	-- ScenePrites shows all sprites in a grid for the sole purpose of twiddling these parameters...
-	{name = "Animal_01", dx = 10, dy = 10},
-	{name = "Animal_02", dx = 0, dy = 40}, --d Eagle "run"/"jump" look more like flying. It dies high up
-	{name = "Animal_03", dx = -70, dy = 13},
-	{name = "Archer_01", dx = -90, dy = 0},
-	{name = "Archer_02", dx = -90, dy = 0},
-	{name = "Archer_03", dx = -90, dy = 0},
-	{name = "Assassin_01", dx = -70, dy = 0},
-	{name = "Assassin_02", dx = -70, dy = 0},
-	{name = "Assassin_03", dx = -70, dy = 0},
-	{name = "Barbarian_01", dx = -70, dy = 0},
-	{name = "Barbarian_02", dx = -70, dy = 0},
-	{name = "Barbarian_03", dx = -70, dy = 0},
-	{name = "Gladiator_01", dx = -70, dy = 0},
-	{name = "Gladiator_03", dx = -70, dy = 0},
-	{name = "Ninja_01", dx = -70, dy = 0},
-	{name = "Ninja_02", dx = -70, dy = 0},
-	{name = "Ninja_03", dx = -70, dy = 0},
-	{name = "Samurai_01", dx = -70, dy = 0},
-	{name = "Samurai_02", dx = -70, dy = 0},
-	{name = "Samurai_03", dx = -70, dy = 0},
+	{name = "Animal_01", dx = -20, dy = 0},
+	{name = "Animal_02", dx = -20, dy = 20}, -- Eagle "run"/"jump" look more like flying. It dies high up
+	{name = "Animal_03", dx = -20, dy = 0},
+	{name = "Archer_01", dx = -50, dy = 0},
+	--[[
+	{name = "Archer_02", dx = 0, dy = 0},
+	{name = "Archer_03", dx = 0, dy = 0},
+	{name = "Assassin_01", dx = 0, dy = 0},
+	{name = "Assassin_02", dx = 0, dy = 0},
+	{name = "Assassin_03", dx = 0, dy = 0},
+	{name = "Barbarian_01", dx = 0, dy = 0},
+	{name = "Barbarian_02", dx = 0, dy = 0},
+	{name = "Barbarian_03", dx = 0, dy = 0},
+	{name = "Gladiator_01", dx = 0, dy = 0},
+	{name = "Gladiator_03", dx = 0, dy = 0},
+	{name = "Ninja_01", dx = 0, dy = 0},
+	{name = "Ninja_02", dx = 0, dy = 0},
+	{name = "Ninja_03", dx = 0, dy = 0},
+	{name = "Samurai_01", dx = 0, dy = 0},
+	{name = "Samurai_02", dx = 0, dy = 0},
+	{name = "Samurai_03", dx = 0, dy = 0},
 	{name = "Troll_01", dx = 0, dy = 0},
 	{name = "Troll_02", dx = 0, dy = 0},
 	{name = "Troll_03", dx = 0, dy = 0},
@@ -82,9 +83,19 @@ function CharacterAnimation:init(textureData)
 		self.mc:setStopAction(a)
 	end
 	
-	self.mc:setScale(1.3)
-	self.mc:setAnchorPosition(textureData.dx,textureData.dy)
+
+	self:setAnchorPoint(0.5,0.5)
+
 	self:addChild(self.mc)
+	self.mc:setAnchorPosition(self.mc:getWidth() / 2 + textureData.dx, self.mc:getHeight() / 2 + textureData.dy)
+
+	local bg = Pixel.new(COLOR_YELLOW, 0.2, self:getWidth(), self:getHeight())
+	bg:setAnchorPoint(0.5,0.5)
+	self:addChild(bg)
+
+	bg = Pixel.new(COLOR_GREEN, 0.2, 100, 100)
+	bg:setAnchorPoint(0.5,0.5)
+	self:addChild(bg)
 	
 end
 

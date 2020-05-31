@@ -9,8 +9,8 @@ function SceneSprites:init()
 	--first, start out with a dark screen
 	application:setBackgroundColor(COLOR_WHITE)
 
-	local LEFT = 100
-	local TOP = 100
+	local LEFT = 0
+	local TOP = 0
 	local WIDTH = APP_WIDTH - 2 * MINX
 	local HEIGHT = APP_HEIGHT - 2 * MINY
 	local D = 2
@@ -62,7 +62,7 @@ function SceneSprites:init()
 	local pack = manual.lists["health"].pack
 	for i = 0, 10 do
 		local bitmap = manual:getSprite(LAYER_HP, i)
-		bitmap:setPosition(x, y)
+		bitmap:setPosition(x + TILE_WIDTH/2, y + TILE_WIDTH /2)
 		sprites:addChild(bitmap)
 		--DEBUG("Bitmap", x, y, bitmap:getSize())
 		x = x + TILE_WIDTH + D
@@ -78,14 +78,15 @@ function SceneSprites:init()
 		end
 		local mc = CharacterAnimation.new(textures[i])
 		if not mc then break end
-		mc:setPosition(x, y)
+		mc:setPosition(x + 50, y + 50)
 		mc:setScale(1)
 		sprites:addChild(mc)
 		table.insert(clips, mc)
-		x = x + TILE_WIDTH + D
+		x = x + 3 * (TILE_WIDTH + D)
 	end
 
 	-- scale
+	--[[
 	local SCALE = 2
 	y = y - (TILE_HEIGHT + D)
 	for i = 1, #textures do
@@ -101,7 +102,8 @@ function SceneSprites:init()
 		table.insert(clips, mc)
 		x = x + SCALE * (TILE_WIDTH + D)
 	end
-	
+	--]]
+		
 	self:addEventListener(Event.KEY_DOWN, function(event)
 		local actions = {[KeyCode.I] = "IDLE", [KeyCode.W] = "WALK", [KeyCode.R] = "RUN", [KeyCode.J] = "JUMP", 
 						[KeyCode.A] = "ATTACK", [KeyCode.NUM_1] = "ATTACK_01", [KeyCode.NUM_2] = "ATTACK_02", 
