@@ -74,22 +74,22 @@ function Cyclopedia:init()
 					projectile	the projectile animation used for the attack, either spear, arrow or magic
 					missSound   what the program reports for close misses
 					--]]
-			[2] = {name = "peasant", textureName = "Samurai_01__WALK_000.png", xp = 1, hp = 4, bloodied = 2, 
+			[2] = {name = "peasant", mcName = "Samurai_01", textureName = "Samurai_01__WALK_000.png", xp = 1, hp = 4, bloodied = 2, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "stick", weapon2 = nil, tactics = "minion", see = 4, alone = 5
 					},
-			[3] = {name = "soldier", textureName = "Samurai_03__WALK_000.png", xp = 3, hp = 15, bloodied = 7,  
+			[3] = {name = "soldier", mcName = "Samurai_03", textureName = "Samurai_03__WALK_000.png", xp = 3, hp = 15, bloodied = 7,  
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "shortsword", weapon2 = "javelin", tactics = "soldier", see = 6, alone = 10
 					},
-			[4] = {name = "samurai", textureName = "Samurai_02__WALK_000.png", xp = 4, hp = 25, bloodied = 12, 
+			[4] = {name = "samurai", mcName = "Samurai_02", textureName = "Samurai_02__WALK_000.png", xp = 4, hp = 25, bloodied = 12, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "katana", weapon2 = "spear", tactics = "soldier", see = 3, alone = 100
 					},
-			[5] = {name = "wolf", textureName = "Animal_03__WALK_000.png", xp = 2, hp = 25, bloodied = 12, 
+			[5] = {name = "wolf", mcName = "Samurai_01", textureName = "Animal_03__WALK_000.png", xp = 2, hp = 25, bloodied = 12, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "claw", weapon2 = "fang", tactics = "minion", see = 6, alone = 4
@@ -196,7 +196,6 @@ function Cyclopedia:loadSprites()
 	local rt = RenderTarget.new(STEPS * TILE_WIDTH, TILE_HEIGHT )
 	local bitmap = Bitmap.new(rt)
 
-	-- first tile (full health) is clear.
 	for s = 1, STEPS do
 		local lightLevel = self:getEntry("light", s)
 		local shadow = Pixel.new(COLOR_LTBLACK, lightLevel.alpha, TILE_WIDTH, TILE_HEIGHT)

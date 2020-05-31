@@ -71,7 +71,7 @@ function Monster:init(entry, id)
 	self.friends = false
 	self.seesHero = false
 	
-	self.mc = CharacterAnimation.new("Ninja_03")
+	self.mc = CharacterAnimation.new(info.mcName)
 	self.mc.mc:gotoAndPlay(1)
 	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
 end
@@ -85,7 +85,7 @@ end
 function Monster:setPosition(c, r)
 	self.x = c
 	self.y = r
-	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+	self.mc:setPosition(self.x*TILE_WIDTH - TILE_WIDTH/2, self.y*TILE_HEIGHT - TILE_HEIGHT/2)
 end
 
 function Monster:moveTo(c, r)
@@ -94,8 +94,8 @@ function Monster:moveTo(c, r)
 	self.y = r
 
 	local animate = {}
-	animate.x = (self.x - 1) * TILE_WIDTH
-	animate.y = (self.y - 1) * TILE_HEIGHT
+	animate.x = self.x * TILE_WIDTH - TILE_WIDTH / 2
+	animate.y = self.y * TILE_HEIGHT - TILE_HEIGHT / 2
 	local properties = {}
 	properties.delay = 0
 	properties.dispatchEvents = false

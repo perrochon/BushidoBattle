@@ -72,6 +72,7 @@ self.weapons = {{name = "shortsword", reach = 1, modifier = 8, defense = "AC", d
 end
 
 function Player:save(filename)
+	DEBUG(self.name, filename, currenHeroFileName)
 	local mc = self.mc
 	self.mc = nil
 	dataSaver.save(filename, self)
@@ -95,7 +96,7 @@ end
 function Player:setPosition(c, r)
 	self.x = c
 	self.y = r
-	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+	self.mc:setPosition(self.x*TILE_WIDTH - TILE_WIDTH/2, self.y*TILE_HEIGHT - TILE_HEIGHT/2)
 end
 
 function Player:moveTo(c, r)
@@ -104,8 +105,8 @@ function Player:moveTo(c, r)
 	self.y = r
 
 	local animate = {}
-	animate.x = (self.x - 1) * TILE_WIDTH
-	animate.y = (self.y - 1) * TILE_HEIGHT
+	animate.x = self.x * TILE_WIDTH - TILE_WIDTH / 2
+	animate.y = self.y * TILE_HEIGHT - TILE_HEIGHT / 2
 	local properties = {}
 	properties.delay = 0
 	properties.dispatchEvents = false

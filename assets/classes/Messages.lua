@@ -31,7 +31,7 @@ function Messages:add(text, type)
 	INFO("Message                           " .. text)
 	
 	local t = tostring(text)
-	local msg = TextField.new(FONT_MEDIUM, t, true)
+	local msg = TextField.new(FONT_SMALL, t, true)
 	
 	--add up all the heights of the current messages in the sidebar
 	local height = 0

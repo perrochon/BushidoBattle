@@ -40,7 +40,7 @@ function WorldMap:init(level, heroes, monsters)
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
-	layer:setAlpha(0.5)
+	layer:setAlpha(0.2)
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)

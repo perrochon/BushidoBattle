@@ -644,7 +644,7 @@ function ScenePlay:basicAttack(attacker, defender)
 			if (defender.defense[weapon.defense] - roll) > 5 then
 				-- silent for big misses
 			else	
-				-- self.msg:add(weapon.missSound, MSG_ATTACK)
+				self.msg:add(weapon.missSound, MSG_ATTACK)
 			end
 		else
 			self.sounds:play("melee-hit")
@@ -716,7 +716,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 				if (defender.defense[weapon.defense] - roll) > 5 then
 					-- silent for big misses
 				else	
-					-- self.msg:add(weapon.missSound, MSG_ATTACK)
+					self.msg:add(weapon.missSound, MSG_ATTACK)
 				end
 			else
 				self.sounds:play(weapon.projectile .. "-hit")
@@ -753,11 +753,8 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 end
 
 function ScenePlay:rollDamage(weapon, attacker, defender, crit)
---[[Logic:  resolve the damage rolls based on the attacker's weapon. Takes into account critical hits and the defender's resistances
-	Called from basicAttack, rangedAttack
-	Calls roll, world:changeTile
-	Changes defender.hp, .HPbar
---]]
+	--[[Logic:  resolve the damage rolls based on the attacker's weapon. Takes into account critical hits and the defender's resistances
+	--]]
 
 	--describe the action if it's the player getting hit
 	--roll for damage
@@ -780,15 +777,19 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	--adjust the defender's hp except for any resistances
 	defender:setHealth(defender.hp - roll + defender.resist[weapon.type])
 	
-	if defender.hp < 0 then
+	DEBUG(attacker.name, "hits", defender.name, defender.hp)
+	
+	if defender.hp <= 0 then
 		defender.hp = 0
 		defender.mc:die()
 	end
 
 	-- TODO FIX ANIMATION won't be needed much longer
+	--[[
 	if defender.hp > 0 then
 		self.world:changeTile(LAYER_HP, defender.HPbar, defender.x, defender.y)
 	end
+	--]]
 end
 
 function ScenePlay:attackMonster(x, y)
@@ -873,7 +874,7 @@ end
 	local keyFrom, layerFrom, tileFrom = self.world:getTileInfo(from.c, from.r)
 	local keyTo, layerTo, tileTo = self.world:getTileInfo(to.c, to.r)
 
-	DEBUG("Line from", manual:getEntry("layers", layerFrom), keyFrom, from.c, from.r, "to", manual:getEntry("layers", layerTo), keyTo, to.c, to.r)
+	--DEBUG("Line from", manual:getEntry("layers", layerFrom), keyFrom, from.c, from.r, "to", manual:getEntry("layers", layerTo), keyTo, to.c, to.r)
 	
 	if not ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero") then return end
 

@@ -5,39 +5,51 @@ MOVE_SPEED @ 0.5
 CharacterAnimation.textureData = {
 	-- Center animations on their center of body. Many die to the right. They all throw to the right...
 	-- ScenePrites shows all sprites in a grid for the sole purpose of twiddling these parameters...
-	{name = "Animal_01", dx = -20, dy = 0},
-	{name = "Animal_02", dx = -20, dy = 20}, -- Eagle "run"/"jump" look more like flying. It dies high up
-	{name = "Animal_03", dx = -20, dy = 0},
-	{name = "Archer_01", dx = -50, dy = 0},
-	--[[
-	{name = "Archer_02", dx = 0, dy = 0},
-	{name = "Archer_03", dx = 0, dy = 0},
-	{name = "Assassin_01", dx = 0, dy = 0},
-	{name = "Assassin_02", dx = 0, dy = 0},
-	{name = "Assassin_03", dx = 0, dy = 0},
-	{name = "Barbarian_01", dx = 0, dy = 0},
-	{name = "Barbarian_02", dx = 0, dy = 0},
-	{name = "Barbarian_03", dx = 0, dy = 0},
-	{name = "Gladiator_01", dx = 0, dy = 0},
-	{name = "Gladiator_03", dx = 0, dy = 0},
-	{name = "Ninja_01", dx = 0, dy = 0},
-	{name = "Ninja_02", dx = 0, dy = 0},
-	{name = "Ninja_03", dx = 0, dy = 0},
-	{name = "Samurai_01", dx = 0, dy = 0},
-	{name = "Samurai_02", dx = 0, dy = 0},
-	{name = "Samurai_03", dx = 0, dy = 0},
-	{name = "Troll_01", dx = 0, dy = 0},
-	{name = "Troll_02", dx = 0, dy = 0},
-	{name = "Troll_03", dx = 0, dy = 0},
+	{name = "Animal_01", dx = -24, dy = -3}, -- Bear
+	{name = "Animal_02", dx = -24, dy = 30}, -- Eagle "run"/"jump" look more like flying. It dies high up
+	{name = "Animal_03", dx = -24, dy = 1}, -- Wolf
+	{name = "Archer_01", dx = -50, dy = 5}, -- Masked Archer
+	{name = "Archer_02", dx = -50, dy = 5}, -- Armored Crossbow Man
+	{name = "Archer_03", dx = -50, dy = 4}, -- Robin Hood Archer
+	---[[
+	{name = "Assassin_01", dx = 0, dy = 1}, -- Grey Assassin (two glove blades)
+	{name = "Assassin_02", dx = 0, dy = 0}, -- White Assassin (knife)
+	{name = "Assassin_03", dx = 0, dy = 1}, -- Dark Assassin (crossbow glove)
+	{name = "Barbarian_01", dx = -8, dy = 7}, -- Ponytail Barbarian
+	{name = "Barbarian_02", dx = -8, dy = 7}, -- Viking Barbarian
+	{name = "Barbarian_03", dx = -8, dy = 7}, -- Blonde Barbarian double sword
+	{name = "Gladiator_01", dx = -1, dy = 6}, -- Mohawk Gladiator with sword
+	{name = "Gladiator_03", dx = -1, dy = 7}, -- Gladiator with flail (weapon that didn't exist...)
+	{name = "Ninja_01", dx = -41, dy = 0}, -- Black Ninja Sword
+	{name = "Ninja_02", dx = -41, dy = 0}, -- Blue Ninja two blades
+	{name = "Ninja_03", dx = -41, dy = 0}, -- White Ninja one blade
+	{name = "Samurai_01", dx = 0, dy = 5}, -- Peasant with Tachi (long sword)
+	{name = "Samurai_02", dx = 0, dy = 5}, -- Samurai with Daisho (2 matching swords, Katana and Wakisashi)
+	{name = "Samurai_03", dx = 0, dy = 5}, -- Samurai with Odachi (long sword)
+	{name = "Troll_01", dx = 3, dy = 0}, -- Green Troll with Club
+	{name = "Troll_02", dx = 3, dy = 0}, -- Grey Troll with Hammer
+	{name = "Troll_03", dx = 3, dy = 0}, -- Brown Troll with Club
 	--]]
 	} 
 
-function CharacterAnimation:init(textureData)
+function CharacterAnimation:init(textureName)
+
+	-- TODO FIX this can be simplified
+	local textureData
+
+	for k,v in pairs(self.textureData) do
+	  if v.name == textureName then
+		textureData = v
+		break
+	  end
+	end
 
 	local filename = textureData.name
 
 	self.mc = nil -- animated sprite (MovieClip) of the character
 	self.bar = nil -- health bar - lazy load, dx = 0, dy = 0},{name = only when needed
+	self.dead = false
+	self.name = filename -- save this for debugging
 	
 	--DEBUG(textureData.name, textureData.dx, textureData.dy)
 
@@ -89,24 +101,33 @@ function CharacterAnimation:init(textureData)
 	self:addChild(self.mc)
 	self.mc:setAnchorPosition(self.mc:getWidth() / 2 + textureData.dx, self.mc:getHeight() / 2 + textureData.dy)
 
+	--[[ TODO ANIMATION REMOVE
 	local bg = Pixel.new(COLOR_YELLOW, 0.2, self:getWidth(), self:getHeight())
-	bg:setAnchorPoint(0.5,0.5)
+	bg:setAnchorPosition(self.mc:getWidth() / 2 + textureData.dx, self.mc:getHeight() / 2 + textureData.dy)
 	self:addChild(bg)
 
-	bg = Pixel.new(COLOR_GREEN, 0.2, 100, 100)
+	bg = Pixel.new(COLOR_RED, 1, 10, 10)
 	bg:setAnchorPoint(0.5,0.5)
 	self:addChild(bg)
+	--]]
 	
 end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	DEBUG("setHealth", hpBar)
+	DEBUG("setHealth", self.name, hpBar, self.bar, ".")
 
 	if self.bar then
+		-- TODO ANIMATION FIX health bar
 		self:removeChild(self.bar)
+		self.bar = nil
 	end
+
+	if self.dead or hpBar < 0 or hpBar > 10 then return end
+
+	-- TODO ANIMATION FIX - just create a bar on the fly here, instead of getting it from a texture map...
 	self.bar = manual:getSprite(LAYER_HP, hpBar) -- TODO FIX actual hero health
+	self.bar:setPosition(-50, -50)
 	self:addChild(self.bar)	
 end
 
@@ -121,4 +142,19 @@ end
 
 function CharacterAnimation:die()
 	self:go("DIE")
+	self.dead = true
+	self:setHealth(nil)
+	
+	local animate = {}
+	animate.alpha = 0
+	local properties = {}
+	properties.delay = 0
+	properties.dispatchEvents = false
+	
+ 	local tween = GTween.new(self.mc, 5, animate, properties)
+
+	
+	
+	
+	
 end
