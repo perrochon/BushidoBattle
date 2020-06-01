@@ -11,7 +11,6 @@ CharacterAnimation.textureData = {
 	{name = "Archer_01", dx = -50, dy = 5}, -- Masked Archer
 	{name = "Archer_02", dx = -50, dy = 5}, -- Armored Crossbow Man
 	{name = "Archer_03", dx = -50, dy = 4}, -- Robin Hood Archer
-	---[[
 	{name = "Assassin_01", dx = 0, dy = 1}, -- Grey Assassin (two glove blades)
 	{name = "Assassin_02", dx = 0, dy = 0}, -- White Assassin (knife)
 	{name = "Assassin_03", dx = 0, dy = 1}, -- Dark Assassin (crossbow glove)
@@ -25,12 +24,13 @@ CharacterAnimation.textureData = {
 	{name = "Ninja_03", dx = -41, dy = 0}, -- White Ninja one blade
 	{name = "Samurai_01", dx = 0, dy = 5}, -- Peasant with Tachi (long sword)
 	{name = "Samurai_02", dx = 0, dy = 5}, -- Samurai with Daisho (2 matching swords, Katana and Wakisashi)
+	{name = "Samurai_02_green", dx = 0, dy = 5}, 
+	{name = "Samurai_02_blue", dx = 0, dy = 5}, 
 	{name = "Samurai_03", dx = 0, dy = 5}, -- Samurai with Odachi (long sword)
 	{name = "Troll_01", dx = 3, dy = 0}, -- Green Troll with Club
 	{name = "Troll_02", dx = 3, dy = 0}, -- Grey Troll with Hammer
 	{name = "Troll_03", dx = 3, dy = 0}, -- Brown Troll with Club
-	--]]
-	} 
+} 
 
 function CharacterAnimation:init(textureName)
 
@@ -80,6 +80,7 @@ function CharacterAnimation:init(textureName)
 			if not(region == nil) then
 				--DEBUG(filename, "found")
 				local bitmap = Bitmap.new(region)
+				
 				table.insert(timeline, {c, c+slow-1, bitmap})
 				c = c + slow
 			else
@@ -115,7 +116,7 @@ end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	DEBUG("setHealth", self.name, hpBar, self.bar, ".")
+	--DEBUG("setHealth", self.name, hpBar, self.bar, ".")
 
 	if self.bar then
 		-- TODO ANIMATION FIX health bar

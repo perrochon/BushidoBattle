@@ -106,5 +106,5 @@ drawVersion()
 
 --go to start scene 
 INFO("\n**********************\n Bushido Battle "..VERSION.."\n**********************\n")
-sceneManager:changeScene(SCENE_SPRITES, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
 

@@ -16,7 +16,7 @@ function SceneSprites:init()
 	local D = 2
 	local SPOTS = math.floor(WIDTH / (TILE_WIDTH + D))
 	
-	DEBUG(MINX, MINY, LEFT, TOP, WIDTH, HEIGHT, SPOTS)
+	--DEBUG(MINX, MINY, LEFT, TOP, WIDTH, HEIGHT, SPOTS)
 
 	local sprites = Pixel.new(COLOR_WHITE, 1, WIDTH, HEIGHT)
 	sprites:setPosition(LEFT, TOP)
@@ -130,6 +130,14 @@ function SceneSprites:init()
 	sprites:addChild(commands)
 	
 	self:addChild(sprites)
+	
+	
+	local basicGui = BasicGui.new(nil, 
+						nil, nil, 
+						nil, nil,
+						"DONE", SCENE_LOBBY)
+	self:addChild(basicGui)
+
 	
 end	
 

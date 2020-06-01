@@ -152,4 +152,26 @@ function distance(o1, o2)
 end
 
 
+require "media"
+
+function magic()
+    local media = Media.new("images/Samurai_02.png")
+	DEBUG(media:getPath())
+    for x = 0, media:getWidth() do
+        for y = 0, media:getHeight() do
+			local r,g,b,a = media:getPixel(x,y)
+			
+			--if r > 120 and b < 120  then media:setPixel(x, y, b, g, r, a) end -- Turqoise, skin unchanged
+			--if r > 120 and b < 120  then media:setPixel(x, y, g, r, b, a) end -- Green, skin unchanged
+        end
+    end
+    media:save()
+	path = media:getPath()
+	DEBUG(media:getPath())
+    local bmp = Bitmap.new(Texture.new(path, true))
+    stage:addChild(bmp) 
+end
+
+--magic()
+
 

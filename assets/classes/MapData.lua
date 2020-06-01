@@ -61,7 +61,7 @@ function MapData:loadTiles(texturePack, textureIndex)
 
 	-- Make sure we got everything, move this code into separate function
 	for k, v in pairs(tiles) do
-		DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
+		--DEBUG(k, v.id, v.name, v.image, v.blocked, v.cover)
 		if v.image == nil or v.name == nil or v.blocked == nil or v.cover == nil then
 			ERROR("ERROR: Missing Data in tile", key, v.image, v.name)
 			if v.image == nil then v.image = "Floor_Grass.png" end -- TODO create error image and show here

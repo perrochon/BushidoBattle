@@ -7,8 +7,8 @@ SceneLobby = Core.class(Sprite)
 function SceneLobby:init()
 
 	--play the music of the scene
-	local sounds = Sounds.new("lobby")
-	self.music = sounds:play("music-lobby")
+	-- local sounds = Sounds.new("lobby")
+	-- self.music = sounds:play("music-lobby")
 
 	application:setBackgroundColor(COLOR_BLACK)
 
@@ -41,6 +41,17 @@ function SceneLobby:init()
 	self.map:addEventListener("click", 
 		function()
 			sceneManager:changeScene(SCENE_CONNECT, TRANSITION_TIME, TRANSITION) 
+		end
+	)
+
+	self.map = TextButton.new("S")
+	self.map:setAlpha(0)
+	self.map:setPosition(MINX,150)
+	self.map:setAnchorPoint(0,0)
+	self:addChild(self.map)
+	self.map:addEventListener("click", 
+		function()
+			sceneManager:changeScene(SCENE_SPRITES, TRANSITION_TIME, TRANSITION) 
 		end
 	)
 

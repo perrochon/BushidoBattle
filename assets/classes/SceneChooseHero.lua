@@ -14,7 +14,7 @@ function SceneChooseHero:init()
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Loading", heroFileName)
 		--local hero = dataSaver.load(heroFileName)	
-		local hero = Player.new(1)	
+		local hero = Player.new(i)	
 		--DEBUG(hero)
 		if hero then
 			--DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
@@ -67,6 +67,11 @@ function SceneChooseHero:displayHero(hero, slot)
 	heroName.front:setWidth(heroName.back:getWidth() - 10)
 	heroName:setPosition(15, -heroHeight+20)
 	panel:addChild(heroName)
+
+	panel:addChild(hero.mc)
+	hero.mc:setScale(3)
+	hero.mc:setPosition(heroWidth - 120, - 150)
+
 	
 	heroName:addEventListener("click", function ()
 		local textInputDialog = TextInputDialog.new("Change Hero Name", "Enter Hero Name", 

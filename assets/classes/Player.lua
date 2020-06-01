@@ -9,26 +9,31 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 Player = Core.class()
 
+Player.names = {"ArcherYP", "YummySake", "Lupus", "Kiga", "Remote San"}
+Player.sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01"}
+
 function Player:init(subEntry)
 	--[[Holding the player's stats
 		entry is the monster # that is created and used in the manual and in the tileset
 		entry = 1 for hero
 	--]]
 
-	self.subentry = subEntry -- position in Hero selection and file name for stored/reset heroes
-	self.entry = 1 	--position/key in tileset-monsters and monster array. HEROFIX all heroes are the same (for now)
-	self.heroIdx = -1 -- position in ScenePlay.heroes
+	self.subentry = subEntry -- position in Hero selection and file name for stored/reset heroes. In [1,2,3,4]
+	self.entry = 1 	--position/key in tileset-monsters and monster array. 
+	-- TODO HEROFIX get rid of subEntry and have heroes in a different array?
+	self.heroIdx = -1 -- position in ScenePlay.heroes -- TODO FIX why is this negative 1?
 	self.flip = 0 -- don't flip the icon 
 
-	names = {"ArcherYP", "YummySake", "Lupus", "Kiga", "Remote San"}
-	self.name = names[subEntry]
+	-- TODO get this out of manual (get rid of subentries first?)
+	self.name = Player.names[subEntry]
+	self.sprite = Player.sprites[subEntry]
+
+	DEBUG(self.entry, self.subentry, self.name, self.sprite)
 	
-	DEBUG("hero tC", manual:getEntry("monsters",1).tC)
 	self.tC = manual:getEntry("monsters",1).tC
 	self.tR = manual:getEntry("monsters",1).tR
 
 	local info = manual:getEntry("monsters", self.entry)	
-	if subEntry == 5 then flip = TileMap.FLIP_HORIZONTAL end -- HEROFIX temporarily, we flip the remote hero.
 	
 	self.tactics = "player"
 	self.x = 6
@@ -54,9 +59,10 @@ function Player:init(subEntry)
 	self.weapons[2] = manual:getEntry("weapons", info.weapon2)
 	self.weapon = self.weapons[1]
 	
-	self.mc = CharacterAnimation.new("Ninja_02")
+	self.mc = CharacterAnimation.new(self.sprite)
 	self.mc.mc:gotoAndPlay(1)
 	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+	
 
 --[[
 self.weapons = {{name = "shortsword", reach = 1, modifier = 8, defense = "AC", damage = 'd8', dice = 1, bonus = 6, 
@@ -73,15 +79,15 @@ end
 
 function Player:save(filename)
 	DEBUG(self.name, filename, currenHeroFileName)
-	local mc = self.mc
+	local temp = self.mc
 	self.mc = nil
 	dataSaver.save(filename, self)
-	self.mc = mc
+	self.mc = temp
 end
 
 function Player.load(filename)
 	local hero = dataSaver.load(filename)
-	hero.mc = CharacterAnimation.new("Ninja_02")
+	hero.mc = CharacterAnimation.new(hero.sprite)
 	hero.mc.mc:gotoAndPlay(1)
 	hero.mc:setPosition((hero.x - 1) * TILE_WIDTH, (hero.y - 1) * TILE_HEIGHT)
 	return hero
