@@ -14,14 +14,14 @@ function SceneChooseHero:init()
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Loading", heroFileName)
 		--local hero = dataSaver.load(heroFileName)	
-		local hero = Player.new(i)	
+		local hero = Player.new(1,i)	
 		--DEBUG(hero)
 		if hero then
 			--DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
 			-- hero.hp = hero.maxHP -- heal whatever hero we found. If we do, we have to save it back...
 			self.panels[i] = self:displayHero(hero, i)	
 		else
-			hero = Player.new(i) 
+			hero = Player.new(1,i) 
 			--DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
 			hero:save(heroFileName)
 			self.panels[i] = self:displayHero(hero, i)
@@ -117,7 +117,7 @@ function SceneChooseHero:displayHero(hero, slot)
 	resetButton:addEventListener("click", function()
 			local heroFileName = "|D|hero"..slot
 			--DEBUG("Resetting", heroFileName)
-			hero = Player.new(slot) 
+			hero = Player.new(1,slot) 
 			hero:save(heroFileName)
 			sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
 			end
@@ -182,7 +182,7 @@ function SceneChooseHero:resetAllHeroes()
 	for i=1, 5 do
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Resetting", heroFileName)
-		hero = Player.new(i) 
+		hero = Player.new(1,i) 
 		hero:save(heroFileName)
 	end
 end

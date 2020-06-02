@@ -65,11 +65,11 @@ function ScenePlay:init()
 	if self.server then 
 		DEBUG("This device is a server")
 		localHero = 1
-		self.heroes[2] = Player.new(5) -- TOTO HEROFIX this only works for 2 devices
+		self.heroes[2] = Player.new(1,5) -- TOTO HEROFIX this only works for 2 devices
 	elseif self.client then 
 		DEBUG("This device is a client")
 		localHero = 2
-		self.heroes[1] = Player.new(5) -- TOTO HEROFIX this only works for 2 devices
+		self.heroes[1] = Player.new(1,5) -- TOTO HEROFIX this only works for 2 devices
 	else 
 		DEBUG("This device is playing locally") 
 		localHero = 1
@@ -77,7 +77,7 @@ function ScenePlay:init()
 
 		--the major gaming variables
 	--self.heroes[localHero] = dataSaver.load(currentHeroFileName)
-    self.heroes[localHero] = Player.new(1)
+    self.heroes[localHero] = Player.new(1,1)
 	
 	local x, y
 	for _, v in pairs(self.mapData.spawns) do
@@ -91,10 +91,10 @@ function ScenePlay:init()
 	--DEBUG("Hero Spawn", x, y)
 
 	self.heroes[1].heroTurn = true	
-	self.heroes[1].heroIdx = 1
+	--self.heroes[1].heroIdx = 1
 	self.heroes[1]:setPosition(x,y)
 	if self.remote then
-		self.heroes[2].heroIdx = 2
+		--self.heroes[2].heroIdx = 2
 		self.heroes[2].heroTurn = false
 		self.heroes[2]:setPosition(x+1,y+1)
 	end
@@ -245,7 +245,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 	--DEBUG(hero, dx, dy, pass, hero.x + dx, hero.y + dy, self.active)
 
 	if not hero.heroTurn then return end
-	ASSERT_EQUAL(hero.heroIdx, localHero, "Called with remote hero")
+	-- TODO HEROFIX REMOTEFIX ASSERT_EQUAL(hero.heroIdx, localHero, "Called with remote hero")
 
 	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
 	--DEBUG(entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
@@ -294,7 +294,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 		self.world:moveHero(hero, dx, dy)
 
 		if self.remote then
-			DEBUG("MOVE", "Hero", hero.heroIdx, hero.x, hero.y, "Monster", nil, nil)
+			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.y, "Monster", nil, nil)
 			self:syncTurn(hero.heroIdx, hero.x, hero.y, 0, 0, 0) 
 		else
 			self.heroes[localHero].heroTurn = true
@@ -623,7 +623,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	--if ASSERT_TRUE(attacker.heroIdx and defender.heroIdx, "Trying to attack other players") then return end
+	if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Trying to attack other players") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon

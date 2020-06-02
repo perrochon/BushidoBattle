@@ -14,55 +14,61 @@ if not json then
 	require "json"
 end
 
-Monster = Core.class()
+Monster = Core.class(Character)
 
 function Monster:init(entry, id)
 	--[[variable to hold the monster's stats
 		entry is the monster # that is created.  The # in the MANUAL and in the tileset
 	--]]
+	
+	ASSERT_TRUE(self.entry > 1) -- Heroes are 1, monsters are > 1
 
+	-- TODO REFACTOR superclass should call this
+	self:loadSprite()
+	DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+
+
+	--Monster additional fields
+	
+	--possible states: attack, flee, move
+	self.state = "move"
+	self.bloodied = false
+	self.inrange = false 
+	self.friends = false
+	self.seesHero = false
+
+	-- TODO REFACTOR remove the rest...
 	--position/key in the MM and tileset-monsters
-	self.entry = entry
-	self.id = id
 	-- temporary coordinates when first created
-	self.x, self.y = 0, 0
-	self.blocked = true
+	--self.x, self.y = 0, 0
+	--self.blocked = true 								-- is this used anywhere?
 	--info is the entry in the monster manual 
-	local info = manual:getEntry("monsters", entry)	
-	self.name = info.name
-	self.xp = info.xp 
-	self.attacks = info.attacks
-	
-	--DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
-	
-	self.tC = info.tC
-	self.tR = info.tR
-
+	--self.info = manual:getEntry("monsters", entry)	
+	--self.name = self.info.name
+	--self.xp = self.info.xp 
+	--self.attacks = self.info.attacks
 	--these variables help keep track of health
-	self.hp = info.hp
-	self.maxHP = self.hp
-	self.bloodiedHP = math.ceil(self.hp / 2)
-	self.HPbar = 0
-	
+	--self.hp = self.info.hp
+	--self.maxHP = self.hp
+	--self.HPbar = 0
 	--these are used by basicAttack
-	self.prof = info.prof
-	self.defense = info.defense
+	--self.prof = self.info.prof
 	--self.weapons = info.weapons
 	
-	self.weapons = {}
-	self.weapons[1] = manual:getEntry("weapons", info.weapon1)
-	if info.weapon2 then 
-		self.weapons[2] = manual:getEntry("weapons", info.weapon2)
-	end
+	--self.weapons = {}
+	--self.weapons[1] = manual:getEntry("weapons", self.info.weapon1)
+	--if self.info.weapon2 then 
+		--self.weapons[2] = manual:getEntry("weapons", self.info.weapon2)
+	--end
 	
-	self.weapon = self.weapons[1]	
+	--self.weapon = self.weapons[1]	
 	-- resistances. vulnerabilities would be listed as negative (-5, etc..)
-	self.resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}
+	--self.resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}
 	
 	--these are used by the AI
-	self.tactics = info.tactics
-	self.see = info.see
-	self.alone = info.alone
+	--self.tactics = self.info.tactics
+	--self.see = self.info.see
+	--self.alone = self.info.alone
 
 	--possible states: attack, flee, move
 	self.state = "move"
@@ -71,41 +77,8 @@ function Monster:init(entry, id)
 	self.friends = false
 	self.seesHero = false
 	
-	self.mc = CharacterAnimation.new(info.mcName)
-	self.mc.mc:gotoAndPlay(1)
-	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
 end
 
-function Monster:setHealth(health)
-	self.hp = health
-	self.HPbar = 10 - math.floor((self.hp / self.maxHP) * 10)
-	self.mc:setHealth(self.HPbar)
-end
-
-function Monster:setPosition(c, r)
-	self.x = c
-	self.y = r
-	self.mc:setPosition(self.x*TILE_WIDTH - TILE_WIDTH/2, self.y*TILE_HEIGHT - TILE_HEIGHT/2)
-end
-
-function Monster:moveTo(c, r)
-
-	self.x = c
-	self.y = r
-
-	local animate = {}
-	animate.x = self.x * TILE_WIDTH - TILE_WIDTH / 2
-	animate.y = self.y * TILE_HEIGHT - TILE_HEIGHT / 2
-	local properties = {}
-	properties.delay = 0
-	properties.dispatchEvents = false
-	
-	self.mc:walk()
-
- 	local tween = GTween.new(self.mc, MOVE_SPEED, animate, properties)
-	
-	return tween
-end
 
 function Monster:serialize()
 	local array = {}

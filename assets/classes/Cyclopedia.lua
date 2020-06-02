@@ -50,51 +50,76 @@ function Cyclopedia:init()
 			--[6] = {name = "black", alpha = 1, cover = -6},
 			},
 		["monsters"] = {
-			texturePack = "images/characters.png",
-			textureIndex = "images/characters.txt",
-			[1] = {name = "hero", weapon1 = "shortsword", weapon2 = "shortbow", textureName = "Ninja_02__WALK_000.png"},
-				--[[monster stats explained:
-					xp			how much xp the hero gets
-					hp			how many hp the monster has
+				--[[heor stats explained (where different from monster)
+					name		display name
+					xp 			collected xp of hero
+				
+					monster stats explained:
+					-			currently not used
+					xp			how much xp the hero gets for killing the monster
+					hp			how many hp the character has
 					bloodied	half the hp 
 					AC			defense against physical attacks
-					Fort		their Fortitude stat
-					Will		their  Will stat
-					Refl		their  Reflex stat 
-					resist		all the resistances against types of magic (from Magic the Gathering)
-					attacks		simple monsters have one attack
-					reach		how many squares away to hitTestPoint
+					-Fort		their Fortitude stat
+					-Will		their  Will stat
+					-Refl		their  Reflex stat 
+					-resist		all the resistances against types of magic (from Magic the Gathering)
+					-attacks	simple monsters have one attack
 					modifier	attack modifier
 					defense		which defense is being attacked
 					dice, damage, bonus = 1d6+2 = 1, d6, 2
-					tactics		behavior, "minion" or "soldier". Minions flee when bloodied or alone.
+					tactics		behavior, "minion" or "soldier" for monsters, "player" for hero
 					see			how far monsters can see
 					alone  		how far other monsters need to be for this monster to feel alone
 					type		nil is physical damage, the others could be green, red, blue, white or black
 					projectile	the projectile animation used for the attack, either spear, arrow or magic
 					missSound   what the program reports for close misses
-					--]]
-			[2] = {name = "peasant", mcName = "Samurai_01", textureName = "Samurai_01__WALK_000.png", xp = 1, hp = 4, bloodied = 2, 
+					
+					weapon stats explained:
+					reach		how far away they can hit
+
+					
+				--]]
+			texturePack = "images/characters.png",
+			textureIndex = "images/characters.txt",
+			[1] = {name = "hero", deprecatedName = "Ninja_02__WALK_000.png",
+					names = {"Ninja 1", "Ninja 2", "Ninja 3", "Ninja 4", "TODO DELETE ME",},
+					sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01",},
+					xp = 0, hp = 600, 
+					defense = {AC = 16, Fort = 16, Refl = 14, Will = 12},
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "shortsword", weapon2 = "shortbow", 
+					tactics = "player", see = 0, alone = 0
+					},
+			[2] = {name = "peasant", sprite = "Samurai_01", deprecatedName = "Samurai_01__WALK_000.png", 
+					xp = 1, hp = 4, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "stick", weapon2 = nil, tactics = "minion", see = 4, alone = 5
+					weapon1 = "stick", weapon2 = nil, 
+					tactics = "minion", see = 4, alone = 5
 					},
-			[3] = {name = "soldier", mcName = "Samurai_03", textureName = "Samurai_03__WALK_000.png", xp = 3, hp = 15, bloodied = 7,  
+			[3] = {name = "soldier", sprite = "Samurai_03", deprecatedName = "Samurai_03__WALK_000.png", 
+					xp = 3, hp = 15,   
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "shortsword", weapon2 = "javelin", tactics = "soldier", see = 6, alone = 10
+					weapon1 = "shortsword", weapon2 = "javelin", 
+					tactics = "soldier", see = 6, alone = 10
 					},
-			[4] = {name = "samurai", mcName = "Samurai_02", textureName = "Samurai_02__WALK_000.png", xp = 4, hp = 25, bloodied = 12, 
+			[4] = {name = "samurai", sprite = "Samurai_02", deprecatedName = "Samurai_02__WALK_000.png", 
+					xp = 4, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "katana", weapon2 = "spear", tactics = "soldier", see = 3, alone = 100
+					weapon1 = "katana", weapon2 = "spear", 
+					tactics = "soldier", see = 3, alone = 100
 					},
-			[5] = {name = "wolf", mcName = "Samurai_01", textureName = "Animal_03__WALK_000.png", xp = 2, hp = 25, bloodied = 12, 
+			[5] = {name = "wolf", sprite = "Samurai_01", deprecatedName = "Animal_03__WALK_000.png", 
+					xp = 2, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
-					weapon1 = "claw", weapon2 = "fang", tactics = "minion", see = 6, alone = 4
+					weapon1 = "claw", weapon2 = "fang", 
+					tactics = "minion", see = 6, alone = 4
 					},
-			},
+		},
 		["weapons"] = {
 			[1] = {name = "katana", reach = 1.5, modifier = 6, defense = "AC", damage = 'd10', dice = 1, bonus = 5, 
 						    type = "Physical", projectile = nil, missSound = "clang"},
@@ -153,13 +178,15 @@ function Cyclopedia:loadSprites()
 	-- TODO FIX ANIMATION REMOVE
 	--self.heroMc = CharacterAnimation.new("Ninja_02")
 
+	-- TODO FIX ANIMATION remove deprecatedTexturNames
+
 	for key, value in ipairs(self.lists["monsters"]) do
-		--INFO("  ", value.name, value.textureName)
-		local region = self.lists["monsters"].pack:getTextureRegion(value.textureName)
+		--INFO("  ", value.name, value.deprecatedName)
+		local region = self.lists["monsters"].pack:getTextureRegion(value.deprecatedName)
 		local tX, tY, w, h = region:getRegion()
 		value.tC = tX/TILE_WIDTH+1
 		value.tR = tY/TILE_HEIGHT+1
-		DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.textureName)		
+		DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.deprecatedName)		
 	end
 
 	-- Health Bars

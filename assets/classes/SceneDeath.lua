@@ -4,7 +4,6 @@ SceneDeath = Core.class(Sprite)
 function SceneDeath:init(hero)
 
 	--self.hero = dataSaver.load(currentHeroFileName)
-    self.hero = Player.new(1)
 
 	--cycles of time/touches that have passed
 	self.time = 0	
@@ -24,12 +23,6 @@ function SceneDeath:init(hero)
 	self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2)
 	self.words:setAlpha(self.a)
 	self:addChild(self.words)
-	
-	-- TODO FIX what is this load/save business?
-	--local hero = dataSaver.load(currentHeroFileName)
-    local hero = Player.new(1)
-	hero:save(currentHeroFileName)
-
 
 	self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)

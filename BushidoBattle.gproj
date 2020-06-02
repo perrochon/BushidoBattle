@@ -24,6 +24,7 @@
   </exports>
  </properties>
  <folder name="classes">
+  <file name="assets/classes/Character.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>
@@ -163,6 +164,7 @@
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
  <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
+ <dependency to="assets/classes/CharacterAnimation.lua" from="assets/classes/Character.lua"/>
  <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
  <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
 </project>

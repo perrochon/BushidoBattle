@@ -274,10 +274,10 @@ function WorldMap:moveHero(hero, dx, dy)
 		Changes hero.x, hero.y, position of the world
 	--]]
 
-	--DEBUG("Moving Hero", hero, hero.heroIdx, dx, dy, "to", hero.x+dx, hero.y+dy)
+	--DEBUG("Moving Hero", hero, hero.id, dx, dy, "to", hero.x+dx, hero.y+dy)
 
 	-- TODO FIX why does this work on the pre-move coordinates?
-	if hero.heroIdx == localHero then 
+	if hero.id == localHero then 
 		--move the torchlight
 		self:adjustLight(hero, dx, dy)
 	end
@@ -290,7 +290,7 @@ function WorldMap:moveHero(hero, dx, dy)
 		self:shiftWorld2(self.heroMc)
 	end
 	
-	if hero.heroIdx == localHero then 
+	if hero.id == localHero then 
 		--keep the hero centered on the screen by shifting all the TileMaps  
 		--self:shiftWorld(hero)
 	end
@@ -305,7 +305,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 	-- TODO FIX Why does this work on previous location
 	-- TODO FIX wrap around lights...
 	
-	ASSERT_EQUAL(hero.heroIdx, localHero, "Trying to adjust light for the wrong hero")
+	ASSERT_EQUAL(hero.id, localHero, "Trying to adjust light for the wrong hero")
 		
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0

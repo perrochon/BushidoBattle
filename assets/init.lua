@@ -92,7 +92,6 @@ LAYER_ROWS = -1			--the number of rows in each array of tile. Set when map is lo
 
 MAP_FILE_NAME @ "maps/map"
 
-
 -- Facebook code to remove the loader
 -- Here to run early, maybe that makes it work
 pcall(function() FBInstant=require "FBInstant" end)
@@ -105,7 +104,6 @@ if FBInstant then
 else
 	--DEBUG("FBInstant not loaded")
 end
-
 
 -- don't change these, as layers are inserted in this order in TileMap.lua
 LAYER_TERRAIN @ 1		-- terrain layer (dirt, floors, water)

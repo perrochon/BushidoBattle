@@ -2,7 +2,7 @@ CharacterAnimation = Core.class(Sprite)
 
 MOVE_SPEED @ 0.5
 
-CharacterAnimation.textureData = {
+CharacterAnimation.spriteData = {
 	-- Center animations on their center of body. Many die to the right. They all throw to the right...
 	-- ScenePrites shows all sprites in a grid for the sole purpose of twiddling these parameters...
 	{name = "Animal_01", dx = -24, dy = -3}, -- Bear
@@ -32,13 +32,13 @@ CharacterAnimation.textureData = {
 	{name = "Troll_03", dx = 3, dy = 0}, -- Brown Troll with Club
 } 
 
-function CharacterAnimation:init(textureName)
+function CharacterAnimation:init(spriteName)
 
 	-- TODO FIX this can be simplified
 	local textureData
 
-	for k,v in pairs(self.textureData) do
-	  if v.name == textureName then
+	for k,v in pairs(self.spriteData) do
+	  if v.name == spriteName then
 		textureData = v
 		break
 	  end

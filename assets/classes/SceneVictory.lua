@@ -8,11 +8,11 @@ function SceneVictory:init()
 
 
 	--local hero = dataSaver.load(currentHeroFileName)
-    local hero  = Player.new(1)
+    --local hero  = Player.new(1,1)
 
-	hero.level = hero.level + 1
-	hero.maxHP = hero.maxHP + 20
-	hero:save(currenHeroFileName)
+	--hero.level = hero.level + 1
+	--hero.maxHP = hero.maxHP + 20
+	--hero:save(currenHeroFileName)
 
 	self.time = 0	--cycles of time that have passed
 	self.a = 0		--setAlpha value for the words on this screen
@@ -30,10 +30,10 @@ function SceneVictory:init()
 	self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2 - 200)
 	self:addChild(self.words)
 	
-	self.words = TextField.new(FONT_LARGE, "You are now level " .. hero.level .. ".")
-	self.words:setTextColor(COLOR_DKBLUE)	
-	self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2)
-	self:addChild(self.words)
+	--self.words = TextField.new(FONT_LARGE, "You are now level " .. hero.level .. ".")
+	--self.words:setTextColor(COLOR_DKBLUE)	
+	--self.words:setPosition(APP_WIDTH/2 - self.words:getWidth()/2, APP_HEIGHT/2)
+	--self:addChild(self.words)
 
 	self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)
 	self:addEventListener(Event.MOUSE_UP, self.onMouseUp, self)
