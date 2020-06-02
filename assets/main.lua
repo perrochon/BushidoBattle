@@ -39,8 +39,12 @@ Main for Bushido Battle, Bushido without the talk
 			- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 			- (medium) TODO FIX in the code base
 			- (medium) factor out remaining data and constants from init.lua to separate files
+			- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010
 		- (low) HTML (Web) Sockets
 			- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1 (search for "sockets")
+		- Shaders (for on the fly color changes)
+			- https://www.khronos.org/opengl/wiki/GLSL_:_common_mistakes
+			- http://forum.giderosmobile.com/discussion/6154/get-pixel-information-from-bitmap-or-texture#latest
 
 	Dev Stuff
 		- Automated Tests
