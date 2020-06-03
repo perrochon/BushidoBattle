@@ -216,7 +216,7 @@ function Monsters:getMonster(id)
   return nil
 end
 
-function Monsters:updateState(monster, id, heroes, remote)
+function Monsters:updateState(monster, id, remote)
 --[[update the 'State' variables for each monster:
 		.bloodied 
 		.inrange  

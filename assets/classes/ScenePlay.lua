@@ -87,9 +87,9 @@ function ScenePlay:init()
 		-- TODO HEROFIX how to place multiple heroes? For now, they all go on top of each other...
 		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
 		-- Problems is we haven't loaded maps yet, and WorldMap.new wants the heroes array
-		heroes[i]:setPosition(r,c)
+		heroes[i]:setPosition(c,r)
 		if heroes[i].active then
-			heroes.turn = true
+			heroes[i].turn = true
 		end
 	end
 	
@@ -187,34 +187,34 @@ function ScenePlay:init()
 	end)
 	
 	--set the default action to move
-	self.active = "move"
+	self.activeAction = "move"
 	self.main.move:updateVisualState(true)
 	 --respond to the action buttons
 	 self.main.look:addEventListener("click", function() 
-	   self.active = "look"
+	   self.activeAction = "look"
 	   self.main.look:updateVisualState(true)
 	   self.main.move:updateVisualState(false)
 	   self.main.ranged:updateVisualState(false)
 	   self.main.melee:updateVisualState(false)
 	 end)
 	 self.main.move:addEventListener("click", function() 
-	   self.active = "move"
+	   self.activeAction = "move"
 	   self.main.move:updateVisualState(true)
 	   self.main.look:updateVisualState(false)
 	   self.main.ranged:updateVisualState(false)
 	   self.main.melee:updateVisualState(false)
 	 end)
 	 self.main.melee:addEventListener("click", function() 
-	   self.active = "attack"
-	   self.heroes[1].weapon = self.heroes[1].weapons[1]
+	   self.activeAction = "attack"
+	   heroes[currentHero].weapon = heroes[currentHero].weapons[1]
 	   self.main.melee:updateVisualState(true)
 	   self.main.move:updateVisualState(false)
 	   self.main.look:updateVisualState(false)
 	   self.main.ranged:updateVisualState(false)
 	 end)
 	 self.main.ranged:addEventListener("click", function() 
-	   self.active = "attack"
-	   self.heroes[1].weapon = self.heroes[1].weapons[2]
+	   self.activeAction = "attack"
+	   heroes[currentHero].weapon = heroes[currentHero].weapons[2]
 	   self.main.ranged:updateVisualState(true)
 	   self.main.move:updateVisualState(false)
 	   self.main.look:updateVisualState(false)
@@ -232,31 +232,33 @@ function ScenePlay:init()
 	if self.remote then self:syncState() end
 end
 
-function ScenePlay:checkMove(hero, dx, dy)
+function ScenePlay:checkMove(hero, dc, dr)
 	--[[move the hero if the tile isn't blocked
 	--]]
 
-	local pass = dx == 0 and dy == 0
+	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
+	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
+
+	local pass = dc == 0 and dr == 0
 	-- first we need the tile key and layer for where the hero wants to move
-	--DEBUG(hero, dx, dy, pass)
-	--DEBUG(hero, dx, dy, pass, hero.x + dx, hero.y + dy, self.active)
+	--DEBUG(hero, dc, dr, pass)
+	--DEBUG("Hero", hero.name, dc, dr, pass, hero.c + dc, hero.r + dr, self.activeAction)
 
-	if not hero.heroTurn then return end
-	-- TODO HEROFIX REMOTEFIX ASSERT_EQUAL(hero.heroIdx, localHero, "Called with remote hero")
+	if not hero.turn then return end
 
-	local entry, layer, tile = self.world:getTileInfo(hero.x + dx, hero.y + dy)
-	--DEBUG(entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
+	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	if self.active == "look" then 
+	if self.activeAction == "look" then 
 		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 		return
-	elseif self.active == "attack" then 
+	elseif self.activeAction == "attack" then 
 		if layer == LAYER_MONSTERS then
-			self:attackMonster(hero.x + dx, hero.y + dy)
+			self:attackMonster(hero.c + dc, hero.r + dr)
 			return
 		else -- change mode to "move" on the fly
 			-- self.msg:add("Not a monster", MSG_DESCRIPTION)
-			self.active = "move"
+			self.activeAction = "move"
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(true)
 			self.main.look:updateVisualState(false)
@@ -265,21 +267,21 @@ function ScenePlay:checkMove(hero, dx, dy)
 		end
 	end
 
-	if self.active == "move" then
+	if self.activeAction == "move" then
 		if layer == LAYER_MONSTERS and not pass then -- LAYER_MONSTERS contains the hero itself...
 			-- allow them to bump and melee attack when moving			
-			self.active = "attack"
+			self.activeAction = "attack"
 			hero.weapon = hero.weapons[1]
 			self.main.melee:updateVisualState(true)
 			self.main.move:updateVisualState(false)
 			self.main.look:updateVisualState(false)
 			self.main.ranged:updateVisualState(false)
-			self:attackMonster(hero.x + dx, hero.y + dy)
+			self:attackMonster(hero.c + dc, hero.r + dr)
 			return
 		elseif layer == LAYER_ENVIRONMENT then
 			-- check for blocked tiles
 			if tile.blocked then
-				--DEBUG(self.active, hero.x + dx, hero.y + dy, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+				--DEBUG(self.activeAction, hero.x + dc, hero.r + dr, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 				self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 			return
 			else
@@ -288,11 +290,11 @@ function ScenePlay:checkMove(hero, dx, dy)
 		end
 
 		-- we move
-		self.world:moveHero(hero, dx, dy)
+		self.world:moveHero(hero, dc, dr)
 
 		if self.remote then
-			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.y, "Monster", nil, nil)
-			self:syncTurn(hero.heroIdx, hero.x, hero.y, 0, 0, 0) 
+			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
+			self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
 		else
 			heroes[currentHero].heroTurn = true
 			self:enableArrows()
@@ -321,19 +323,19 @@ end
 		if not ASSERT_NOT_EQUAL(heroIdx, localHero, "Remote trying to update local hero") then return end
 		DEBUG_C(SYNC_TURN, "Updating remote hero's move locally.")
 		
-		self.world:moveHero(self.heroes[heroIdx], x-self.heroes[heroIdx].x, y-self.heroes[heroIdx].y)
+		self.world:moveHero(heroes[heroIdx], x-heroes[heroIdx].x, y-heroes[heroIdx].r)
 		self.sounds:play("hero-steps")
 		
 		if monsterIdx ~= 0 then
 			m = self.monsters:getMonster(monsterIdx)
 			m.hp = monsterHp
 			m.HPbar = monsterHpBar
-			self.world:changeTile(LAYER_HP, m.HPbar, m.x, m.y)
+			self.world:changeTile(LAYER_HP, m.HPbar, m.x, m.r)
 			self:removeDeadMonsters(heroIdx)
 		end
 		
 		if self.client then 
-			self.heroes[3-localHero].heroTurn = false
+			heroes[3-localHero].heroTurn = false
 			heroes[currentHero].heroTurn = true
 			self:enableArrows(true)
 			
@@ -343,7 +345,7 @@ end
 			end
 			
 		else
-			self.heroes[3-localHero].heroTurn = false
+			heroes[3-localHero].heroTurn = false
 			self:heroesTurnOver()
 		end
 		
@@ -353,7 +355,7 @@ end
 
 		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
 		
-		self.heroes[3-localHero].heroTurn = true
+		heroes[3-localHero].heroTurn = true
 		heroes[currentHero].heroTurn = false
 		self:enableArrows(false)
 	end
@@ -374,7 +376,7 @@ end
 		if self.client then
 			local m = self.monsters:getMonster(id)
 			DEBUG_C(MONSTER_MOVED, m.id, m.name, x, y, sender)
-			self.world:moveMonster(m, x-m.x, y-m.y)
+			self.world:moveMonster(m, x-m.x, y-m.r)
 		else
 			ERROR(MONSTER_MOVED, "should not be called remotely on server")
 		end
@@ -406,7 +408,7 @@ end
 			if self.client then -- server sent update to client
 				--DEBUG("old monsters: ", self.monsters:serialize())
 				for id, m in pairs(self.monsters.list) do
-					self.world:removeMonster(m.x, m.y)	
+					self.world:removeMonster(m.c, m.r)	
 				end
 				self.monsters.list = {} -- TODO FIX there must be a more elegant way to replace the list
 				self.monsters:initFromServer(monstersInfo)
@@ -414,20 +416,20 @@ end
 				for id, m in pairs(self.monsters.list) do
 					self.world:addMonster(m)
 				end
-				self.world:moveHero(self.heroes[1], hero1X-self.heroes[1].x, hero1Y-self.heroes[1].y)
-				self.world:moveHero(self.heroes[2], hero2X-self.heroes[2].x, hero2Y-self.heroes[2].y)
+				self.world:moveHero(heroes[1], hero1X-heroes[1].c, hero1Y-heroes[1].r)
+				self.world:moveHero(heroes[2], hero2X-heroes[2].c, hero2Y-heroes[2].r)
 			else -- client requests update. Ignore any parameters and send out update
 				monstersInfo = self.monsters:serialize()
-				DEBUG_C(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
-				serverlink:callMethod(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
+				DEBUG_C(SYNC_STATE, heroes[1].c, heroes[1].r, heroes[2].c, heroes[2].r, monstersInfo)
+				serverlink:callMethod(SYNC_STATE, heroes[1].c, heroes[1].r, heroes[2].c, heroes[2].r, monstersInfo)
 			end
 		end		
 	else -- this is a local call.
 		ASSERT_TRUE(self.ready, "should not be called locally before ready")
 		if self.server then -- ignore parameters and send update to client
 			monstersInfo = self.monsters:serialize()
-			DEBUG_C(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
-			serverlink:callMethod(SYNC_STATE, self.heroes[1].x, self.heroes[1].y, self.heroes[2].x, self.heroes[2].y, monstersInfo)
+			DEBUG_C(SYNC_STATE, heroes[1].c, heroes[1].r, heroes[2].c, heroes[2].r, monstersInfo)
+			serverlink:callMethod(SYNC_STATE, heroes[1].c, heroes[1].r, heroes[2].c, heroes[2].r, monstersInfo)
 		else -- request update from server. Parameters don't matter
 			DEBUG_C(SYNC_STATE, -1, -1, -1)
 			serverlink:callMethod(SYNC_STATE, -1, -1, -1, -1, -1)
@@ -440,9 +442,9 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 	--find the monster being attacked and their index in monsters.list 
 	for id, m in pairs(self.monsters.list) do
 		if m.hp < 1 then		
-			self.msg:add(self.heroes[heroIdx].name, " killed the " .. m.name, MSG_DEATH)
-			self.heroes[heroIdx].xp = heroes[currentHero].xp + m.xp
-			self.heroes[heroIdx].kills = self.heroes[heroIdx].kills + 1
+			self.msg:add(heroes[heroIdx].name, " killed the " .. m.name, MSG_DEATH)
+			heroes[heroIdx].xp = heroes[currentHero].xp + m.xp
+			heroes[heroIdx].kills = heroes[heroIdx].kills + 1
 			
 			if m.entry == 4 then
 				for id, m in pairs(self.monsters.list) do
@@ -455,7 +457,7 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 			
 			--remove the monster from the monsters.list and the map
 			table.remove(self.monsters.list, id)	
-			self.world:removeMonster(m.x, m.y)
+			self.world:removeMonster(m.c, m.r)
 		end
 	end
 end
@@ -479,9 +481,9 @@ function ScenePlay:heroesTurnOver()
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
-	ASSERT_TRUE(not self.client, "called on client")
-	ASSERT_TRUE(not self.heroes[1].heroTurn, "Hero 1's turn - Is this why monsters attack twice?")
-	if self.remote then ASSERT_TRUE(not self.heroes[2].heroTurn, "Hereo 2's turn") end
+	--ASSERT_TRUE(not self.client, "called on client")
+	--ASSERT_TRUE(not heroes[1].heroTurn, "Hero 1's turn - Is this why monsters attack twice?")
+	--if self.remote then ASSERT_TRUE(not heroes[2].heroTurn, "Hereo 2's turn") end
 
 
 	-- first set all monsters to not done
@@ -491,9 +493,9 @@ function ScenePlay:heroesTurnOver()
 	--each monster gets a turn
 	for id, m in pairs(self.monsters.list) do
 		m.done = false
-		self.monsters:updateState(m, id, self.heroes, self.remote)
+		self.monsters:updateState(m, id, self.remote)
 		if (m.hp > 0) then -- redundant, as we remove dead monsters now explicitely
-			--DEBUG("Playing " .. m.name .. " at " .. m.x .. " " .. m.y)
+			--DEBUG("Playing " .. m.name .. " at " .. m.c .. " " .. m.r)
 			self:monsterAI(m)
 		end	
 	end	
@@ -556,7 +558,7 @@ function ScenePlay:monsterAI(monster)
 		if monster.seesHero then
 			--move towards the hero
 			self.sounds:play("monster-steps")
-			dx, dy = self.world:shortestPath({c = monster.x, r = monster.y}, {c = monster.target.x, r = monster.target.y})
+			dx, dy = self.world:shortestPath({c = monster.c, r = monster.r}, {c = monster.target.c, r = monster.target.r})
 		else
 			--move randomly in one of eight directions
 			local directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}, {-1, -1}, {-1, 1}, {1, -1}}
@@ -566,7 +568,7 @@ function ScenePlay:monsterAI(monster)
 			while not successful do
 				local d = directions[math.random(1, 8)]
 				dx, dy = d[1], d[2]
-				if not self.world:blocked(monster.x + dx, monster.y + dy) then
+				if not self.world:blocked(monster.c + dx, monster.r + dy) then
 					successful = true
 				end
 				tries = tries + 1
@@ -574,14 +576,14 @@ function ScenePlay:monsterAI(monster)
 					successful = true 
 					dx = 0 
 					dy = 0
-					--DEBUG("Not moving this turn", monster.id, monster.name, monster.x,monster.y)
+					--DEBUG("Not moving this turn", monster.id, monster.name, monster.c,monster.r)
 				end
 			end
 		end
 		self.world:moveMonster(monster, dx, dy)
 		if self.server then
-			--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-			--self:syncMonster(monster.id, monster.x, monster.y)
+			--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.c, monster.r)
+			--self:syncMonster(monster.id, monster.c, monster.r)
 		end
 		monster.done = true
 		self:monsterTurnOver()
@@ -596,8 +598,8 @@ function ScenePlay:monsterAI(monster)
 		
 			self.world:moveMonster(monster, dx, dy)
 			if self.remote then
-				--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.x, monster.y)
-				--self:syncMonster(monster.id, m.x, m.y)
+				--DEBUG_C("Attempting to remote move", monster, monster.id, monster.entry, monster.c, monster.r)
+				--self:syncMonster(monster.id, m.c, m.r)
 			end
 			monster.done = true
 			self:monsterTurnOver()
@@ -649,8 +651,8 @@ function ScenePlay:basicAttack(attacker, defender)
 		end
 		if heroes[currentHero].heroTurn  then 		
 			if self.remote then
-				DEBUG("Basic Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
-				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
+				DEBUG("Basic Attack", "Hero", attacker.heroIdx, attacker.c, attacker.r, "Monster", defender.id, defender.hp)	
+				self:syncTurn(attacker.heroIdx, attacker.c, attacker.r, defender.id, defender.hp, defender.HPbar) 
 				self:removeDeadMonsters(localHero)
 			else
 				self:removeDeadMonsters(localHero)
@@ -671,16 +673,16 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 --]]
 
 	local p = nil
-	local cover, blockedX, blockedY = self.world:lineOfCover(attacker.x, attacker.y, defender.x, defender.y)
+	local cover, blockedX, blockedY = self.world:lineOfCover(attacker.c, attacker.r, defender.c, defender.r)
 	if blockedX then 
 		-- launch a projectile that hits something along the way
 		-- TODO: FIX projectil should move direction defender, not direction obstacle
 		--       they are sometimes slightly different and it looks weird
-		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, blockedX, blockedY)
+		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, blockedX, blockedY)
 	else
 		-- launch a projectile towards the defender
-		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, 
-							heroes[currentHero].x, heroes[currentHero].y)	
+		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, 
+							heroes[currentHero].c, heroes[currentHero].r)	
 	end
 
 	-- Add the projectile to the world which takes care of scaling and dragging.
@@ -723,8 +725,8 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 
 		if heroes[currentHero].heroTurn  then 		
 			if self.remote then
-				DEBUG("Range Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
-				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
+				DEBUG("Range Attack", "Hero", attacker.heroIdx, attacker.c, attacker.r, "Monster", defender.id, defender.hp)	
+				self:syncTurn(attacker.heroIdx, attacker.c, attacker.r, defender.id, defender.hp, defender.HPbar) 
 				self:removeDeadMonsters(localHero)
 			else
 				self:removeDeadMonsters(localHero)
@@ -784,7 +786,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	-- TODO FIX ANIMATION won't be needed much longer
 	--[[
 	if defender.hp > 0 then
-		self.world:changeTile(LAYER_HP, defender.HPbar, defender.x, defender.y)
+		self.world:changeTile(LAYER_HP, defender.HPbar, defender.c, defender.r)
 	end
 	--]]
 end
@@ -799,7 +801,7 @@ function ScenePlay:attackMonster(x, y)
 	for i = 1, #self.monsters.list do
 		monster = self.monsters.list[i] 
 		id = i
-		if monster.x == x and monster.y == y then 
+		if monster.c == x and monster.r == y then 
 			break 
 		end
 	end
@@ -877,9 +879,9 @@ end
 
 	--[[
 	local hero = nil
-	for key, value in ipairs(self.heroes) do
-		DEBUG("Looking for hero", key, value.x, value.y)
-		if value.x == from.c and value.y == from.r then
+	for key, value in ipairs(heroes) do
+		DEBUG("Looking for hero", key, value.c, value.r)
+		if value.c == from.c and value.r == from.r then
 			hero = value
 		end
 	end
@@ -888,11 +890,11 @@ end
 
 	-- TODO FIX PARTY need to use something like code above when we support parties
 	hero = heroes[currentHero]
-	if not ASSERT_TRUE(hero.x == from.c and hero.y == from.r, "Line not originating at local hero") then return end
+	if not ASSERT_TRUE(hero.c == from.c and hero.r == from.r, "Line not originating at local hero") then return end
 
 	
 	-- Look
-	if self.active == "look" then
+	if self.activeAction == "look" then
 		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
 		return
 	end
@@ -912,7 +914,7 @@ end
 	
 		-- Can they melee/range, let them melee/range
 		if distance < hero.weapons[1].reach then
-			self.active = "attack"
+			self.activeAction = "attack"
 			hero.weapon = hero.weapons[1]
 			self.main.melee:updateVisualState(true)
 			self.main.move:updateVisualState(false)
@@ -921,7 +923,7 @@ end
 			self:attackMonster(to.c, to.r)
 			return
 		elseif distance < hero.weapons[2].reach then
-			self.active = "attack"
+			self.activeAction = "attack"
 			hero.weapon = hero.weapons[2]
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(false)
@@ -930,7 +932,7 @@ end
 			self:attackMonster(to.c, to.r)
 			return
 		else -- change mode to "move" on the fly
-			self.active = "move"
+			self.activeAction = "move"
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(true)
 			self.main.look:updateVisualState(false)
@@ -943,37 +945,37 @@ end
 
 	local dc, dr = self.world:shortestPath(from, to)
 	
-	DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.x, hero.y, dc, dr))
+	DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
 	self:checkMove(hero, dc, dr)
 
 
 --[[
-		if self.active == "attack" then
+		if self.activeAction == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
 			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(heroes[currentHero].x - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].y - y) <= heroes[currentHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
+			--local inReach = math.abs(heroes[currentHero].c - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].r - y) <= heroes[currentHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
 			local inReach = distance({x=event.from.c,y=event.from.r},{x=event.to.r,y=event.to.r}) < heroes[currentHero].weapon.reach
 			if layer == LAYER_MONSTERS and inReach then
-				self:checkMove(heroes[currentHero], event.to.c - heroes[currentHero].x, event.to.r - heroes[currentHero].y)
+				self:checkMove(heroes[currentHero], event.to.c - heroes[currentHero].c, event.to.r - heroes[currentHero].r)
 			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
 				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
 			end
-		elseif self.active == "look" then
+		elseif self.activeAction == "look" then
 			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
-		elseif self.active == "move" then
+		elseif self.activeAction == "move" then
 			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(heroes[currentHero].x - event.to.c)
-			local deltaY = math.abs(heroes[currentHero].y - event.to.r)
+			local deltaX = math.abs(heroes[currentHero].c - event.to.c)
+			local deltaY = math.abs(heroes[currentHero].r - event.to.r)
 			local dx, dy = 0, 0
 			if deltaX > 0 or deltaY > 0 then
 				--calculate the optimal dx, dy 
 				if deltaX > deltaY then
-					if event.to.c > heroes[currentHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+					if event.to.c > heroes[currentHero].c then dx, dy = 1, 0 else dx, dy = -1, 0 end
 				else
-					if event.to.r > heroes[currentHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+					if event.to.r > heroes[currentHero].r then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].x, heroes[currentHero].y, dx, dy))
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].c, heroes[currentHero].r, dx, dy))
 				self:checkMove(heroes[currentHero],dx, dy)
 			end
 		end
@@ -986,40 +988,40 @@ end
 		--local key, layer, tile = self.world:getTileInfo(x, y)
 		local key, layer, tile = self.world:getTileInfo(x, y)
 		
-		--DEBUG("Touch at " .. event.x .. ", " .. event.y .. " / " .. x .. ", " .. y )
+		--DEBUG("Touch at " .. event.c .. ", " .. event.r .. " / " .. x .. ", " .. y )
 		
-		if self.active == "attack" then
+		if self.activeAction == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
 			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(heroes[currentHero].x - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].y - y) <= heroes[currentHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
+			--local inReach = math.abs(heroes[currentHero].c - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].r - y) <= heroes[currentHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
 			local inReach = distance(heroes[currentHero], event) < heroes[currentHero].weapon.reach and
-							layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
+							layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
 			if inReach then
-				self:checkMove(heroes[currentHero], x - heroes[currentHero].x, y - heroes[currentHero].y)
+				self:checkMove(heroes[currentHero], x - heroes[currentHero].c, y - heroes[currentHero].r)
 			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
 				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
 			end
-		elseif self.active == "look" then
+		elseif self.activeAction == "look" then
 			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
-		elseif self.active == "move" then
+		elseif self.activeAction == "move" then
 			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(heroes[currentHero].x - x)
-			local deltaY = math.abs(heroes[currentHero].y - y)
+			local deltaX = math.abs(heroes[currentHero].c - x)
+			local deltaY = math.abs(heroes[currentHero].r - y)
 			local dx, dy = 0, 0
 			if deltaX > 0 or deltaY > 0 then
 				--calculate the optimal dx, dy 
 				if deltaX > deltaY then
-					if x > heroes[currentHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+					if x > heroes[currentHero].c then dx, dy = 1, 0 else dx, dy = -1, 0 end
 				else
-					if y > heroes[currentHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+					if y > heroes[currentHero].r then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].x, heroes[currentHero].y, dx, dy))
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].c, heroes[currentHero].r, dx, dy))
 				self:checkMove(heroes[currentHero],dx, dy)
 			end
 		end
 	else
-		--DEBUG(("Touch outside visible map at %d,%d"):format(event.x, event.y))
+		--DEBUG(("Touch outside visible map at %d,%d"):format(event.c, event.r))
 	end
 	
 	--]]

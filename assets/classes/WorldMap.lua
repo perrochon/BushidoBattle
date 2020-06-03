@@ -71,7 +71,7 @@ function WorldMap:init(level, monsters)
 	self:addChild(self.camera)
 end
 
-function WorldMap:idx(c, r) --index of cell (c,r)
+function WorldMap:index(c, r) --index of cell (c,r)
 	return c + (r - 1) * LAYER_COLUMNS 
 end
 
@@ -87,20 +87,20 @@ function WorldMap:placeMonsters(monsters)
 
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			mArray[self:idx(x, y)] = 0
+			mArray[self:index(x, y)] = 0
 		end
 	end
 	
 	for _, m in pairs(monsters.list) do
-		mArray[self:idx(m.c, m.r)] = m.entry
+		mArray[self:index(m.c, m.r)] = m.entry
 		self.camera:addChild(m.mc)
 	end
 	
-	mArray[self:idx(heroes[localHero].c, heroes[localHero].r)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+	mArray[self:index(heroes[localHero].c, heroes[localHero].r)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 		self.camera:addChild(heroes[localHero].mc)
 
 	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
-		mArray[self:idx(heroes[3-localHero].c, heroes[3-localHero].r)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		mArray[self:index(heroes[3-localHero].c, heroes[3-localHero].r)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 		self.camera:addChild(heroes[3-localHero].mc)	
 	end
 	
@@ -113,7 +113,7 @@ function WorldMap:addHP()
   local hArray = {}
   for y = 1, LAYER_ROWS do
     for x = 1, LAYER_COLUMNS do
-      hArray[self:idx(x, y)] = 0
+      hArray[self:index(x, y)] = 0
     end
   end
   return hArray
@@ -130,7 +130,7 @@ function WorldMap:addLight(hero)
 	local lArray = {}
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			lArray[self:idx(x, y)] = 4 -- TODO such constants should really not be hard coded...
+			lArray[self:index(x, y)] = 4 -- TODO such constants should really not be hard coded...
 		end
 	end
 	
@@ -142,7 +142,7 @@ function WorldMap:addLight(hero)
 			torchIndex = torchIndex + 1
 			--only change the light array if on the screen
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
-				local i = self:idx(x, y)
+				local i = self:index(x, y)
 				lArray[i] = hero.light.array[torchIndex]
 				--DEBUG(x, y, hero.light.array[torchIndex])
 			end
@@ -164,7 +164,7 @@ function WorldMap:returnTileMap(mapArray, layer)
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
 
-			local key = mapArray[self:idx(x, y)]
+			local key = mapArray[self:index(x, y)]
 
 			if layer == "monsters" then
 				--only setTiles if the mapArray value isn't 0
@@ -174,7 +174,7 @@ function WorldMap:returnTileMap(mapArray, layer)
 					tilemap:setTile(x, y, monster.tC, monster.tR)
 				end
 			elseif layer == "light" then
-				DEBUG(x, y, self:idx(x, y), key )
+				DEBUG(x, y, self:index(x, y), key )
 				tilemap:setTile(x, y, key, 1)
 			elseif layer == "health" then
 				-- do nothing at creation
@@ -186,16 +186,16 @@ function WorldMap:returnTileMap(mapArray, layer)
 end
 
 
-function WorldMap:getTileInfo(x, y, layer) 
+function WorldMap:getTileInfo(c, r, layer) 
 	--[[Return the tile key, layer and tile information for a location on the map. 
 				if no TileMap layer is specified, it returns the highest layer with a value.  
 				i.e. monster #3, environment #2, or terrain #1
 		Returns key, layer, tile
 	--]]
 
-	local i = self:idx(x, y)
+	local i = self:index(c, r)
 
-	--DEBUG(("%d,%d %d %d %d %d"):format(x, y, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
+	--DEBUG(("(%d, %d) %d 1: %d 2:%d 3:%d"):format(c, r, layer and layer or -1, self.mapArrays[1][i], self.mapArrays[2][i], self.mapArrays[3][i]))
 	
 	if layer then
 		local array = self.mapArrays[layer]
@@ -208,9 +208,9 @@ function WorldMap:getTileInfo(x, y, layer)
 			tile = self.level.tiles[array[i]] -- FIX replace with getFunction
 		end
 		if tile ~= nil then
-			--DEBUG(x, y, layer, array[i], tile.id, tile.name, tile.blocked)
+			--DEBUG(c, r, layer, array[i], tile.id, tile.name, tile.blocked)
 		else
-			--DEBUG(x, y, layer, array[i], "no tile")		
+			--DEBUG(c, r, layer, array[i], "no tile")		
 		end			
 		return array[i], layer, tile
 	else
@@ -222,16 +222,16 @@ function WorldMap:getTileInfo(x, y, layer)
 				if n == 3 then
 					-- get tile information from constants
 					local tile = manual:getEntry(manual:getEntry("layers", n), array[i])
-					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
+					--DEBUG(c, r, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile			
 				else
 					local tile = self.level.tiles[array[i]] -- FIX replace with getFunction
-					--DEBUG(x, y, n, tile.id, tile.name, tile.blocked)
+					--DEBUG(c, r, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile
 				end
 			end
 		end
-		ERROR("There is no tile in the ground layer at", x, y)
+		ERROR("There is no tile in the ground layer at", c, r)
 		return 1,1,{id = 1, name = "no tile", blocked = true} 
 	end
 end
@@ -240,7 +240,7 @@ function WorldMap:changeTile(layerId, entry, x, y)
 	--Change both the self.mapArrays entry and the tile in self.mapLayers
 
 	local array = self.mapArrays[layerId]
-	array[self:idx(x, y)] = entry
+	array[self:index(x, y)] = entry
 	self.mapLayers[layerId]:setTile(x, y, entry, 1)
 end
 
@@ -250,7 +250,7 @@ function WorldMap:shiftWorld(hero)
 		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
 	
-	self.camera:centerPoint(hero.r * TILE_WIDTH, hero.c * TILE_HEIGHT)
+	self.camera:centerPoint(hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT)
 	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
 	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
@@ -269,32 +269,28 @@ function WorldMap:shiftWorld2()
 end
 
 
-function WorldMap:moveHero(hero, dx, dy)
+function WorldMap:moveHero(hero, dc, dr)
 	--[[change the mapArrays and mapLayers location of a hero and 
 		if it's the local hero, shift the TileMap and the light
 
 		Changes hero.c, hero.r, position of the world
 	--]]
 
-	--DEBUG("Moving Hero", hero, hero.id, dx, dy, "to", hero.c+dx, hero.r+dy)
+	--DEBUG("Moving Hero", hero.name, hero.c, hero.r, dc, dr, "to", hero.c+dc, hero.r+dr)
 
-	-- TODO FIX why does this work on the pre-move coordinates?
+	-- TODO FIX HEROFIX ANIMATION turn it back on
 	if hero.id == localHero then 
 		--move the torchlight
-		self:adjustLight(hero, dx, dy)
+		--self:adjustLight(hero, dc, dr)
 	end
 
 	--for purposes of moving around the map, the hero is just another monster
-	local tween = self:moveMonster(hero, dx, dy)
+	local tween = self:moveMonster(hero, dc, dr)
 	
 	tween.onChange = function()
 		self:shiftWorld2()
 	end
 	
-	if hero.id == localHero then 
-		--keep the hero centered on the screen by shifting all the TileMaps  
-		--self:shiftWorld(hero)
-	end
 end
 
 function WorldMap:adjustLight(hero, dx, dy)
@@ -316,7 +312,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 		for x = hero.c - hero.light.radius, hero.c + hero.light.radius do
 			--only change the light array and tile if on screen 
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
-				i = self:idx(x, y)
+				i = self:index(x, y)
 				--only change if previously lit 
 				if lArray[i] ~= 4 then
 					lArray[i] = 3
@@ -332,7 +328,7 @@ function WorldMap:adjustLight(hero, dx, dy)
 	for y = hero.r + dy - hero.light.radius, hero.r + dy + hero.light.radius do
 		for x = hero.c + dx - hero.light.radius, hero.c + dx + hero.light.radius do
 			torchIndex = torchIndex + 1
-			i = self:idx(x, y)
+			i = self:index(x, y)
 			--only change the light array if on screen
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
 				--and needs to be updated
@@ -345,9 +341,11 @@ function WorldMap:adjustLight(hero, dx, dy)
 	end
 end
 
-function WorldMap:moveMonster(monster, dx, dy)
+function WorldMap:moveMonster(monster, dc, dr)
 	--[[change the mapArrays and mapLayers location of the monster 
 	--]]
+
+	--DEBUG("Moving Monster", monster.name, monster.c, monster.r, dc, dr, "to", monster.c+dc, monster.r+dr)
 
 	--get the array and entry
 	local array = self.mapArrays[LAYER_MONSTERS]
@@ -356,38 +354,38 @@ function WorldMap:moveMonster(monster, dx, dy)
 
 	-- DEBUG Getting non-reproducible errors on the next line in HTML - Checking for possible conditions
 	if monster.c > LAYER_COLUMNS or monster.r > LAYER_ROWS or monster.c < 1 or monster.r < 1 then
-		ERROR("Monster current location out of bounds", monster.name, monster.c, monster.r, dx, dy)
-	elseif monster.c+dx > LAYER_COLUMNS or monster.r+dy > LAYER_ROWS or monster.c+dx < 1 or monster.r+dy < 1 then
-		ERROR("Monster new location out of bounds", monster.name, monster.c, monster.r, dx, dy)
+		ERROR("Monster current location out of bounds", monster.name, monster.c, monster.r, dc, dr)
+	elseif monster.c+dc > LAYER_COLUMNS or monster.r+dr > LAYER_ROWS or monster.c+dc < 1 or monster.r+dr < 1 then
+		ERROR("Monster new location out of bounds", monster.name, monster.c, monster.r, dc, dr)
 	else
-		array[self:idx(monster.c, monster.r)] = 0
+		array[self:index(monster.c, monster.r)] = 0
 		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.c, monster.r)
 		
 		--place the monster at the new position
-		array[self:idx(monster.c + dx, monster.r + dy)] = monster.entry
-		self.mapLayers[LAYER_MONSTERS]:setTile(monster.c + dx, monster.c + dy, monster.tC, monster.tR) 
+		array[self:index(monster.c + dc, monster.r + dr)] = monster.entry
+		self.mapLayers[LAYER_MONSTERS]:setTile(monster.c + dc, monster.r + dr, monster.tC, monster.tR) 
 
 		--remove and move the HPbar
 		array = self.mapArrays[LAYER_HP]
-		array[self:idx(monster.c, monster.r)] = 0
+		array[self:index(monster.c, monster.r)] = 0
 		self.mapLayers[LAYER_HP]:clearTile(monster.c, monster.r) 	
-		array[self:idx(monster.c + dx, monster.r + dy)] = monster.HPbar
+		array[self:index(monster.c + dc, monster.r + dr)] = monster.HPbar
 		if monster.HPbar ~= 0 then
-			self.mapLayers[LAYER_HP]:setTile(monster.c + dx, monster.r + dy, monster.HPbar, 1) 
+			self.mapLayers[LAYER_HP]:setTile(monster.c + dc, monster.r + dr, monster.HPbar, 1) 
 		end
 
-		--update x and y
-		local tween = monster:moveTo(monster.c + dx, monster.c + dy)
+		--update r and c
+		local tween = monster:moveTo(monster.c + dc, monster.r + dr)
 		return tween
 	end
 end
 
 function WorldMap:removeMonster(x, y)
 	local array = self.mapArrays[LAYER_MONSTERS]
-	array[self:idx(x, y)] = 0
+	array[self:index(x, y)] = 0
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
 	array = self.mapArrays[LAYER_HP]
-	array[self:idx(x, y)] = 0
+	array[self:index(x, y)] = 0
 	self.mapLayers[LAYER_HP]:clearTile(x, y) 	
 end
 
@@ -403,12 +401,12 @@ function WorldMap:addMonster(monster)
 
 	--DEBUG(x, y)
 	--place the monster at the new position
-	array[self:idx(monster.c, monster.r)] = monster.entry
+	array[self:index(monster.c, monster.r)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.c, monster.r, monster.entry, 1) 
 
 	--add the HPbar
 	array = self.mapArrays[LAYER_HP]
-	array[self:idx(monster.c, monster.r)] = monster.HPbar
+	array[self:index(monster.c, monster.r)] = monster.HPbar
 	if monster.HPbar ~= 0 then
 		self.mapLayers[LAYER_HP]:setTile(monster.c, monster.r, monster.HPbar, 1) 
 	end
@@ -419,7 +417,7 @@ function WorldMap:blocked(x, y)
 	--[[uses getTileInfo to determine if the tile is blocked or not
 		returns true or false
 	--]]
-	--local i = self:idx(x, y)
+	--local i = self:index(x, y)
 	--return (self.mapLayers[LAYER_MONSTERS] ~= 0) or tilemap:blocked(x,y)
 
 	--getTileInfo returns the highest level layer key that isn't 0
@@ -447,21 +445,21 @@ function WorldMap:flee(monster, target)
 		 Chooses neighbouring tile furthest away from target
 	--]]
 
-	local x, y = monster.c, monster.r
-	local dx, dy = 0, 0	-- the direction variables to return and the default values 0, 0
+	local c, r = monster.c, monster.r
+	local dc, dr = 0, 0	-- the direction variables to return and the default values 0, 0
 	local moves = {{-1, 0}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1} } -- the table of directions to try
 
 	-- Sort by distance from the hero
 	table.sort(moves, function (p1, p2) 
-		return distance({x = x + p1[1], y = y + p1[2]},target) > distance({x = x + p2[1], y = y + p2[2]},target) 
+		return distance({c = c + p1[1], r = r + p1[2]},target) > distance({c = c + p2[1], r = r + p2[2]},target) 
 	end) 
 
 	-- Choose a non-blocked move
 	for i, move in ipairs(moves) do
-		dx, dy = move[1], move[2]
-		--DEBUG(monster.id, monster.name, dx, dy, x+dx, y+dy, self:blocked(x + dx, y + dy))
-		if not self:blocked(x + dx, y + dy) then		-- if not blocked then move in that direction 
-			return dx, dy
+		dc, dr = move[1], move[2]
+		--DEBUG(monster.id, monster.name, dc, dr, c+dc, r+dr, self:blocked(c + dc, r + dr))
+		if not self:blocked(c + dc, r + dr) then		-- if not blocked then move in that direction 
+			return dc, dr
 		end
 	end
 	
@@ -634,7 +632,7 @@ function WorldMap:shortestPath(from, to)
 	from.dr = 0
 	from.steps = 0 
 	table.insert(queue, from)
-	found[self:idx(from.c, from.r)] = true	
+	found[self:index(from.c, from.r)] = true	
 	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
 
 	while #queue > 0 and iterations < 100 do
@@ -660,12 +658,12 @@ function WorldMap:shortestPath(from, to)
 		for dr = -1, 1 do
 			for dc = -1 , 1 do
 				next = {c = current.c + dc, r = current.r + dr, steps = current.steps + 1}
-				if not found[self:idx(next.c, next.r)] 
+				if not found[self:index(next.c, next.r)] 
 					and (dr or dc) 
 					and next.c > 1 and next.c < LAYER_COLUMNS 
 					and next.r > 1 and next.r < LAYER_ROWS then
 					
-					found[self:idx(next.c, next.r)] = true	
+					found[self:index(next.c, next.r)] = true	
 
 					key, layer, tile = self:getTileInfo(next.c, next.r)
 
@@ -716,7 +714,7 @@ function WorldMap:debugMapInfo(id)
 	for y = 1, LAYER_ROWS do
 		local s = ""
 		for x = 1, LAYER_COLUMNS do
-			local i = self:idx(x,y)
+			local i = self:index(x,y)
 			s = s .. array[i] .. " "
 		end
 		DEBUG(s)

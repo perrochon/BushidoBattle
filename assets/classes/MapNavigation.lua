@@ -8,13 +8,13 @@ function MapNavigation:init(world)
 	self:addChild(intercept)
 
 	self.focus = false
-	self.from = {x=1, y=10, r = 1, c = 11}
-	self.to = {x=1, y=11, r = 1, c = 11}
-	self.hero = { x = 0, y = 0, key = 1, index = 1}
+	self.from = {x = 0, y = 0, c = 0, r = 0}
+	self.to   = {x = 0, y = 0, c = 0, r = 0}
+	self.character = {x = 0, y = 0, key = 1, id = 1}
 
 	self.fromMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
 	self.fromMarker:setAnchorPoint(0.5,0.5)
-	self.fromMarker:setPosition(self.from.x,self.from.y)
+	self.fromMarker:setPosition(self.from.x, self.from.y)
 	self.fromMarker:setVisible(false)
 	self.world.camera:addChild(self.fromMarker)
 
@@ -42,22 +42,28 @@ function MapNavigation:visibleMapTouched(event)
 		- column, row index of tile
 		- whether the visible map was touched (i.e. left area of screen AND not outside bounds) 
 	--]]
+
+
 	local e = self.world.camera:translateEvent(event)
-	local x = math.ceil(e.x / TILE_WIDTH)
-	local y = math.ceil(e.y / TILE_HEIGHT)
-	e.x = (x-0.5) * TILE_WIDTH
-	e.y = (y-0.5) * TILE_HEIGHT
-	--DEBUG("mouse down", event.x, event.y, " - ", e.x, e.y, " - ", x, y, self.focus)
+	e.c = math.ceil(e.x / TILE_WIDTH)
+	e.r = math.ceil(e.y / TILE_HEIGHT)
+	e.x = (e.c-0.5) * TILE_WIDTH
+	e.y = (e.r-0.5) * TILE_HEIGHT
+	--DEBUG("checking", event.x, event.y, " - ", e.x, e.y, " - ", c, r, self.focus)
 
 	local visibleTile = false
-	if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
-		local key, layer, tile = self.world:getTileInfo(x, y, LAYER_LIGHT)
-		DEBUG("tile is", key, layer, tile.name)
+	if e.c > 0 and e.c <= LAYER_COLUMNS and e.r > 0 and e.r <= LAYER_ROWS then
+		local key, layer, tile = self.world:getTileInfo(e.c, e.r, LAYER_LIGHT)
+		--DEBUG("tile is", key, layer, tile.name)
 		if key < 4 then
 			visibleTile = true
 		end
 	end
-	return e, x, y, (event.x < FG_X and visibleTile)
+	
+	-- FIXME HEROFIX VISIBILITY ignoring visibility for now
+	visibleTile = true
+	
+	return e, e.c, e.r, (event.x < FG_X and visibleTile)
 end
 
 function MapNavigation:updateVisualStatus()
@@ -65,13 +71,13 @@ function MapNavigation:updateVisualStatus()
 	--local dx = (self.hero.key == 1) and TILE_WIDTH or 0 -- TODO FIX offset target for touch users
 	--local dy = (self.hero.key == 1) and TILE_HEIGHT or 0
 	
-	dx, dy = 0,0
+	dx, dy = 0,0 -- offset toMarker a bit so it's not under the finger
 
 	self.fromMarker:setVisible(self.focus)
 	self.toMarker:setVisible(self.focus)
 
-	self.fromMarker:setPosition(self.from.x,self.from.y)
-	self.toMarker:setPosition(self.to.x-dx,self.to.y-dy)
+	self.fromMarker:setPosition(self.from.x, self.from.y)
+	self.toMarker:setPosition(self.to.x - dx, self.to.y - dy)
 
 	if self.line then 
 		self.world.camera:removeChild(self.line)
@@ -79,13 +85,13 @@ function MapNavigation:updateVisualStatus()
 	end
 	
 	if self.focus then
-		self.line = Shape.new() -- create the shape
-		self.line:beginPath()         -- begin a path
-		self.line:setLineStyle(2, COLOR_WHITE, 0.5)     -- set the line width = 1
-		self.line:moveTo(self.from.x,self.from.y)     -- move pen to start of line
-		self.line:lineTo(self.to.x-dx,self.to.y-dy)     -- draw line
-		self.line:endPath()           -- end the path
-		self.world.camera:addChild(self.line)     -- add the shape to the stage
+		self.line = Shape.new()                        -- create the shape
+		self.line:beginPath()                          -- begin a path
+		self.line:setLineStyle(2, COLOR_WHITE, 0.5)    -- set the line width = 1
+		self.line:moveTo(self.from.x, self.from.y)     -- move pen to start of line
+		self.line:lineTo(self.to.x-dx, self.to.y-dy)   -- draw line
+		self.line:endPath()                            -- end the path
+		self.world.camera:addChild(self.line)          -- add the shape to the stage
 	end
 	
 end
@@ -98,35 +104,34 @@ function MapNavigation:onMouseDown(event)
 
 	-- Where did we click, and is it on the map
 	local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
+	--DEBUG("Down on", c ,r , e.x, e.y)
 
 	if visibleMapTouched then
 		--find the tile that was touched
 		local key, layer, tile = self.world:getTileInfo(c, r)	
-		--DEBUG("    on Map", c, r, key, manual:getEntry("layers", layer))
+		--DEBUG("on Map", c, r, e.x, e.y, manual:getEntry("layers", layer), key, tile.name)
 
-		if self.hero.index then
-		end
 		
 		if layer == LAYER_MONSTERS then
-			self.hero.key = key
-			self.to.x = e.x
-			self.to.y = e.y
+			self.character.key = key
+			self.to = e			
+			self.from = e
 
 			if key == 1 then
-				for key, value in ipairs(heroes) do
-					--DEBUG("Looking for hero", key, value.x, value.y)
-					if value.x == c and value.y == r then
-						self.hero.index = key
+				for id, hero in ipairs(heroes) do
+					--DEBUG("Comparing with hero", hero.name, hero.c, hero.r, c, r)
+					if hero.active and hero.c == c and hero.r == r then
+						self.character.id = id
 					end
 				end
+				--self.from.c = heroes[self.character.index].c
+				--self.from.r = heroes[self.character.index].r			
+				--self.from.x = (heroes[self.character.index].c-0.5) * TILE_WIDTH
+				--self.from.y = (heroes[self.character.index].r-0.5) * TILE_HEIGHT
+				self.focus = true
 			end
-			self.from.c = heroes[self.hero.index].x
-			self.from.r = heroes[self.hero.index].y			
-			self.from.x = (heroes[self.hero.index].x-0.5) * TILE_WIDTH
-			self.from.y = (heroes[self.hero.index].y-0.5) * TILE_HEIGHT
-			DEBUG("from now is", self.from.c, self.from.r, self.from.x, self.from.y)
-			
-			self.focus = true
+
+			DEBUG(self.focus, "from", self.from.x, self.from.y, "to", self.to.x, self.to.y)
 			self:updateVisualStatus()
 			event:stopPropagation()
 		end
@@ -138,6 +143,8 @@ function MapNavigation:onMouseMove(event)
 	if self.focus then
 		-- Where did we click, and is it on the map
 		local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
+
+		--DEBUG("on Map", c, r, e.x, e.y)
 
 		if not self:hitTestPoint(event.x, event.y) or not visibleMapTouched then	
 			self.focus = false
@@ -155,13 +162,13 @@ function MapNavigation:onMouseUp(event)
 
 	if self.focus then
 		-- Where did we click, and is it on the map
-		local e, x, y, visibleMapTouched = self:visibleMapTouched(event)
+		local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
 
 		if self:hitTestPoint(event.x, event.y) and visibleMapTouched then	
 			local result = Event.new("line")
-			result.from = {c = math.ceil(self.from.x / TILE_WIDTH), r = math.ceil(self.from.y / TILE_HEIGHT)}
-			result.to = {c = x, r = y}
-			--DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
+			result.from = self.from
+			result.to = e
+			DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
 			self:dispatchEvent(result)	-- dispatch line drawn event
 		end
 

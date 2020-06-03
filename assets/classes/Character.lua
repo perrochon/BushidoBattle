@@ -66,6 +66,9 @@ function Character:setPosition(c, r)
 end
 
 function Character:moveTo(c, r)
+
+	--DEBUG("Moving Character", self.name, self.c, self.r, "to", c, r)
+
 	self.c = c
 	self.r = r
 

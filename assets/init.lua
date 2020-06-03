@@ -142,11 +142,7 @@ AUTO_CONNECT @ true
 
 function distance(o1, o2)
 	if not o1 or not o2 then return nil end
-	if o1.x then -- TODO FIX refactor all rows,columns from x,y, to r,x
-		return math.floor(10*math.sqrt(math.pow(tonumber(o1.x) - tonumber(o2.x),2) + math.pow(tonumber(o1.y) - tonumber(o2.y),2)))/10
-	else
-		return math.floor(10*math.sqrt(math.pow(tonumber(o1.c) - tonumber(o2.c),2) + math.pow(tonumber(o1.r) - tonumber(o2.r),2)))/10
-	end
+	return math.floor(10*math.sqrt(math.pow(tonumber(o1.c) - tonumber(o2.c),2) + math.pow(tonumber(o1.r) - tonumber(o2.r),2)))/10
 end
 
 
