@@ -25,7 +25,7 @@ function Monster:init(entry, id)
 
 	-- TODO REFACTOR superclass should call this
 	self:loadSprite()
-	DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
 
 	--Monster additional fields
@@ -84,8 +84,8 @@ function Monster:serialize()
 	local array = {}
 	array["id"] = self.id
 	array["entry"] = self.entry
-	array["x"] = self.x
-	array["y"] = self.y
+	array["c"] = self.c
+	array["r"] = self.r
 	array["hp"] = self.hp
 	array["HPbar"] = self.HPbar
 	return array
@@ -94,8 +94,8 @@ end
 function Monster:deserialize(m)
 	if (self.id ~= m["id"]) then DEBUG("Monster mismatch", self.id, m["id"]) return end
 	self.entry = m["entry"]
-	self.x = tonumber(m["x"])
-	self.y = tonumber(m["y"])
+	self.c = tonumber(m["c"])
+	self.r = tonumber(m["r"])
 	self.hp = tonumber(m["hp"])
 	self.HPbar = tonumber(m["HPbar"])
 end
@@ -114,7 +114,7 @@ function Monsters:init(mapData)
 		if v.type ~= 1 then
 			--DEBUG(json.encode(v))
 			local m = Monster.new(v.type, id)
-			m:setPosition(v.x, v.y)
+			m:setPosition(v.c, v.r)
 			m.sentry = v.sentry
 			m.berserk = v.berserk
 			table.insert(self.list, m)
@@ -291,5 +291,5 @@ function Monsters:updateState(monster, id, heroes, remote)
 	end
 
 	
-	--DEBUG(monster.name, monster.x, monster.y, monster.state, distance(monster, monster.target), monster.inrange)
+	--DEBUG(monster.name, monster.c, monster.r, monster.state, distance(monster, monster.target), monster.inrange)
 end

@@ -41,13 +41,15 @@ function ScenePlay:init()
 
 	application:setBackgroundColor(COLOR_LTBLACK)
 
+	self.sounds = Sounds.new("game")
+
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
 
 	-- FIX move the hero creation/placement stuff out of init into Heroes.lua
 
-	ScenePlay.heroes = {} 
-	-- HEROFIX > 2 - heroes[1] will be on the server. heroes[2] on the client
+	-- TODO HEROFIX remove
+	--ScenePlay.heroes = {} 
 
 	-- determine if we play locally, as server, or as client
 	if serverlink then
@@ -64,49 +66,44 @@ function ScenePlay:init()
 
 	if self.server then 
 		DEBUG("This device is a server")
-		localHero = 1
-		self.heroes[2] = Player.new(1,5) -- TOTO HEROFIX this only works for 2 devices
 	elseif self.client then 
 		DEBUG("This device is a client")
-		localHero = 2
-		self.heroes[1] = Player.new(1,5) -- TOTO HEROFIX this only works for 2 devices
 	else 
 		DEBUG("This device is playing locally") 
-		localHero = 1
 	end
 
-		--the major gaming variables
-	--self.heroes[localHero] = dataSaver.load(currentHeroFileName)
-    self.heroes[localHero] = Player.new(1,1)
-	
-	local x, y
+	-- get heroes ready for next battle
+	local r, c
 	for _, v in pairs(self.mapData.spawns) do
 		if v.type == 1 then
-			x = v.x
-			y = v.y
+			r = v.r
+			c = v.c
 			break
 		end
 	end
-	
-	--DEBUG("Hero Spawn", x, y)
 
-	self.heroes[1].heroTurn = true	
-	--self.heroes[1].heroIdx = 1
-	self.heroes[1]:setPosition(x,y)
+	for i = 1,4 do
+		heroes[i].mc:setScale(1)
+		-- TODO HEROFIX how to place multiple heroes? For now, they all go on top of each other...
+		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
+		-- Problems is we haven't loaded maps yet, and WorldMap.new wants the heroes array
+		heroes[i]:setPosition(r,c)
+		if heroes[i].active then
+			heroes.turn = true
+		end
+	end
+	
 	if self.remote then
-		--self.heroes[2].heroIdx = 2
-		self.heroes[2].heroTurn = false
-		self.heroes[2]:setPosition(x+1,y+1)
+		-- TODO HEROFIX
 	end
 		
 	-- load monsters -- TODO HEROFIX double monsters when there are two players.
 	self.monsters = Monsters.new(self.mapData)
 
 	-- Create the TileMaps and the arrays
-	self.world = WorldMap.new(self.mapData, self.heroes, self.monsters)
+	self.world = WorldMap.new(self.mapData, self.monsters)
 
 	self.msg = Messages.new()
-	self.sounds = Sounds.new("game")
 
 	--add methods for remote play
 	if self.remote then
@@ -120,7 +117,7 @@ function ScenePlay:init()
 	self:addChild(self.world)
 
 	self:addChild(self.msg)
-	self.main = MainScreen.new(self.heroes[localHero])
+	self.main = MainScreen.new(heroes[currentHero])
 	self:addChild(self.main)
 	
 	if self.remote then
@@ -135,18 +132,18 @@ function ScenePlay:init()
 	end
 
 	--respond to the compass directions
-	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:checkMove(self.heroes[localHero], 0, -1) end)
-	self.main.south:addEventListener("click", function() ScenePlay:cheater(1) self:checkMove(self.heroes[localHero], 0, 1)  end)
-	self.main.west:addEventListener("click", function() ScenePlay:cheater(2) self:checkMove(self.heroes[localHero], -1, 0)  end)
-	self.main.east:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], 1, 0)  end)
-	self.main.northwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], -1, -1)  end)
-	self.main.northeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], 1, -1)  end)
-	self.main.southwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], -1, 1)  end)
-	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(self.heroes[localHero], 1, 1)  end)
+	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:checkMove(heroes[currentHero], 0, -1) end)
+	self.main.south:addEventListener("click", function() ScenePlay:cheater(1) self:checkMove(heroes[currentHero], 0, 1)  end)
+	self.main.west:addEventListener("click", function() ScenePlay:cheater(2) self:checkMove(heroes[currentHero], -1, 0)  end)
+	self.main.east:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, 0)  end)
+	self.main.northwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], -1, -1)  end)
+	self.main.northeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, -1)  end)
+	self.main.southwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], -1, 1)  end)
+	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, 1)  end)
 	self.main.center:addEventListener("click", function()
 		if ScenePlay:cheater(4) then self.main:displayCheats() end
-		if not self.heroes[localHero].heroTurn  then return end
-		self:checkMove(self.heroes[localHero], 0, 0)
+		if not heroes[currentHero].heroTurn  then return end
+		self:checkMove(heroes[currentHero], 0, 0)
 	end)
 
 	self.cheat = ""
@@ -160,26 +157,26 @@ function ScenePlay:init()
 	-- respond to keys pressed (mainly for easier testing on desktop)
 	self:addEventListener(Event.KEY_DOWN, function(event)
 		if event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
-			self:checkMove(self.heroes[localHero], 0, -1)
+			self:checkMove(heroes[currentHero], 0, -1)
 		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
-			self:checkMove(self.heroes[localHero], 0, 1)
+			self:checkMove(heroes[currentHero], 0, 1)
 		elseif event.keyCode == KeyCode.LEFT or event.keyCode == KeyCode.A or event.keyCode == KeyCode.NUM_4 then
-			self:checkMove(self.heroes[localHero], -1, 0)
+			self:checkMove(heroes[currentHero], -1, 0)
 		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D or event.keyCode == KeyCode.NUM_6 then
-			self:checkMove(self.heroes[localHero], 1, 0)
+			self:checkMove(heroes[currentHero], 1, 0)
 			
 		elseif event.keyCode == KeyCode.C or event.keyCode == KeyCode.NUM_3 then
-			self:checkMove(self.heroes[localHero], 1, 1)
+			self:checkMove(heroes[currentHero], 1, 1)
 		elseif event.keyCode == KeyCode.E or event.keyCode == KeyCode.NUM_9 then
-			self:checkMove(self.heroes[localHero], 1, -1)
+			self:checkMove(heroes[currentHero], 1, -1)
 		elseif event.keyCode == KeyCode.Z or event.keyCode == KeyCode.NUM_1 then
-			self:checkMove(self.heroes[localHero], -1, 1)
+			self:checkMove(heroes[currentHero], -1, 1)
 		elseif event.keyCode == KeyCode.Q or event.keyCode == KeyCode.NUM_7 then
-			self:checkMove(self.heroes[localHero], -1, -1)
+			self:checkMove(heroes[currentHero], -1, -1)
 			
 		elseif event.keyCode == KeyCode.SPACE or event.keyCode == KeyCode.NUM_5 then
-			if not self.heroes[localHero].heroTurn  then return end
-			self:checkMove(self.heroes[localHero], 0, 0)
+			if not heroes[currentHero].heroTurn  then return end
+			self:checkMove(heroes[currentHero], 0, 0)
 		elseif event.keyCode == KeyCode.M then
 			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
 			self.world.camera:centerAnchor()
@@ -226,7 +223,7 @@ function ScenePlay:init()
 	 
 	 
 	--respond to mouse and touch events
-	local nav = MapNavigation.new(self.world, self.heroes)
+	local nav = MapNavigation.new(self.world)
 	self:addChild(nav)
 	
 	nav:addEventListener("line", self.onLine, self)
@@ -297,7 +294,7 @@ function ScenePlay:checkMove(hero, dx, dy)
 			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.y, "Monster", nil, nil)
 			self:syncTurn(hero.heroIdx, hero.x, hero.y, 0, 0, 0) 
 		else
-			self.heroes[localHero].heroTurn = true
+			heroes[currentHero].heroTurn = true
 			self:enableArrows()
 			self:heroesTurnOver()
 		end
@@ -337,7 +334,7 @@ end
 		
 		if self.client then 
 			self.heroes[3-localHero].heroTurn = false
-			self.heroes[localHero].heroTurn = true
+			heroes[currentHero].heroTurn = true
 			self:enableArrows(true)
 			
 			-- for debugging - wait a little, then client hero decides to do nothing
@@ -357,7 +354,7 @@ end
 		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
 		
 		self.heroes[3-localHero].heroTurn = true
-		self.heroes[localHero].heroTurn = false
+		heroes[currentHero].heroTurn = false
 		self:enableArrows(false)
 	end
  end
@@ -444,7 +441,7 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 	for id, m in pairs(self.monsters.list) do
 		if m.hp < 1 then		
 			self.msg:add(self.heroes[heroIdx].name, " killed the " .. m.name, MSG_DEATH)
-			self.heroes[heroIdx].xp = self.heroes[localHero].xp + m.xp
+			self.heroes[heroIdx].xp = heroes[currentHero].xp + m.xp
 			self.heroes[heroIdx].kills = self.heroes[heroIdx].kills + 1
 			
 			if m.entry == 4 then
@@ -478,7 +475,7 @@ function ScenePlay:heroesTurnOver()
 	DEBUG("Targets left", targets)
 	
 	if targets == 0 or self.cheat == "V" then
-		self.heroes[localHero]:save(currentHeroFileName)
+		heroes[currentHero]:save(currentHeroFileName)
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
@@ -531,14 +528,14 @@ function ScenePlay:monsterTurnOver()
 	end
 	
 	--after all the monsters attacked, check if the hero lost
-	if self.heroes[localHero].hp < 1 or self.cheat == "D" then
+	if heroes[currentHero].hp < 1 or self.cheat == "D" then
 		self.msg:add("you died", MSG_DEATH)
-		self.heroes[localHero]:save(currentHeroFileName)
+		heroes[currentHero]:save(currentHeroFileName)
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
 
 	-- enable hero again
-	self.heroes[localHero].heroTurn  = true
+	heroes[currentHero].heroTurn  = true
 	self:enableArrows(true)
 
 	-- Push everything to client
@@ -650,14 +647,14 @@ function ScenePlay:basicAttack(attacker, defender)
 			self.sounds:play("melee-hit")
 			self:rollDamage(weapon, attacker, defender, crit)
 		end
-		if self.heroes[localHero].heroTurn  then 		
+		if heroes[currentHero].heroTurn  then 		
 			if self.remote then
 				DEBUG("Basic Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
 				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
 				self:removeDeadMonsters(localHero)
 			else
 				self:removeDeadMonsters(localHero)
-				self.heroes[localHero].heroTurn = false
+				heroes[currentHero].heroTurn = false
 				self:heroesTurnOver()
 			end
 		else
@@ -683,7 +680,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	else
 		-- launch a projectile towards the defender
 		p = Projectile.new(weapon.projectile, attacker.x, attacker.y, 
-							self.heroes[localHero].x, self.heroes[localHero].y)	
+							heroes[currentHero].x, heroes[currentHero].y)	
 	end
 
 	-- Add the projectile to the world which takes care of scaling and dragging.
@@ -724,14 +721,14 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 			end
 		end
 
-		if self.heroes[localHero].heroTurn  then 		
+		if heroes[currentHero].heroTurn  then 		
 			if self.remote then
 				DEBUG("Range Attack", "Hero", attacker.heroIdx, attacker.x, attacker.y, "Monster", defender.id, defender.hp)	
 				self:syncTurn(attacker.heroIdx, attacker.x, attacker.y, defender.id, defender.hp, defender.HPbar) 
 				self:removeDeadMonsters(localHero)
 			else
 				self:removeDeadMonsters(localHero)
-				self.heroes[localHero].heroTurn = false
+				heroes[currentHero].heroTurn = false
 				self:heroesTurnOver()
 			end
 		else
@@ -741,7 +738,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 
 --[[
 
-		if self.heroes[localHero].heroTurn  then 
+		if heroes[currentHero].heroTurn  then 
 			self:heroesTurnOver() 
 		else
 			attacker.done = true
@@ -808,7 +805,7 @@ function ScenePlay:attackMonster(x, y)
 	end
 	
 	--call the attack function
-	self:basicAttack(self.heroes[localHero], monster)
+	self:basicAttack(heroes[currentHero], monster)
 end
 
 
@@ -890,7 +887,7 @@ end
 	--]]
 
 	-- TODO FIX PARTY need to use something like code above when we support parties
-	hero = self.heroes[localHero]
+	hero = heroes[currentHero]
 	if not ASSERT_TRUE(hero.x == from.c and hero.y == from.r, "Line not originating at local hero") then return end
 
 	
@@ -954,11 +951,11 @@ end
 		if self.active == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
 			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
-			local inReach = distance({x=event.from.c,y=event.from.r},{x=event.to.r,y=event.to.r}) < self.heroes[localHero].weapon.reach
+			--local inReach = math.abs(heroes[currentHero].x - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].y - y) <= heroes[currentHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
+			local inReach = distance({x=event.from.c,y=event.from.r},{x=event.to.r,y=event.to.r}) < heroes[currentHero].weapon.reach
 			if layer == LAYER_MONSTERS and inReach then
-				self:checkMove(self.heroes[localHero], event.to.c - self.heroes[localHero].x, event.to.r - self.heroes[localHero].y)
+				self:checkMove(heroes[currentHero], event.to.c - heroes[currentHero].x, event.to.r - heroes[currentHero].y)
 			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
 				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
 			end
@@ -966,18 +963,18 @@ end
 			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
 		elseif self.active == "move" then
 			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(self.heroes[localHero].x - event.to.c)
-			local deltaY = math.abs(self.heroes[localHero].y - event.to.r)
+			local deltaX = math.abs(heroes[currentHero].x - event.to.c)
+			local deltaY = math.abs(heroes[currentHero].y - event.to.r)
 			local dx, dy = 0, 0
 			if deltaX > 0 or deltaY > 0 then
 				--calculate the optimal dx, dy 
 				if deltaX > deltaY then
-					if event.to.c > self.heroes[localHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+					if event.to.c > heroes[currentHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
 				else
-					if event.to.r > self.heroes[localHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+					if event.to.r > heroes[currentHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[localHero].x, self.heroes[localHero].y, dx, dy))
-				self:checkMove(self.heroes[localHero],dx, dy)
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].x, heroes[currentHero].y, dx, dy))
+				self:checkMove(heroes[currentHero],dx, dy)
 			end
 		end
 --]]
@@ -994,12 +991,12 @@ end
 		if self.active == "attack" then
 			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
 			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(self.heroes[localHero].x - x) <= self.heroes[localHero].weapon.reach and math.abs(self.heroes[localHero].y - y) <= self.heroes[localHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
-			local inReach = distance(self.heroes[localHero], event) < self.heroes[localHero].weapon.reach and
-							layer == LAYER_MONSTERS and not (self.heroes[localHero].x == x and self.heroes[localHero].y == y)
+			--local inReach = math.abs(heroes[currentHero].x - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].y - y) <= heroes[currentHero].weapon.reach and
+			--				layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
+			local inReach = distance(heroes[currentHero], event) < heroes[currentHero].weapon.reach and
+							layer == LAYER_MONSTERS and not (heroes[currentHero].x == x and heroes[currentHero].y == y)
 			if inReach then
-				self:checkMove(self.heroes[localHero], x - self.heroes[localHero].x, y - self.heroes[localHero].y)
+				self:checkMove(heroes[currentHero], x - heroes[currentHero].x, y - heroes[currentHero].y)
 			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
 				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
 			end
@@ -1007,18 +1004,18 @@ end
 			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
 		elseif self.active == "move" then
 			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(self.heroes[localHero].x - x)
-			local deltaY = math.abs(self.heroes[localHero].y - y)
+			local deltaX = math.abs(heroes[currentHero].x - x)
+			local deltaY = math.abs(heroes[currentHero].y - y)
 			local dx, dy = 0, 0
 			if deltaX > 0 or deltaY > 0 then
 				--calculate the optimal dx, dy 
 				if deltaX > deltaY then
-					if x > self.heroes[localHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
+					if x > heroes[currentHero].x then dx, dy = 1, 0 else dx, dy = -1, 0 end
 				else
-					if y > self.heroes[localHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
+					if y > heroes[currentHero].y then dx, dy = 0, 1 else dx, dy = 0, -1 end
 				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(self.heroes[localHero].x, self.heroes[localHero].y, dx, dy))
-				self:checkMove(self.heroes[localHero],dx, dy)
+				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].x, heroes[currentHero].y, dx, dy))
+				self:checkMove(heroes[currentHero],dx, dy)
 			end
 		end
 	else

@@ -2,7 +2,7 @@
 This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
 (C) 2010 - 2020 Louis Perrochon
 ]]
-VERSION = "0.7.1"
+VERSION = "0.8.0"
 
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")

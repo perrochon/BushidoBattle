@@ -44,7 +44,7 @@ function SceneLobby:init()
 		end
 	)
 
-	self.map = TextButton.new("S")
+	self.map = TextButton.new("")
 	self.map:setAlpha(0)
 	self.map:setPosition(MINX,150)
 	self.map:setAnchorPoint(0,0)

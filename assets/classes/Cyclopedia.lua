@@ -71,12 +71,12 @@ function Cyclopedia:init()
 					tactics		behavior, "minion" or "soldier" for monsters, "player" for hero
 					see			how far monsters can see
 					alone  		how far other monsters need to be for this monster to feel alone
-					type		nil is physical damage, the others could be green, red, blue, white or black
-					projectile	the projectile animation used for the attack, either spear, arrow or magic
-					missSound   what the program reports for close misses
 					
 					weapon stats explained:
 					reach		how far away they can hit
+					type		nil is physical damage, the others could be green, red, blue, white or black
+					projectile	the projectile animation used for the attack, either spear, arrow or magic
+					missSound   what the program reports for close misses
 
 					
 				--]]
@@ -172,7 +172,7 @@ function Cyclopedia:loadSprites()
 	-- Characters
 	local texturePack = self.lists["monsters"].texturePack
 	local textureIndex = self.lists["monsters"].textureIndex
-	INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
+	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
 	
 	-- TODO FIX ANIMATION REMOVE
@@ -186,7 +186,7 @@ function Cyclopedia:loadSprites()
 		local tX, tY, w, h = region:getRegion()
 		value.tC = tX/TILE_WIDTH+1
 		value.tR = tY/TILE_HEIGHT+1
-		DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.deprecatedName)		
+		--DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.deprecatedName)		
 	end
 
 	-- Health Bars

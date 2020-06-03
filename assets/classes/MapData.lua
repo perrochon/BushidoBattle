@@ -86,7 +86,7 @@ function MapData:spawnsFromMap()
 	local found = {}
 
 	for _,v in ipairs(layerData.objects) do 
-		m = {type = tonumber(v.type % 100), name = v.name, x = v.x // 100 + 1, y = v.y // 100 + 1, 
+		m = {type = tonumber(v.type % 100), name = v.name, c = v.x // 100 + 1, r = v.y // 100 + 1, 
 			sentry = tonumber(v.type) > 100 and tonumber(v.type) < 200,
 			berserk = tonumber(v.type) > 200 and tonumber(v.type) < 300,
 			}

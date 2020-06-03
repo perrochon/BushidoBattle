@@ -24,18 +24,18 @@
   </exports>
  </properties>
  <folder name="classes">
-  <file name="assets/classes/Character.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>
+  <file name="assets/classes/Character.lua"/>
   <file name="assets/classes/CharacterAnimation.lua"/>
   <file name="assets/classes/Cyclopedia.lua"/>
+  <file name="assets/classes/Hero.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
   <file name="assets/classes/MapData.lua"/>
   <file name="assets/classes/MapNavigation.lua"/>
   <file name="assets/classes/Messages.lua"/>
   <file name="assets/classes/Monsters.lua"/>
-  <file name="assets/classes/Player.lua"/>
   <file name="assets/classes/Projectiles.lua"/>
   <file name="assets/classes/SceneChooseHero.lua"/>
   <file name="assets/classes/SceneChooseMap.lua"/>
@@ -163,6 +163,7 @@
  <file name="assets/fbapp-config.json"/>
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
+ <file excludeFromExecution="1" excludeFromPackage="1" name="assets/todo.lua"/>
  <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
  <dependency to="assets/classes/CharacterAnimation.lua" from="assets/classes/Character.lua"/>
  <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>

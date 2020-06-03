@@ -71,7 +71,7 @@ function MainScreen:init(hero)
 	self.hp :setPosition(HALFX, 450) 
 	self:addChild(self.hp)
 
-	self.xy = TextField.new(FONT_SMALL, self.hero.x .. ",".. self.hero.y)
+	self.xy = TextField.new(FONT_SMALL, self.hero.c .. ",".. self.hero.r)
 	self.xy :setTextColor(COLOR_DKGREY)	
 	self.xy :setPosition(FG_X, MAXY - version:getHeight()) 
 	self:addChild(self.xy)
@@ -80,7 +80,7 @@ function MainScreen:init(hero)
 		self.kills:setText("Kills: " .. self.hero.kills )
 		self.xp:setText("Experience: " .. self.hero.xp)
 		self.hp:setText("Health: " .. self.hero.hp)
-		self.xy:setText(self.hero.x .. ",".. self.hero.y)
+		self.xy:setText(self.hero.c .. ",".. self.hero.r)
 	end)
 
 	--these variables are for the buttons that respond to user input

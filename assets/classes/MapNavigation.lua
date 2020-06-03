@@ -1,16 +1,15 @@
 MapNavigation = Core.class(Sprite)
 
-function MapNavigation:init(world, heroes)
+function MapNavigation:init(world)
 
 	self.world = world
-	self.heroes = heroes
 	local intercept = Pixel.new(COLOR_RED, 0, FG_X-MINX, MAXY-MINY)
 	intercept:setPosition(MINX, MINY)
 	self:addChild(intercept)
 
 	self.focus = false
-	self.from = {x=1, y=10, r = 1, c = 1}
-	self.to = {x=1, y=11, r = 1, c = 1}
+	self.from = {x=1, y=10, r = 1, c = 11}
+	self.to = {x=1, y=11, r = 1, c = 11}
 	self.hero = { x = 0, y = 0, key = 1, index = 1}
 
 	self.fromMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
@@ -53,7 +52,7 @@ function MapNavigation:visibleMapTouched(event)
 	local visibleTile = false
 	if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
 		local key, layer, tile = self.world:getTileInfo(x, y, LAYER_LIGHT)
-		--DEBUG("tile is", key, layer, tile.name)
+		DEBUG("tile is", key, layer, tile.name)
 		if key < 4 then
 			visibleTile = true
 		end
@@ -114,17 +113,17 @@ function MapNavigation:onMouseDown(event)
 			self.to.y = e.y
 
 			if key == 1 then
-				for key, value in ipairs(self.heroes) do
+				for key, value in ipairs(heroes) do
 					--DEBUG("Looking for hero", key, value.x, value.y)
 					if value.x == c and value.y == r then
 						self.hero.index = key
 					end
 				end
 			end
-			self.from.c = self.heroes[self.hero.index].x
-			self.from.r = self.heroes[self.hero.index].y			
-			self.from.x = (self.heroes[self.hero.index].x-0.5) * TILE_WIDTH
-			self.from.y = (self.heroes[self.hero.index].y-0.5) * TILE_HEIGHT
+			self.from.c = heroes[self.hero.index].x
+			self.from.r = heroes[self.hero.index].y			
+			self.from.x = (heroes[self.hero.index].x-0.5) * TILE_WIDTH
+			self.from.y = (heroes[self.hero.index].y-0.5) * TILE_HEIGHT
 			DEBUG("from now is", self.from.c, self.from.r, self.from.x, self.from.y)
 			
 			self.focus = true

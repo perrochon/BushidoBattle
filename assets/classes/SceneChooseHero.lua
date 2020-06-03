@@ -11,22 +11,30 @@ function SceneChooseHero:init()
 	self.panels = {}
 	
 	for i=1,4 do
+	
+		self.panels[i] = self:displayHero(i)
+
+		--[[ 
+		
+		-- TODO HEROFIX If heroes[i] is nil, load from file. If file is empty, create new
+		-- TODO HEROFIX Support selection of multiple heroes (checkboxes, not radio buttons)
+		
 		local heroFileName = "|D|hero"..i
 		--DEBUG("Loading", heroFileName)
 		--local hero = dataSaver.load(heroFileName)	
-		local hero = Player.new(1,i)	
+		local hero = Hero.new(1,i)	
 		--DEBUG(hero)
 		if hero then
 			--DEBUG(i, "found " .. hero.name .. " level " .. hero.level)
 			-- hero.hp = hero.maxHP -- heal whatever hero we found. If we do, we have to save it back...
 			self.panels[i] = self:displayHero(hero, i)	
 		else
-			hero = Player.new(1,i) 
+			hero = Hero.new(1,i) 
 			--DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
 			hero:save(heroFileName)
 			self.panels[i] = self:displayHero(hero, i)
 		end
-		
+			--]]
 	end
 	
 	self:updateVisualState(true, currentHero)
@@ -35,7 +43,9 @@ function SceneChooseHero:init()
 
 end
 
-function SceneChooseHero:displayHero(hero, slot)
+function SceneChooseHero:displayHero(slot)
+
+	local hero = heroes[slot]
 
 	local yGap = BUTTON_MARGIN
 	local heroWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
@@ -71,7 +81,6 @@ function SceneChooseHero:displayHero(hero, slot)
 	panel:addChild(hero.mc)
 	hero.mc:setScale(3)
 	hero.mc:setPosition(heroWidth - 120, - 150)
-
 	
 	heroName:addEventListener("click", function ()
 		local textInputDialog = TextInputDialog.new("Change Hero Name", "Enter Hero Name", 
@@ -79,15 +88,12 @@ function SceneChooseHero:displayHero(hero, slot)
 		textInputDialog:addEventListener(Event.COMPLETE, function(event)
 			if event.buttonIndex ~= nil then
 				hero.name = event.text:sub(1,8)
-				
-				local heroFileName = "|D|hero"..slot
-				hero:save(heroFileName)
+				hero:save()
 				sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 				
 			end
 		end)
 		textInputDialog:show()
 	end)
-
 
 	local heroDescription = ""
 	heroDescription = heroDescription .. "Level: " .. hero.level .."\n"
@@ -115,16 +121,15 @@ function SceneChooseHero:displayHero(hero, slot)
 	panel:addChild(resetButton)
 
 	resetButton:addEventListener("click", function()
-			local heroFileName = "|D|hero"..slot
 			--DEBUG("Resetting", heroFileName)
-			hero = Player.new(1,slot) 
-			hero:save(heroFileName)
+			heroes[slot] = Hero.new(1,slot) 
+			heroes[slot]:save()
 			sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
 			end
 		)
 
 	panel.front.slot = slot
-
+	
 	self.focus = false 
 	panel.front:addEventListener(Event.MOUSE_DOWN, SceneChooseHero.onMouseDown, panel.front)
 	panel.front:addEventListener(Event.MOUSE_MOVE, SceneChooseHero.onMouseMove, panel.front)
@@ -162,9 +167,7 @@ function SceneChooseHero:onMouseUp(event)
 		self.focus = false;
 		self:getParent():getParent():updateVisualState(false, currentHero)
 		self:getParent():getParent():updateVisualState(true, self.slot)
-		currentHero = self.slot
-		currentHeroFileName = "|D|hero"..self.slot
-		
+		currentHero = self.slot		
 		event:stopPropagation()
 	end
 end
@@ -174,15 +177,5 @@ function SceneChooseHero:updateVisualState(state, slot)
 		self.panels[slot].front:setColor(COLOR_GREY)
 	else
 		self.panels[slot].front:setColor(COLOR_DKGREY)
-	end
-end
-
-function SceneChooseHero:resetAllHeroes()
-
-	for i=1, 5 do
-		local heroFileName = "|D|hero"..i
-		--DEBUG("Resetting", heroFileName)
-		hero = Player.new(1,i) 
-		hero:save(heroFileName)
 	end
 end

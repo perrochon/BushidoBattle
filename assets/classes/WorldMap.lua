@@ -9,7 +9,7 @@ WorldMap class and all the functions associated with it: changing tiles, generat
 
 WorldMap = Core.class(Sprite)
 
-function WorldMap:init(level, heroes, monsters)
+function WorldMap:init(level, monsters)
 
 	--Create tables for map content (self.mapArrays) and for each TileMap (self.mapLayers)	
 	--self.level = Level.new(currentMapFileName) -- read the file
@@ -38,7 +38,7 @@ function WorldMap:init(level, heroes, monsters)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
-	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(heroes, monsters)
+	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
 	layer:setAlpha(0.2)
 	self.camera:addChild(layer) 
@@ -46,39 +46,40 @@ function WorldMap:init(level, heroes, monsters)
 	--self:debugMapInfo(LAYER_MONSTERS)
 	
 	-- TODO FIX ANIMATION store this somewhere, but not so that it gets saved
-	self.heroMc = heroes[localHero].mc
+	--self.heroMc = heroes[current].mc
 	--self.heroMc = CharacterAnimation.new("Ninja_02")
 	--self.heroMc.mc:gotoAndPlay(1)
-	--self.heroMc:setPosition((heroes[localHero].x - 1) * TILE_WIDTH, (heroes[localHero].y - 1) * TILE_HEIGHT)
+	--self.heroMc:setPosition((heroes[localHero].c - 1) * TILE_WIDTH, (heroes[localHero].r - 1) * TILE_HEIGHT)
 	--self.camera:addChild(self.heroMc)
 	
 
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_HP] = self:addHP()
-	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[localHero])
+	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[currentHero])
     self:shiftWorld(heroes[localHero])
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "health")
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
-	-- TODD FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?
-	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
+	-- TODO FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?
+	-- TODO FIX below old solution is broken
+	--layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
 	--self.camera:addChild(layer) 
-	table.insert(self.mapLayers, layer)	
+	--table.insert(self.mapLayers, layer)	
 
 	self:addChild(self.camera)
 end
 
-function WorldMap:idx(x, y) --index of cell (x,y)
-	return x + (y - 1) * LAYER_COLUMNS 
+function WorldMap:idx(c, r) --index of cell (c,r)
+	return c + (r - 1) * LAYER_COLUMNS 
 end
 
 
-function WorldMap:placeMonsters(heroes, monsters)
+function WorldMap:placeMonsters(monsters)
 	--[[Return an array to represent the monsters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
-		Changes heroes[].x, heroes[].y and each monster.x, monster.y
+		Changes heroes[].c, heroes[].r and each monster.c, monster.r
 	--]]
 
 	--this is the array without monsters
@@ -91,15 +92,15 @@ function WorldMap:placeMonsters(heroes, monsters)
 	end
 	
 	for _, m in pairs(monsters.list) do
-		mArray[self:idx(m.x, m.y)] = m.entry
+		mArray[self:idx(m.c, m.r)] = m.entry
 		self.camera:addChild(m.mc)
 	end
 	
-	mArray[self:idx(heroes[localHero].x, heroes[localHero].y)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+	mArray[self:idx(heroes[localHero].c, heroes[localHero].r)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 		self.camera:addChild(heroes[localHero].mc)
 
 	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
-		mArray[self:idx(heroes[3-localHero].x, heroes[3-localHero].y)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
+		mArray[self:idx(heroes[3-localHero].c, heroes[3-localHero].r)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
 		self.camera:addChild(heroes[3-localHero].mc)	
 	end
 	
@@ -136,8 +137,8 @@ function WorldMap:addLight(hero)
 	--this overlays the hero with a torch array
 	--torch array is overkill if lightsources are symmetric. Could be computed
 	local torchIndex = 0
-	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
-		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
+	for y = hero.r - hero.light.radius, hero.r + hero.light.radius do
+		for x = hero.r - hero.light.radius, hero.c + hero.light.radius do
 			torchIndex = torchIndex + 1
 			--only change the light array if on the screen
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
@@ -166,13 +167,14 @@ function WorldMap:returnTileMap(mapArray, layer)
 			local key = mapArray[self:idx(x, y)]
 
 			if layer == "monsters" then
-			--only setTiles if the mapArray value isn't 0
-			if key ~= 0 then
-				local monster = manual:getEntry("monsters", key)	
-				--DEBUG(monster.name, monster.tC, monster.tR)
-				tilemap:setTile(x, y, monster.tC, monster.tR)
-			end
+				--only setTiles if the mapArray value isn't 0
+				if key ~= 0 then
+					local monster = manual:getEntry("monsters", key)	
+					--DEBUG(monster.name, monster.tC, monster.tR)
+					tilemap:setTile(x, y, monster.tC, monster.tR)
+				end
 			elseif layer == "light" then
+				DEBUG(x, y, self:idx(x, y), key )
 				tilemap:setTile(x, y, key, 1)
 			elseif layer == "health" then
 				-- do nothing at creation
@@ -248,20 +250,20 @@ function WorldMap:shiftWorld(hero)
 		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
 	
-	self.camera:centerPoint(hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT)
-	--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
+	self.camera:centerPoint(hero.r * TILE_WIDTH, hero.c * TILE_HEIGHT)
+	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
 	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
 end
 
-function WorldMap:shiftWorld2(heroMc)
+function WorldMap:shiftWorld2()
 	--[[Moves the camera to the hero's location
 		May require more complexity with multiple heroes
 		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
 	
-	self.camera:centerPoint(heroMc:getX(), heroMc:getY())
-	--DEBUG("Hero:", hero.x * TILE_WIDTH, hero.y * TILE_HEIGHT, hero.x, hero.y, 
+	self.camera:centerPoint(heroes[localHero].mc:getX(), heroes[localHero].mc:getY())
+	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
 	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
 end
@@ -271,10 +273,10 @@ function WorldMap:moveHero(hero, dx, dy)
 	--[[change the mapArrays and mapLayers location of a hero and 
 		if it's the local hero, shift the TileMap and the light
 
-		Changes hero.x, hero.y, position of the world
+		Changes hero.c, hero.r, position of the world
 	--]]
 
-	--DEBUG("Moving Hero", hero, hero.id, dx, dy, "to", hero.x+dx, hero.y+dy)
+	--DEBUG("Moving Hero", hero, hero.id, dx, dy, "to", hero.c+dx, hero.r+dy)
 
 	-- TODO FIX why does this work on the pre-move coordinates?
 	if hero.id == localHero then 
@@ -286,8 +288,7 @@ function WorldMap:moveHero(hero, dx, dy)
 	local tween = self:moveMonster(hero, dx, dy)
 	
 	tween.onChange = function()
-		--DEBUG("Shifting world", self.heroMc:getX())
-		self:shiftWorld2(self.heroMc)
+		self:shiftWorld2()
 	end
 	
 	if hero.id == localHero then 
@@ -311,8 +312,8 @@ function WorldMap:adjustLight(hero, dx, dy)
 	local i = 0
 
 	--set all previously lit tiles to 3
-	for y = hero.y - hero.light.radius, hero.y + hero.light.radius do
-		for x = hero.x - hero.light.radius, hero.x + hero.light.radius do
+	for y = hero.r - hero.light.radius, hero.r + hero.light.radius do
+		for x = hero.c - hero.light.radius, hero.c + hero.light.radius do
 			--only change the light array and tile if on screen 
 			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
 				i = self:idx(x, y)
@@ -328,8 +329,8 @@ function WorldMap:adjustLight(hero, dx, dy)
 	local torchIndex = 0
 	--overlay the torchArray tiles over the hero's new spot
 	--TODO why can this not just be self:addLight (with modification)
-	for y = hero.y + dy - hero.light.radius, hero.y + dy + hero.light.radius do
-		for x = hero.x + dx - hero.light.radius, hero.x + dx + hero.light.radius do
+	for y = hero.r + dy - hero.light.radius, hero.r + dy + hero.light.radius do
+		for x = hero.c + dx - hero.light.radius, hero.c + dx + hero.light.radius do
 			torchIndex = torchIndex + 1
 			i = self:idx(x, y)
 			--only change the light array if on screen
@@ -354,29 +355,29 @@ function WorldMap:moveMonster(monster, dx, dy)
 	--erase the monster in the array and TileMap
 
 	-- DEBUG Getting non-reproducible errors on the next line in HTML - Checking for possible conditions
-	if monster.x > LAYER_COLUMNS or monster.y > LAYER_ROWS or monster.x < 1 or monster.y < 1 then
-		ERROR("Monster current location out of bounds", monster.name, monster.x, monster.y, dx, dy)
-	elseif monster.x+dx > LAYER_COLUMNS or monster.y+dy > LAYER_ROWS or monster.x+dx < 1 or monster.y+dy < 1 then
-		ERROR("Monster new location out of bounds", monster.name, monster.x, monster.y, dx, dy)
+	if monster.c > LAYER_COLUMNS or monster.r > LAYER_ROWS or monster.c < 1 or monster.r < 1 then
+		ERROR("Monster current location out of bounds", monster.name, monster.c, monster.r, dx, dy)
+	elseif monster.c+dx > LAYER_COLUMNS or monster.r+dy > LAYER_ROWS or monster.c+dx < 1 or monster.r+dy < 1 then
+		ERROR("Monster new location out of bounds", monster.name, monster.c, monster.r, dx, dy)
 	else
-		array[self:idx(monster.x, monster.y)] = 0
-		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.x, monster.y)
+		array[self:idx(monster.c, monster.r)] = 0
+		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.c, monster.r)
 		
 		--place the monster at the new position
-		array[self:idx(monster.x + dx, monster.y + dy)] = monster.entry
-		self.mapLayers[LAYER_MONSTERS]:setTile(monster.x + dx, monster.y + dy, monster.tC, monster.tR) 
+		array[self:idx(monster.c + dx, monster.r + dy)] = monster.entry
+		self.mapLayers[LAYER_MONSTERS]:setTile(monster.c + dx, monster.c + dy, monster.tC, monster.tR) 
 
 		--remove and move the HPbar
 		array = self.mapArrays[LAYER_HP]
-		array[self:idx(monster.x, monster.y)] = 0
-		self.mapLayers[LAYER_HP]:clearTile(monster.x, monster.y) 	
-		array[self:idx(monster.x + dx, monster.y + dy)] = monster.HPbar
+		array[self:idx(monster.c, monster.r)] = 0
+		self.mapLayers[LAYER_HP]:clearTile(monster.c, monster.r) 	
+		array[self:idx(monster.c + dx, monster.r + dy)] = monster.HPbar
 		if monster.HPbar ~= 0 then
-			self.mapLayers[LAYER_HP]:setTile(monster.x + dx, monster.y + dy, monster.HPbar, 1) 
+			self.mapLayers[LAYER_HP]:setTile(monster.c + dx, monster.r + dy, monster.HPbar, 1) 
 		end
 
 		--update x and y
-		local tween = monster:moveTo(monster.x + dx, monster.y + dy)
+		local tween = monster:moveTo(monster.c + dx, monster.c + dy)
 		return tween
 	end
 end
@@ -394,22 +395,22 @@ function WorldMap:addMonster(monster)
 	--[[ 
 	--]]
 
-	local x = monster.x
-	local y = monster.y
+	local x = monster.c
+	local y = monster.r
 	
 	--get the array and entry
 	local array = self.mapArrays[LAYER_MONSTERS]
 
 	--DEBUG(x, y)
 	--place the monster at the new position
-	array[self:idx(monster.x, monster.y)] = monster.entry
-	self.mapLayers[LAYER_MONSTERS]:setTile(monster.x, monster.y, monster.entry, 1) 
+	array[self:idx(monster.c, monster.r)] = monster.entry
+	self.mapLayers[LAYER_MONSTERS]:setTile(monster.c, monster.r, monster.entry, 1) 
 
 	--add the HPbar
 	array = self.mapArrays[LAYER_HP]
-	array[self:idx(monster.x, monster.y)] = monster.HPbar
+	array[self:idx(monster.c, monster.r)] = monster.HPbar
 	if monster.HPbar ~= 0 then
-		self.mapLayers[LAYER_HP]:setTile(monster.x, monster.y, monster.HPbar, 1) 
+		self.mapLayers[LAYER_HP]:setTile(monster.c, monster.r, monster.HPbar, 1) 
 	end
 end
 
@@ -446,7 +447,7 @@ function WorldMap:flee(monster, target)
 		 Chooses neighbouring tile furthest away from target
 	--]]
 
-	local x, y = monster.x, monster.y
+	local x, y = monster.c, monster.r
 	local dx, dy = 0, 0	-- the direction variables to return and the default values 0, 0
 	local moves = {{-1, 0}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1} } -- the table of directions to try
 
@@ -629,9 +630,6 @@ function WorldMap:shortestPath(from, to)
 	end
 	iterations = 0
 	
-	if to.x then to.c = to.x end
-	if to.y then to.r = to.r end
-
 	from.dc = 0
 	from.dr = 0
 	from.steps = 0 

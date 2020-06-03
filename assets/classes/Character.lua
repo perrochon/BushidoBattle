@@ -7,7 +7,7 @@ function Character:init(entry, id)
 	self.entry = entry  -- position/key in manual, and the world's monster array. 1 is a hero, the rest are monsters
 	self.id = id
 	self.mc = nil -- MovieClip
-	self.x, self.y = 1, 1 -- temporary coordinates when first created.
+	self.c, self.r = 1, 1 -- temporary coordinates when first created.
 
 	self.info = manual:getEntry("monsters", self.entry)	
 	self.name = self.info.name
@@ -35,7 +35,7 @@ function Character:init(entry, id)
 	
 	-- TODO REFACTOR Call loadSprite here, and pick the one from the subclass, instead of calling in subclass init)_
 	
-	DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
 	-- TODO DELETE once old sprites go away
 	--DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
@@ -47,10 +47,10 @@ end
 
 function Character:loadSprite()
 	self.sprite = self.info.sprite
-	DEBUG(self.entry, self.id, self.name, self.sprite)
+	--DEBUG(self.entry, self.id, self.name, self.sprite)
 	self.mc = CharacterAnimation.new(self.sprite)
 	self.mc.mc:gotoAndPlay(1)
-	self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
+	self.mc:setPosition((self.c - 1) * TILE_WIDTH, (self.r - 1) * TILE_HEIGHT)
 end
 
 function Character:setHealth(health)
@@ -60,18 +60,18 @@ function Character:setHealth(health)
 end
 
 function Character:setPosition(c, r)
-	self.x = c
-	self.y = r
-	self.mc:setPosition(self.x*TILE_WIDTH - TILE_WIDTH/2, self.y*TILE_HEIGHT - TILE_HEIGHT/2)
+	self.c = c
+	self.r = r
+	self.mc:setPosition(c * TILE_WIDTH - TILE_WIDTH / 2, r * TILE_HEIGHT - TILE_HEIGHT / 2)
 end
 
 function Character:moveTo(c, r)
-	self.x = c
-	self.y = r
+	self.c = c
+	self.r = r
 
 	local animate = {}
-	animate.x = self.x * TILE_WIDTH - TILE_WIDTH / 2
-	animate.y = self.y * TILE_HEIGHT - TILE_HEIGHT / 2
+	animate.x = self.c * TILE_WIDTH - TILE_WIDTH / 2
+	animate.y = self.r * TILE_HEIGHT - TILE_HEIGHT / 2
 	local properties = {}
 	properties.delay = 0
 	properties.dispatchEvents = false

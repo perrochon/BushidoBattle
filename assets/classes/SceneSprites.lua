@@ -70,7 +70,7 @@ function SceneSprites:init()
 	end
 	--]]
 
-	local textures = CharacterAnimation.textureData
+	local textures = CharacterAnimation.spriteData
 	local clips = {}
 	-- regular scale
 	for i = 1, #textures do
