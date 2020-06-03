@@ -38,7 +38,7 @@ function WorldMap:init(level, monsters)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
-	self.mapArrays[LAYER_MONSTERS] = self:placeMonsters(monsters)
+	self.mapArrays[LAYER_MONSTERS] = self:placeCharacters(monsters)
 	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
 	layer:setAlpha(0.2)
 	self.camera:addChild(layer) 
@@ -76,32 +76,29 @@ function WorldMap:index(c, r) --index of cell (c,r)
 end
 
 
-function WorldMap:placeMonsters(monsters)
-	--[[Return an array to represent the monsters tiles. 
+function WorldMap:placeCharacters(monsters)
+	--[[Return an array to represent the characters tiles. 
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
-		Changes heroes[].c, heroes[].r and each monster.c, monster.r
 	--]]
 
-	--this is the array without monsters
 	local mArray = {}
 
-	for y = 1, LAYER_ROWS do
-		for x = 1, LAYER_COLUMNS do
-			mArray[self:index(x, y)] = 0
+	for r = 1, LAYER_ROWS do
+		for c = 1, LAYER_COLUMNS do
+			mArray[self:index(c, r)] = 0
 		end
 	end
 	
-	for _, m in pairs(monsters.list) do
-		mArray[self:index(m.c, m.r)] = m.entry
-		self.camera:addChild(m.mc)
+	for _, monster in pairs(monsters.list) do
+		mArray[self:index(monster.c, monster.r)] = monster.entry
+		self.camera:addChild(monster.mc)
 	end
-	
-	mArray[self:index(heroes[localHero].c, heroes[localHero].r)] = heroes[localHero].entry -- TODO HEROFIX all heroes are the same entry for now
-		self.camera:addChild(heroes[localHero].mc)
 
-	if heroes[3-localHero] then -- TODO HEROFIX only works for 2 Heroes
-		mArray[self:index(heroes[3-localHero].c, heroes[3-localHero].r)] = heroes[3-localHero].entry -- TODO HEROFIX all heroes are the same entry for now
-		self.camera:addChild(heroes[3-localHero].mc)	
+	for _, hero in pairs(heroes) do
+		if hero.active then
+			mArray[self:index(hero.c, hero.r)] = hero.entry
+			self.camera:addChild(hero.mc)
+		end
 	end
 	
 	return mArray
@@ -535,45 +532,43 @@ function WorldMap:line(fromX, fromY, toX, toY)
 	return line
 end
 
-function WorldMap:lineOfCover(fromX, fromY, toX, toY)
+function WorldMap:lineOfCover(fromC, fromR, toC, toR)
 	--[[find all the tile.cover values between from and to on the environment and light layer
-		Return blockedX, blockedY if totalCover <-5
-		Return totalCover, blockedX, blockedY 
+		Return blockedC, blockedR if totalCover <-5
+		Return totalCover, blockedC, blockedR 
 	--]]
 
 	local totalCover = 0
-	local blockedX, blockedY = nil, nil
-	local x, y = 0, 0
-	local line = self:line(fromX, fromY, toX, toY)
+	local blockedC, blockedR = nil, nil
+	local line = self:line(fromC, fromR, toC, toR)
 
-	--remove the starting x, y
+	--remove the starting r, c
 	table.remove(line, 1)
-	--DEBUG(fromX, fromY, toX, toY, " for cover")
+	--DEBUG(fromC, fromR, toC, toR, " for cover")
 	for key, coordinates in pairs(line) do
-		x, y = coordinates[1], coordinates[2]
-		--DEBUG(x, y)
+		local r, c = coordinates[1], coordinates[2]
 
 		--figure out the cover for what's in the way
-		local key, layer, tile = self:getTileInfo(x, y, LAYER_ENVIRONMENT)
+		local key, layer, tile = self:getTileInfo(r, c, LAYER_ENVIRONMENT)
 		if key ~= 0 then	
 			totalCover = totalCover + tile.cover 
 		end
 
 		--account for lighting too
-		local key, layer, tile = self:getTileInfo(x, y, LAYER_LIGHT)		
-		totalCover = totalCover + tile.cover 
+		local key, layer, tile = self:getTileInfo(r, c, LAYER_LIGHT)	
+		--totalCover = totalCover + tile.cover  -- TODO FIX ANIMATION HEROFIX VISIBILITY don't shoot into dark
 		if totalCover < -5 then -- removed redundant? or tile.cover < -5
-			if not blockedX then -- return first block
-				blockedX, blockedY = x, y
+			if not blockedC then -- return first block
+				blockedC, blockedR = c, r
 			end
 		end
 	end
-	if blockedX then
-		--DEBUG("cover is  ", totalCover, " blocked at ", blockedX, blockedY )
+	if blockedC then
+		--DEBUG("cover is  ", totalCover, " blocked at ", blockedC, blockedR )
 	else
 		--DEBUG("cover is  ", totalCover, " not blocked")
 	end
-	return totalCover, blockedX, blockedY
+	return totalCover, blockedC, blockedR
 end
 
 
@@ -585,9 +580,9 @@ function WorldMap:setMarker(point, type, grade)
 	end
 	
 	local types = { 
-		["s"] = {color = COLOR_BLUE, alpha = 0.5},
-		["e"] = {color = COLOR_RED, alpha = 0.5},
-		["f"] = {color = COLOR_GREEN, alpha = 0.8},
+		["s"] = {color = COLOR_BLUE, alpha = 0.7},
+		["e"] = {color = COLOR_RED, alpha = 0.7},
+		["f"] = {color = COLOR_GREEN, alpha = 0.7},
 		}
 
 	local color
@@ -602,7 +597,7 @@ function WorldMap:setMarker(point, type, grade)
 	else
 		color = types[type].color
 	end
-	local marker = Pixel.new(color, types[type].alpha, 50, 50)
+	local marker = Pixel.new(color, types[type].alpha, 10, 10)
 	marker:setAnchorPoint(0.5,0.5)
 	marker:setPosition((point.c - 0.5) * TILE_WIDTH, (point.r - 0.5) * TILE_HEIGHT)
 	self.path:addChild(marker)
@@ -617,9 +612,9 @@ end
 
 function WorldMap:shortestPath(from, to)
 
-	--self:clearMarkers()
-	--self:setMarker(from, "s")
-	--self:setMarker(to, "e")
+	self:clearMarkers()
+	self:setMarker(from, "s")
+	self:setMarker(to, "e")
 
 	queue = {}
 	found = {}
@@ -648,7 +643,7 @@ function WorldMap:shortestPath(from, to)
 		table.remove(queue, 1)
 		steps = iterations + 1
 		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, current.steps, to.c, to.r, #queue)			
-		--self:setMarker(current, "f", current.steps + 1)
+		self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
 			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)

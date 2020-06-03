@@ -1,11 +1,10 @@
 --[[
-This is derived from the Birds example
 --]]
 
 Projectile = Core.class(Sprite)
 
-function Projectile:init(pName, fromX, fromY, toX, toY)
---[[Logic: 	accepts a key pName for a projectile and outputs an animatation from a tilemap fromX, fromY to a tilemap toX, toY
+function Projectile:init(pName, fromC, fromR, toC, toR)
+--[[Logic: 	accepts a key pName for a projectile and outputs an animatation from a tilemap fromC, fromR to a tilemap toC, toR
 			adds an image and onEventFrame event listener to the stage which dispatchs a "animation finished" event
 	Called from rangedAttack
 	Calls self.onEnterFrame, self.onRemovedFromStage
@@ -18,27 +17,26 @@ function Projectile:init(pName, fromX, fromY, toX, toY)
 	p:setAnchorPoint(0.5, 0.5)
 	
 	--calculate the screen start and target variables
-	local startX = (fromX - 0.5) * TILE_WIDTH 
-	local startY = (fromY - 0.5) * TILE_HEIGHT 
-	self.targetX = (toX - 0.5) * TILE_WIDTH 
-	self.targetY = (toY - 0.5) * TILE_HEIGHT 
+	local toX = (fromC - 0.5) * TILE_WIDTH 
+	local toY = (fromR - 0.5) * TILE_HEIGHT 
+	self.toX = (toC - 0.5) * TILE_WIDTH 
+	self.toY = (toR - 0.5) * TILE_HEIGHT 
 
-
-	--DEBUG("Projectile:", startX, startY, self.targetX, self.targetY, fromX, fromY, toX, toY)
+	DEBUG("Projectile:", toX, toY, self.toX, self.toY, fromC, fromR, toC, toR)
 
 	-- set initial position and speed
-	self:setPosition(startX, startY)
-	self.speedX = (toX - fromX) * info.speed
-	self.speedY = (toY - fromY) * info.speed
+	self:setPosition(toX, toY)
+	self.speedX = (toC - fromC) * info.speed
+	self.speedY = (toR - fromR) * info.speed
 	
 	--adjust the rotation based on the heading
 	local angle = 0
-	if math.abs(toY - fromY) ~= 0 then
+	if math.abs(toR - fromR) ~= 0 then
 		--turn the angle to shoot in the direction of the monster
-		angle = math.deg(math.atan2(toY - fromY, toX - fromX))
+		angle = math.deg(math.atan2(toR - fromR, toC - fromC))
 	else
 		--or rotate 180 if it's directly left and don't rotate if directly right
-		if fromX > toX then 
+		if fromC > toC then 
 			angle = 180		
 		else
 			angle = 0		
@@ -64,7 +62,7 @@ function Projectile:onEnterFrame()
 	local x, y = self:getPosition()
 	
 	-- if the projectile hits the target, remove it 
-	if math.abs(x - self.targetX) < 20 and math.abs(y - self.targetY) < 20 then 
+	if math.abs(x - self.toX) < 20 and math.abs(y - self.toY) < 20 then 
 		self:removeFromParent()		
 	else
 		-- set a new position

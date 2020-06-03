@@ -622,7 +622,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Trying to attack other players") then return end
+	if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Hero attacking hero") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon
@@ -668,21 +668,20 @@ end
 
 function ScenePlay:rangedAttack(weapon, attacker, defender)
 --[[Logic:  resolves a ranged attack
-	Called from basicAttack
-	Calls world:lineOfCover, roll, projectile.new, messages:add, sounds:play, rollDamage, messages:add
 --]]
 
 	local p = nil
-	local cover, blockedX, blockedY = self.world:lineOfCover(attacker.c, attacker.r, defender.c, defender.r)
-	if blockedX then 
+	local cover, blockedC, blockedR = self.world:lineOfCover(attacker.c, attacker.r, defender.c, defender.r)
+	if blockedC then 
 		-- launch a projectile that hits something along the way
 		-- TODO: FIX projectil should move direction defender, not direction obstacle
 		--       they are sometimes slightly different and it looks weird
-		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, blockedX, blockedY)
+		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, blockedC, blockedR)
+		DEBUG("launching (blocked)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	else
 		-- launch a projectile towards the defender
-		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, 
-							heroes[currentHero].c, heroes[currentHero].r)	
+		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, defender.c, defender.r)	
+		DEBUG("launching (free)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	end
 
 	-- Add the projectile to the world which takes care of scaling and dragging.
