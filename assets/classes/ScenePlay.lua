@@ -65,11 +65,11 @@ function ScenePlay:init()
 	self.ready = false
 
 	if self.server then 
-		DEBUG("This device is a server")
+		--DEBUG("This device is a server")
 	elseif self.client then 
-		DEBUG("This device is a client")
+		--DEBUG("This device is a client")
 	else 
-		DEBUG("This device is playing locally") 
+		--DEBUG("This device is playing locally") 
 	end
 
 	-- get heroes ready for next battle
@@ -474,7 +474,7 @@ function ScenePlay:heroesTurnOver()
 		if m.entry ~= 2 then targets = targets + 1 end
 	end
 	
-	DEBUG("Targets left", targets)
+	--DEBUG("Targets left", targets)
 	
 	if targets == 0 or self.cheat == "V" then
 		heroes[currentHero]:save(currentHeroFileName)
@@ -622,7 +622,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Hero attacking hero") then return end
+	--if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Hero attacking hero") then return end
 
 	-- this is the weapon
 	local weapon = attacker.weapon
@@ -681,7 +681,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	else
 		-- launch a projectile towards the defender
 		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, defender.c, defender.r)	
-		DEBUG("launching (free)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
+		--DEBUG("launching (free)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	end
 
 	-- Add the projectile to the world which takes care of scaling and dragging.
@@ -775,7 +775,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	--adjust the defender's hp except for any resistances
 	defender:setHealth(defender.hp - roll + defender.resist[weapon.type])
 	
-	DEBUG(attacker.name, "hits", defender.name, defender.hp)
+	--DEBUG(attacker.name, "hits", defender.name, defender.hp)
 	
 	if defender.hp <= 0 then
 		defender.hp = 0

@@ -4,7 +4,7 @@ TODO
 	- auto connect all the way to Battle...Dependency: new connection protocol
 	- Camera Follow Update
 	- Bugs
-		- Visibility
+		- Click on monster in range should fire at it
 		- After ranged action, hitting center icon for pass shoots an arrow to nowhere.
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
@@ -23,6 +23,8 @@ TODO
 		- Load monster graphics into cyclopedia
 		- Fix HP layer. Wrong size. Maybe different graphics?
 		- New graphics for monsters, environment, terrain, projectiles
+		- Jump in gladiator?
+		- Other color Samurais
 	- Remote Play
 		- fix basic mechanism. Let anyone move any hero. Once all heroes are moved once (or pass), monsters move.
 		- Monster AI with multiple heroes

@@ -57,18 +57,20 @@ function SceneSprites:init()
 		x = x + TILE_WIDTH + D
 	end
 
-	--[[ TODO ANIMATION REMOVE after no longer creating texture map for health bars in Cyclopedia
+	---[[ TODO ANIMATION REMOVE after no longer creating texture map for health bars in Cyclopedia
 	-- Draw Health Bars
 	x = x + D
-	local pack = manual.lists["health"].pack
+	DEBUG(manual:getEntry("layers", LAYER_HP))
 	for i = 0, 10 do
-		local bitmap = manual:getSprite(LAYER_HP, i)
-		bitmap:setPosition(x - D, y)
+		local region = TextureRegion.new(manual.lists[manual:getEntry("layers", LAYER_HP)].texture, i*100, 0, i*100+100, 100)
+		local bitmap = Bitmap.new(region)
+		bitmap:setPosition(x, 0)
 		sprites:addChild(bitmap)
-		--DEBUG("Bitmap", x, y, bitmap:getSize())
+		DEBUG("Bitmap", x, y, bitmap:getSize())
 		x = x + TILE_WIDTH + D
 	end
 	--]]
+	
 
 	local textures = CharacterAnimation.spriteData
 	local clips = {}

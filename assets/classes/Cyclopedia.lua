@@ -3,6 +3,9 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 (C) 2010 - 2020 Louis Perrochon
 ]]
 
+
+
+
 -- The layer lookup "table"
 Cyclopedia = Core.class()
 
@@ -21,6 +24,10 @@ function Cyclopedia:init()
 			[5] = "light",
 			},
 		["light-source"] = {
+			--[[
+				0 - No change (i.e. it likely remains LIGHT_UNEXPLORED)
+				1..3 - light up to LIGHT_BRIGHT, LIGHT_DIM, LIGHT_DARK
+			--]]
 			[1] = {name = "torch", radius = 3, array = {
 						0, 3, 2, 1, 2, 3, 0, 
 						3, 2, 1, 1, 1, 2, 3, 
@@ -42,10 +49,10 @@ function Cyclopedia:init()
 			},
 		["health"] = {},
 		["light"] = {
-			[1] = {name = "bright", alpha = 0, cover = 0},
-			[2] = {name = "dim", alpha = 0.4, cover = -1},
-			[3] = {name = "dark/remembered", alpha = 0.6, cover = -2},
-			[4] = {name = "unexplored", alpha = 1, cover = -6},
+			[LIGHT_BRIGHT] = {name = "bright", alpha = 0, cover = 0},
+			[LIGHT_DIM] = {name = "dim", alpha = 0.4, cover = -1},
+			[LIGHT_DARK] = {name = "dark/remembered", alpha = 0.6, cover = -2},
+			[LIGHT_UNEXPLORED] = {name = "unexplored", alpha = 1, cover = -6},
 			--[5] = {name = "white", alpha = 1, cover = -6},
 			--[6] = {name = "black", alpha = 1, cover = -6},
 			},
@@ -195,7 +202,7 @@ function Cyclopedia:loadSprites()
 	local H = 5 -- height of health bar
 
 	local rt = RenderTarget.new((STEPS + 1) * TILE_WIDTH, TILE_HEIGHT )
-	local bitmap = Bitmap.new(rt)
+	--local bitmap = Bitmap.new(rt)
 
 	-- first tile (full health) is clear.
 	for s = 1, STEPS do
@@ -215,7 +222,11 @@ function Cyclopedia:loadSprites()
 		bar:setPosition(x + 2 * D , TILE_HEIGHT - H - 2 * D)
 		rt:draw(bar)		
 	end
-	self.lists[self:getEntry("layers", LAYER_HP)].pack = rt
+	DEBUG(self:getEntry("layers", LAYER_HP))
+	-- TODO ANIMATION we should not enter the rt here and cut things out once the HP layer is gone. 
+	-- We should just store each sprite into health sprites.
+	self.lists[self:getEntry("layers", LAYER_HP)].texture = rt
+	self.lists[self:getEntry("layers", LAYER_HP)].pack = rt 
 
 	-- Light
 	local STEPS = 4 -- 4 levels of light, ignore first (zero) tile.

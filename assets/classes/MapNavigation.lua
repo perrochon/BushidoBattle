@@ -131,7 +131,7 @@ function MapNavigation:onMouseDown(event)
 				self.focus = true
 			end
 
-			DEBUG(self.focus, "from", self.from.x, self.from.y, "to", self.to.x, self.to.y)
+			--DEBUG(self.focus, "from", self.from.x, self.from.y, "to", self.to.x, self.to.y)
 			self:updateVisualStatus()
 			event:stopPropagation()
 		end
@@ -168,7 +168,7 @@ function MapNavigation:onMouseUp(event)
 			local result = Event.new("line")
 			result.from = self.from
 			result.to = e
-			DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
+			--DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
 			self:dispatchEvent(result)	-- dispatch line drawn event
 		end
 

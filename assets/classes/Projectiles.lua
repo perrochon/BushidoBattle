@@ -22,7 +22,7 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 	self.toX = (toC - 0.5) * TILE_WIDTH 
 	self.toY = (toR - 0.5) * TILE_HEIGHT 
 
-	DEBUG("Projectile:", toX, toY, self.toX, self.toY, fromC, fromR, toC, toR)
+	--DEBUG("Projectile:", toX, toY, self.toX, self.toY, fromC, fromR, toC, toR)
 
 	-- set initial position and speed
 	self:setPosition(toX, toY)

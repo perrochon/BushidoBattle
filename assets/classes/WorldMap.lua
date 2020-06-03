@@ -43,19 +43,11 @@ function WorldMap:init(level, monsters)
 	layer:setAlpha(0.2)
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
-	--self:debugMapInfo(LAYER_MONSTERS)
-	
-	-- TODO FIX ANIMATION store this somewhere, but not so that it gets saved
-	--self.heroMc = heroes[current].mc
-	--self.heroMc = CharacterAnimation.new("Ninja_02")
-	--self.heroMc.mc:gotoAndPlay(1)
-	--self.heroMc:setPosition((heroes[localHero].c - 1) * TILE_WIDTH, (heroes[localHero].r - 1) * TILE_HEIGHT)
-	--self.camera:addChild(self.heroMc)
-	
+	--self:debugMapInfo(LAYER_MONSTERS)	
 
 	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_HP] = self:addHP()
-	self.mapArrays[LAYER_LIGHT] = self:addLight(heroes[currentHero])
+	self.mapArrays[LAYER_LIGHT] = self:addLight()
     self:shiftWorld(heroes[localHero])
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "health")
@@ -64,9 +56,9 @@ function WorldMap:init(level, monsters)
 
 	-- TODO FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?
 	-- TODO FIX below old solution is broken
-	--layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
-	--self.camera:addChild(layer) 
-	--table.insert(self.mapLayers, layer)	
+	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
+	self.camera:addChild(layer) 
+	table.insert(self.mapLayers, layer)	
 
 	self:addChild(self.camera)
 end
@@ -116,32 +108,32 @@ function WorldMap:addHP()
   return hArray
 end
 
-function WorldMap:addLight(hero) 
-	-- TODO HEROFIX how to handle light for two players?
-
+function WorldMap:addLight() 
 	--[[Logic:  returns an array filled with light tile values with the area near the hero visible
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
 	--]]
+	
+	local hero = heroes[localHero] 	-- TODO HEROFIX loop through all active heroes
 
 	--this is the array filled with darkness of unexplored tiles
 	local lArray = {}
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
-			lArray[self:index(x, y)] = 4 -- TODO such constants should really not be hard coded...
+			lArray[self:index(x, y)] = LIGHT_UNEXPLORED -- TODO such constants should really not be hard coded...
 		end
 	end
 	
 	--this overlays the hero with a torch array
 	--torch array is overkill if lightsources are symmetric. Could be computed
 	local torchIndex = 0
-	for y = hero.r - hero.light.radius, hero.r + hero.light.radius do
-		for x = hero.r - hero.light.radius, hero.c + hero.light.radius do
+	for r = hero.r - hero.light.radius, hero.r + hero.light.radius do
+		for c = hero.c - hero.light.radius, hero.c + hero.light.radius do
 			torchIndex = torchIndex + 1
 			--only change the light array if on the screen
-			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
-				local i = self:index(x, y)
+			if c > 0 and c <= LAYER_COLUMNS and r > 0 and r <= LAYER_ROWS and hero.light.array[torchIndex] ~= 0 then
+				local i = self:index(c, r)
 				lArray[i] = hero.light.array[torchIndex]
-				--DEBUG(x, y, hero.light.array[torchIndex])
+				--DEBUG(r, c, hero.light.array[torchIndex])
 			end
 		end
 	end
@@ -171,7 +163,7 @@ function WorldMap:returnTileMap(mapArray, layer)
 					tilemap:setTile(x, y, monster.tC, monster.tR)
 				end
 			elseif layer == "light" then
-				DEBUG(x, y, self:index(x, y), key )
+				--DEBUG(x, y, self:index(x, y), key )
 				tilemap:setTile(x, y, key, 1)
 			elseif layer == "health" then
 				-- do nothing at creation
@@ -278,7 +270,7 @@ function WorldMap:moveHero(hero, dc, dr)
 	-- TODO FIX HEROFIX ANIMATION turn it back on
 	if hero.id == localHero then 
 		--move the torchlight
-		--self:adjustLight(hero, dc, dr)
+		self:adjustLight(hero, dc, dr)
 	end
 
 	--for purposes of moving around the map, the hero is just another monster
@@ -290,10 +282,9 @@ function WorldMap:moveHero(hero, dc, dr)
 	
 end
 
-function WorldMap:adjustLight(hero, dx, dy)
+function WorldMap:adjustLight(hero, dc, dr)
 	--[[change the light array tiles as the hero moves
-		Uses the hero's old position and the hero.light.radius to change array values
-		Called from moveHero
+		Uses the hero's old position and the hero.light.radius to create darkness there, and the new position to light up
 	--]]	
 	
 	-- TODO FIX Why does this work on previous location
@@ -304,34 +295,38 @@ function WorldMap:adjustLight(hero, dx, dy)
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0
 
+	--[[ -- TODO This doesn't look good with smooth scrolling, need different solution or remove
 	--set all previously lit tiles to 3
-	for y = hero.r - hero.light.radius, hero.r + hero.light.radius do
-		for x = hero.c - hero.light.radius, hero.c + hero.light.radius do
+	for r = hero.r - hero.light.radius, hero.r + hero.light.radius do
+		for c = hero.c - hero.light.radius, hero.c + hero.light.radius do
 			--only change the light array and tile if on screen 
-			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
-				i = self:index(x, y)
+			if c > 0 and c <= LAYER_COLUMNS and r > 0 and r <= LAYER_ROWS then
+				i = self:index(c, r)
 				--only change if previously lit 
-				if lArray[i] ~= 4 then
-					lArray[i] = 3
-					self.mapLayers[LAYER_LIGHT]:setTile(x, y, 3, 1)
+				if lArray[i] ~= LIGHT_UNEXPLORED then
+					lArray[i] = LIGHT_DARK
+					self.mapLayers[LAYER_LIGHT]:setTile(c, r, 3, 1)
 				end
 			end
 		end
 	end
+	--]]
 
 	local torchIndex = 0
 	--overlay the torchArray tiles over the hero's new spot
 	--TODO why can this not just be self:addLight (with modification)
-	for y = hero.r + dy - hero.light.radius, hero.r + dy + hero.light.radius do
-		for x = hero.c + dx - hero.light.radius, hero.c + dx + hero.light.radius do
+	for r = hero.r + dr - hero.light.radius, hero.r + dr + hero.light.radius do
+		for c = hero.c + dc - hero.light.radius, hero.c + dc + hero.light.radius do
 			torchIndex = torchIndex + 1
-			i = self:index(x, y)
+			i = self:index(c, r)
 			--only change the light array if on screen
-			if x > 0 and x <= LAYER_COLUMNS and y > 0 and y <= LAYER_ROWS then
+			if c > 0 and c <= LAYER_COLUMNS and r > 0 and r <= LAYER_ROWS then
 				--and needs to be updated
 				if hero.light.array[torchIndex] ~= 0 then
-					lArray[i] = hero.light.array[torchIndex]
-					self.mapLayers[LAYER_LIGHT]:setTile(x, y, hero.light.array[torchIndex], 1)
+					if lArray[i] > hero.light.array[torchIndex] then
+						lArray[i] = hero.light.array[torchIndex]
+						self.mapLayers[LAYER_LIGHT]:setTile(c, r, hero.light.array[torchIndex], 1)
+					end
 				end
 			end
 		end

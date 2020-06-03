@@ -116,7 +116,7 @@ end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	--DEBUG("setHealth", self.name, hpBar, self.bar, ".")
+	DEBUG("setHealth", self.name, hpBar, self.bar, ".")
 
 	if self.bar then
 		-- TODO ANIMATION FIX health bar
@@ -125,9 +125,16 @@ function CharacterAnimation:setHealth(hpBar)
 	end
 
 	if self.dead or hpBar < 0 or hpBar > 10 then return end
+	
+	DEBUG(LAYER_HP, manual:getEntry("layers", LAYER_HP))
+	local texture = manual.lists[manual:getEntry("layers", LAYER_HP)].texture
+	local region = TextureRegion.new(texture, hpBar*100, 0, 100, 100)
+	self.bar = Bitmap.new(region)
 
-	-- TODO ANIMATION FIX - just create a bar on the fly here, instead of getting it from a texture map...
-	self.bar = manual:getSprite(LAYER_HP, hpBar) -- TODO FIX actual hero health
+	-- TODO ANIMATION - create on the fly, instead of getting it from a layer
+	--local bars = manual.lists[manual:getEntry("layers", LAYER_HP)].pack
+	--self.bar = manual:getSprite(LAYER_HP, hpBar) -- TODO FIX actual hero health
+	--self.bar = bars -- TODO FIX actual hero health
 	self.bar:setPosition(-50, -50)
 	self:addChild(self.bar)	
 end
