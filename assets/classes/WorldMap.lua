@@ -576,8 +576,8 @@ function WorldMap:setMarker(point, type, grade)
 	
 	local types = { 
 		["s"] = {color = COLOR_BLUE, alpha = 0.7},
-		["e"] = {color = COLOR_RED, alpha = 0.7},
-		["f"] = {color = COLOR_GREEN, alpha = 0.7},
+		["e"] = {color = COLOR_GREEN, alpha = 0.7},
+		["f"] = {color = COLOR_RED, alpha = 1},
 		}
 
 	local color
@@ -592,7 +592,7 @@ function WorldMap:setMarker(point, type, grade)
 	else
 		color = types[type].color
 	end
-	local marker = Pixel.new(color, types[type].alpha, 10, 10)
+	local marker = Pixel.new(color, types[type].alpha, 20, 20)
 	marker:setAnchorPoint(0.5,0.5)
 	marker:setPosition((point.c - 0.5) * TILE_WIDTH, (point.r - 0.5) * TILE_HEIGHT)
 	self.path:addChild(marker)
@@ -606,7 +606,6 @@ function WorldMap:clearMarkers()
 end
 
 function WorldMap:shortestPath(from, to)
-
 	self:clearMarkers()
 	self:setMarker(from, "s")
 	self:setMarker(to, "e")
@@ -621,27 +620,37 @@ function WorldMap:shortestPath(from, to)
 	from.dc = 0
 	from.dr = 0
 	from.steps = 0 
+	from.incoming = from
 	table.insert(queue, from)
 	found[self:index(from.c, from.r)] = true	
-	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, #queue)
+	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, from.incoming.c, from.incoming.r, #queue)
 
-	while #queue > 0 and iterations < 100 do
+	while #queue > 0 and iterations < 1000 do
 	
 		-- Sort by possible shortest path. 
 		table.sort(queue, function (p1, p2)
-			local d1 = distance(p1, to) + p1.steps
-			local d2 = distance(p2, to) + p2.steps
+			local d1 = distance(p1, to)/1.41 + p1.steps
+			local d2 = distance(p2, to)/1.41 + p2.steps
 			return d1 < d2
 		end) 
 
 		current = queue[1]
 		table.remove(queue, 1)
-		steps = iterations + 1
+		iterations = iterations + 1
 		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, current.steps, to.c, to.r, #queue)			
-		self:setMarker(current, "f", current.steps + 1)
+		--self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
-			--DEBUG("Found Target", current.c, current.r, current.dc, current.dr)
+			--DEBUG("Found Target", from.c, from.r, "-", current.c, current.r, "-", current.dc, current.dr)
+			
+			local walker, s = current.incoming, 0
+			while walker.c ~= from.c and walker.r ~= from.r and s < 100 do
+				walker = walker.incoming
+				--DEBUG(s, ":", from.c, from.r, "-", current.c, current.r, "-",  walker.c, walker.r)
+				self:setMarker(walker, "f")
+				s = s + 1
+			end
+			
 			return current.dc, current.dr
 		end
 		
@@ -659,7 +668,7 @@ function WorldMap:shortestPath(from, to)
 
 					local blocked  = (layer == LAYER_ENVIRONMENT and tile.blocked)
 	
-					if current.dc ~= 0 or current.dr ~= 0  then -- carry on original direction
+					if current.dc ~= 0 or current.dr ~= 0  then -- carry forward on original direction
 						next.dc = current.dc
 						next.dr = current.dr
 					else -- first set of nodes, set initial direction
@@ -669,9 +678,11 @@ function WorldMap:shortestPath(from, to)
 						blocked = blocked or (layer == LAYER_MONSTERS)
 					end
 					
+					next.incoming = current
+					
 					if not blocked then
 						table.insert(queue, next)
-						--DEBUG("ADDING", next.c, next.r, next.dc, next.dr, manual:getEntry("layers", layer), tile.name, tile.blocked)
+						--DEBUG("ADDING", next.c, next.r, "|", next.dc, next.dr, "|", next.incoming.c, next.incoming.r)
 					end
 				end
 			end
