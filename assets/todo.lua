@@ -6,10 +6,9 @@ TODO
 	- Bugs
 		- Character broken in higher slots
 		- Barracks level very slow due to lots of berserkers pathfinding
-		- Click on monster in range should fire at it
-		- * After ranged action, hitting center icon for pass shoots an arrow to nowhere.
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
+		- Replace Hero animation in ChooseHero with dead hero if hero is dead
 		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
 	- Multiple Heroes / Remote
 		- Mark heroes that still have a turn
@@ -67,5 +66,16 @@ Assets
 	https://craftpix.net/product/2d-fantasy-asassin-sprite-sheets/
 	https://craftpix.net/product/2d-fantasy-archer-sprite-sheets/
 	https://craftpix.net/product/2d-fantasy-ghosts-sprite-sheets/
+
+
+NOTES
+-----
+
+	- Coordinates: 
+		(c,r) indicate column, row. 
+		(x,y) indicate pixels (either app-coordinate or screen (transformed by Camera)
+		Typically, x = c * TILE_WIDTH and y = r * TILEWIDTH (often rounded to ccenter of the tile)
+
+
 
 --]]
