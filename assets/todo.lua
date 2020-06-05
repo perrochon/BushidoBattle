@@ -4,7 +4,6 @@ TODO
 	- auto connect all the way to Battle...Dependency: new connection protocol
 	- Camera Follow Update
 	- Bugs
-		- Character broken in higher slots
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...

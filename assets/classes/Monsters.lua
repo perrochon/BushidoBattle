@@ -244,12 +244,8 @@ function Monsters:updateState(monster, id, remote)
 	--check if the hero can been seen
 	do
 		local hero
-		if not remote then
-			hero = heroes[1]
-		else
-			local closerHero = distance(monster, heroes[1]) < distance(monster, heroes[2]) and 1 or 2
-			hero = heroes[closerHero]
-		end
+		hero = heroes[currentHero] -- TODO HEROFIX Choose closest, active hero instead of currentHero
+		
 		monster.seesHero = distance(monster, hero) < monster.see or monster.berserk
 		monster.target = monster.seesHero and hero or nil
 	end

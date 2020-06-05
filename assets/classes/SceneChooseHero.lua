@@ -167,7 +167,10 @@ function SceneChooseHero:onMouseUp(event)
 		self.focus = false;
 		self:getParent():getParent():updateVisualState(false, currentHero)
 		self:getParent():getParent():updateVisualState(true, self.slot)
-		currentHero = self.slot		
+		currentHero = self.slot
+		localHero = self.slot
+		for i = 1,4 do heroes[i].active = false end
+		heroes[currentHero].active = true
 		event:stopPropagation()
 	end
 end
