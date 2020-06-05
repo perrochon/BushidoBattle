@@ -116,7 +116,7 @@ end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	DEBUG("setHealth", self.name, hpBar, self.bar, ".")
+	--DEBUG("setHealth", self.name, hpBar, self.bar, ".")
 
 	if self.bar then
 		-- TODO ANIMATION FIX health bar
@@ -126,7 +126,7 @@ function CharacterAnimation:setHealth(hpBar)
 
 	if self.dead or hpBar < 0 or hpBar > 10 then return end
 	
-	DEBUG(LAYER_HP, manual:getEntry("layers", LAYER_HP))
+	--DEBUG(LAYER_HP, manual:getEntry("layers", LAYER_HP))
 	local texture = manual.lists[manual:getEntry("layers", LAYER_HP)].texture
 	local region = TextureRegion.new(texture, hpBar*100, 0, 100, 100)
 	self.bar = Bitmap.new(region)
