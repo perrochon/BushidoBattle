@@ -4,12 +4,17 @@ TODO
 	- auto connect all the way to Battle...Dependency: new connection protocol
 	- Camera Follow Update
 	- Bugs
+		- Character broken in higher slots
+		- Barracks level very slow due to lots of berserkers pathfinding
 		- Click on monster in range should fire at it
-		- After ranged action, hitting center icon for pass shoots an arrow to nowhere.
+		- * After ranged action, hitting center icon for pass shoots an arrow to nowhere.
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
 		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
+	- Multiple Heroes / Remote
+		- Mark heroes that still have a turn
 	- Game Logic
+		- hero selection - if hero is dead, show dead hero sprite
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 		- render shortest path only on line, instead of whole search space
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)

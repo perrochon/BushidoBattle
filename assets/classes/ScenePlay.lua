@@ -243,16 +243,18 @@ function ScenePlay:checkMove(hero, dc, dr)
 	-- first we need the tile key and layer for where the hero wants to move
 	--DEBUG(hero, dc, dr, pass)
 	--DEBUG("Hero", hero.name, dc, dr, pass, hero.c + dc, hero.r + dr, self.activeAction)
+	
+	
 
 	if not hero.turn then return end
 
 	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
 	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	if self.activeAction == "look" then 
+	if self.activeAction == "look" and not pass then 
 		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 		return
-	elseif self.activeAction == "attack" then 
+	elseif self.activeAction == "attack" and not pass then 
 		if layer == LAYER_MONSTERS then
 			self:attackMonster(hero.c + dc, hero.r + dr)
 			return

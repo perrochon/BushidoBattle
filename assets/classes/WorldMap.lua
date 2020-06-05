@@ -606,9 +606,9 @@ function WorldMap:clearMarkers()
 end
 
 function WorldMap:shortestPath(from, to)
-	self:clearMarkers()
-	self:setMarker(from, "s")
-	self:setMarker(to, "e")
+	--self:clearMarkers()
+	--self:setMarker(from, "s")
+	--self:setMarker(to, "e")
 
 	queue = {}
 	found = {}
@@ -625,7 +625,7 @@ function WorldMap:shortestPath(from, to)
 	found[self:index(from.c, from.r)] = true	
 	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, from.incoming.c, from.incoming.r, #queue)
 
-	while #queue > 0 and iterations < 1000 do
+	while #queue > 0 and iterations < 100 do
 	
 		-- Sort by possible shortest path. 
 		table.sort(queue, function (p1, p2)
@@ -643,11 +643,11 @@ function WorldMap:shortestPath(from, to)
  		if current.c == to.c and current.r == to.r then
 			--DEBUG("Found Target", from.c, from.r, "-", current.c, current.r, "-", current.dc, current.dr)
 			
-			local walker, s = current.incoming, 0
-			while walker.c ~= from.c and walker.r ~= from.r and s < 100 do
+			local walker, s = current, 0
+			while walker.c ~= from.c or walker.r ~= from.r and s < 100 do
 				walker = walker.incoming
 				--DEBUG(s, ":", from.c, from.r, "-", current.c, current.r, "-",  walker.c, walker.r)
-				self:setMarker(walker, "f")
+				--self:setMarker(walker, "f")
 				s = s + 1
 			end
 			

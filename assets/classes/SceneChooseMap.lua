@@ -10,7 +10,7 @@ function SceneChooseMap:init()
 	
 	self.panels = {}
 	
-	for i=1,8 do		
+	for i=1,9 do		
 		local mapFile = string.format("%s%02d.lua", MAP_FILE_NAME, i)
 		local map = loadfile(mapFile)() 
 		self.panels[i] = self:displayMap(map.properties["Title"], i)		

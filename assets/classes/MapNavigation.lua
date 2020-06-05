@@ -11,6 +11,9 @@ function MapNavigation:init(world)
 	self.from = {x = 0, y = 0, c = 0, r = 0}
 	self.to   = {x = 0, y = 0, c = 0, r = 0}
 	self.character = {x = 0, y = 0, key = 1, id = 1}
+	
+	self.path = {}
+	self.path.to = {x = 0, y = 0, c = 0, r = 0}
 
 	self.fromMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
 	self.fromMarker:setAnchorPoint(0.5,0.5)
@@ -42,7 +45,6 @@ function MapNavigation:visibleMapTouched(event)
 		- column, row index of tile
 		- whether the visible map was touched (i.e. left area of screen AND not outside bounds) 
 	--]]
-
 
 	local e = self.world.camera:translateEvent(event)
 	e.c = math.ceil(e.x / TILE_WIDTH)
@@ -76,15 +78,28 @@ function MapNavigation:updateVisualStatus()
 	self.fromMarker:setVisible(self.focus)
 	self.toMarker:setVisible(self.focus)
 
-	self.fromMarker:setPosition(self.from.x, self.from.y)
-	self.toMarker:setPosition(self.to.x - dx, self.to.y - dy)
-
 	if self.line then 
 		self.world.camera:removeChild(self.line)
 		self.line = nil
 	end
+
 	
 	if self.focus then
+	
+		local key, layer, tile = self.world:getTileInfo(self.to.c, self.to.r)
+
+		if self.path.to.c ~= self.to.c or self.path.to.r ~= self.to.r  then
+			DEBUG("looking at new location", self.to.c, self.to.r)
+			self.path.to.c = self.to.c
+			self.path.to.r = self.to.r  
+			if layer == 1 then
+				self.world:shortestPath({c = self.from.c, r = self.from.r}, {c = self.to.c, r = self.to.r})
+			end
+		end
+
+		self.fromMarker:setPosition(self.from.x, self.from.y)
+		self.toMarker:setPosition(self.to.x - dx, self.to.y - dy)
+
 		self.line = Shape.new()                        -- create the shape
 		self.line:beginPath()                          -- begin a path
 		self.line:setLineStyle(2, COLOR_WHITE, 0.5)    -- set the line width = 1
@@ -93,6 +108,8 @@ function MapNavigation:updateVisualStatus()
 		self.line:endPath()                            -- end the path
 		self.world.camera:addChild(self.line)          -- add the shape to the stage
 	end
+	
+
 	
 end
 
@@ -151,10 +168,8 @@ function MapNavigation:onMouseMove(event)
 		end
 		self.to = e
 		self:updateVisualStatus()
-		event:stopPropagation()
-		
-		self.world:shortestPath({c = self.from.c, r = self.from.r}, {c = c, r = r})
 
+		event:stopPropagation()
 	end
 end
 

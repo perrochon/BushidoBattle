@@ -119,7 +119,7 @@ function Cyclopedia:init()
 					weapon1 = "katana", weapon2 = "spear", 
 					tactics = "soldier", see = 3, alone = 100
 					},
-			[5] = {name = "wolf", sprite = "Samurai_01", deprecatedName = "Animal_03__WALK_000.png", 
+			[5] = {name = "wolf", sprite = "Animal_03", deprecatedName = "Animal_03__WALK_000.png", 
 					xp = 2, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
