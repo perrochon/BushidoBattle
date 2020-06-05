@@ -222,7 +222,7 @@ function ScenePlay:init()
 	 end)	
 	 
 	 
-	--respond to mouse and touch events
+	--respond to mouse and touch events. Add this on top of the world
 	local nav = MapNavigation.new(self.world)
 	self:addChild(nav)
 	
@@ -792,8 +792,8 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	--]]
 end
 
-function ScenePlay:attackMonster(x, y)
---[[targets a monster at x, y
+function ScenePlay:attackMonster(c, r)
+--[[targets a monster at c, r
 --]]
 
 	--find the monster being attacked and their index in monsters.list 
@@ -802,10 +802,12 @@ function ScenePlay:attackMonster(x, y)
 	for i = 1, #self.monsters.list do
 		monster = self.monsters.list[i] 
 		id = i
-		if monster.c == x and monster.r == y then 
+		if monster.c == c and monster.r == r then 
 			break 
 		end
 	end
+	
+	--DEBUG("Attacking monster, at, with", monster.name, c, r, heroes[currentHero].weapon.name)
 	
 	--call the attack function
 	self:basicAttack(heroes[currentHero], monster)
@@ -876,7 +878,7 @@ end
 
 	--DEBUG("Line from", manual:getEntry("layers", layerFrom), keyFrom, from.c, from.r, "to", manual:getEntry("layers", layerTo), keyTo, to.c, to.r)
 	
-	if not ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero") then return end
+	--ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero")
 
 	--[[
 	local hero = nil
@@ -891,8 +893,9 @@ end
 
 	-- TODO FIX PARTY need to use something like code above when we support parties
 	hero = heroes[currentHero]
-	if not ASSERT_TRUE(hero.c == from.c and hero.r == from.r, "Line not originating at local hero") then return end
+	--ASSERT_TRUE(hero.c == from.c and hero.r == from.r, "Line not originating at local hero")
 
+	from.c, from.r = hero.c, hero.r
 	
 	-- Look
 	if self.activeAction == "look" then
@@ -911,7 +914,7 @@ end
 	-- Target a monster
 	if layerTo == LAYER_MONSTERS then
 		local distance = distance(from, to)
-		DEBUG("Line leads to monster at distance", distance)
+		--DEBUG("Line leads to monster at distance", distance)
 	
 		-- Can they melee/range, let them melee/range
 		if distance < hero.weapons[1].reach then
@@ -946,7 +949,7 @@ end
 
 	local dc, dr = self.world:shortestPath(from, to)
 	
-	DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
+	--DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
 	self:checkMove(hero, dc, dr)
 
 

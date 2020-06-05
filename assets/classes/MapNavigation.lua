@@ -89,7 +89,7 @@ function MapNavigation:updateVisualStatus()
 		local key, layer, tile = self.world:getTileInfo(self.to.c, self.to.r)
 
 		if self.path.to.c ~= self.to.c or self.path.to.r ~= self.to.r  then
-			DEBUG("looking at new location", self.to.c, self.to.r)
+			--DEBUG("looking at new location", self.to.c, self.to.r)
 			self.path.to.c = self.to.c
 			self.path.to.r = self.to.r  
 			if layer == 1 then
@@ -126,7 +126,7 @@ function MapNavigation:onMouseDown(event)
 	if visibleMapTouched then
 		--find the tile that was touched
 		local key, layer, tile = self.world:getTileInfo(c, r)	
-		--DEBUG("on Map", c, r, e.x, e.y, manual:getEntry("layers", layer), key, tile.name)
+		--DEBUG("Down on Map", c, r, e.x, e.y, manual:getEntry("layers", layer), key, tile.name)
 
 		
 		if layer == LAYER_MONSTERS then
@@ -145,8 +145,9 @@ function MapNavigation:onMouseDown(event)
 				--self.from.r = heroes[self.character.index].r			
 				--self.from.x = (heroes[self.character.index].c-0.5) * TILE_WIDTH
 				--self.from.y = (heroes[self.character.index].r-0.5) * TILE_HEIGHT
-				self.focus = true
 			end
+
+			self.focus = true
 
 			--DEBUG(self.focus, "from", self.from.x, self.from.y, "to", self.to.x, self.to.y)
 			self:updateVisualStatus()
@@ -178,12 +179,13 @@ function MapNavigation:onMouseUp(event)
 	if self.focus then
 		-- Where did we click, and is it on the map
 		local e, c, r, visibleMapTouched = self:visibleMapTouched(event)
+		--DEBUG("Up on", c ,r , e.x, e.y)
 
 		if self:hitTestPoint(event.x, event.y) and visibleMapTouched then	
 			local result = Event.new("line")
 			result.from = self.from
 			result.to = e
-			--DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
+			DEBUG("Line from", result.from.c, result.from.r, result.to.c, result.to.r)
 			self:dispatchEvent(result)	-- dispatch line drawn event
 		end
 
@@ -194,7 +196,7 @@ function MapNavigation:onMouseUp(event)
 	end
 end
 
--- if button is on focus, stop propagation of touch events
+-- if map is on focus, stop propagation of touch events
 function MapNavigation:onTouchesBegin(event)
 	--DEBUG("ScreenPlay touches begin", event.touch.x, event.touch.y, self.focus)
 	if self.focus then
@@ -202,7 +204,7 @@ function MapNavigation:onTouchesBegin(event)
 	end
 end
 
--- if button is on focus, stop propagation of touch events
+-- if map is on focus, stop propagation of touch events
 function MapNavigation:onTouchesMove(event)
 	--DEBUG("touches move", event.touch.x, event.touch.y, self.focus)
 	if self.focus then
@@ -210,7 +212,7 @@ function MapNavigation:onTouchesMove(event)
 	end
 end
 
--- if button is on focus, stop propagation of touch events
+-- if map is on focus, stop propagation of touch events
 function MapNavigation:onTouchesEnd(event)
 	--DEBUG("touches end", event.touch.x, event.touch.y, self.focus)
 	if self.focus then
