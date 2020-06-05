@@ -82,6 +82,7 @@ function Character:moveTo(c, r)
 	self.mc:walk()
 
  	local tween = GTween.new(self.mc, MOVE_SPEED, animate, properties)
+	tween.onComplete = function(event) self.mc:idle() end
 	
 	return tween
 end

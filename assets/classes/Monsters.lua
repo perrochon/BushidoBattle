@@ -93,7 +93,7 @@ end
 
 function Monster:deserialize(m)
 	if (self.id ~= m["id"]) then DEBUG("Monster mismatch", self.id, m["id"]) return end
-	self.entry = m["entry"]
+	self.entry = toNumber(m["entry"])
 	self.c = tonumber(m["c"])
 	self.r = tonumber(m["r"])
 	self.hp = tonumber(m["hp"])

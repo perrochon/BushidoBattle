@@ -628,6 +628,8 @@ function ScenePlay:basicAttack(attacker, defender)
 
 	-- this is the weapon
 	local weapon = attacker.weapon
+	
+	attacker.mc:attack() -- TODO ANIMATION request the correct attack animation attackRange(), attackMelee()
 
 	if weapon.projectile then
 		self:rangedAttack(weapon, attacker, defender)
@@ -781,7 +783,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	
 	if defender.hp <= 0 then
 		defender.hp = 0
-		defender.mc:die()
+		defender.mc:die(defender.entry > 1) -- Monsters fade out
 	end
 
 	-- TODO FIX ANIMATION won't be needed much longer

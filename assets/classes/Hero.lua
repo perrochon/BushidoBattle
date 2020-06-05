@@ -4,7 +4,7 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 --[[
-	Player and their attributes
+	Heroes and their attributes
 --]]
 
 Hero = Core.class(Character)
@@ -23,7 +23,6 @@ function Hero:init(entry, id)
 	self:loadSprite()
 	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
-
 	-- Additional Player fields
 	self.active = false 
 	self.kills = 0
@@ -32,47 +31,12 @@ function Hero:init(entry, id)
 	
 	self.fileName = "|D|hero"..id
 
-
-	-- TODO REFACTOR remove the rest...
-	--self.tC = manual:getEntry("monsters",1).tC
-	--self.tR = manual:getEntry("monsters",1).tR
-	--self.tactics = "player"
-	--self.x = 6
-	--self.y = 6
-	--self.blocked = true
-	--self.xp = 0
-	--self.hp = 600
-	--self.maxHP = self.hp
-	--self.bloodied = math.ceil(self.hp / 2)
-	--self.HPbar = 0
-	--prof is attack proficiency used by basicAttack
-	--self.prof = 5
-	--self.defense = {AC = 16, Fort = 16, Refl = 14, Will = 12}
-	--equip the hero with a longsword for now
-	--self.weapons = {}
-	--self.weapons[1] = manual:getEntry("weapons", self.info.weapon1)
-	--self.weapons[2] = manual:getEntry("weapons", self.info.weapon2)
-	--self.weapon = self.weapons[1]
-	--self.mc = CharacterAnimation.new(self.sprite)
-	--self.mc.mc:gotoAndPlay(1)
-	--self.mc:setPosition((self.x - 1) * TILE_WIDTH, (self.y - 1) * TILE_HEIGHT)
---[[
-self.weapons = {{name = "shortsword", reach = 1, modifier = 8, defense = "AC", damage = 'd8', dice = 1, bonus = 6, 
-						    type = "Physical", projectile = nil, missSound = "clang"},
-					{name = "shortbow", reach = 5, modifier = 5, defense = "AC", damage = 'd6', dice = 1, bonus = 2,
-					type = "Physical", projectile = "arrow", missSound = "swish"},
-					}
-	self.weapon = self.weapons[1]
-]]
-	-- resistances. vulnerabilities would be listed as negative (-5, etc..)
-	--self.resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}
 end
 
 function Hero:loadSprite()
 	self.sprite = self.info.sprites[self.id]
 	--DEBUG(self.entry, self.id, self.name, self.sprite)
 	self.mc = CharacterAnimation.new(self.sprite)
-	self.mc.mc:gotoAndPlay(1)
 	self.mc:setPosition((self.c - 1) * TILE_WIDTH, (self.r - 1) * TILE_HEIGHT)
 end
 

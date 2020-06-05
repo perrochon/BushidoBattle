@@ -90,27 +90,25 @@ function CharacterAnimation:init(spriteName)
 	end
 	
 	self.mc = MovieClip.new(timeline)
-	self.mc:setGotoAction(10*slow-1, 1)
-	for a = 20*slow-1, c, 10*slow do
-		--self.mc:setGotoAction(a, 1)
-		self.mc:setStopAction(a)
-	end
 	
-
+	local idleFrame = self.startFrames["IDLE"]
+	for a = 1, #activity do
+		local startFrame = self.startFrames[activity[a]]
+		local endFrame = startFrame + 10 * slow - 1
+		if activity[a] == "WALK" or activity[a] == "IDLE" or activity[a] == "RUN" then
+			self.mc:setGotoAction(endFrame,startFrame) 
+		elseif activity[a] == "DIE" then
+			self.mc:setStopAction(endFrame)
+		else
+			self.mc:setGotoAction(endFrame,idleFrame) 
+		end
+	end
+		
 	self:setAnchorPoint(0.5,0.5)
+	self:idle()
 
 	self:addChild(self.mc)
 	self.mc:setAnchorPosition(self.mc:getWidth() / 2 + textureData.dx, self.mc:getHeight() / 2 + textureData.dy)
-
-	--[[ TODO ANIMATION REMOVE
-	local bg = Pixel.new(COLOR_YELLOW, 0.2, self:getWidth(), self:getHeight())
-	bg:setAnchorPosition(self.mc:getWidth() / 2 + textureData.dx, self.mc:getHeight() / 2 + textureData.dy)
-	self:addChild(bg)
-
-	bg = Pixel.new(COLOR_RED, 1, 10, 10)
-	bg:setAnchorPoint(0.5,0.5)
-	self:addChild(bg)
-	--]]
 	
 end
 
@@ -144,25 +142,30 @@ function CharacterAnimation:go(action)
 	self.mc:gotoAndPlay(self.startFrames[action])
 end
 
+function CharacterAnimation:idle()
+	self:go("IDLE")
+end
+
+function CharacterAnimation:attack()
+	self:go("ATTACK")
+end
+
 function CharacterAnimation:walk()
 	self:go("WALK")
 end
 
-function CharacterAnimation:die()
+function CharacterAnimation:die(fadeOut)
 	self:go("DIE")
 	self.dead = true
 	self:setHealth(nil)
 	
-	local animate = {}
-	animate.alpha = 0
-	local properties = {}
-	properties.delay = 0
-	properties.dispatchEvents = false
-	
- 	local tween = GTween.new(self.mc, 5, animate, properties)
-
-	
-	
-	
-	
+	if fadeOut then
+		local animate = {}
+		animate.alpha = 0
+		local properties = {}
+		properties.delay = 0
+		properties.dispatchEvents = false
+		
+		local tween = GTween.new(self.mc, 5, animate, properties)
+	end
 end
