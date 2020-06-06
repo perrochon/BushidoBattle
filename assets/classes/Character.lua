@@ -59,6 +59,8 @@ function Character:setHealth(health)
 	self.mc:setHealth(self.HPbar)
 end
 
+
+
 function Character:setPosition(c, r)
 	self.c = c
 	self.r = r
@@ -67,7 +69,13 @@ end
 
 function Character:moveTo(c, r)
 
-	--DEBUG("Moving Character", self.name, self.c, self.r, "to", c, r)
+	DEBUG("Moving Character", self.name, self.c, self.r, "to", c, r)
+
+	if self.c > c then
+		self.mc:faceWest()
+	elseif self.c < c then
+		self.mc:faceEast()
+	end
 
 	self.c = c
 	self.r = r
@@ -80,6 +88,7 @@ function Character:moveTo(c, r)
 	properties.dispatchEvents = false
 	
 	self.mc:walk()
+	
 
  	local tween = GTween.new(self.mc, MOVE_SPEED, animate, properties)
 	tween.onComplete = function(event) self.mc:idle() end

@@ -39,8 +39,38 @@ function SceneChooseHero:init()
 	
 	self:updateVisualState(true, currentHero)
 
+	self.timer = Timer.new(2000)
+	self.timer:addEventListener(Event.TIMER, function ()
+		if math.random(5) == 1 then
+			heroes[math.random(4)].mc:flip()
+		end
+		if math.random(4) == 1 then
+			heroes[math.random(4)].mc:jump()
+		else
+			if math.random(2) == 1 then
+				heroes[math.random(4)].mc:attack1()
+			else
+				heroes[math.random(4)].mc:attack2()
+			end
+		end
+		if math.random(30) == 1 then
+			heroes[1].mc:jump()
+			heroes[2].mc:jump()
+			heroes[3].mc:jump()
+			heroes[4].mc:jump()
+		end
+		self.timer:setDelay(math.random(5000))
+	end)
+	self.timer:start()
+
+	self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
+
 	--basicGui:drawGrid()
 
+end
+
+function SceneChooseHero:onTransitionOutEnd()
+	self.timer:stop()
 end
 
 function SceneChooseHero:displayHero(slot)
@@ -68,7 +98,6 @@ function SceneChooseHero:displayHero(slot)
 	heroName = TextButton.new(hero.name)
 	heroName:setAnchorPoint(0,-1)
 	heroName:setScale(0.5)
-	--heroName:setAlpha(0.5)
 	heroName.back:setColor(COLOR_DKGREY)
 	heroName.front:setColor(COLOR_BROWN)
 	heroName.title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_LEFT|FontBase.TLF_NOWRAP})
@@ -80,7 +109,14 @@ function SceneChooseHero:displayHero(slot)
 
 	panel:addChild(hero.mc)
 	hero.mc:setScale(3)
-	hero.mc:setPosition(heroWidth - 120, - 150)
+	if hero.hp <=0 then
+		hero.mc:setPosition(heroWidth - 180, -150)
+	else
+		hero.mc:setPosition(heroWidth - 120, - 150)
+		if math.random(2) == 1 then
+			hero.mc:flip()
+		end
+	end
 	
 	heroName:addEventListener("click", function ()
 		local textInputDialog = TextInputDialog.new("Change Hero Name", "Enter Hero Name", 
@@ -121,12 +157,11 @@ function SceneChooseHero:displayHero(slot)
 	panel:addChild(resetButton)
 
 	resetButton:addEventListener("click", function()
-			--DEBUG("Resetting", heroFileName)
-			heroes[slot] = Hero.new(1,slot) 
-			heroes[slot]:save()
-			sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
-			end
-		)
+		--DEBUG("Resetting", heroFileName)
+		heroes[slot] = Hero.new(1,slot) 
+		heroes[slot]:save()
+		sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 
+	end)
 
 	panel.front.slot = slot
 	
@@ -134,7 +169,7 @@ function SceneChooseHero:displayHero(slot)
 	panel.front:addEventListener(Event.MOUSE_DOWN, SceneChooseHero.onMouseDown, panel.front)
 	panel.front:addEventListener(Event.MOUSE_MOVE, SceneChooseHero.onMouseMove, panel.front)
 	panel.front:addEventListener(Event.MOUSE_UP, SceneChooseHero.onMouseUp, panel.front)
- 
+	
 	return panel
 end
 

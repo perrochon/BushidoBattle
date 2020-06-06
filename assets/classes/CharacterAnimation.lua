@@ -61,7 +61,7 @@ function CharacterAnimation:init(spriteName)
 
 	local activity = {"WALK", "RUN", "JUMP", "ATTACK", "ATTACK_01", "ATTACK_02", "IDLE", "HURT", "DIE"}
 	-- TODO ANIMATIONS handle single vs. double attack. Right now, order above matters.
-		-- Requesting ATTACK if ATTACK not pressent will fall through to ATTACK_01. 
+		-- Requesting ATTACK if ATTACK not present will fall through to ATTACK_01. 
 		-- Requesting ATTACK_01 or ATTACK_02 if not present will fall through to IDLE 
 	
 	local timeline = {}
@@ -137,6 +137,18 @@ function CharacterAnimation:setHealth(hpBar)
 	self:addChild(self.bar)	
 end
 
+function CharacterAnimation:faceWest()
+	self:setScaleX(-1)
+end
+
+function CharacterAnimation:faceEast()
+	self:setScaleX(1)
+end
+
+function CharacterAnimation:flip()
+	self:setScaleX(-self:getScaleX())
+end
+
 function CharacterAnimation:go(action)
 	if action == nil or self.startFrames[action] == nil then return end
 	self.mc:gotoAndPlay(self.startFrames[action])
@@ -147,11 +159,32 @@ function CharacterAnimation:idle()
 end
 
 function CharacterAnimation:attack()
+	--Requesting ATTACK if ATTACK not present will fall through to ATTACK_01.
 	self:go("ATTACK")
+end
+
+function CharacterAnimation:attack1()
+	if self.startFrames["ATTACK_01"] == self.startFrames["IDLE"] then
+		self:attack()
+	else
+		self:go("ATTACK_01")
+	end
+end
+
+function CharacterAnimation:attack2()
+	if self.startFrames["ATTACK_02"] == self.startFrames["IDLE"] then
+		self:attack()
+	else
+		self:go("ATTACK_02")
+	end
 end
 
 function CharacterAnimation:walk()
 	self:go("WALK")
+end
+
+function CharacterAnimation:jump()
+	self:go("JUMP")
 end
 
 function CharacterAnimation:die(fadeOut)

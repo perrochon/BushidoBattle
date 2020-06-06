@@ -90,7 +90,7 @@ function Cyclopedia:init()
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
 			[1] = {name = "hero", deprecatedName = "Ninja_02__WALK_000.png",
-					names = {"Nijna One", "Ninja Two", "Ninja Three", "Ninja Four", "TODO DELETE ME",},
+					names = {"Ninja One", "Ninja Two", "Ninja Three", "Ninja Four", "TODO DELETE ME",},
 					sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01",},
 					xp = 0, hp = 600, 
 					defense = {AC = 16, Fort = 16, Refl = 14, Will = 12},
