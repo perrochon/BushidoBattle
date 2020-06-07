@@ -89,7 +89,7 @@ function Cyclopedia:init()
 				--]]
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
-			[1] = {name = "hero", deprecatedName = "Ninja_02__WALK_000.png",
+			[1] = {name = "hero", 
 					names = {"Ninja One", "Ninja Two", "Ninja Three", "Ninja Four", "TODO DELETE ME",},
 					sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01",},
 					xp = 0, hp = 600, 
@@ -98,32 +98,123 @@ function Cyclopedia:init()
 					weapon1 = "shortsword", weapon2 = "shortbow", 
 					tactics = "player", see = 0, alone = 0
 					},
-			[2] = {name = "peasant", sprite = "Samurai_01", deprecatedName = "Samurai_01__WALK_000.png", 
+			[2] = {name = "peasant", sprite = "Samurai_01",  
 					xp = 1, hp = 4, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "stick", weapon2 = nil, 
 					tactics = "minion", see = 4, alone = 5
 					},
-			[3] = {name = "soldier", sprite = "Samurai_03", deprecatedName = "Samurai_03__WALK_000.png", 
+			[3] = {name = "soldier", sprite = "Samurai_03",  
 					xp = 3, hp = 15,   
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "shortsword", weapon2 = "javelin", 
 					tactics = "soldier", see = 6, alone = 10
 					},
-			[4] = {name = "samurai", sprite = "Samurai_02", deprecatedName = "Samurai_02__WALK_000.png", 
+			[4] = {name = "samurai", sprite = "Samurai_02",  
 					xp = 4, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "katana", weapon2 = "spear", 
 					tactics = "soldier", see = 3, alone = 100
 					},
-			[5] = {name = "wolf", sprite = "Animal_03", deprecatedName = "Animal_03__WALK_000.png", 
+			[5] = {name = "bear", sprite = "Animal_01",  
+					xp = 4, hp = 50, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "claw", weapon2 = "fang", 
+					tactics = "soldier", see = 6, alone = 4
+					},
+			[6] = {name = "eagle", sprite = "Animal_02", 
 					xp = 2, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "claw", weapon2 = "fang", 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[7] = {name = "wolf", sprite = "Animal_03",  
+					xp = 2, hp = 25, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "claw", weapon2 = "fang", 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[8] = {name = "barbarian", sprite = "Barbarian_01",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "sword", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[9] = {name = "barbarian", sprite = "Barbarian_02",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "sword", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[10] = {name = "barbarian", sprite = "Barbarian_03",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "sword", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[11] = {name = "barbarian", sprite = "Gladiator_01",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "sword", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[12] = {name = "barbarian", sprite = "Gladiator_02",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "axe", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[13] = {name = "barbarian", sprite = "Gladiator_03",  
+					xp = 2, hp = 15, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "flail", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[14] = {name = "samurai", sprite = "Samurai_02_blue",  
+					xp = 4, hp = 25, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "katana", weapon2 = "spear", 
+					tactics = "soldier", see = 3, alone = 100
+					},
+			[15] = {name = "samurai", sprite = "Samurai_02_green",  
+					xp = 4, hp = 25, 
+					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "katana", weapon2 = "spear", 
+					tactics = "soldier", see = 3, alone = 100
+					},
+			[16] = {name = "troll", sprite = "Troll_01",  
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "club", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[17] = {name = "troll", sprite = "Troll_02",  
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "club", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[18] = {name = "troll", sprite = "Troll_03",  
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "club", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
 		},
@@ -144,6 +235,16 @@ function Cyclopedia:init()
 							type = "Physical", projectile = nil, missSound = "swish"},
 			[8] = {name = "fang", reach = 1.5, modifier = 2, defense = "AC", damage = 'd6', dice = 1, bonus = 2,
 							type = "Physical", projectile = nil, missSound = "swish"},
+			[9] = {name = "beak", reach = 1.5, modifier = 2, defense = "AC", damage = 'd6', dice = 1, bonus = 2,
+							type = "Physical", projectile = nil, missSound = "swish"},
+			[10] = {name = "sword", reach = 1.5, modifier = 5, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
+						    type = "Physical", projectile = nil, missSound = "clang"},
+			[11] = {name = "axe", reach = 1.5, modifier = 5, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
+						    type = "Physical", projectile = nil, missSound = "clang"},
+			[12] = {name = "flail", reach = 2.5, modifier = 6, defense = "AC", damage = 'd6', dice = 1, bonus = 2, 
+						    type = "Physical", projectile = nil, missSound = "clang"},
+			[13] = {name = "club", reach = 1.5, modifier = 3, defense = "AC", damage = 'd4', dice = 1, bonus = 3, 
+						    type = "Physical", projectile = nil, missSound = "clang"},
 			},
 		["projectiles"] = {
 			[1] = {name = "arrow", image = TextureRegion.new(projectilesTexture, 0, 0, 108, 108), speed = 5},
@@ -186,8 +287,11 @@ function Cyclopedia:loadSprites()
 	--self.heroMc = CharacterAnimation.new("Ninja_02")
 
 	-- TODO FIX ANIMATION remove deprecatedTexturNames
-
+	
 	for key, value in ipairs(self.lists["monsters"]) do
+
+		if not value.deprecatedName then value.deprecatedName = "Samurai_01__WALK_000.png" end
+
 		--INFO("  ", value.name, value.deprecatedName)
 		local region = self.lists["monsters"].pack:getTextureRegion(value.deprecatedName)
 		local tX, tY, w, h = region:getRegion()
