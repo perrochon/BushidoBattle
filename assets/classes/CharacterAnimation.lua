@@ -18,6 +18,7 @@ CharacterAnimation.spriteData = {
 	{name = "Barbarian_02", dx = -8, dy = 7}, -- Viking Barbarian
 	{name = "Barbarian_03", dx = -8, dy = 7}, -- Blonde Barbarian double sword
 	{name = "Gladiator_01", dx = -1, dy = 6}, -- Mohawk Gladiator with sword
+	{name = "Gladiator_02", dx = -1, dy = 6}, -- Mohawk Gladiator with sword
 	{name = "Gladiator_03", dx = -1, dy = 7}, -- Gladiator with flail (weapon that didn't exist...)
 	{name = "Ninja_01", dx = -41, dy = 0}, -- Black Ninja Sword
 	{name = "Ninja_02", dx = -41, dy = 0}, -- Blue Ninja two blades
@@ -44,6 +45,7 @@ function CharacterAnimation:init(spriteName)
 	  end
 	end
 
+	--DEBUG(spriteName)
 	local filename = textureData.name
 
 	self.mc = nil -- animated sprite (MovieClip) of the character

@@ -37,39 +37,6 @@ function Monster:init(entry, id)
 	self.friends = false
 	self.seesHero = false
 
-	-- TODO REFACTOR remove the rest...
-	--position/key in the MM and tileset-monsters
-	-- temporary coordinates when first created
-	--self.x, self.y = 0, 0
-	--self.blocked = true 								-- is this used anywhere?
-	--info is the entry in the monster manual 
-	--self.info = manual:getEntry("monsters", entry)	
-	--self.name = self.info.name
-	--self.xp = self.info.xp 
-	--self.attacks = self.info.attacks
-	--these variables help keep track of health
-	--self.hp = self.info.hp
-	--self.maxHP = self.hp
-	--self.HPbar = 0
-	--these are used by basicAttack
-	--self.prof = self.info.prof
-	--self.weapons = info.weapons
-	
-	--self.weapons = {}
-	--self.weapons[1] = manual:getEntry("weapons", self.info.weapon1)
-	--if self.info.weapon2 then 
-		--self.weapons[2] = manual:getEntry("weapons", self.info.weapon2)
-	--end
-	
-	--self.weapon = self.weapons[1]	
-	-- resistances. vulnerabilities would be listed as negative (-5, etc..)
-	--self.resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}
-	
-	--these are used by the AI
-	--self.tactics = self.info.tactics
-	--self.see = self.info.see
-	--self.alone = self.info.alone
-
 	--possible states: attack, flee, move
 	self.state = "move"
 	self.bloodied = false
@@ -249,6 +216,8 @@ function Monsters:updateState(monster, id, remote)
 		monster.seesHero = distance(monster, hero) < monster.see or monster.berserk
 		monster.target = monster.seesHero and hero or nil
 	end
+
+	--DEBUG(monster.entry, monster.name, monster.c, monster.r, monster.state, distance(monster, monster.target), monster.inrange)
 	
 	if not monster.seesHero then
 			monster.state = "move"
@@ -287,5 +256,4 @@ function Monsters:updateState(monster, id, remote)
 	end
 
 	
-	--DEBUG(monster.name, monster.c, monster.r, monster.state, distance(monster, monster.target), monster.inrange)
 end

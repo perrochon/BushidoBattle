@@ -91,7 +91,9 @@ function ScenePlay:init()
 		if heroes[i].active then
 			heroes[i].turn = true
 		end
+		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 end -- DEBUG buff heroes for testing map
 	end
+
 	
 	if self.remote then
 		-- TODO HEROFIX
@@ -99,6 +101,7 @@ function ScenePlay:init()
 		
 	-- load monsters -- TODO HEROFIX double monsters when there are two players.
 	self.monsters = Monsters.new(self.mapData)
+	
 
 	-- Create the TileMaps and the arrays
 	self.world = WorldMap.new(self.mapData, self.monsters)
@@ -681,7 +684,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 		-- TODO: FIX projectil should move direction defender, not direction obstacle
 		--       they are sometimes slightly different and it looks weird
 		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, blockedC, blockedR)
-		DEBUG("launching (blocked)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
+		--DEBUG("launching (blocked)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	else
 		-- launch a projectile towards the defender
 		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, defender.c, defender.r)	

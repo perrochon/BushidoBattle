@@ -69,7 +69,7 @@ end
 
 function Character:moveTo(c, r)
 
-	DEBUG("Moving Character", self.name, self.c, self.r, "to", c, r)
+	--DEBUG("Moving Character", self.name, self.c, self.r, "to", c, r)
 
 	if self.c > c then
 		self.mc:faceWest()

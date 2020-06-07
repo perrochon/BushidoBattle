@@ -4,8 +4,6 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 
-
-
 -- The layer lookup "table"
 Cyclopedia = Core.class()
 

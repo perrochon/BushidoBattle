@@ -4,30 +4,37 @@ TODO
 	- auto connect all the way to Battle...Dependency: new connection protocol
 	- Camera Follow Update
 	- Bugs
+		- Menagerie shows some weird shooting by the sentries, range attack in the wrong direction
+		- Change Hero Name in HTML not working anymore
 		- Why are green and blue samurai hopping at end of walk?
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
 		- Replace Hero animation in ChooseHero with dead hero if hero is dead
 		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
-	- Multiple Heroes / Remote
+	- (1.0) Multiple Heroes / Remote
 		- Mark heroes that still have a turn
 	- Game Logic
+		- map00 in cheats
+		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
+		- Render shortest path, if walk, and line if can shoot
+		- if BFS fails on less than 1000 iterations (because no path), then move anyway
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
-		- render shortest path only on line, instead of whole search space
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 		- (low) limit ranged attacks in number (no unlimited javelins)
 		- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
+		- Don't have monsters shoot into walls. If path is fully blocked, then better move, or don't shoot
 	- Fog of war
 		- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
 		- Block line of sight at walls?
 	- Graphics
+		- Trolls, bears are small - per monster scale factor, and use that everywhere...
 		- Use range attack for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
 		- Load monster graphics into cyclopedia
 		- New graphics for monsters, environment, terrain, projectiles
 		- Jump in gladiator?
-	- Remote Play
+	- (1.0) Remote Play
 		- fix basic mechanism. Let anyone move any hero. Once all heroes are moved once (or pass), monsters move.
 		- Monster AI with multiple heroes
 		- Ensure same map on client
