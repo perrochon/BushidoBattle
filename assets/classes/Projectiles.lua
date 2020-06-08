@@ -4,11 +4,10 @@
 Projectile = Core.class(Sprite)
 
 function Projectile:init(pName, fromC, fromR, toC, toR)
---[[Logic: 	accepts a key pName for a projectile and outputs an animatation from a tilemap fromC, fromR to a tilemap toC, toR
+--[[Logic: 	accepts a key pName for a projectile and outputs an animatation from a 
+			tilemap fromC, fromR to a tilemap toC, toR
 			adds an image and onEventFrame event listener to the stage which dispatchs a "animation finished" event
-	Called from rangedAttack
-	Calls self.onEnterFrame, self.onRemovedFromStage
-	Returns a bitmap to the stage
+			Returns a bitmap
 --]]	
 
 	-- create a Bitmap 
@@ -17,15 +16,15 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 	p:setAnchorPoint(0.5, 0.5)
 	
 	--calculate the screen start and target variables
-	local toX = (fromC - 0.5) * TILE_WIDTH 
-	local toY = (fromR - 0.5) * TILE_HEIGHT 
+	local fromX = (fromC - 0.5) * TILE_WIDTH 
+	local fromY = (fromR - 0.5) * TILE_HEIGHT 
 	self.toX = (toC - 0.5) * TILE_WIDTH 
 	self.toY = (toR - 0.5) * TILE_HEIGHT 
 
 	--DEBUG("Projectile:", toX, toY, self.toX, self.toY, fromC, fromR, toC, toR)
 
 	-- set initial position and speed
-	self:setPosition(toX, toY)
+	self:setPosition(fromX, fromY)
 	self.speedX = (toC - fromC) * info.speed
 	self.speedY = (toR - fromR) * info.speed
 	
@@ -43,20 +42,36 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 		end
 	end
 	p:setRotation(angle)
+	
+	local animate = {}
+	animate.x = self.toX
+	animate.y = self.toY
+	local properties = {}
+	properties.delay = 0
+	local d = distance({c = fromC, r = fromR},{c = toC, r = toR})
+	properties.dispatchEvents = false
+
+ 	local tween = GTween.new(self, d, animate, properties)
+	tween.onComplete = function(event) 
+		self:removeFromParent() 
+		self:dispatchEvent(Event.new("animation finished"))	
+ end
+
 	self:addChild(p)
 
 	--DEBUG("Created " .. pName)
 	
-	self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)	
-	self:addEventListener(Event.REMOVED_FROM_STAGE, self.onRemovedFromStage, self)
+	--self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)	
+	--self:addEventListener(Event.REMOVED_FROM_STAGE, self.onRemovedFromStage, self)
 end
 
+--[[
 function Projectile:onEnterFrame()
---[[Logic:	update the position based on self.speedX, self.speedY and remove when target is hit
+--Logic:	update the position based on self.speedX, self.speedY and remove when target is hit
 	Called from init
 	Calls removeFromParent
 	Changes p.x, p.y
---]]
+--
 
 	-- get the current position
 	local x, y = self:getPosition()
@@ -73,12 +88,12 @@ function Projectile:onEnterFrame()
 end
 
 function Projectile:onRemovedFromStage(event)
---[[Logic: 	projectile is done, dispatch "animation finished" event
+--Logic: 	projectile is done, dispatch "animation finished" event
 	Called from onEnterFrame
 	Calls dispatchEvent
---]]
+--
 
-	self:dispatchEvent(Event.new("animation finished"))	
     self:removeEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)
 end
 
+--]]
