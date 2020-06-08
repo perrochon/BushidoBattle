@@ -5,7 +5,7 @@ Samurai_02_green__WALK_006.png, 0, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__WALK_005.png, 0, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__WALK_004.png, 0, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__WALK_003.png, 0, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__WALK_002_green.png, 0, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__WALK_002.png, 0, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__WALK_001.png, 0, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__WALK_000.png, 0, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_009.png, 160, 0, 160, 100, 0, 0, 0, 0
@@ -15,7 +15,7 @@ Samurai_02_green__RUN_006.png, 160, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_005.png, 160, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_004.png, 160, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_003.png, 160, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__RUN_002_green.png, 160, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__RUN_002.png, 160, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_001.png, 160, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__RUN_000.png, 160, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_009.png, 320, 0, 160, 100, 0, 0, 0, 0
@@ -25,7 +25,7 @@ Samurai_02_green__JUMP_006.png, 320, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_005.png, 320, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_004.png, 320, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_003.png, 320, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__JUMP_002_green.png, 320, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__JUMP_002.png, 320, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_001.png, 320, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__JUMP_000.png, 320, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_009.png, 480, 0, 160, 100, 0, 0, 0, 0
@@ -35,7 +35,7 @@ Samurai_02_green__IDLE_006.png, 480, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_005.png, 480, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_004.png, 480, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_003.png, 480, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__IDLE_002_green.png, 480, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__IDLE_002.png, 480, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_001.png, 480, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__IDLE_000.png, 480, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_009.png, 640, 0, 160, 100, 0, 0, 0, 0
@@ -45,7 +45,7 @@ Samurai_02_green__HURT_006.png, 640, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_005.png, 640, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_004.png, 640, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_003.png, 640, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__HURT_002_green.png, 640, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__HURT_002.png, 640, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_001.png, 640, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__HURT_000.png, 640, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_009.png, 800, 0, 160, 100, 0, 0, 0, 0
@@ -55,7 +55,7 @@ Samurai_02_green__DIE_006.png, 800, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_005.png, 800, 400, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_004.png, 800, 500, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_003.png, 800, 600, 160, 100, 0, 0, 0, 0
-Samurai_02_green__DIE_002_green.png, 800, 700, 160, 100, 0, 0, 0, 0
+Samurai_02_green__DIE_002.png, 800, 700, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_001.png, 800, 800, 160, 100, 0, 0, 0, 0
 Samurai_02_green__DIE_000.png, 800, 900, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_009.png, 960, 0, 160, 100, 0, 0, 0, 0
@@ -65,6 +65,6 @@ Samurai_02_green__ATTACK_006.png, 1440, 0, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_005.png, 1600, 0, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_004.png, 1760, 0, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_003.png, 960, 100, 160, 100, 0, 0, 0, 0
-Samurai_02_green__ATTACK_002_green.png, 960, 200, 160, 100, 0, 0, 0, 0
+Samurai_02_green__ATTACK_002.png, 960, 200, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_001.png, 960, 300, 160, 100, 0, 0, 0, 0
 Samurai_02_green__ATTACK_000.png, 960, 400, 160, 100, 0, 0, 0, 0

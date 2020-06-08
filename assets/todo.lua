@@ -2,6 +2,7 @@
 
 TODO
 	- Bugs
+		- Fix sounds, and make it easy to turn off (even in code)
 		- Change Hero Name in HTML not working anymore
 		- Why are green and blue samurai hopping at end of walk? And not jumping?
 		- Barracks level very slow due to lots of berserkers pathfinding
@@ -18,6 +19,7 @@ TODO
 		- Load monster graphics into cyclopedia
 		- New graphics for monsters, environment, terrain, projectiles
 		- Jump in gladiator?
+		- Swizzle full res Samurai_02
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
 		- Render shortest path, if walk, and line if can shoot
