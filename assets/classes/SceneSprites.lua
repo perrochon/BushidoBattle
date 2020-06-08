@@ -7,9 +7,9 @@ SceneSprites = Core.class(Sprite)
 function SceneSprites:init()
 
 	--first, start out with a dark screen
-	application:setBackgroundColor(COLOR_WHITE)
+	application:setBackgroundColor(COLOR_LTBLACK)
 
-	local LEFT = -40
+	local LEFT = 0 -- TODO FIX why does MINX not work here? It starts outside the screen...
 	local TOP = 0
 	local WIDTH = APP_WIDTH - 2 * MINX
 	local HEIGHT = APP_HEIGHT - 2 * MINY
@@ -18,17 +18,17 @@ function SceneSprites:init()
 	
 	--DEBUG(MINX, MINY, LEFT, TOP, WIDTH, HEIGHT, SPOTS)
 
-	local sprites = Pixel.new(COLOR_WHITE, 1, WIDTH, HEIGHT)
+	local sprites = Pixel.new(COLOR_LTBLACK, 1, WIDTH, HEIGHT)
 	sprites:setPosition(LEFT, TOP)
 
 	-- Draw Grid
 	for x = LEFT, WIDTH, TILE_WIDTH + D do
-		local line = Pixel.new(COLOR_BLUE, 1, D, HEIGHT)
+		local line = Pixel.new(COLOR_BLUE, 0.2, D, HEIGHT)
 		line:setPosition(x, TOP)
 		sprites:addChild(line)
 	end
 	for y = TOP, HEIGHT, TILE_HEIGHT + D do
-		local line = Pixel.new(COLOR_RED, 1, WIDTH, D)
+		local line = Pixel.new(COLOR_RED, 0.2, WIDTH, D)
 		line:setPosition(LEFT, y)
 		sprites:addChild(line)
 	end
@@ -45,7 +45,8 @@ function SceneSprites:init()
 		x = x + TILE_WIDTH + D
 	end
 	--]]
-	
+
+	--[[
 	-- Draw Light Shadows
 	x = LEFT + D
 	local pack = manual.lists["light"].pack
@@ -56,8 +57,9 @@ function SceneSprites:init()
 		--DEBUG("Bitmap", x, y, bitmap:getSize())
 		x = x + TILE_WIDTH + D
 	end
-
-	---[[ TODO ANIMATION REMOVE after no longer creating texture map for health bars in Cyclopedia
+	--]]
+	
+	--[[ TODO ANIMATION REMOVE after no longer creating texture map for health bars in Cyclopedia
 	-- Draw Health Bars
 	x = x + D
 	DEBUG(manual:getEntry("layers", LAYER_HP))
@@ -136,10 +138,16 @@ function SceneSprites:init()
 	
 	local basicGui = BasicGui.new(nil, 
 						nil, nil, 
-						nil, nil,
+						"Menagerie", nil,
 						"DONE", SCENE_LOBBY)
 	self:addChild(basicGui)
 
-	
+	basicGui.button1:addEventListener("click", 
+		function()
+			currentMap = 0 -- index pointing to the maps we have saved
+			currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, currentMap)
+			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION) 
+		end
+	)
 end	
 

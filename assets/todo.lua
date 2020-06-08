@@ -6,7 +6,7 @@ TODO
 	- Bugs
 		- Menagerie shows some weird shooting by the sentries, range attack in the wrong direction
 		- Change Hero Name in HTML not working anymore
-		- Why are green and blue samurai hopping at end of walk?
+		- Why are green and blue samurai hopping at end of walk? And not jumping?
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
