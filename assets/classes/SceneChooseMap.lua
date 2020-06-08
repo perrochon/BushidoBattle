@@ -10,7 +10,12 @@ function SceneChooseMap:init()
 	
 	self.panels = {}
 	
-	local numberOfMaps = 9 -- TODO FIX look in directory and see how many we have...
+	-- Make sure we have a good map as default (needed because of debug map00)
+	if currentMap < 1 or 
+		currentMap > numberOfMaps then
+		currentMap = 1 -- index pointing to the maps we have saved
+		currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, currentMap)
+	end
 
 	for i=1,numberOfMaps do
 		local mapFile = string.format("%s%02d.lua", MAP_FILE_NAME, i)
@@ -18,11 +23,6 @@ function SceneChooseMap:init()
 		self.panels[i] = self:displayMap(map.properties["Title"], i)		
 	end
 	
-	if currentMap < 1 or currentMap > numberOfMaps then
-		currentMap = 1 -- index pointing to the maps we have saved
-		currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, currentMap)
-	end
-
 	self:updateVisualState(true, currentMap)
 
 	--basicGui:drawGrid()

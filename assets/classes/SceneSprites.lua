@@ -149,5 +149,4 @@ function SceneSprites:init()
 			sceneManager:changeScene(SCENE_PLAY, TRANSITION_TIME, TRANSITION) 
 		end
 	)
-end	
-
+end
