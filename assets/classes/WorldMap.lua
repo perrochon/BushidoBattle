@@ -461,34 +461,32 @@ function WorldMap:flee(monster, target)
 	return 0, 0
 end
 
-function WorldMap:line(fromX, fromY, toX, toY)
-	--[[Return a table of {x, y} pairs on the line including {fromX, fromY} and {toX, toY}
-		The classic Bresenham integer only line algorithm all Roguelikes use.
-		Pick one tile along the direction of the line (one x for horizontal, one y for vertical)
-		Returns a table of x, y coordinates
-	--]]
+function WorldMap:line(from, to)
+	--	The classic Bresenham integer only line algorithm all Roguelikes use.
+	--	Pick one tile along the direction of the line (one c for horizontal, one r for vertical)
+	--  Return a table of {c, r} pairs on the line including {from.c, from.r} and {to.c, to.r}
 
-	local line = {}							-- a line is series of x, y values. this gets returned
-	local deltaX = math.abs(toX - fromX)	-- the difference between the x's
-	local deltaY = math.abs(toY - fromY)	-- The difference between the y's
-	local x = fromX				   			-- Start x off at the first point
-	local y = fromY				   			-- Start y off at the first point
+	local line = {}							-- A line is series of c, r values. This gets returned
+	local deltaC = math.abs(to.c - from.c)	-- The difference between the c's
+	local deltaR = math.abs(to.r - from.r)	-- The difference between the r's
+	local c = from.c			   			-- Start x off at the first point
+	local r = from.r			   			-- Start y off at the first point
 
 	--different increments of x and y are needed for each octant of LOS
-	local incX1 = 0	
-	local incX2 = 0
-	local incY1 = 0
-	local incY2 = 0
+	local incC1 = 0	
+	local incC2 = 0
+	local incR1 = 0
+	local incR2 = 0
 
-	if toX >= fromX then			-- the x-values are increasing
-		incX1, incX2 = 1, 1
+	if to.c >= from.c then			-- the x-values are increasing
+		incC1, incC2 = 1, 1
 	else						 	-- the x-values are decreasing
-		incX1, incX2 = -1, -1
+		incC1, incC2 = -1, -1
 	end
-	if toY >= fromY then			-- the y-values are increasing
-		incY1, incY2 = 1, 1
+	if to.r >= from.r then			-- the y-values are increasing
+		incR1, incR2 = 1, 1
 	else						  	-- the y-values are decreasing
-		incY1, incY2 = -1, -1
+		incR1, incR2 = -1, -1
 	end
 	
 	--these variables are used to calculate the next points in the main loop
@@ -497,76 +495,71 @@ function WorldMap:line(fromX, fromY, toX, toY)
 	local numAdd = 0				-- how much to add to the numerator
 	local numPoints = 0	 			-- how many points (sometimes more x points than y points)
 	
-	if deltaX >= deltaY then	 	
+	if deltaC >= deltaR then	 	
 	-- there is at least one x-value for every y-value
-		incX1 = 0				  	-- don't change the x when numerator >= denominator
-		incY2 = 0				  	-- don't change the y for every iteration
-		den = deltaX	
-		num = deltaX / 2
-		numAdd = deltaY
-		numPoints = deltaX	 		-- there are more x-values than y-values
+		incC1 = 0				  	-- don't change the x when numerator >= denominator
+		incR2 = 0				  	-- don't change the y for every iteration
+		den = deltaC	
+		num = deltaC / 2
+		numAdd = deltaR
+		numPoints = deltaC	 		-- there are more x-values than y-values
 	else						  
 	-- there is at least one y-value for every x-value
-		incX2 = 0				  	-- don't change the x for every iteration
-		incY1 = 0				  	-- don't change the y when numerator >= denominator
-		den = deltaY
-		num = deltaY / 2
-		numAdd = deltaX
-		numPoints = deltaY		 	-- there are more y-values than x-values
+		incC2 = 0				  	-- don't change the x for every iteration
+		incR1 = 0				  	-- don't change the y when numerator >= denominator
+		den = deltaR
+		num = deltaR / 2
+		numAdd = deltaC
+		numPoints = deltaR		 	-- there are more y-values than x-values
 	end
 
 	--this is the main loop.  add x, y to the table called line
 	for i = 0, numPoints do
-		table.insert(line, {x, y})	-- add to the line table
+		table.insert(line, {c, r})	-- add to the line table
 		num = num + numAdd			-- increase the numerator by the top of the fraction
 		if num >= den then		 	-- check if numerator >= denominator
 			num = num - den		   	-- calculate the new numerator value
-			x = x + incX1		   	-- change the x as appropriate
-			y = y + incY1		   	-- change the y as appropriate
+			c = c + incC1		   	-- change the x as appropriate
+			r = r + incR1		   	-- change the y as appropriate
 		end
-		x = x + incX2			 	-- change the x as appropriate
-		y = y + incY2			 	-- Change the y as appropriate
+		c = c + incC2			 	-- change the x as appropriate
+		r = r + incR2			 	-- Change the y as appropriate
 	end
 	return line
 end
 
-function WorldMap:lineOfCover(fromC, fromR, toC, toR)
-	--[[find all the tile.cover values between from and to on the environment and light layer
-		Return blockedC, blockedR if totalCover <-5
-		Return totalCover, blockedC, blockedR 
-	--]]
+function WorldMap:lineOfCover(from, to)
+	-- Check tile.cover values until they go below -5 or we reach to
+	-- Return totalCover, to if totalCover >= -5
+	-- Return totalCover, <coordinates of blocker> if totalCover < -5 with 
 
 	local totalCover = 0
-	local blockedC, blockedR = nil, nil
-	local line = self:line(fromC, fromR, toC, toR)
+	local line = self:line(from, to)
 
-	--remove the starting r, c
+	-- remove the starting c, r
 	table.remove(line, 1)
-	--DEBUG(fromC, fromR, toC, toR, " for cover")
 	for key, coordinates in pairs(line) do
-		local r, c = coordinates[1], coordinates[2]
+		local c, r = coordinates[1], coordinates[2]
 
-		--figure out the cover for what's in the way
-		local key, layer, tile = self:getTileInfo(r, c, LAYER_ENVIRONMENT)
+		-- Environment
+		local key, layer, tile = self:getTileInfo(c, r, LAYER_ENVIRONMENT)
 		if key ~= 0 then	
 			totalCover = totalCover + tile.cover 
+			--DEBUG("ENVIR", c, r, tile.cover, totalCover)
 		end
 
-		--account for lighting too
-		local key, layer, tile = self:getTileInfo(r, c, LAYER_LIGHT)	
-		--totalCover = totalCover + tile.cover  -- TODO FIX ANIMATION HEROFIX VISIBILITY don't shoot into dark
-		if totalCover < -5 then -- removed redundant? or tile.cover < -5
-			if not blockedC then -- return first block
-				blockedC, blockedR = c, r
-			end
+		-- Light
+		local key, layer, tile = self:getTileInfo(c, r, LAYER_LIGHT)	
+		totalCover = totalCover + tile.cover
+		--DEBUG("LIGHT", c, r, tile.cover, totalCover)
+
+		if totalCover < -5 then 
+			--DEBUG("Blocked", totalCover, c, r)
+			return totalCover, c, r
 		end
 	end
-	if blockedC then
-		--DEBUG("cover is  ", totalCover, " blocked at ", blockedC, blockedR )
-	else
-		--DEBUG("cover is  ", totalCover, " not blocked")
-	end
-	return totalCover, blockedC, blockedR
+	--DEBUG("Not blocked", totalCover, c, r)
+	return totalCover, to.c, to.r
 end
 
 

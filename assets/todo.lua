@@ -1,10 +1,7 @@
 --[[
 
 TODO
-	- auto connect all the way to Battle...Dependency: new connection protocol
-	- Camera Follow Update
 	- Bugs
-		- Menagerie shows some weird shooting by the sentries, range attack in the wrong direction
 		- Change Hero Name in HTML not working anymore
 		- Why are green and blue samurai hopping at end of walk? And not jumping?
 		- Barracks level very slow due to lots of berserkers pathfinding
@@ -12,10 +9,16 @@ TODO
 		- Hero reset button not greyed out if hero is dead...
 		- Replace Hero animation in ChooseHero with dead hero if hero is dead
 		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
-	- (1.0) Multiple Heroes / Remote
-		- Mark heroes that still have a turn
+	- FIX in the code base
+	- TODO (w/o FIX) in the code base
+	- Graphics
+		- Trolls, bears are small - per monster scale factor, and use that everywhere...
+		- Use range attack for sprites that have it (heroes...)
+		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
+		- Load monster graphics into cyclopedia
+		- New graphics for monsters, environment, terrain, projectiles
+		- Jump in gladiator?
 	- Game Logic
-		- map00 in cheats
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
 		- Render shortest path, if walk, and line if can shoot
 		- if BFS fails on less than 1000 iterations (because no path), then move anyway
@@ -27,22 +30,20 @@ TODO
 	- Fog of war
 		- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
 		- Block line of sight at walls?
-	- Graphics
-		- Trolls, bears are small - per monster scale factor, and use that everywhere...
-		- Use range attack for sprites that have it (heroes...)
-		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
-		- Load monster graphics into cyclopedia
-		- New graphics for monsters, environment, terrain, projectiles
-		- Jump in gladiator?
+	- (1.0) Multiple Heroes / Remote
+		- Mark heroes that still have a turn
+		- Scale difficulty. More monsters? Less HP?
+		- Monster AI with multiple heroes
 	- (1.0) Remote Play
 		- fix basic mechanism. Let anyone move any hero. Once all heroes are moved once (or pass), monsters move.
-		- Monster AI with multiple heroes
+		- auto connect all the way to Battle...Dependency: new connection protocol. May be tricky with >2 players
 		- Ensure same map on client
 		- >2 devices
 		- remote attack update
 	- Settings Screen with 
 		- AutoConnect, sounds, music, (fog of war?)
-	- TODO (w/o FIX) in the code base
+	- Achievements Screen with 
+		- Scores, per level? XP?
 	- Refactor
 		- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 		- (medium) TODO FIX in the code base

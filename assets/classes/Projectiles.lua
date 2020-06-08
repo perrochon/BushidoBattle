@@ -6,7 +6,7 @@ Projectile = Core.class(Sprite)
 function Projectile:init(pName, fromC, fromR, toC, toR)
 --[[Logic: 	accepts a key pName for a projectile and outputs an animatation from a 
 			tilemap fromC, fromR to a tilemap toC, toR
-			adds an image and onEventFrame event listener to the stage which dispatchs a "animation finished" event
+			adds an image and onEventFrame event listener to the stage which dispatchs a "complete" event
 			Returns a bitmap
 --]]	
 
@@ -42,7 +42,7 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 		end
 	end
 	p:setRotation(angle)
-	
+
 	local animate = {}
 	animate.x = self.toX
 	animate.y = self.toY
@@ -51,10 +51,10 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 	local d = distance({c = fromC, r = fromR},{c = toC, r = toR})
 	properties.dispatchEvents = false
 
- 	local tween = GTween.new(self, d, animate, properties)
-	tween.onComplete = function(event) 
-		self:removeFromParent() 
-		self:dispatchEvent(Event.new("animation finished"))	
+	local tween = GTween.new(self, d, animate, properties)
+	tween.onComplete = function(event)
+		self:removeFromParent()
+		self:dispatchEvent(Event.new("complete"))
  end
 
 	self:addChild(p)
@@ -64,36 +64,3 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 	--self:addEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)	
 	--self:addEventListener(Event.REMOVED_FROM_STAGE, self.onRemovedFromStage, self)
 end
-
---[[
-function Projectile:onEnterFrame()
---Logic:	update the position based on self.speedX, self.speedY and remove when target is hit
-	Called from init
-	Calls removeFromParent
-	Changes p.x, p.y
---
-
-	-- get the current position
-	local x, y = self:getPosition()
-	
-	-- if the projectile hits the target, remove it 
-	if math.abs(x - self.toX) < 20 and math.abs(y - self.toY) < 20 then 
-		self:removeFromParent()		
-	else
-		-- set a new position
-		x = x + self.speedX
-		y = y + self.speedY
-		self:setPosition(x, y)
-	end
-end
-
-function Projectile:onRemovedFromStage(event)
---Logic: 	projectile is done, dispatch "animation finished" event
-	Called from onEnterFrame
-	Calls dispatchEvent
---
-
-    self:removeEventListener(Event.ENTER_FRAME, self.onEnterFrame, self)
-end
-
---]]

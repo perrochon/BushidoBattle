@@ -46,11 +46,6 @@ function ScenePlay:init()
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
 
-	-- FIX move the hero creation/placement stuff out of init into Heroes.lua
-
-	-- TODO HEROFIX remove
-	--ScenePlay.heroes = {} 
-
 	-- determine if we play locally, as server, or as client
 	if serverlink then
 		self.remote = true
@@ -72,19 +67,20 @@ function ScenePlay:init()
 		--DEBUG("This device is playing locally") 
 	end
 
-	-- get heroes ready for next battle
-	local r, c
+	-- Get heroes ready
+	-- First load spawn point
+	local c, r
 	for _, v in pairs(self.mapData.spawns) do
 		if v.type == 1 then
-			r = v.r
 			c = v.c
+			r = v.r
 			break
 		end
 	end
 
 	for i = 1,4 do
 		heroes[i].mc:setScale(1)
-		-- TODO HEROFIX how to place multiple heroes? For now, they all go on top of each other...
+		-- TODO FIX how to place multiple heroes? For now, they all go on top of each other...
 		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
 		-- Problems is we haven't loaded maps yet, and WorldMap.new wants the heroes array
 		heroes[i]:setPosition(c,r)
@@ -93,19 +89,14 @@ function ScenePlay:init()
 		end
 		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 end -- DEBUG buff heroes for testing map
 	end
-
 	
-	if self.remote then
-		-- TODO HEROFIX
-	end
-		
-	-- load monsters -- TODO HEROFIX double monsters when there are two players.
+	-- load monsters 
 	self.monsters = Monsters.new(self.mapData)
-	
 
-	-- Create the TileMaps and the arrays
+	-- load the map
 	self.world = WorldMap.new(self.mapData, self.monsters)
 
+	-- load the messages window
 	self.msg = Messages.new()
 
 	--add methods for remote play
@@ -118,9 +109,8 @@ function ScenePlay:init()
 
 	--get everything on the screen
 	self:addChild(self.world)
-
 	self:addChild(self.msg)
-	self.main = MainScreen.new(heroes[currentHero])
+	self.main = MainScreen.new()
 	self:addChild(self.main)
 	
 	if self.remote then
@@ -225,6 +215,7 @@ function ScenePlay:init()
 	 end)	
 	 
 	 
+
 	--respond to mouse and touch events. Add this on top of the world
 	local nav = MapNavigation.new(self.world)
 	self:addChild(nav)
@@ -247,8 +238,6 @@ function ScenePlay:checkMove(hero, dc, dr)
 	--DEBUG(hero, dc, dr, pass)
 	--DEBUG("Hero", hero.name, dc, dr, pass, hero.c + dc, hero.r + dr, self.activeAction)
 	
-	
-
 	if not hero.turn then return end
 
 	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
@@ -308,8 +297,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 	end
 end
  
-
- function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)
+function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)
 	-- Update the other device about the player turn. If the player 
 		-- moved: id and location of hero
 		-- attacked: id and location of here, id and new hp of monster
@@ -678,24 +666,26 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 --]]
 
 	local p = nil
-	local cover, blockedC, blockedR = self.world:lineOfCover(attacker.c, attacker.r, defender.c, defender.r)
+	local cover, endC, endR = self.world:lineOfCover(attacker, defender)
+	-- TODO: FIX projectile angle to move direction defender, not direction obstacle
+	p = Projectile.new(weapon.projectile, attacker.c, attacker.r, endC, endR)
+
+	--[[
 	if blockedC then 
 		-- launch a projectile that hits something along the way
-		-- TODO: FIX projectil should move direction defender, not direction obstacle
 		--       they are sometimes slightly different and it looks weird
-		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, blockedC, blockedR)
 		--DEBUG("launching (blocked)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	else
 		-- launch a projectile towards the defender
 		p = Projectile.new(weapon.projectile, attacker.c, attacker.r, defender.c, defender.r)	
 		--DEBUG("launching (free)",weapon.name, attacker.c, attacker.r, blockedC, blockedR) 
 	end
-
+	--]]
+	
 	-- Add the projectile to the world which takes care of scaling and dragging.
-	-- TODO this smells (encapsulation violation), so maybe projectiles should be managed by WorldMap?
 	self.world.camera:addChild(p)
-	p:addEventListener("animation finished", function(event)
-		--DEBUG("Anonymous EventListener")
+
+	p:addEventListener("complete", function(event)
 		event:stopPropagation()
 		if blockedX then
 			local key, layer, tile = self.world:getTileInfo(blockedX, blockedY)
@@ -743,17 +733,6 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 			attacker.done = true
 			self:monsterTurnOver()
 		end
-
---[[
-
-		if heroes[currentHero].heroTurn  then 
-			self:heroesTurnOver() 
-		else
-			attacker.done = true
-			self:monsterTurnOver()
-		end
-
-]]
 	end)
 end
 

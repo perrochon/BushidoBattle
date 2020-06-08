@@ -9,15 +9,11 @@ HALFX @ \(FG_X + PLAY_UX_WIDTH / 2)\
 COMPASS_OFFSET @ 166
 COMPASS_Y @ \(MAXY - BUTTON_MARGIN - 144 / 2 - COMPASS_OFFSET)\
 
-function MainScreen:init(hero)
+function MainScreen:init()
 
-	self.hero = hero
+	self.hero = heroes[currentHero]
 	
---	local PLAY_UX_WIDTH = APP_WIDTH - FG_X
---	local halfX = FG_X + PLAY_UX_WIDTH / 2
-	local actionY = 520
---	local COMPASS_Y = 928
---	local COMPASS_OFFSET = 166
+	local actionY = 520 -- FIX should not be hard coded here, or be a function of other
 	local cheatY = 230
 
 	-- Compass
