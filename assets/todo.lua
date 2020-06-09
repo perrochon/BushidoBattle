@@ -4,17 +4,15 @@ TODO
 	- Bugs
 		- Fix sounds, and make it easy to turn off (even in code)
 		- Change Hero Name in HTML not working anymore
-		- Why are green and blue samurai hopping at end of walk? And not jumping?
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
-		- Replace Hero animation in ChooseHero with dead hero if hero is dead
 		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
 		- Trolls, bears are small - per monster scale factor, and use that everywhere...
-		- Use range attack for sprites that have it (heroes...)
+		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
 		- Load monster graphics into cyclopedia
 		- New graphics for monsters, environment, terrain, projectiles
