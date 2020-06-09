@@ -35,8 +35,8 @@ end
 
 function Hero:loadSprite()
 	self.sprite = self.info.sprites[self.id]
-	--DEBUG(self.entry, self.id, self.name, self.sprite)
-	self.mc = CharacterAnimation.new(self.sprite)
+	DEBUG(self.entry, self.id, self.name, self.sprite, self.dx, self.dy, self.scale)
+	self.mc = CharacterAnimation.new(self)
 	self.mc:setPosition((self.c - 1) * TILE_WIDTH, (self.r - 1) * TILE_HEIGHT)
 end
 
@@ -51,7 +51,7 @@ end
 function Hero.load(id)
 	local fileName = "|D|hero"..id
 	local hero = dataSaver.load(fileName)
-	hero.mc = CharacterAnimation.new(hero.sprite)
+	hero.mc = CharacterAnimation.new(hero)
 	hero.mc.mc:gotoAndPlay(1)
 	--DEBUG("Resetting", hero.name, hero.fileName)
 	heroes[id] = hero

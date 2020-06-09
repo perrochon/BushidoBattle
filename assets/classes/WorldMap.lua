@@ -54,7 +54,7 @@ function WorldMap:init(level, monsters)
     self:shiftWorld(heroes[localHero])
 
 	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "health")
-	self.camera:addChild(layer) 
+	--self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
 	-- TODO FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?

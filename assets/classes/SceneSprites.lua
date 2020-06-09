@@ -1,8 +1,9 @@
 --[[
-	this is the class that creates the first scene the player sees when the game loads.
+	Render all the sprites on screen for testing
 --]]
 
 SceneSprites = Core.class(Sprite)
+
 
 function SceneSprites:init()
 
@@ -77,34 +78,36 @@ function SceneSprites:init()
 	local textures = CharacterAnimation.spriteData
 	local clips = {}
 	-- regular scale
-	for i = 1, #textures do
+	for i = 2, #manual.lists["monsters"] do
 		if (i-1) % SPOTS == 0 then
 			y = y + TILE_HEIGHT + D
 			x = LEFT + D
 		end
-		local mc = CharacterAnimation.new(textures[i].name)
+		local mc = CharacterAnimation.new(manual:getEntry("monsters", i))
 		if not mc then break end
 		mc:setPosition(x + 50, y + 50)
-		mc:setScale(1)
 		mc:setHealth(i % 10 + 1)
 		sprites:addChild(mc)
 		table.insert(clips, mc)
 		x = x + 1 * (TILE_WIDTH + D)
 	end
 
+	y = y + 2 * TILE_HEIGHT + D
+	x = LEFT + D
+
 	-- scale
 	---[[
 	local SCALE = 2
 	y = y - (TILE_HEIGHT + D)
-	for i = 1, #textures do
+	for i = 2, #manual.lists["monsters"] do
 		if SCALE * (i-1) % SPOTS == 0 then
 			y = y + SCALE * (TILE_HEIGHT + D)
 			x = LEFT + D
 		end
-		local mc = CharacterAnimation.new(textures[i].name)
+		local mc = CharacterAnimation.new(manual:getEntry("monsters", i))
 		if not mc then break end
 		mc:setPosition(x + 100, y + 100)
-		mc:setScale(SCALE)
+		mc:setScale(SCALE * mc:getScale())
 		mc:setHealth(i % 10 + 1)
 		sprites:addChild(mc)
 		table.insert(clips, mc)
@@ -123,13 +126,17 @@ function SceneSprites:init()
 			sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
 		end
 
+
 		for i = 1, #clips do
 			--DEBUG(i, event.keyCode, actions[event.keyCode])
+			if event.keyCode == KeyCode.F then
+				clips[i]:flip()
+			end
 			clips[i]:go(actions[event.keyCode])
 		end		
 	end)
 	
-	local commands = TextField.new(FONT_MEDIUM, "I W R J A 1 2 H D Q")
+	local commands = TextField.new(FONT_MEDIUM, "I W R J A 1 2 H D F Q")
 	commands:setPosition(1200, 70)
 	sprites:addChild(commands)
 	

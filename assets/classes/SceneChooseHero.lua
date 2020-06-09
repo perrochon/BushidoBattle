@@ -108,7 +108,7 @@ function SceneChooseHero:displayHero(slot)
 	panel:addChild(heroName)
 
 	panel:addChild(hero.mc)
-	hero.mc:setScale(3)
+	hero.mc:scaleUp(3)
 	if hero.hp <=0 then
 		hero.mc:setPosition(heroWidth - 180, -150)
 	else

@@ -2,12 +2,23 @@
 
 TODO
 	- Bugs
+		- Healt bar scaling... Need to scale the mc only, not the whole sprite
+		- Bring heroes back into SceneSprites
+		- Add Assassin to monsters, and maybe Ninja's too
 		- Fix sounds, and make it easy to turn off (even in code)
 		- Change Hero Name in HTML not working anymore
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
-		- BFS to monster/env tile searches whole board. Why? Find closest spot? Even when right next to hero. Cut off?
+		- BFS 
+			-cut of BFS based on time spent (i.e. 1s/number of monsters)
+			-to monster/env tile searches whole board. Why? 
+				Find closest spot? Even when right next to hero. Cut off?
+			- if BFS times out / fails on less than 1000 iterations (because no path), then move anyway
+			- Rewrite BFS with an array of map size? 
+				Only worth it if re-used, still updating 1000+ objects on each search...
+				10 monsters, 100 fields searched is still 1000
+				Instead of boolean found use int, and increment on every search, then no need to clean out
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
@@ -18,10 +29,10 @@ TODO
 		- New graphics for monsters, environment, terrain, projectiles
 		- Jump in gladiator?
 		- Swizzle full res Samurai_02
+		- Make full res animations of heroes for hero selection screen
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
 		- Render shortest path, if walk, and line if can shoot
-		- if BFS fails on less than 1000 iterations (because no path), then move anyway
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 		- (low) limit ranged attacks in number (no unlimited javelins)

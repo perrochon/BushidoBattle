@@ -9,7 +9,7 @@ function Character:init(entry, id)
 	self.mc = nil -- MovieClip
 	self.c, self.r = 1, 1 -- temporary coordinates when first created.
 
-	self.info = manual:getEntry("monsters", self.entry)	
+	self.info = manual:getEntry("monsters", self.entry)	-- need to keep info around for subclass loading of sprite name
 	self.name = self.info.name
 	self.xp = self.info.xp 
 
@@ -33,7 +33,11 @@ function Character:init(entry, id)
 	self.see = self.info.see
 	self.alone = self.info.alone
 	
-	-- TODO REFACTOR Call loadSprite here, and pick the one from the subclass, instead of calling in subclass init)_
+	-- TODO REFACTOR Call loadSprite here, and pick the one from the subclass, instead of calling in subclass init()
+	--self.sprite = self.info.sprite -- Heroes have a list of sprites, so differ from monsters
+	self.dx = self.info.dx
+	self.dy = self.info.dy
+	self.scale = self.info.scale
 	
 	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
@@ -47,8 +51,8 @@ end
 
 function Character:loadSprite()
 	self.sprite = self.info.sprite
-	--DEBUG(self.entry, self.id, self.name, self.sprite)
-	self.mc = CharacterAnimation.new(self.sprite)
+	DEBUG(self.entry, self.id, self.name, self.sprite, self.dx, self.dy, self.scale)
+	self.mc = CharacterAnimation.new(self)
 	self.mc.mc:gotoAndPlay(1)
 	self.mc:setPosition((self.c - 1) * TILE_WIDTH, (self.r - 1) * TILE_HEIGHT)
 end

@@ -79,7 +79,7 @@ function ScenePlay:init()
 	end
 
 	for i = 1,4 do
-		heroes[i].mc:setScale(1)
+		heroes[i].mc:faceEast()
 		-- TODO FIX how to place multiple heroes? For now, they all go on top of each other...
 		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
 		-- Problems is we haven't loaded maps yet, and WorldMap.new wants the heroes array

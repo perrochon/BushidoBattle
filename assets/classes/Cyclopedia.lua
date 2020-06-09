@@ -82,137 +82,156 @@ function Cyclopedia:init()
 					type		nil is physical damage, the others could be green, red, blue, white or black
 					projectile	the projectile animation used for the attack, either spear, arrow or magic
 					missSound   what the program reports for close misses
-
-					
 				--]]
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
 			[1] = {name = "hero", 
 					names = {"Ninja One", "Ninja Two", "Ninja Three", "Ninja Four", "TODO DELETE ME",},
-					sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01",},
+					sprites = {"Ninja_01", "Ninja_02", "Ninja_03", "Assassin_01",}, dx = -41, dy = -0, scale = 1,
 					xp = 0, hp = 600, 
 					defense = {AC = 16, Fort = 16, Refl = 14, Will = 12},
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "shortsword", weapon2 = "shortbow", 
 					tactics = "player", see = 0, alone = 0
 					},
-			[2] = {name = "peasant", sprite = "Samurai_01",  
+			[2] = {name = "peasant", sprite = "Samurai_01", dx = 0, dy = 5, scale = 1,
 					xp = 1, hp = 4, 
 					defense = {AC = 10, Fort = 12, Refl = 14, Will = 11}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "stick", weapon2 = nil, 
 					tactics = "minion", see = 4, alone = 5
 					},
-			[3] = {name = "soldier", sprite = "Samurai_03",  
+			[3] = {name = "soldier", sprite = "Samurai_03", dx = 0, dy = 5, scale = 1,
 					xp = 3, hp = 15,   
 					defense = {AC = 12, Fort = 13, Refl = 15, Will = 12}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "shortsword", weapon2 = "javelin", 
 					tactics = "soldier", see = 6, alone = 10
 					},
-			[4] = {name = "samurai", sprite = "Samurai_02",  
+			[4] = {name = "samurai", sprite = "Samurai_02", dx = 0, dy = 5, scale = 1,
 					xp = 4, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "katana", weapon2 = "spear", 
 					tactics = "soldier", see = 3, alone = 100
 					},
-			[5] = {name = "bear", sprite = "Animal_01",  
+			[5] = {name = "bear", sprite = "Animal_01", dx = -24, dy = 10, scale = 1.3,
 					xp = 4, hp = 50, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "claw", weapon2 = "fang", 
 					tactics = "soldier", see = 6, alone = 4
 					},
-			[6] = {name = "eagle", sprite = "Animal_02", 
+			[6] = {name = "eagle", sprite = "Animal_02", dx = -24, dy = 30, scale = 1,
 					xp = 2, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "claw", weapon2 = "fang", 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[7] = {name = "wolf", sprite = "Animal_03",  
+			[7] = {name = "wolf", sprite = "Animal_03", dx = -24, dy = 1, scale = 1,
 					xp = 2, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "claw", weapon2 = "fang", 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[8] = {name = "barbarian", sprite = "Barbarian_01",  
+			[8] = {name = "barbarian", sprite = "Barbarian_01", dx = -8, dy = -7, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "sword", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[9] = {name = "barbarian", sprite = "Barbarian_02",  
+			[9] = {name = "barbarian", sprite = "Barbarian_02", dx = -8, dy = 7, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "sword", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[10] = {name = "barbarian", sprite = "Barbarian_03",  
+			[10] = {name = "barbarian", sprite = "Barbarian_03", dx = -8, dy = -7, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "sword", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[11] = {name = "barbarian", sprite = "Gladiator_01",  
+			[11] = {name = "barbarian", sprite = "Gladiator_01", dx = -1, dy = 6, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "sword", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[12] = {name = "barbarian", sprite = "Gladiator_02",  
+			[12] = {name = "barbarian", sprite = "Gladiator_02", dx = -1, dy = 6, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "axe", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[13] = {name = "barbarian", sprite = "Gladiator_03",  
+			[13] = {name = "barbarian", sprite = "Gladiator_03", dx = -1, dy = 7, scale = 1,
 					xp = 2, hp = 15, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "flail", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[14] = {name = "samurai", sprite = "Samurai_02_blue",  
+			[14] = {name = "samurai", sprite = "Samurai_02_blue", dx = 0, dy = 5, scale = 1,
 					xp = 4, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "katana", weapon2 = "spear", 
 					tactics = "soldier", see = 3, alone = 100
 					},
-			[15] = {name = "samurai", sprite = "Samurai_02_green",  
+			[15] = {name = "samurai", sprite = "Samurai_02_green", dx = 0, dy = 5, scale = 1,
 					xp = 4, hp = 25, 
 					defense = {AC = 14, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 0, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "katana", weapon2 = "spear", 
 					tactics = "soldier", see = 3, alone = 100
 					},
-			[16] = {name = "troll", sprite = "Troll_01",  
+			[16] = {name = "troll", sprite = "Troll_01", dx = 3, dy = 10, scale = 1.8,
 					xp = 4, hp = 50, 
 					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "club", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[17] = {name = "troll", sprite = "Troll_02",  
+			[17] = {name = "troll", sprite = "Troll_02", dx = 3, dy = 10, scale = 1.8,
 					xp = 4, hp = 50, 
 					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "club", weapon2 = nil, 
 					tactics = "minion", see = 6, alone = 4
 					},
-			[18] = {name = "troll", sprite = "Troll_03",  
+			[18] = {name = "troll", sprite = "Troll_03", dx = 3, dy = 10, scale = 1.8,
 					xp = 4, hp = 50, 
 					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
 					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
 					weapon1 = "club", weapon2 = nil, 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[19] = {name = "archer", sprite = "Archer_01", dx = -50, dy = 5, scale = 1,
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "knife", weapon2 = "shortbow", 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[20] = {name = "archer", sprite = "Archer_02", dx = -50, dy = 5, scale = 1,
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "knife", weapon2 = "shortbow", 
+					tactics = "minion", see = 6, alone = 4
+					},
+			[21] = {name = "archer", sprite = "Archer_03", dx = -50, dy = 5, scale = 1,
+					xp = 4, hp = 50, 
+					defense = {AC = 16, Fort = 17, Refl = 15, Will = 13}, prof = 0,
+					resist = {Physical = 1, Green = 0, Red = 0, Blue = 0, White = 0, Black = 0}, 
+					weapon1 = "knife", weapon2 = "shortbow", 
 					tactics = "minion", see = 6, alone = 4
 					},
 		},
@@ -281,8 +300,6 @@ function Cyclopedia:loadSprites()
 	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
 	
-	-- TODO FIX ANIMATION REMOVE
-	--self.heroMc = CharacterAnimation.new("Ninja_02")
 
 	-- TODO FIX ANIMATION remove deprecatedTexturNames
 	
