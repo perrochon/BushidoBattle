@@ -8,10 +8,10 @@ SceneSprites = Core.class(Sprite)
 function SceneSprites:init()
 
 	--first, start out with a dark screen
-	application:setBackgroundColor(COLOR_LTBLACK)
+	application:setBackgroundColor(COLOR_BLACK)
 
-	local LEFT = 0 -- TODO FIX why does MINX not work here? It starts outside the screen...
-	local TOP = 0
+	local LEFT = MINX
+	local TOP = MINY
 	local WIDTH = APP_WIDTH - 2 * MINX
 	local HEIGHT = APP_HEIGHT - 2 * MINY
 	local D = 2
@@ -19,22 +19,22 @@ function SceneSprites:init()
 	
 	--DEBUG(MINX, MINY, LEFT, TOP, WIDTH, HEIGHT, SPOTS)
 
-	local sprites = Pixel.new(COLOR_LTBLACK, 1, WIDTH, HEIGHT)
+	local sprites = Pixel.new(COLOR_GREY, 1, WIDTH, HEIGHT)
 	sprites:setPosition(LEFT, TOP)
 
 	-- Draw Grid
-	for x = LEFT, WIDTH, TILE_WIDTH + D do
-		local line = Pixel.new(COLOR_BLUE, 0.2, D, HEIGHT)
+	for x = 0, WIDTH, TILE_WIDTH + D do
+		local line = Pixel.new(COLOR_BLACK, 0.2, D, HEIGHT)
 		line:setPosition(x, TOP)
 		sprites:addChild(line)
 	end
-	for y = TOP, HEIGHT, TILE_HEIGHT + D do
-		local line = Pixel.new(COLOR_RED, 0.2, WIDTH, D)
+	for y = 0, HEIGHT, TILE_HEIGHT + D do
+		local line = Pixel.new(COLOR_BLACK, 0.2, WIDTH, D)
 		line:setPosition(LEFT, y)
 		sprites:addChild(line)
 	end
 
-	local x = LEFT + D
+	local x = D
 	local y = TOP + D
 
 	--[[
@@ -73,42 +73,40 @@ function SceneSprites:init()
 		x = x + TILE_WIDTH + D
 	end
 	--]]
-	
+
+	y = y - TILE_HEIGHT - D
 
 	local textures = CharacterAnimation.spriteData
 	local clips = {}
 	-- regular scale
 	for i = 2, #manual.lists["monsters"] do
-		if (i-1) % SPOTS == 0 then
+		if (i-2) % SPOTS == 0 then
 			y = y + TILE_HEIGHT + D
-			x = LEFT + D
+			x = D
 		end
 		local mc = CharacterAnimation.new(manual:getEntry("monsters", i))
 		if not mc then break end
 		mc:setPosition(x + 50, y + 50)
-		mc:setHealth(i % 10 + 1)
+		mc:setHealth((i-2) % 11)
 		sprites:addChild(mc)
 		table.insert(clips, mc)
 		x = x + 1 * (TILE_WIDTH + D)
 	end
-
-	y = y + 2 * TILE_HEIGHT + D
-	x = LEFT + D
 
 	-- scale
 	---[[
 	local SCALE = 2
 	y = y - (TILE_HEIGHT + D)
 	for i = 2, #manual.lists["monsters"] do
-		if SCALE * (i-1) % SPOTS == 0 then
+		if SCALE * (i-2) % SPOTS == 0 then
 			y = y + SCALE * (TILE_HEIGHT + D)
-			x = LEFT + D
+			x = D
 		end
 		local mc = CharacterAnimation.new(manual:getEntry("monsters", i))
 		if not mc then break end
 		mc:setPosition(x + 100, y + 100)
 		mc:setScale(SCALE * mc:getScale())
-		mc:setHealth(i % 10 + 1)
+		mc:setHealth((i-2) % 11)
 		sprites:addChild(mc)
 		table.insert(clips, mc)
 		x = x + SCALE * (TILE_WIDTH + D)
@@ -137,7 +135,7 @@ function SceneSprites:init()
 	end)
 	
 	local commands = TextField.new(FONT_MEDIUM, "I W R J A 1 2 H D F Q")
-	commands:setPosition(1200, 70)
+	commands:setPosition(BUTTON_MARGIN, HEIGHT - BUTTON_MARGIN)
 	sprites:addChild(commands)
 	
 	self:addChild(sprites)
