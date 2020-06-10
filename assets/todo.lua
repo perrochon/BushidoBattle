@@ -23,6 +23,7 @@ TODO
 	- TODO (w/o FIX) in the code base
 	- Graphics
 		- Trolls, bears are small - per monster scale factor, and use that everywhere...
+		- Fix naming of file names for attack. Barbarians are wrong, for example
 		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
 		- Load monster graphics into cyclopedia
