@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="22" height="20" tilewidth="100" tileheight="100" infinite="0" nextlayerid="5" nextobjectid="102">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="22" height="20" tilewidth="100" tileheight="100" infinite="0" nextlayerid="5" nextobjectid="112">
  <editorsettings>
   <export target="../assets/maps/map00.lua" format="lua"/>
  </editorsettings>
@@ -78,14 +78,14 @@
   <object id="68" template="SoldierSentry.tx" x="1408.69" y="1638.49"/>
   <object id="69" template="SoldierSentry.tx" x="1717.98" y="1626.93"/>
   <object id="70" template="SoldierSentry.tx" x="1124.42" y="1618.69"/>
-  <object id="71" template="Hero.tx" x="1020.35" y="930.748"/>
+  <object id="71" template="Hero.tx" x="1057.93" y="939.42"/>
   <object id="79" template="SoldierSentry.tx" x="2024.81" y="333.642"/>
   <object id="80" template="SoldierSentry.tx" x="2037.39" y="633.825"/>
   <object id="81" template="SoldierSentry.tx" x="2034.5" y="1339.11"/>
   <object id="82" template="SoldierSentry.tx" x="2022.93" y="1639.72"/>
-  <object id="83" template="Bear.tx" x="141.636" y="1849.93"/>
-  <object id="84" template="Eagle.tx" x="427.797" y="1844.15"/>
-  <object id="85" template="Wolf.tx" x="734.192" y="1826.81"/>
+  <object id="83" template="Bear.tx" x="1367.22" y="1170.66"/>
+  <object id="84" template="Eagle.tx" x="1670.72" y="1176.44"/>
+  <object id="85" template="Wolf.tx" x="1974.23" y="1179.33"/>
   <object id="86" template="Troll1.tx" x="1338.31" y="1821.03"/>
   <object id="87" template="Troll2.tx" x="1641.82" y="1826.81"/>
   <object id="88" template="Troll3.tx" x="1925.09" y="1826.81"/>
@@ -100,5 +100,15 @@
   <object id="99" template="Barbarian4.tx" x="1355.65" y="118.511"/>
   <object id="100" template="Barbarian5.tx" x="1633.14" y="109.84"/>
   <object id="101" template="Barbarian6.tx" x="1945.32" y="127.183"/>
+  <object id="102" template="Soldier.tx" x="1066.6" y="656.148"/>
+  <object id="103" template="Assassin1.tx" x="130.073" y="1144.65"/>
+  <object id="104" template="Assassin2.tx" x="450.921" y="1133.08"/>
+  <object id="105" template="Assassin3.tx" x="728.411" y="1144.65"/>
+  <object id="106" template="Ninja1.tx" x="161.869" y="1780.56"/>
+  <object id="107" template="Ninja2.tx" type="26" x="465.374" y="1769"/>
+  <object id="108" template="Ninja3.tx" x="783.331" y="1803.69"/>
+  <object id="109" template="Archer1.tx" x="182.103" y="780.441"/>
+  <object id="110" template="Archer2.tx" x="485.608" y="786.222"/>
+  <object id="111" template="Archer3.tx" x="783.331" y="783.331"/>
  </objectgroup>
 </map>

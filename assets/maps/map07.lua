@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 4,
-  nextobjectid = 34,
+  nextobjectid = 41,
   properties = {
     ["Title"] = "Forest Maze"
   },
@@ -33,7 +33,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 26,
+      tilecount = 27,
       tiles = {
         {
           id = 11,
@@ -312,6 +312,16 @@ return {
             ["description"] = "well"
           },
           image = "../../tiled/tiles/Well_With_Base_2x2.png",
+          width = 100,
+          height = 100
+        },
+        {
+          id = 81,
+          properties = {
+            ["blocked"] = "false",
+            ["description"] = "dungeon floor"
+          },
+          image = "../../tiled/tiles/Floor_Dungeon_2x2.png",
           width = 100,
           height = 100
         }
@@ -596,42 +606,12 @@ return {
           }
         },
         {
-          id = 2,
-          name = "Wolf",
-          type = "5",
-          shape = "rectangle",
-          x = 2828.87,
-          y = 1227.24,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place Many. Peasants are weak and melee only."
-          }
-        },
-        {
           id = 3,
           name = "Wolf",
           type = "5",
           shape = "rectangle",
           x = 2411.94,
           y = 637.833,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place Many. Peasants are weak and melee only."
-          }
-        },
-        {
-          id = 4,
-          name = "Wolf",
-          type = "5",
-          shape = "rectangle",
-          x = 3222.82,
-          y = 1845.78,
           width = 50,
           height = 50,
           rotation = 0,
@@ -761,27 +741,12 @@ return {
           }
         },
         {
-          id = 27,
-          name = "Wolf",
-          type = "5",
-          shape = "rectangle",
-          x = 848,
-          y = 10076,
-          width = 50,
-          height = 50,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["Description"] = "Place Many. Peasants are weak and melee only."
-          }
-        },
-        {
           id = 28,
           name = "SoldierSentry",
           type = "103",
           shape = "rectangle",
-          x = 2924,
-          y = 9024,
+          x = 2827.03,
+          y = 9030.06,
           width = 50,
           height = 50,
           rotation = 0,
@@ -810,8 +775,8 @@ return {
           name = "Soldier",
           type = "3",
           shape = "rectangle",
-          x = 3144,
-          y = 6664,
+          x = 3116.73,
+          y = 6633.7,
           width = 50,
           height = 50,
           rotation = 0,
@@ -863,6 +828,96 @@ return {
           visible = true,
           properties = {
             ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 34,
+          name = "Troll 3",
+          type = "18",
+          shape = "rectangle",
+          x = 3030.15,
+          y = 233.003,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 36,
+          name = "Wolf",
+          type = "5",
+          shape = "rectangle",
+          x = 2239.39,
+          y = 1936.36,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 37,
+          name = "Wolf",
+          type = "5",
+          shape = "rectangle",
+          x = 1824.24,
+          y = 2936.36,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Many. Peasants are weak and melee only."
+          }
+        },
+        {
+          id = 38,
+          name = "Troll 2",
+          type = "17",
+          shape = "rectangle",
+          x = 2115.15,
+          y = 4336.36,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 39,
+          name = "Troll 1",
+          type = "16",
+          shape = "rectangle",
+          x = 321.212,
+          y = 2345.45,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 40,
+          name = "Bear",
+          type = "6",
+          shape = "rectangle",
+          x = 827.273,
+          y = 10024.2,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place Few."
           }
         }
       }

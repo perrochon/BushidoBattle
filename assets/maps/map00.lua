@@ -9,7 +9,7 @@ return {
   tilewidth = 100,
   tileheight = 100,
   nextlayerid = 5,
-  nextobjectid = 102,
+  nextobjectid = 112,
   properties = {
     ["Title"] = "Menagerie"
   },
@@ -749,8 +749,8 @@ return {
           name = "Hero",
           type = "1",
           shape = "rectangle",
-          x = 1020.35,
-          y = 930.748,
+          x = 1057.93,
+          y = 939.42,
           width = 50,
           height = 50,
           rotation = 0,
@@ -824,8 +824,8 @@ return {
           name = "Bear",
           type = "6",
           shape = "rectangle",
-          x = 141.636,
-          y = 1849.93,
+          x = 1367.22,
+          y = 1170.66,
           width = 50,
           height = 50,
           rotation = 0,
@@ -839,8 +839,8 @@ return {
           name = "Eagle",
           type = "7",
           shape = "rectangle",
-          x = 427.797,
-          y = 1844.15,
+          x = 1670.72,
+          y = 1176.44,
           width = 50,
           height = 50,
           rotation = 0,
@@ -854,8 +854,8 @@ return {
           name = "Wolf",
           type = "5",
           shape = "rectangle",
-          x = 734.192,
-          y = 1826.81,
+          x = 1974.23,
+          y = 1179.33,
           width = 50,
           height = 50,
           rotation = 0,
@@ -1066,6 +1066,156 @@ return {
           shape = "rectangle",
           x = 1945.32,
           y = 127.183,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 102,
+          name = "Soldier",
+          type = "3",
+          shape = "rectangle",
+          x = 1066.6,
+          y = 656.148,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Soldiers are range and melee."
+          }
+        },
+        {
+          id = 103,
+          name = "Assassin 1",
+          type = "21",
+          shape = "rectangle",
+          x = 130.073,
+          y = 1144.65,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 104,
+          name = "Assassin 2",
+          type = "22",
+          shape = "rectangle",
+          x = 450.921,
+          y = 1133.08,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 105,
+          name = "Assassin 3",
+          type = "23",
+          shape = "rectangle",
+          x = 728.411,
+          y = 1144.65,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 106,
+          name = "Ninja 1",
+          type = "25",
+          shape = "rectangle",
+          x = 161.869,
+          y = 1780.56,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 107,
+          name = "Ninja 2",
+          type = "26",
+          shape = "rectangle",
+          x = 465.374,
+          y = 1769,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 108,
+          name = "Ninja 3",
+          type = "27",
+          shape = "rectangle",
+          x = 783.331,
+          y = 1803.69,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 109,
+          name = "Archer 1",
+          type = "19",
+          shape = "rectangle",
+          x = 182.103,
+          y = 780.441,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 110,
+          name = "Archer 2",
+          type = "20",
+          shape = "rectangle",
+          x = 485.608,
+          y = 786.222,
+          width = 50,
+          height = 50,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["Description"] = "Place many. Barbarians are melee only."
+          }
+        },
+        {
+          id = 111,
+          name = "Archer 3",
+          type = "21",
+          shape = "rectangle",
+          x = 783.331,
+          y = 783.331,
           width = 50,
           height = 50,
           rotation = 0,

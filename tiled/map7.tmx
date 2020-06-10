@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="35" height="108" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="34">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="35" height="108" tilewidth="100" tileheight="100" infinite="0" nextlayerid="4" nextobjectid="41">
  <editorsettings>
   <export target="../assets/maps/map07.lua" format="lua"/>
  </editorsettings>
@@ -233,9 +233,7 @@
  </layer>
  <objectgroup color="#ff0000" id="4" name="Monsters">
   <object id="1" template="Samurai.tx" x="163.717" y="195.707"/>
-  <object id="2" template="Wolf.tx" x="2828.87" y="1227.24"/>
   <object id="3" template="Wolf.tx" x="2411.94" y="637.833"/>
-  <object id="4" template="Wolf.tx" x="3222.82" y="1845.78"/>
   <object id="8" template="SoldierSentry.tx" x="1619.27" y="3216.24"/>
   <object id="9" template="SoldierSentry.tx" x="221.333" y="4121.33"/>
   <object id="10" template="SoldierSentry.tx" x="623.273" y="7639.39"/>
@@ -244,12 +242,17 @@
   <object id="24" template="Wolf.tx" x="124" y="6240"/>
   <object id="25" template="Wolf.tx" x="1428" y="1300"/>
   <object id="26" template="SoldierSentry.tx" x="1532" y="9140"/>
-  <object id="27" template="Wolf.tx" x="848" y="10076"/>
-  <object id="28" template="SoldierSentry.tx" x="2924" y="9024"/>
+  <object id="28" template="SoldierSentry.tx" x="2827.03" y="9030.06"/>
   <object id="29" template="SoldierSentry.tx" x="3128" y="8740"/>
-  <object id="30" template="Soldier.tx" x="3144" y="6664"/>
+  <object id="30" template="Soldier.tx" x="3116.73" y="6633.7"/>
   <object id="31" template="SoldierSentry.tx" x="2932" y="5332"/>
   <object id="32" template="Hero.tx" x="1636" y="5636"/>
   <object id="33" template="Wolf.tx" x="1128" y="3712"/>
+  <object id="34" template="Troll3.tx" x="3030.15" y="233.003"/>
+  <object id="36" template="Wolf.tx" x="2239.39" y="1936.36"/>
+  <object id="37" template="Wolf.tx" x="1824.24" y="2936.36"/>
+  <object id="38" template="Troll2.tx" x="2115.15" y="4336.36"/>
+  <object id="39" template="Troll1.tx" x="321.212" y="2345.45"/>
+  <object id="40" template="Bear.tx" x="827.273" y="10024.2"/>
  </objectgroup>
 </map>
