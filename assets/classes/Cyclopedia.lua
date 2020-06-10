@@ -4,6 +4,33 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 
+--[[ TODO FIX move descriptions into structure below
+	{name = "Animal_02", dx = -24, dy = 30}, -- Eagle "run"/"jump" look more like flying. It dies high up
+	{name = "Animal_03", dx = -24, dy = 1}, -- Wolf
+	{name = "Archer_01", dx = -50, dy = 5}, -- Masked Archer
+	{name = "Archer_02", dx = -50, dy = 5}, -- Armored Crossbow Man
+	{name = "Archer_03", dx = -50, dy = 4}, -- Robin Hood Archer
+	{name = "Assassin_01", dx = 0, dy = 1}, -- Grey Assassin (two glove blades)
+	{name = "Assassin_02", dx = 0, dy = 0}, -- White Assassin (knife)
+	{name = "Assassin_03", dx = 0, dy = 1}, -- Dark Assassin (crossbow glove)
+	{name = "Barbarian_01", dx = -8, dy = 7}, -- Ponytail Barbarian
+	{name = "Barbarian_02", dx = -8, dy = 7}, -- Viking Barbarian
+	{name = "Barbarian_03", dx = -8, dy = 7}, -- Blonde Barbarian double sword
+	{name = "Gladiator_01", dx = -1, dy = 6}, -- Mohawk Gladiator with sword
+	{name = "Gladiator_02", dx = -1, dy = 6}, -- Mohawk Gladiator with sword
+	{name = "Gladiator_03", dx = -1, dy = 7}, -- Gladiator with flail (weapon that didn't exist...)
+	{name = "Ninja_01", dx = -41, dy = 0}, -- Black Ninja Sword
+	{name = "Ninja_02", dx = -41, dy = 0}, -- Blue Ninja two blades
+	{name = "Ninja_03", dx = -41, dy = 0}, -- White Ninja one blade
+	{name = "Samurai_01", dx = 0, dy = 5}, -- Peasant with Tachi (long sword)
+	{name = "Samurai_02", dx = 0, dy = 5}, -- Samurai with Daisho (2 matching swords, Katana and Wakisashi)
+	{name = "Samurai_02_green", dx = 0, dy = 5}, 
+	{name = "Samurai_02_blue", dx = 0, dy = 5}, 
+	{name = "Samurai_03", dx = 0, dy = 5}, -- Samurai with Odachi (long sword)
+	{name = "Troll_01", dx = 3, dy = 0}, -- Green Troll with Club
+	{name = "Troll_02", dx = 3, dy = 0}, -- Grey Troll with Hammer
+	{name = "Troll_03", dx = 3, dy = 0}, -- Brown Troll with Club
+--]]
 -- The layer lookup "table"
 Cyclopedia = Core.class()
 

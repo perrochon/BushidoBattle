@@ -13,7 +13,7 @@ function CharacterAnimation:init(character)
 	self.name = filename -- save this for debugging
 	self.scale = character.scale
 	
-	DEBUG(character.sprite, character.dx, character.dy, character.scale)
+	--DEBUG(character.sprite, character.dx, character.dy, character.scale)
 
 	local texturePack = "images/"..filename..".png"
 	local textureIndex = "images/"..filename..".txt"
