@@ -14,8 +14,13 @@ function SceneDeath:init(hero)
 	application:setBackgroundColor(COLOR_BLACK)
 	
 	--play the music of the scene
-	local sounds = Sounds.new("death")
-	self.music = sounds:play("music-death")
+	local sounds = Sounds.new(SCENE_DEATH)
+	if music and music.name ~= SCENE_DEATH then 
+		music:stop() 
+		self.music = sounds:play("music-death",1)
+		music.name = SCENE_DEATH
+	end 
+
 	
 	--then fade in the "You died" words
 	self.words = TextField.new(FONT_XL, "You died!")

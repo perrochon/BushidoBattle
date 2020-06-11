@@ -21,8 +21,13 @@ function SceneVictory:init()
 	application:setBackgroundColor(COLOR_WHITE)
 	
 	--play the music of the scene
-	local sounds = Sounds.new("victory")
-	self.music = sounds:play("music-victory")
+	local sounds = Sounds.new(SCENE_VICTORY)
+	if music and music.name ~= SCENE_VICTORY then 
+		music:stop() 
+		self.music = sounds:play("music-victory",1)
+		music.name = SCENE_VICTORY
+	end 
+	
 	
 	--then add "You did it"
 	self.words = TextField.new(FONT_XL, "You did it!")

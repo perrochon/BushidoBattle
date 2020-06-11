@@ -4,6 +4,9 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 VERSION = "0.8.0"
 
+MUSIC @ true
+EFFECTS @ true
+
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")
 if SOCKETS then

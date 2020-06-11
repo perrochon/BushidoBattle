@@ -2,7 +2,7 @@ Sounds = Core.class(EventDispatcher)
 
 function Sounds:init(scene)
 	self.sounds = {}
-	if scene == "game" then
+	if scene == SCENE_PLAY then
 		self:add("melee-hit", "sounds/melee_hit.wav")
 		self:add("melee-hit", "sounds/melee_hit2.wav")
 		self:add("melee-miss", "sounds/melee_miss.mp3")
@@ -11,14 +11,16 @@ function Sounds:init(scene)
 		self:add("monster-steps", "sounds/footsteps-02.wav")
 		self:add("monster-steps", "sounds/footsteps-one.wav")
 		self:add("monster-steps", "sounds/footsteps-fast.wav")
-	elseif scene == "victory" then
+	elseif scene == SCENE_VICTORY then
 		self:add("music-victory", "sounds/music-victory.mp3")
-	elseif scene == "death" then
+	elseif scene == SCENE_DEATH then
 		self:add("music-death", "sounds/music-death.mp3")
-	elseif scene == "title" then
+	elseif scene == SCENE_START then
 		self:add("music-title", "sounds/music-title.mp3")
-	elseif scene == "lobby" then
+	elseif scene == SCENE_LOBBY then
 		self:add("music-lobby", "sounds/Ninja-Game-Intro.mp3")
+	else
+		DEUBG("No scene called", scene)
 	end
 end
 
@@ -33,12 +35,16 @@ end
 function Sounds:play(name, volume)
 --plays a named sound at a particular volume
 	if self.sounds[name] then
-		--play 1 of however many sounds there are for that named sound
-		sound = self.sounds[name][math.random(1, #self.sounds[name])]:play()
+		local repeats = 1
+		if string.sub(name, 1, 5) == "music" then 
+			repeats = math.huge
+		end
+		--play repeats of however many sounds there are for that named sound
+		sound = self.sounds[name][math.random(1, #self.sounds[name])]:play(0, repeats)
 		if volume then
 			sound:setVolume(volume)
 		end
-		if string.sub(name, 1, 5) == "music" then 
+		if string.sub(name, 1, 5) == "music" then
 			return sound
 		end
 	end

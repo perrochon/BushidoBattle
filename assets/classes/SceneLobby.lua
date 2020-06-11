@@ -7,9 +7,14 @@ SceneLobby = Core.class(Sprite)
 function SceneLobby:init()
 
 	--play the music of the scene
-	-- local sounds = Sounds.new("lobby")
-	-- self.music = sounds:play("music-lobby")
-
+	local sounds = Sounds.new(SCENE_LOBBY)
+	DEBUG (music.name, SCENE_LOBBY, music.name ~= SCENE_LOBBY)
+	if music and music.name ~= SCENE_LOBBY then 
+		music:stop() 
+		music = sounds:play("music-lobby",0.5)
+		music.name = SCENE_LOBBY
+	end 
+	
 	application:setBackgroundColor(COLOR_BLACK)
 
 	local basicGui = BasicGui.new("Bushido Battle", 

@@ -2,7 +2,7 @@
 
 TODO
 	- Bugs
-		- Fix sounds, and make it easy to turn off (even in code)
+		- Fix sounds, and make it easy to turn off (even in code). Move music switch to Sounds
 		- Change Hero Name in HTML not working anymore
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)

@@ -51,7 +51,7 @@ end
 
 function Character:loadSprite()
 	self.sprite = self.info.sprite
-	DEBUG(self.entry, self.id, self.name, self.sprite, self.dx, self.dy, self.scale)
+	--DEBUG(self.entry, self.id, self.name, self.sprite, self.dx, self.dy, self.scale)
 	self.mc = CharacterAnimation.new(self)
 	self.mc.mc:gotoAndPlay(1)
 	self.mc:setPosition((self.c - 1) * TILE_WIDTH, (self.r - 1) * TILE_HEIGHT)

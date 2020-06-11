@@ -21,6 +21,7 @@ Hero.resetAllHeroes()
 currentHero = 1 -- currently playing hero
 localHero = currentHero -- The map centers around her
 heroes[currentHero]:setActive(true)
+heroes[2]:setActive(true)
 
 --define the scenes
 sceneManager = SceneManager.new({
@@ -51,4 +52,4 @@ drawVersion()
 
 --go to start scene 
 print("\n**********************\n Bushido Battle "..VERSION.."\n**********************\n\n")
-sceneManager:changeScene(SCENE_LOBBY, TRANSITION_TIME, TRANSITION)
+sceneManager:changeScene(SCENE_START, TRANSITION_TIME, TRANSITION)

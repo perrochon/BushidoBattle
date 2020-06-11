@@ -40,8 +40,9 @@ ScenePlay = Core.class(Sprite)
 function ScenePlay:init()
 
 	application:setBackgroundColor(COLOR_LTBLACK)
+	
+	self.sounds = Sounds.new(SCENE_PLAY)
 
-	self.sounds = Sounds.new("game")
 
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
