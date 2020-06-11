@@ -24,13 +24,18 @@ function Hero:init(entry, id)
 	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
 	-- Additional Player fields
-	self.active = false 
+	self:setActive(false) 
 	self.kills = 0
 	self.level = 1
 	self.light = manual:getEntry("light-source", "torch")
 	
 	self.fileName = "|D|hero"..id
 
+end
+
+function Hero:setActive(active)
+	self.active = active
+	self.mc:setActive(active)
 end
 
 function Hero:loadSprite()

@@ -12,6 +12,10 @@ function CharacterAnimation:init(character)
 	self.dead = false
 	self.name = filename -- save this for debugging
 	self.scale = character.scale
+	self.active = nil
+
+	
+	
 	
 	--DEBUG(character.sprite, character.dx, character.dy, character.scale)
 
@@ -73,7 +77,27 @@ function CharacterAnimation:init(character)
 	self.mc:setScale(character.scale)
 	self:addChild(self.mc)
 	
+	
 end
+
+function CharacterAnimation:setActive(active)
+
+	if active then
+		if not self.activeMarker then
+			self.activeMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
+			self.activeMarker:setAlpha(0.5)
+			self.activeMarker:setAnchorPoint(0.5,0.5)
+			self:addChildAt(self.activeMarker,1)	
+		end
+		self.activeMarker:setVisible(true)
+	else
+		if self.activeMarker then
+			self.activeMarker:setVisible(false)
+		end
+	end
+
+end
+
 
 function CharacterAnimation:setHealth(hpBar)
 

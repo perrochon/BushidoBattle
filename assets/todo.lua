@@ -2,9 +2,6 @@
 
 TODO
 	- Bugs
-		- Healt bar scaling... Need to scale the mc only, not the whole sprite
-		- Bring heroes back into SceneSprites
-		- Add Assassin to monsters, and maybe Ninja's too
 		- Fix sounds, and make it easy to turn off (even in code)
 		- Change Hero Name in HTML not working anymore
 		- Barracks level very slow due to lots of berserkers pathfinding
