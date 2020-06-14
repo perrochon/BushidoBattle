@@ -30,6 +30,7 @@ TODO
 		- Make full res animations of heroes for hero selection screen
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
+		- Loot!
 		- Render shortest path, if walk, and line if can shoot
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
@@ -39,7 +40,11 @@ TODO
 	- Fog of war
 		- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
 		- Block line of sight at walls?
+		- Better way of doing fog of war, that works with smooth animation, and multiple players
 	- (1.0) Multiple Heroes / Remote
+		- Better placement of multiple heroes. For now, they all go on top of each other...
+		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
+		-- Problems is we haven't loaded maps when we place heroes, and WorldMap.new wants the heroes array
 		- Mark heroes that still have a turn
 		- Scale difficulty. More monsters? Less HP?
 		- Monster AI with multiple heroes
@@ -55,6 +60,7 @@ TODO
 		- Scores, per level? XP?
 	- Refactor
 		- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
+		-- Look in directory and see how many maps we have instead of hard coding number
 		- (medium) TODO FIX in the code base
 		- (medium) factor out remaining data and constants from init.lua to separate files
 		- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010

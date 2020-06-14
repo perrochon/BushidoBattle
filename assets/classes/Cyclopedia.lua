@@ -372,7 +372,7 @@ function Cyclopedia:loadSprites()
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
 	
 
-	-- TODO FIX ANIMATION remove deprecatedTexturNames
+	-- TODO FIX ANIMATION remove deprecatedTextureNames
 	
 	for key, value in ipairs(self.lists["monsters"]) do
 
@@ -445,9 +445,4 @@ function Cyclopedia:getSprite(layerNumber, which)
 	end
 
 	return Bitmap.new(region)
-end
-
--- TODO FIX ANIMATION REMOVE
-function Cyclopedia:getHeroMc()
-	return self.heroMc
 end

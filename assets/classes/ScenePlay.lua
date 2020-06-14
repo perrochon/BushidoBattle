@@ -81,10 +81,7 @@ function ScenePlay:init()
 
 	for i = 1,4 do
 		heroes[i].mc:faceEast()
-		-- TODO FIX how to place multiple heroes? For now, they all go on top of each other...
-		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
-		-- Problems is we haven't loaded maps yet, and WorldMap.new wants the heroes array
-		heroes[i]:setPosition(c,r)
+		heroes[i]:setPosition(c,r) -- TODO FIX This piles heroes on top of each other.
 		if heroes[i].active then
 			heroes[i].turn = true
 		end
@@ -769,12 +766,6 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 		defender.mc:die(defender.entry > 1) -- Monsters fade out
 	end
 
-	-- TODO FIX ANIMATION won't be needed much longer
-	--[[
-	if defender.hp > 0 then
-		self.world:changeTile(LAYER_HP, defender.HPbar, defender.c, defender.r)
-	end
-	--]]
 end
 
 function ScenePlay:attackMonster(c, r)

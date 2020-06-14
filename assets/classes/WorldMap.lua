@@ -57,8 +57,6 @@ function WorldMap:init(level, monsters)
 	--self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
-	-- TODO FIX ANIMATION LAYER_LIGHT needs a different solution. Maybe fade out old, fade in new?
-	-- TODO FIX below old solution is broken
 	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
@@ -270,7 +268,6 @@ function WorldMap:moveHero(hero, dc, dr)
 
 	--DEBUG("Moving Hero", hero.name, hero.c, hero.r, dc, dr, "to", hero.c+dc, hero.r+dr)
 
-	-- TODO FIX HEROFIX ANIMATION turn it back on
 	if hero.id == localHero then 
 		--move the torchlight
 		self:adjustLight(hero, dc, dr)
@@ -290,15 +287,12 @@ function WorldMap:adjustLight(hero, dc, dr)
 		Uses the hero's old position and the hero.light.radius to create darkness there, and the new position to light up
 	--]]	
 	
-	-- TODO FIX Why does this work on previous location
-	-- TODO FIX wrap around lights...
-	
 	ASSERT_EQUAL(hero.id, localHero, "Trying to adjust light for the wrong hero")
 		
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0
 
-	--[[ -- TODO This doesn't look good with smooth scrolling, need different solution or remove
+	--[[ -- TODO FIX This doesn't look good with smooth scrolling, need different solution or remove
 	--set all previously lit tiles to 3
 	for r = hero.r - hero.light.radius, hero.r + hero.light.radius do
 		for c = hero.c - hero.light.radius, hero.c + hero.light.radius do

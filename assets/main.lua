@@ -12,7 +12,7 @@ manual = Cyclopedia.new()
 
 currentMap = 1 -- index pointing to the maps we have saved
 currentMapFileName = string.format("%s%02d", MAP_FILE_NAME, currentMap)
-numberOfMaps = 9 -- TODO FIX look in directory and see how many we have...
+numberOfMaps = 9 
 
 heroes = {} -- We support 4 heroes that will go in this array
 
