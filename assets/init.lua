@@ -122,10 +122,6 @@ else
 	--DEBUG("FBInstant not loaded")
 end
 
-MONSTERS_2 @ 2 -- TODO FIX are these macros used anywhere?
-MONSTERS_3 @ 1
-MONSTERS_4 @ 1
-
 -- Scene Manager Settings
 TRANSITION_TIME @ 0.5
 TRANSITION @ \SceneManager.fade\

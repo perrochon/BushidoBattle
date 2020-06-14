@@ -88,26 +88,6 @@ function Monsters:init(mapData)
 			id += 1
 		end
 	end
-	
-	--[[
-
-	--place #2 monsters 
-	for i = 1, MONSTERS_2 + level*5 do
-		table.insert(self.list, Monster.new(2,id))
-		id += 1
-	end
-	--place #3 monsters 
-	for i = 1, MONSTERS_3 + level do
-		table.insert(self.list, Monster.new(3,id))
-		id += 1
-	end
-	--place #4 monster
-	for i = 1, MONSTERS_4 do
-		table.insert(self.list, Monster.new(4,id))
-		id += 1
-	end
-	
-	--]]
 
 end
 
