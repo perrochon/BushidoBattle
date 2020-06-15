@@ -11,7 +11,7 @@ function SceneLobby:init()
 	DEBUG (music.name, SCENE_LOBBY, music.name ~= SCENE_LOBBY)
 	if music and music.name ~= SCENE_LOBBY then 
 		music:stop() 
-		music = sounds:play("music-lobby",0.5)
+		music = sounds:play("music-lobby")
 		music.name = SCENE_LOBBY
 	end 
 	

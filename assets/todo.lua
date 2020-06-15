@@ -2,7 +2,6 @@
 
 TODO
 	- Bugs
-		- Fix sounds, and make it easy to turn off (even in code). Move music switch to Sounds
 		- Change Hero Name in HTML not working anymore
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
@@ -19,7 +18,6 @@ TODO
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
-		- Trolls, bears are small - per monster scale factor, and use that everywhere...
 		- Fix naming of file names for attack. Barbarians are wrong, for example
 		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
@@ -30,13 +28,14 @@ TODO
 		- Make full res animations of heroes for hero selection screen
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
-		- Loot!
 		- Render shortest path, if walk, and line if can shoot
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
+		- Music / Sounds refresh. Find a set of new sounds and revise all of it
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 		- (low) limit ranged attacks in number (no unlimited javelins)
 		- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
 		- Don't have monsters shoot into walls. If path is fully blocked, then better move, or don't shoot
+	- Loot
 	- Fog of war
 		- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
 		- Block line of sight at walls?

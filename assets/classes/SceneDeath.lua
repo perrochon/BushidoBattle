@@ -17,7 +17,7 @@ function SceneDeath:init(hero)
 	local sounds = Sounds.new(SCENE_DEATH)
 	if music and music.name ~= SCENE_DEATH then 
 		music:stop() 
-		self.music = sounds:play("music-death",1)
+		self.music = sounds:play("music-death")
 		music.name = SCENE_DEATH
 	end 
 

@@ -179,6 +179,7 @@ function Monsters:updateState(monster, id, remote)
 	monster.bloodied = (monster.hp <= monster.bloodiedHP)
 
 	--check if there are friends around
+	monster.friends = false
 	for i = 1, #self.list do
 		if id ~= i then
 			local other = self.list[i] 

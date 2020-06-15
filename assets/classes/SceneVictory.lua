@@ -24,7 +24,7 @@ function SceneVictory:init()
 	local sounds = Sounds.new(SCENE_VICTORY)
 	if music and music.name ~= SCENE_VICTORY then 
 		music:stop() 
-		self.music = sounds:play("music-victory",1)
+		self.music = sounds:play("music-victory")
 		music.name = SCENE_VICTORY
 	end 
 	

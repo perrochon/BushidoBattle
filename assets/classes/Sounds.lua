@@ -38,12 +38,13 @@ function Sounds:play(name, volume)
 		local repeats = 1
 		if string.sub(name, 1, 5) == "music" then 
 			repeats = math.huge
+			volume = volume and volume or MUSIC_VOLUME
+		else
+			volume = volume and volume or EFFECTS_VOLUME
 		end
 		--play repeats of however many sounds there are for that named sound
 		sound = self.sounds[name][math.random(1, #self.sounds[name])]:play(0, repeats)
-		if volume then
-			sound:setVolume(volume)
-		end
+		sound:setVolume(volume)
 		if string.sub(name, 1, 5) == "music" then
 			return sound
 		end

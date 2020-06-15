@@ -283,6 +283,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 
 		-- we move
 		self.world:moveHero(hero, dc, dr)
+		self.sounds:play("hero-steps")
 
 		if self.remote then
 			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
@@ -315,7 +316,6 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 		DEBUG_C(SYNC_TURN, "Updating remote hero's move locally.")
 		
 		self.world:moveHero(heroes[heroIdx], x-heroes[heroIdx].x, y-heroes[heroIdx].r)
-		self.sounds:play("hero-steps")
 		
 		if monsterIdx ~= 0 then
 			m = self.monsters:getMonster(monsterIdx)
