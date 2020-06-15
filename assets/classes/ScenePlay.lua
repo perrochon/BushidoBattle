@@ -321,7 +321,6 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 			m = self.monsters:getMonster(monsterIdx)
 			m.hp = monsterHp
 			m.HPbar = monsterHpBar
-			self.world:changeTile(LAYER_HP, m.HPbar, m.x, m.r)
 			self:removeDeadMonsters(heroIdx)
 		end
 		

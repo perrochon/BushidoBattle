@@ -45,7 +45,7 @@ function Cyclopedia:init()
 			[1] = "terrain",
 			[2] = "environment",
 			[3] = "monsters",
-			[4] = "health",
+			[4] = "loot",
 			[5] = "light",
 			},
 		["light-source"] = {
@@ -72,7 +72,6 @@ function Cyclopedia:init()
 						1, 1, 1, 1, 1, 1, 1, 1, 1,
 						2, 1, 1, 1, 1, 1, 1, 1, 2}},
 			},
-		["health"] = {},
 		["light"] = {
 			[LIGHT_BRIGHT] = {name = "bright", alpha = 0, cover = 0},
 			[LIGHT_DIM] = {name = "dim", alpha = 0.4, cover = -1},
@@ -340,6 +339,12 @@ function Cyclopedia:init()
 			[3] = {name = "fireball", image = TextureRegion.new(projectilesTexture, 216, 0, 108, 108), speed = 5},
 			[4] = {name = "hammer", image = TextureRegion.new(projectilesTexture, 324, 0, 108, 108), speed = 5},
 			},
+		["loot"] = {
+			texturePack = "images/texturepack-projectiles-108px.png",
+			textureIndex = "images/characters.txt",
+			},
+		["bars"] = {},
+			-- health bars are generated in loadSprites()
 		}
 	self.lists = {}
 	for key, val in pairs(manual) do
@@ -365,12 +370,12 @@ end
 
 function Cyclopedia:loadSprites()
 
+	-- TODO FIX LOOT TODO FIX ANIMATION plenty of lines here should go away, don't need Monster bitmaps
 	-- Characters
 	local texturePack = self.lists["monsters"].texturePack
 	local textureIndex = self.lists["monsters"].textureIndex
 	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
-	
 
 	-- TODO FIX ANIMATION remove deprecatedTextureNames
 	
@@ -386,17 +391,23 @@ function Cyclopedia:loadSprites()
 		--DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.deprecatedName)		
 	end
 
-	-- Health Bars
+	-- TODO FIX LOOT TODO FIX ANIMATION until here
+
+	-- Load Loot
+	local texturePack = self.lists["loot"].texturePack
+	local textureIndex = self.lists["loot"].textureIndex
+	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
+	self.lists["loot"].pack = TexturePack.new(textureIndex, texturePack)
+
+	-- Generate Health Bars
 	local STEPS = 10 -- 0 plus 10 steps of bar
 	local D = 2 -- border width
 	local H = 5 -- height of health bar
 
-	local rt = RenderTarget.new((STEPS + 1) * TILE_WIDTH, TILE_HEIGHT )
-	--local bitmap = Bitmap.new(rt)
+	for k,v in pairs(self.lists["bars"]) do DEBUG("Cyclopedia", #self.lists["bars"], k,v) end
 
-	-- first tile (full health) is clear.
 	for s = 1, STEPS do
-		local x = s * TILE_WIDTH
+		local rt = RenderTarget.new(TILE_WIDTH, TILE_HEIGHT)
 		local w = math.floor((s / STEPS) * (TILE_WIDTH - 4 * D))
 		local r = math.floor(s / STEPS * 127) + 128
 		local g = math.floor((STEPS - s) / STEPS * 63)
@@ -405,19 +416,15 @@ function Cyclopedia:loadSprites()
 		local alpha = (s / STEPS * 0.5) + 0.5
 
 		local frame = Pixel.new(COLOR_BLACK, alpha, TILE_WIDTH - 2 * D, H + 2 * D)
-		frame:setPosition(x + D, TILE_HEIGHT - H - 3 * D)
+		frame:setPosition(D, TILE_HEIGHT - H - 3 * D)
 		rt:draw(frame)
 		
 		local bar = Pixel.new(color, alpha, w, H)
-		bar:setPosition(x + 2 * D , TILE_HEIGHT - H - 2 * D)
-		rt:draw(bar)		
+		bar:setPosition(2 * D , TILE_HEIGHT - H - 2 * D)
+		rt:draw(bar)
+		table.insert(self.lists["bars"], rt)	-- TODO LOOT need to fix positions above, and make rt inside loop
 	end
-	DEBUG(self:getEntry("layers", LAYER_HP))
-	-- TODO ANIMATION we should not enter the rt here and cut things out once the HP layer is gone. 
-	-- We should just store each sprite into health sprites.
-	self.lists[self:getEntry("layers", LAYER_HP)].texture = rt
-	self.lists[self:getEntry("layers", LAYER_HP)].pack = rt 
-
+	
 	-- Light
 	local STEPS = 4 -- 4 levels of light, ignore first (zero) tile.
 

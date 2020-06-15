@@ -75,14 +75,13 @@ application:setBackgroundColor(COLOR_BLACK)
 LAYER_TERRAIN @ 1		-- terrain layer (dirt, floors, water)
 LAYER_ENVIRONMENT @ 2	-- the enivornment layer (doors, pillars, walls)
 LAYER_MONSTERS @ 3		-- the monster layer (including the hero and NPCs)
-LAYER_HP @ 4			--the HP bar layer
-LAYER_LIGHT @ 5			--the light layer (clear, dim, previously-seen, fog-of-war, white, black)
+LAYER_LOOT @ 4			-- the loot layer
+LAYER_LIGHT @ 5			-- the light layer (clear, dim, previously-seen, fog-of-war, white, black)
 
 LIGHT_BRIGHT @ 1
 LIGHT_DIM @ 2
 LIGHT_DARK @ 3
 LIGHT_UNEXPLORED @ 4
-
 
 MSG_FADE = 0.005
 MSG_DESCRIPTION @ 1

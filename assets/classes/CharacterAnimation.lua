@@ -101,27 +101,20 @@ end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	--DEBUG("setHealth", self.name, hpBar, self.bar, ".")
+	--DEBUG(self.name, hpBar, self.bar)
 
 	if self.bar then
-		-- TODO ANIMATION FIX health bar
 		self:removeChild(self.bar)
 		self.bar = nil
 	end
 
-	if self.dead or hpBar < 0 or hpBar > 10 then return end
-	
-	--DEBUG(LAYER_HP, manual:getEntry("layers", LAYER_HP))
-	local texture = manual.lists[manual:getEntry("layers", LAYER_HP)].texture
-	local region = TextureRegion.new(texture, hpBar*100, 0, 100, 100)
-	self.bar = Bitmap.new(region)
+	if self.dead or not hpBar or hpBar == 0 or hpBar > 10 then return end
 
-	-- TODO ANIMATION - create on the fly, instead of getting it from a layer
-	--local bars = manual.lists[manual:getEntry("layers", LAYER_HP)].pack
-	--self.bar = manual:getSprite(LAYER_HP, hpBar) -- TODO FIX actual hero health
-	--self.bar = bars -- TODO FIX actual hero health
+	local bars = manual.lists["bars"]
+	self.bar = Bitmap.new(bars[hpBar])
 	self.bar:setPosition(-50, -50)
 	self:addChild(self.bar)	
+
 end
 
 -- FIX should the below live in character.lua? How to to SceneSprite, though.
@@ -192,5 +185,14 @@ function CharacterAnimation:die(fadeOut)
 		properties.dispatchEvents = false
 		
 		local tween = GTween.new(self.mc, 5, animate, properties)
+		
+		tween.onComplete = function(event) 
+			if self.mc then
+				self:removeChild(self.mc)
+				self.mc = nil
+				self:removeFromParent()
+			end
+		end
+		
 	end
 end

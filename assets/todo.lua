@@ -58,6 +58,7 @@ TODO
 	- Achievements Screen with 
 		- Scores, per level? XP?
 	- Refactor
+		- Remove monster tilemap logic
 		- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 		-- Look in directory and see how many maps we have instead of hard coding number
 		- (medium) TODO FIX in the code base

@@ -37,9 +37,8 @@ function WorldMap:init(level, monsters)
 	table.insert(self.mapArrays, array2)
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
-	-- TODD FIX ANIMATION LAYER_HP can soon go away
 	self.mapArrays[LAYER_MONSTERS] = self:placeCharacters(monsters)
-	layer = self:returnTileMap(self.mapArrays[LAYER_MONSTERS], "monsters")
+	layer = self:returnTileMap(LAYER_MONSTERS)
 	layer:setAlpha(0.6)
 
 	local where = self.camera:getChildIndex(layer2)
@@ -48,16 +47,15 @@ function WorldMap:init(level, monsters)
 	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)	
 
-	-- TODD FIX ANIMATION LAYER_HP can soon go away
-	self.mapArrays[LAYER_HP] = self:addHP()
+	self.mapArrays[LAYER_LOOT] = self:newArray(0) -- TODO FIX LOOT does it need it's own add function?
 	self.mapArrays[LAYER_LIGHT] = self:addLight()
     self:shiftWorld(heroes[localHero])
 
-	layer = self:returnTileMap(self.mapArrays[LAYER_HP], "health")
-	--self.camera:addChild(layer) 
+	layer = self:returnTileMap(LAYER_LOOT) -- TODO FIX why is there a string here?
+	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)
 
-	layer = self:returnTileMap(self.mapArrays[LAYER_LIGHT], "light")
+	layer = self:returnTileMap(LAYER_LIGHT)  -- TODO FIX why is there a string here?
 	self.camera:addChild(layer) 
 	table.insert(self.mapLayers, layer)	
 
@@ -97,13 +95,12 @@ function WorldMap:placeCharacters(monsters)
 	return mArray
 end
 
-function WorldMap:addHP()
+function WorldMap:newArray(value)
 
-  --tiles are 0 at the start
   local hArray = {}
   for y = 1, LAYER_ROWS do
     for x = 1, LAYER_COLUMNS do
-      hArray[self:index(x, y)] = 0
+      hArray[self:index(x, y)] = value
     end
   end
   return hArray
@@ -117,12 +114,7 @@ function WorldMap:addLight()
 	local hero = heroes[localHero] 	-- TODO HEROFIX loop through all active heroes
 
 	--this is the array filled with darkness of unexplored tiles
-	local lArray = {}
-	for y = 1, LAYER_ROWS do
-		for x = 1, LAYER_COLUMNS do
-			lArray[self:index(x, y)] = LIGHT_UNEXPLORED -- TODO such constants should really not be hard coded...
-		end
-	end
+	local lArray = self:newArray(LIGHT_UNEXPLORED)
 	
 	--this overlays the hero with a torch array
 	--torch array is overkill if lightsources are symmetric. Could be computed
@@ -141,33 +133,32 @@ function WorldMap:addLight()
 	return lArray
 end
 
-function WorldMap:returnTileMap(mapArray, layer)
+function WorldMap:returnTileMap(layerId)
 	--[[Logic:  return a TileMap for a given tileset	
-		Returns a TileMap
+		Returns a TileMap		
 	--]]
 
-	local pack = manual.lists[layer].pack
-
+	local pack = manual.lists[manual:getEntry("layers", layerId)].pack
 	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT)
 	
 	--use setTile to assign a tile based on the mapArray index
 	for y = 1, LAYER_ROWS do
 		for x = 1, LAYER_COLUMNS do
 
-			local key = mapArray[self:index(x, y)]
+			local key = self.mapArrays[layerId][self:index(x, y)]
 
-			if layer == "monsters" then
+			if layerId == LAYER_MONSTERS then
 				--only setTiles if the mapArray value isn't 0
 				if key ~= 0 then
 					local monster = manual:getEntry("monsters", key)	
 					--DEBUG(monster.name, monster.tC, monster.tR)
 					tilemap:setTile(x, y, monster.tC, monster.tR)
 				end
-			elseif layer == "light" then
+			elseif layerId == LAYER_LIGHT then
 				--DEBUG(x, y, self:index(x, y), key )
 				tilemap:setTile(x, y, key, 1)
-			elseif layer == "health" then
-				-- do nothing at creation
+			elseif layerId == LAYER_LOOT then
+				tilemap:setTile(4, 14, 1, 1)
 			end
 		end
 	end
@@ -228,7 +219,6 @@ end
 
 function WorldMap:changeTile(layerId, entry, x, y)
 	--Change both the self.mapArrays entry and the tile in self.mapLayers
-
 	local array = self.mapArrays[layerId]
 	array[self:index(x, y)] = entry
 	self.mapLayers[layerId]:setTile(x, y, entry, 1)
@@ -352,17 +342,20 @@ function WorldMap:moveMonster(monster, dc, dr)
 		
 		--place the monster at the new position
 		array[self:index(monster.c + dc, monster.r + dr)] = monster.entry
+		-- TODO FIX TILEMAPS remove monster tilemap logic
 		self.mapLayers[LAYER_MONSTERS]:setTile(monster.c + dc, monster.r + dr, monster.tC, monster.tR) 
 
+		--[[ TODO FIX LOOT delete this code
 		--remove and move the HPbar
-		array = self.mapArrays[LAYER_HP]
+		array = self.mapArrays[LAYER_*HP]
 		array[self:index(monster.c, monster.r)] = 0
-		self.mapLayers[LAYER_HP]:clearTile(monster.c, monster.r) 	
+		self.mapLayers[LAYER_*HP]:clearTile(monster.c, monster.r) 	
 		array[self:index(monster.c + dc, monster.r + dr)] = monster.HPbar
 		if monster.HPbar ~= 0 then
-			self.mapLayers[LAYER_HP]:setTile(monster.c + dc, monster.r + dr, monster.HPbar, 1) 
+			self.mapLayers[LAYER_*HP]:setTile(monster.c + dc, monster.r + dr, monster.HPbar, 1) 
 		end
-
+		--]]
+	
 		--update r and c
 		local tween = monster:moveTo(monster.c + dc, monster.r + dr)
 		return tween
@@ -372,10 +365,12 @@ end
 function WorldMap:removeMonster(x, y)
 	local array = self.mapArrays[LAYER_MONSTERS]
 	array[self:index(x, y)] = 0
+	-- TODO FIX TILEMAPS remove monster tilemap logic
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
-	array = self.mapArrays[LAYER_HP]
-	array[self:index(x, y)] = 0
-	self.mapLayers[LAYER_HP]:clearTile(x, y) 	
+
+	array = self.mapArrays[LAYER_LOOT]
+	array[self:index(x, y)] = 7
+	self.mapLayers[LAYER_LOOT]:setTile(x, y, 1, 1)
 end
 
 function WorldMap:addMonster(monster)
@@ -393,12 +388,14 @@ function WorldMap:addMonster(monster)
 	array[self:index(monster.c, monster.r)] = monster.entry
 	self.mapLayers[LAYER_MONSTERS]:setTile(monster.c, monster.r, monster.entry, 1) 
 
+	--[[ TODO FIX LOOT delete this code
 	--add the HPbar
-	array = self.mapArrays[LAYER_HP]
+	array = self.mapArrays[LAYER_*HP]
 	array[self:index(monster.c, monster.r)] = monster.HPbar
 	if monster.HPbar ~= 0 then
-		self.mapLayers[LAYER_HP]:setTile(monster.c, monster.r, monster.HPbar, 1) 
+		self.mapLayers[LAYER_*HP]:setTile(monster.c, monster.r, monster.HPbar, 1) 
 	end
+	--]]
 end
 
 

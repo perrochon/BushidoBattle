@@ -60,12 +60,12 @@ function SceneSprites:init()
 	end
 	--]]
 	
-	--[[ TODO ANIMATION REMOVE after no longer creating texture map for health bars in Cyclopedia
+	--[[ TODO LOOT update once we load loot sprites after no longer creating texture map for health bars in Cyclopedia
 	-- Draw Health Bars
 	x = x + D
-	DEBUG(manual:getEntry("layers", LAYER_HP))
+	DEBUG(manual:getEntry("layers", LAYER_LOOT))
 	for i = 0, 10 do
-		local region = TextureRegion.new(manual.lists[manual:getEntry("layers", LAYER_HP)].texture, i*100, 0, i*100+100, 100)
+		local region = TextureRegion.new(manual.lists[manual:getEntry("layers", LAYER_LOOT)].texture, i*100, 0, i*100+100, 100)
 		local bitmap = Bitmap.new(region)
 		bitmap:setPosition(x, 0)
 		sprites:addChild(bitmap)
