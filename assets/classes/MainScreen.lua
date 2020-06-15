@@ -67,15 +67,22 @@ function MainScreen:init()
 	self.hp :setPosition(HALFX, 450) 
 	self:addChild(self.hp)
 
+	self.money = TextField.new(FONT_SMALL, "Money: " .. self.hero.money)
+	self.money :setTextColor(COLOR_LTGREY)	
+	self.money :setAnchorPoint(0.5,0.5)
+	self.money :setPosition(HALFX, 500) 
+	self:addChild(self.money)
+
 	self.xy = TextField.new(FONT_SMALL, self.hero.c .. ",".. self.hero.r)
 	self.xy :setTextColor(COLOR_DKGREY)	
 	self.xy :setPosition(FG_X, MAXY - version:getHeight()) 
 	self:addChild(self.xy)
 
-	self:addEventListener(Event.ENTER_FRAME, function(event)
+	self:addEventListener(Event.ENTER_FRAME, function(event) -- TODO maybe don't need to do on each frame?
 		self.kills:setText("Kills: " .. self.hero.kills )
 		self.xp:setText("Experience: " .. self.hero.xp)
 		self.hp:setText("Health: " .. self.hero.hp)
+		self.money:setText("Money: " .. self.hero.money)
 		self.xy:setText(self.hero.c .. ",".. self.hero.r)
 	end)
 

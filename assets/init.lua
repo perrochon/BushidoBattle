@@ -2,7 +2,7 @@
 This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
 (C) 2010 - 2020 Louis Perrochon
 ]]
-VERSION = "0.8.0"
+VERSION = "0.8.2"
 
 MUSIC @ true
 MUSIC_VOLUME @ 0.1

@@ -27,6 +27,7 @@ function Hero:init(entry, id)
 	self:setActive(false) 
 	self.kills = 0
 	self.level = 1
+	self.money = 0
 	self.light = manual:getEntry("light-source", "torch")
 	
 	self.fileName = "|D|hero"..id

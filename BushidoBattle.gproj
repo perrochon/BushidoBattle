@@ -31,6 +31,7 @@
   <file name="assets/classes/CharacterAnimation.lua"/>
   <file name="assets/classes/Cyclopedia.lua"/>
   <file name="assets/classes/Hero.lua"/>
+  <file name="assets/classes/Loot.lua"/>
   <file name="assets/classes/MainScreen.lua"/>
   <file name="assets/classes/MapData.lua"/>
   <file name="assets/classes/MapNavigation.lua"/>

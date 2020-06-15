@@ -39,10 +39,8 @@ ScenePlay = Core.class(Sprite)
  
 function ScenePlay:init()
 
-	application:setBackgroundColor(COLOR_LTBLACK)
-	
+	application:setBackgroundColor(COLOR_LTBLACK)	
 	self.sounds = Sounds.new(SCENE_PLAY)
-
 
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
@@ -96,6 +94,12 @@ function ScenePlay:init()
 
 	-- load the messages window
 	self.msg = Messages.new()
+
+	-- Loot
+	self.loots = Loots.new()
+	
+	-- place one coin
+	self:placeLoot(1,4,14)
 
 	--add methods for remote play
 	if self.remote then
@@ -224,6 +228,12 @@ function ScenePlay:init()
 	if self.remote then self:syncState() end
 end
 
+function ScenePlay:placeLoot(entry, c, r)	
+	local coin = Loot.new(entry, c, r)
+	self.world.camera:addChildAt(coin,3)
+	self.loots:add(coin)
+end
+
 function ScenePlay:checkMove(hero, dc, dr)
 	--[[move the hero if the tile isn't blocked
 	--]]
@@ -284,7 +294,12 @@ function ScenePlay:checkMove(hero, dc, dr)
 		-- we move
 		self.world:moveHero(hero, dc, dr)
 		self.sounds:play("hero-steps")		
-		self:checkLoot(hero)
+		local loot = self.loots:check(hero.c, hero.r)
+		if loot then
+			DEBUG("Found a", loot.name, "at", loot.c, loot.r)
+			hero.money = hero.money + loot.value
+			self.world.camera:removeChild(loot)
+		end
 
 		if self.remote then
 			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
@@ -295,18 +310,6 @@ function ScenePlay:checkMove(hero, dc, dr)
 			self:heroesTurnOver()
 		end
 	end
-end
-
-function ScenePlay:checkLoot(hero)
-
-	local key, layer, tile = self.world:getTileInfo(hero.c, hero.r, LAYER_LOOT)
-	
-	if tile then
-		DEBUG("Found a", tile.name)
-		self.world:clearTile(hero.c, hero.r, LAYER_LOOT)
-	end
-	
-
 end
  
 function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)
@@ -460,6 +463,10 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 			
 			--remove the monster from the monsters.list and the map
 			table.remove(self.monsters.list, id)	
+			
+			local val,key = manual:getEntry("loot", m.drop)		
+			self:placeLoot(key, m.c, m.r)
+
 			self.world:removeMonster(m.c, m.r)
 		end
 	end

@@ -389,10 +389,6 @@ function WorldMap:removeMonster(x, y)
 	array[self:index(x, y)] = 0
 	-- TODO FIX TILEMAPS remove monster tilemap logic
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
-
-	array = self.mapArrays[LAYER_LOOT]
-	array[self:index(x, y)] = 1
-	self.mapLayers[LAYER_LOOT]:setTile(x, y, 4, 2)
 end
 
 function WorldMap:addMonster(monster)

@@ -33,6 +33,8 @@ function Character:init(entry, id)
 	self.see = self.info.see
 	self.alone = self.info.alone
 	
+	self.drop = self.info.drop
+	
 	-- TODO REFACTOR Call loadSprite here, and pick the one from the subclass, instead of calling in subclass init()
 	--self.sprite = self.info.sprite -- Heroes have a list of sprites, so differ from monsters
 	self.dx = self.info.dx

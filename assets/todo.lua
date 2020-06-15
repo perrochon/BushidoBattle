@@ -1,4 +1,8 @@
 --[[
+RELEASE NOTES
+
+next 
+	- Loot! Woot!
 
 TODO
 	- Bugs
@@ -59,6 +63,8 @@ TODO
 		- Scores, per level? XP?
 	- Refactor
 		- Remove monster tilemap logic
+		- access .info, instead of copying it all over.... Maybe call it .i or .p
+		- Make Character a sprite, instead of having a sprite (will still have a sprite, of course)
 		- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 		-- Look in directory and see how many maps we have instead of hard coding number
 		- (medium) TODO FIX in the code base
