@@ -283,7 +283,8 @@ function ScenePlay:checkMove(hero, dc, dr)
 
 		-- we move
 		self.world:moveHero(hero, dc, dr)
-		self.sounds:play("hero-steps")
+		self.sounds:play("hero-steps")		
+		self:checkLoot(hero)
 
 		if self.remote then
 			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
@@ -294,6 +295,18 @@ function ScenePlay:checkMove(hero, dc, dr)
 			self:heroesTurnOver()
 		end
 	end
+end
+
+function ScenePlay:checkLoot(hero)
+
+	local key, layer, tile = self.world:getTileInfo(hero.c, hero.r, LAYER_LOOT)
+	
+	if tile then
+		DEBUG("Found a", tile.name)
+		self.world:clearTile(hero.c, hero.r, LAYER_LOOT)
+	end
+	
+
 end
  
 function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)

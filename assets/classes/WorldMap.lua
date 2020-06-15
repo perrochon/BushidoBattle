@@ -96,14 +96,13 @@ function WorldMap:placeCharacters(monsters)
 end
 
 function WorldMap:newArray(value)
-
-  local hArray = {}
-  for y = 1, LAYER_ROWS do
-    for x = 1, LAYER_COLUMNS do
-      hArray[self:index(x, y)] = value
+  local a = {}
+  for r = 1, LAYER_ROWS do
+    for c = 1, LAYER_COLUMNS do
+      a[self:index(c, r)] = value
     end
   end
-  return hArray
+  return a
 end
 
 function WorldMap:addLight() 
@@ -139,26 +138,40 @@ function WorldMap:returnTileMap(layerId)
 	--]]
 
 	local pack = manual.lists[manual:getEntry("layers", layerId)].pack
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT)
+	
+	local w = TILE_WIDTH
+	local h = TILE_HEIGHT
+	if layerId == LAYER_LOOT then
+		--w = 50
+		--h = 50
+	end
+	
+	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, w, h)
 	
 	--use setTile to assign a tile based on the mapArray index
-	for y = 1, LAYER_ROWS do
-		for x = 1, LAYER_COLUMNS do
+	for r = 1, LAYER_ROWS do
+		for c = 1, LAYER_COLUMNS do
 
-			local key = self.mapArrays[layerId][self:index(x, y)]
+			local key = self.mapArrays[layerId][self:index(c, r)]
 
-			if layerId == LAYER_MONSTERS then
+			if layerId == LAYER_MONSTERS then -- TODO FIX ANIMATION REMOVE (no longer needed)
 				--only setTiles if the mapArray value isn't 0
 				if key ~= 0 then
 					local monster = manual:getEntry("monsters", key)	
 					--DEBUG(monster.name, monster.tC, monster.tR)
-					tilemap:setTile(x, y, monster.tC, monster.tR)
+					--tilemap:setTile(c, r, monster.tC, monster.tR)
 				end
 			elseif layerId == LAYER_LIGHT then
-				--DEBUG(x, y, self:index(x, y), key )
-				tilemap:setTile(x, y, key, 1)
+				--DEBUG(c, r, self:index(c, r), key )
+				tilemap:setTile(c, r, key, 1)
 			elseif layerId == LAYER_LOOT then
-				tilemap:setTile(4, 14, 1, 1)
+				if key ~= 0 then
+					local region = self.lists["loot"].pack:getTextureRegion("10.png")
+					local tX, tY, w, h = region:getRegion()
+					value.tC = tX/TILE_WIDTH+1
+					value.tR = tY/TILE_HEIGHT+1
+					tilemap:setTile(c, r, tX, tY)
+				end
 			end
 		end
 	end
@@ -217,11 +230,20 @@ function WorldMap:getTileInfo(c, r, layer)
 	end
 end
 
+--[[ TODO FIX DELETE
 function WorldMap:changeTile(layerId, entry, x, y)
 	--Change both the self.mapArrays entry and the tile in self.mapLayers
 	local array = self.mapArrays[layerId]
 	array[self:index(x, y)] = entry
 	self.mapLayers[layerId]:setTile(x, y, entry, 1)
+end
+--]]
+
+function WorldMap:clearTile(c, r, layerId)
+	--Change both the self.mapArrays entry and the tile in self.mapLayers
+	local array = self.mapArrays[layerId]
+	array[self:index(c, r)] = 0
+	self.mapLayers[layerId]:clearTile(c, r)
 end
 
 function WorldMap:shiftWorld(hero)
@@ -257,7 +279,7 @@ function WorldMap:moveHero(hero, dc, dr)
 	--]]
 
 	--DEBUG("Moving Hero", hero.name, hero.c, hero.r, dc, dr, "to", hero.c+dc, hero.r+dr)
-
+	
 	if hero.id == localHero then 
 		--move the torchlight
 		self:adjustLight(hero, dc, dr)
@@ -369,8 +391,8 @@ function WorldMap:removeMonster(x, y)
 	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
 
 	array = self.mapArrays[LAYER_LOOT]
-	array[self:index(x, y)] = 7
-	self.mapLayers[LAYER_LOOT]:setTile(x, y, 1, 1)
+	array[self:index(x, y)] = 1
+	self.mapLayers[LAYER_LOOT]:setTile(x, y, 4, 2)
 end
 
 function WorldMap:addMonster(monster)

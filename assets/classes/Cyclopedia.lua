@@ -340,8 +340,9 @@ function Cyclopedia:init()
 			[4] = {name = "hammer", image = TextureRegion.new(projectilesTexture, 324, 0, 108, 108), speed = 5},
 			},
 		["loot"] = {
-			texturePack = "images/texturepack-projectiles-108px.png",
-			textureIndex = "images/characters.txt",
+			texturePack = "images/loot.png",
+			textureIndex = "images/loot.txt",
+			[1] = {name = "coin"},
 			},
 		["bars"] = {},
 			-- health bars are generated in loadSprites()
