@@ -296,7 +296,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 		self.sounds:play("hero-steps")		
 		local loot = self.loots:check(hero.c, hero.r)
 		if loot then
-			DEBUG("Found a", loot.name, "at", loot.c, loot.r)
+			self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
 			hero.money = hero.money + loot.value
 			self.world.camera:removeChild(loot)
 		end
@@ -467,7 +467,7 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 			local val,key = manual:getEntry("loot", m.drop)		
 			self:placeLoot(key, m.c, m.r)
 
-			self.world:removeMonster(m.c, m.r)
+			self.world:removeMonster({c=m.c, r=m.r})
 		end
 	end
 end

@@ -4,12 +4,13 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ]]
 
 --[[
-WorldMap class and all the functions associated with it: changing tiles, generating the arrays, querying locations, etc..
+WorldMap and all the functions associated with it: 
+changing tiles, generating the arrays, querying locations, etc..
 ]]
 
 WorldMap = Core.class(Sprite)
 
-function WorldMap:init(level, monsters)
+function WorldMap:init(level, monsters) -- TODO rename self.level because of confusion with hero level
 
 	--Create tables for map content (self.mapArrays) and for each TileMap (self.mapLayers)	
 	--self.level = Level.new(currentMapFileName) -- read the file
@@ -19,45 +20,34 @@ function WorldMap:init(level, monsters)
 	self.mapArrays = {} -- a numeric key indicating what's in this place - defined in tiled maps and constants.lua
 	self.mapLayers = {} -- the actual tile that is painted
 
-
 	self.camera = Camera.new({maxZoom=3,friction=.95}) -- higher seems to make it "more slippery" (documentation says lower).
 
 	-- assign TileMaps to self.mapLayers. table.insert ads at the end, so the order here matters
 	-- needs to be consistent with Constants.lua, but also rendering.
-	
-	local layer1,array1 = self.level:layerFromMap(LAYER_TERRAIN)
-	self.camera:addChild(layer1) 
-	table.insert(self.mapLayers, layer1)
-	table.insert(self.mapArrays, array1)
+
+	-- Terrain
+	self.mapLayers[LAYER_TERRAIN], self.mapArrays[LAYER_TERRAIN] = 
+		self.level:layerFromMap(LAYER_TERRAIN)
+	self.camera:addChild(self.mapLayers[LAYER_TERRAIN]) 
 	--self:debugMapInfo(LAYER_TERRAIN)
 
-	local layer2,array2 = self.level:layerFromMap(LAYER_ENVIRONMENT)
-	self.camera:addChild(layer2) 
-	table.insert(self.mapLayers, layer2)
-	table.insert(self.mapArrays, array2)
+	-- Environment
+	self.mapLayers[LAYER_ENVIRONMENT], self.mapArrays[LAYER_ENVIRONMENT] = 
+		self.level:layerFromMap(LAYER_ENVIRONMENT)
+	self.camera:addChild(self.mapLayers[LAYER_ENVIRONMENT]) 
 	--self:debugMapInfo(LAYER_ENVIRONMENT)
 
+	-- Monsters, we only use the array
 	self.mapArrays[LAYER_MONSTERS] = self:placeCharacters(monsters)
-	layer = self:returnTileMap(LAYER_MONSTERS)
-	layer:setAlpha(0.6)
-
-	local where = self.camera:getChildIndex(layer2)
-	self.camera:addChildAt(layer, where) 
-
-	table.insert(self.mapLayers, layer)
 	--self:debugMapInfo(LAYER_MONSTERS)	
 
-	self.mapArrays[LAYER_LOOT] = self:newArray(0) -- TODO FIX LOOT does it need it's own add function?
+	-- Light, we use array and tile map
 	self.mapArrays[LAYER_LIGHT] = self:addLight()
+	self.mapLayers[LAYER_LIGHT] = self:returnTileMap(LAYER_LIGHT)
+	self.camera:addChild(self.mapLayers[LAYER_LIGHT]) 
+	--self:debugMapInfo(LAYER_LIGHT)	
+
     self:shiftWorld(heroes[localHero])
-
-	layer = self:returnTileMap(LAYER_LOOT) -- TODO FIX why is there a string here?
-	self.camera:addChild(layer) 
-	table.insert(self.mapLayers, layer)
-
-	layer = self:returnTileMap(LAYER_LIGHT)  -- TODO FIX why is there a string here?
-	self.camera:addChild(layer) 
-	table.insert(self.mapLayers, layer)	
 
 	self:addChild(self.camera)
 end
@@ -133,52 +123,23 @@ function WorldMap:addLight()
 end
 
 function WorldMap:returnTileMap(layerId)
-	--[[Logic:  return a TileMap for a given tileset	
-		Returns a TileMap		
-	--]]
+	-- Return a TileMap for a given tileset	
 
 	local pack = manual.lists[manual:getEntry("layers", layerId)].pack
-	
-	local w = TILE_WIDTH
-	local h = TILE_HEIGHT
-	if layerId == LAYER_LOOT then
-		--w = 50
-		--h = 50
-	end
-	
-	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, w, h)
+	local tilemap = TileMap.new(LAYER_COLUMNS, LAYER_ROWS, pack, TILE_WIDTH, TILE_HEIGHT)
 	
 	--use setTile to assign a tile based on the mapArray index
 	for r = 1, LAYER_ROWS do
 		for c = 1, LAYER_COLUMNS do
-
 			local key = self.mapArrays[layerId][self:index(c, r)]
-
-			if layerId == LAYER_MONSTERS then -- TODO FIX ANIMATION REMOVE (no longer needed)
-				--only setTiles if the mapArray value isn't 0
-				if key ~= 0 then
-					local monster = manual:getEntry("monsters", key)	
-					--DEBUG(monster.name, monster.tC, monster.tR)
-					--tilemap:setTile(c, r, monster.tC, monster.tR)
-				end
-			elseif layerId == LAYER_LIGHT then
+			if layerId == LAYER_LIGHT then
 				--DEBUG(c, r, self:index(c, r), key )
 				tilemap:setTile(c, r, key, 1)
-			elseif layerId == LAYER_LOOT then
-				if key ~= 0 then
-					local region = self.lists["loot"].pack:getTextureRegion("10.png")
-					local tX, tY, w, h = region:getRegion()
-					value.tC = tX/TILE_WIDTH+1
-					value.tR = tY/TILE_HEIGHT+1
-					tilemap:setTile(c, r, tX, tY)
-				end
 			end
 		end
-	end
-	
+	end	
 	return tilemap
 end
-
 
 function WorldMap:getTileInfo(c, r, layer) 
 	--[[Return the tile key, layer and tile information for a location on the map. 
@@ -230,7 +191,7 @@ function WorldMap:getTileInfo(c, r, layer)
 	end
 end
 
---[[ TODO FIX DELETE
+--[[ TODO FIX Not currently used, but updating light could use it
 function WorldMap:changeTile(layerId, entry, x, y)
 	--Change both the self.mapArrays entry and the tile in self.mapLayers
 	local array = self.mapArrays[layerId]
@@ -343,96 +304,56 @@ function WorldMap:adjustLight(hero, dc, dr)
 end
 
 function WorldMap:moveMonster(monster, dc, dr)
-	--[[change the mapArrays and mapLayers location of the monster 
-	--]]
+	--Move monster in mapArray and tween the monster's location
 
 	--DEBUG("Moving Monster", monster.name, monster.c, monster.r, dc, dr, "to", monster.c+dc, monster.r+dr)
 
-	--get the array and entry
-	local array = self.mapArrays[LAYER_MONSTERS]
-	
-	--erase the monster in the array and TileMap
-
-	-- DEBUG Getting non-reproducible errors on the next line in HTML - Checking for possible conditions
 	if monster.c > LAYER_COLUMNS or monster.r > LAYER_ROWS or monster.c < 1 or monster.r < 1 then
 		ERROR("Monster current location out of bounds", monster.name, monster.c, monster.r, dc, dr)
+		return
 	elseif monster.c+dc > LAYER_COLUMNS or monster.r+dr > LAYER_ROWS or monster.c+dc < 1 or monster.r+dr < 1 then
 		ERROR("Monster new location out of bounds", monster.name, monster.c, monster.r, dc, dr)
-	else
-		array[self:index(monster.c, monster.r)] = 0
-		self.mapLayers[LAYER_MONSTERS]:clearTile(monster.c, monster.r)
-		
-		--place the monster at the new position
-		array[self:index(monster.c + dc, monster.r + dr)] = monster.entry
-		-- TODO FIX TILEMAPS remove monster tilemap logic
-		self.mapLayers[LAYER_MONSTERS]:setTile(monster.c + dc, monster.r + dr, monster.tC, monster.tR) 
-
-		--[[ TODO FIX LOOT delete this code
-		--remove and move the HPbar
-		array = self.mapArrays[LAYER_*HP]
-		array[self:index(monster.c, monster.r)] = 0
-		self.mapLayers[LAYER_*HP]:clearTile(monster.c, monster.r) 	
-		array[self:index(monster.c + dc, monster.r + dr)] = monster.HPbar
-		if monster.HPbar ~= 0 then
-			self.mapLayers[LAYER_*HP]:setTile(monster.c + dc, monster.r + dr, monster.HPbar, 1) 
-		end
-		--]]
-	
-		--update r and c
-		local tween = monster:moveTo(monster.c + dc, monster.r + dr)
-		return tween
+		return
 	end
+	
+	self:removeMonster(monster)
+	self:addMonster({c = monster.c+dc, r = monster.r+dr, entry = monster.entry})
+
+	--update r and c
+	local tween = monster:moveTo(monster.c + dc, monster.r + dr)
+	return tween
 end
 
-function WorldMap:removeMonster(x, y)
-	local array = self.mapArrays[LAYER_MONSTERS]
-	array[self:index(x, y)] = 0
-	-- TODO FIX TILEMAPS remove monster tilemap logic
-	self.mapLayers[LAYER_MONSTERS]:clearTile(x, y) 	
+function WorldMap:removeMonster(position)
+	-- Remove monster from monster array
+	local a = self.mapArrays[LAYER_MONSTERS]
+	a[self:index(position.c, position.r)] = 0
 end
 
 function WorldMap:addMonster(monster)
-	--[[ 
-	--]]
-
-	local x = monster.c
-	local y = monster.r
-	
-	--get the array and entry
-	local array = self.mapArrays[LAYER_MONSTERS]
-
-	--DEBUG(x, y)
-	--place the monster at the new position
-	array[self:index(monster.c, monster.r)] = monster.entry
-	self.mapLayers[LAYER_MONSTERS]:setTile(monster.c, monster.r, monster.entry, 1) 
-
-	--[[ TODO FIX LOOT delete this code
-	--add the HPbar
-	array = self.mapArrays[LAYER_*HP]
-	array[self:index(monster.c, monster.r)] = monster.HPbar
-	if monster.HPbar ~= 0 then
-		self.mapLayers[LAYER_*HP]:setTile(monster.c, monster.r, monster.HPbar, 1) 
-	end
-	--]]
+	-- Place a monster into the monster array
+	--get the array
+	local a = self.mapArrays[LAYER_MONSTERS]
+	--place the monster at it's position
+	a[self:index(monster.c, monster.r)] = monster.entry
 end
 
-
-function WorldMap:blocked(x, y)
+function WorldMap:blocked(c, r)
 	--[[uses getTileInfo to determine if the tile is blocked or not
 		returns true or false
 	--]]
-	--local i = self:index(x, y)
+	--local i = self:index(c, r)
 	--return (self.mapLayers[LAYER_MONSTERS] ~= 0) or tilemap:blocked(x,y)
 
 	--getTileInfo returns the highest level layer key that isn't 0
 
-	if x < 1 or x > LAYER_COLUMNS or y < 1 or y > LAYER_ROWS then
-		DEBUG("x,y outside bounds", x,y)
-		ERROR("Testing blocked on tile outside bound", x, y)
+	if c < 1 or c > LAYER_COLUMNS or r < 1 or r > LAYER_ROWS then
+		DEBUG("x,y outside bounds", c,r)
+		ERROR("Testing blocked on tile outside bound", c, r)
 		return true
 	end
 
-	local key, layer, tile = self:getTileInfo(x, y)
+	local key, layer, tile = self:getTileInfo(c, r)
 	--DEBUG(x, y, key, layer, tile.name, tile.blocked)
 	
 	if layer == LAYER_MONSTERS then
@@ -710,18 +631,20 @@ end
 
 
 function WorldMap:debugMapInfo(id)
-	DEBUG(("Array %d layers, %d arrays"):format(#self.mapLayers, #self.mapArrays))
-	DEBUG(("Layer %d %dx%d at %d %d %d"):format(id, self.mapLayers[id]:getWidth(), 
-		self.mapLayers[id]:getHeight(), 
-		self.mapLayers[id]:getPosition()))
-	array = self.mapArrays[id]
-
-	DEBUG(("Array %d %d"):format(id, #array)) 
-	for y = 1, LAYER_ROWS do
+	DEBUG(("World: %d layers  and %d arrays"):format(#self.mapLayers, #self.mapArrays))
+	if self.mapLayers[id] then
+		DEBUG(("Layer[%d] %s %dx%d at %d %d %d"):format(id, manual:getEntry("layers", id), id, self.mapLayers[id]:getWidth(), 
+			self.mapLayers[id]:getHeight(), 
+			self.mapLayers[id]:getPosition()))
+	end
+	
+	a = self.mapArrays[id]
+	DEBUG(("Array[%d] %s  %d"):format(id, manual:getEntry("layers", id), #a)) 
+	for r = 1, LAYER_ROWS do
 		local s = ""
-		for x = 1, LAYER_COLUMNS do
-			local i = self:index(x,y)
-			s = s .. array[i] .. " "
+		for c = 1, LAYER_COLUMNS do
+			local i = self:index(c, r)
+			s = s .. a[i] .. " "
 		end
 		DEBUG(s)
 	end

@@ -42,12 +42,6 @@ function Character:init(entry, id)
 	self.scale = self.info.scale
 	
 	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
-
-	-- TODO DELETE once old sprites go away
-	--DEBUG("monster tC", manual:getEntry("monsters",entry).tC)
-	self.tC = self.info.tC
-	self.tR = self.info.tR
-
 	
 end
 

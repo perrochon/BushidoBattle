@@ -42,11 +42,10 @@ function Cyclopedia:init()
 	--make sure the numbers here match up with their positions in the tileset images.
 	local manual = {
 		["layers"] = {
-			[1] = "terrain",
-			[2] = "environment",
-			[3] = "monsters",
-			[4] = "loot",
-			[5] = "light",
+			[LAYER_TERRAIN] = "terrain",
+			[LAYER_ENVIRONMENT] = "environment",
+			[LAYER_MONSTERS] = "monsters",
+			[LAYER_LIGHT] = "light",
 			},
 		["light-source"] = {
 			--[[
@@ -381,41 +380,15 @@ end
 
 function Cyclopedia:loadSprites()
 
-	-- TODO FIX LOOT TODO FIX ANIMATION plenty of lines here should go away, don't need Monster bitmaps
-	-- Characters
-	local texturePack = self.lists["monsters"].texturePack
-	local textureIndex = self.lists["monsters"].textureIndex
-	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
-	self.lists["monsters"].pack = TexturePack.new(textureIndex, texturePack)
-
-	-- TODO FIX ANIMATION remove deprecatedTextureNames
-	
-	for key, value in ipairs(self.lists["monsters"]) do
-
-		if not value.deprecatedName then value.deprecatedName = "Samurai_01__WALK_000.png" end
-
-		--INFO("  ", value.name, value.deprecatedName)
-		local region = self.lists["monsters"].pack:getTextureRegion(value.deprecatedName)
-		local tX, tY, w, h = region:getRegion()
-		value.tC = tX/TILE_WIDTH+1
-		value.tR = tY/TILE_HEIGHT+1
-		--DEBUG("  ", key, value.name, value.tC, value.tR, tX, tY, w, h, value.deprecatedName)		
-	end
-
-	-- TODO FIX LOOT TODO FIX ANIMATION until here
-
 	-- Load Loot
 	local texturePack = self.lists["loot"].texturePack
 	local textureIndex = self.lists["loot"].textureIndex
-	--INFO("Character Pack:", texturePack, "Character Index:", textureIndex)
 	self.lists["loot"].pack = TexturePack.new(textureIndex, texturePack)
 
 	-- Generate Health Bars
 	local STEPS = 10 -- 0 plus 10 steps of bar
 	local D = 2 -- border width
 	local H = 5 -- height of health bar
-
-	for k,v in pairs(self.lists["bars"]) do DEBUG("Cyclopedia", #self.lists["bars"], k,v) end
 
 	for s = 1, STEPS do
 		local rt = RenderTarget.new(TILE_WIDTH, TILE_HEIGHT)
@@ -433,7 +406,7 @@ function Cyclopedia:loadSprites()
 		local bar = Pixel.new(color, alpha, w, H)
 		bar:setPosition(2 * D , TILE_HEIGHT - H - 2 * D)
 		rt:draw(bar)
-		table.insert(self.lists["bars"], rt)	-- TODO LOOT need to fix positions above, and make rt inside loop
+		table.insert(self.lists["bars"], rt)
 	end
 	
 	-- Light
@@ -443,7 +416,7 @@ function Cyclopedia:loadSprites()
 	local bitmap = Bitmap.new(rt)
 
 	for s = 1, STEPS do
-		local lightLevel = self:getEntry("light", s)
+		local lightLevel = self:getEntry(self:getEntry("layers", LAYER_LIGHT), s)
 		local shadow = Pixel.new(COLOR_LTBLACK, lightLevel.alpha, TILE_WIDTH, TILE_HEIGHT)
 		shadow:setPosition((s-1)*TILE_WIDTH, 0)
 		rt:draw(shadow)

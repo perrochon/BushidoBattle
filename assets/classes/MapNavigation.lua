@@ -129,7 +129,7 @@ function MapNavigation:onMouseDown(event)
 		--DEBUG("Down on Map", c, r, e.x, e.y, manual:getEntry("layers", layer), key, tile.name)
 
 		
-		if layer == LAYER_MONSTERS then
+		if layer == LAYER_MONSTERS or layer == LAYER_ENVIRONMENT then
 			self.character.key = key
 			self.to = e			
 			self.from = e

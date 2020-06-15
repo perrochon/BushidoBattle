@@ -7,6 +7,7 @@ next
 TODO
 	- Bugs
 		- Change Hero Name in HTML not working anymore
+		- Navigation funky. Also, need to be able to look at Loot.
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...

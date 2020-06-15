@@ -14,9 +14,6 @@ function CharacterAnimation:init(character)
 	self.scale = character.scale
 	self.active = nil
 
-	
-	
-	
 	--DEBUG(character.sprite, character.dx, character.dy, character.scale)
 
 	local texturePack = "images/"..filename..".png"

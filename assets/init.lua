@@ -70,12 +70,11 @@ COLOR_WHITE @ 0xF9FAFA   -- slightly creamy white
 
 application:setBackgroundColor(COLOR_BLACK)
 
-
--- don't change these, as layers are inserted in this order in TileMap.lua
+-- Order matters as we search high number to low. We insert from low to high, so light is on top.
+-- Loot gets added to the camera on the fly at position 3, i.e. above Environment, below monsters
 LAYER_TERRAIN @ 1		-- terrain layer (dirt, floors, water)
 LAYER_ENVIRONMENT @ 2	-- the enivornment layer (doors, pillars, walls)
 LAYER_MONSTERS @ 3		-- the monster layer (including the hero and NPCs)
-LAYER_LOOT @ 4			-- the loot layer
 LAYER_LIGHT @ 5			-- the light layer (clear, dim, previously-seen, fog-of-war, white, black)
 
 LIGHT_BRIGHT @ 1

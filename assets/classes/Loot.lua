@@ -32,8 +32,7 @@ function Loot:init(entry, c, r)
 	local speed = 0.5 + math.random()
  	local tween = GTween.new(bitmap, speed, animate, properties)
 
-	DEBUG(self.entry, self.name, self.c, self.r, self.x, self.y)
-
+	--DEBUG(self.entry, self.name, self.c, self.r, self.x, self.y)
 end
 
 Loots = Core.class()
@@ -49,7 +48,6 @@ end
 function Loots:check(c, r)
 	for k,v in pairs(self.list) do
 		if c == v.c and r == v.r then
-			DEBUG("Found a", v.name, "at", v.c, v.r)
 			table.remove(self.list, k)
 			return v
 		end
