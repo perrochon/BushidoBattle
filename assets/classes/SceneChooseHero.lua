@@ -81,7 +81,7 @@ function SceneChooseHero:displayHero(slot)
 	local heroWidth = (APP_WIDTH - 2 * BUTTON_MARGIN - 3 * yGap)/4
 	local heroHeight = 400	
 
-	panel = Sprite.new()
+	local panel = Sprite.new()
 	panel:setAnchorPoint(0,1) -- TODO Why does it not matter what this is set to?
 	panel:setPosition(BUTTON_MARGIN + (heroWidth + yGap) * (slot-1) , MENU_MARGIN + heroHeight)
 	self:addChild(panel)
@@ -95,7 +95,7 @@ function SceneChooseHero:displayHero(slot)
 	panel.front:setPosition(5,-5)
 	panel:addChild(panel.front)
 
-	heroName = TextButton.new(hero.name)
+	local heroName = TextButton.new(hero.name)
 	heroName:setAnchorPoint(0,-1)
 	heroName:setScale(0.5)
 	heroName.back:setColor(COLOR_DKGREY)
@@ -106,6 +106,28 @@ function SceneChooseHero:displayHero(slot)
 	heroName.front:setWidth(heroName.back:getWidth() - 10)
 	heroName:setPosition(15, -heroHeight+20)
 	panel:addChild(heroName)
+	panel.heroName = heroName
+	DEBUG(panel.heroName.title.text)
+	
+	panel.heroName:addEventListener("click", function ()
+		DEBUG(panel.heroName.title.text)
+		self.panels[1].heroName.title:stopEditing()
+		self.panels[2].heroName.title:stopEditing()
+		self.panels[3].heroName.title:stopEditing()
+		self.panels[4].heroName.title:stopEditing()
+		panel.heroName.title:startEditing()
+		application:setKeyboardVisibility(true)
+		
+		panel.heroName.title:addEventListener("Validate", function()
+			DEBUG("Validate", panel.heroName.title.text)
+			panel.heroName.title:stopEditing()
+			application:setKeyboardVisibility(false)
+			hero.name = panel.heroName.title:getText():sub(1,11)
+			panel.heroName.title:setText(hero.name)
+			hero:save()
+			end)
+		
+	end)
 
 	panel:addChild(hero.mc)
 	hero.mc:scaleUp(3)
@@ -118,19 +140,6 @@ function SceneChooseHero:displayHero(slot)
 		end
 	end
 	
-	heroName:addEventListener("click", function ()
-		local textInputDialog = TextInputDialog.new("Change Hero Name", "Enter Hero Name", 
-			hero.name, "Cancel", "Save")
-		textInputDialog:addEventListener(Event.COMPLETE, function(event)
-			if event.buttonIndex ~= nil then
-				hero.name = event.text:sub(1,8)
-				hero:save()
-				sceneManager:changeScene(SCENE_CHOOSE_HERO, 0, TRANSITION) 				
-			end
-		end)
-		textInputDialog:show()
-	end)
-
 	local heroDescription = ""
 	heroDescription = heroDescription .. "Level: " .. hero.level .."\n"
 	heroDescription = heroDescription .. "HP: " .. hero.hp .."\n"
@@ -149,7 +158,7 @@ function SceneChooseHero:displayHero(slot)
 	pixel:setPosition(x-5, y-5)
 	--stage:addChild(pixel)
 
-	resetButton = TextButton.new("Reset")
+	local resetButton = TextButton.new("Reset")
 	resetButton:setAnchorPoint(0.5,1)
 	resetButton:setScale(0.5)
 	resetButton:setAlpha(0.5)

@@ -22,9 +22,9 @@ function TextButton:init(text)
 
 	--self:DrawGrid()
 
- 	self.title = TextField.new(FONT_MEDIUM, text)
+ 	self.title = TextEdit.new(FONT_MEDIUM, text,{flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
 	self.title:setTextColor(COLOR_YELLOW)	
-	self.title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
+	--self.title:setLayout({flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
 	self.title:setPosition(200, - (MENU_MARGIN - BUTTON_MARGIN) / 2)
 	self:addChild(self.title)
 
@@ -63,7 +63,7 @@ function TextButton:onMouseUp(event)
 	if self.focus then
 		self.focus = false;
 		self:updateVisualState(false)
-		self:dispatchEvent(Event.new("click"))
+		self:dispatchEvent(Event.new("click", self))
 		event:stopPropagation()
 	end
 end
