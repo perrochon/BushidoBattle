@@ -43,7 +43,7 @@ function Character:init(entry, id)
 	self.dy = self.info.dy
 	self.scale = self.info.scale
 	
-	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+	--DEBUG(self.entry, self.id, self.name, self.weapon.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 	
 end
 

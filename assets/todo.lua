@@ -6,7 +6,6 @@ next
 
 TODO
 	- Bugs
-		- Ninja Four in Heroes is too far to the sides
 		- Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
 		- Change Hero Name in HTML not working anymore
 		- Navigation funky. Also, need to be able to look at Loot.
