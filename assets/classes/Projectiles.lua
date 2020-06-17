@@ -50,8 +50,8 @@ function Projectile:init(pName, fromC, fromR, toC, toR)
 	properties.delay = 0
 	local d = distance({c = fromC, r = fromR},{c = toC, r = toR})
 	properties.dispatchEvents = false
-
-	local tween = GTween.new(self, d/6, animate, properties)
+	
+	local tween = GTween.new(self, d / 6 * ANIMATION_SLOWDOWN, animate, properties)
 	tween.onComplete = function(event)
 		self:removeFromParent()
 		self:dispatchEvent(Event.new("complete"))

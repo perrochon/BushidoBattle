@@ -1,5 +1,5 @@
 <project>
- <properties architecture="7" win_org="GiderosMobile" version="1.0" scaleMode="3" packageName="com.yourdomain.yourapp" app_name="Bushido Battle" vsync="0" osx_category="5" osx_domain="giderosmobile.com" html5_wasm="0" html5_fbload="50" html5_mem="256" build_number="1" app_icon="other/Icon.png" splash_h_image="" windowWidth="0" fps="60" iosDevice="0" osx_installerId="" autorotation="0" html5_host="" version_code="1" tv_icon="" disableSplash="1" windowHeight="0" winrt_package="com.yourdomain.yourapp" splashScaleMode="0" splash_v_image="" retinaDisplay="0" osx_bundle="com.yourdomain." mouseTouchOrder="0" encryptCode="0" logicalWidth="1200" html5_fbinstant="0" html5_crash="" android_template="0" html5_pack="0" logicalHeight="1920" encryptAssets="0" backgroundColor="#000000" touchToMouse="1" exportMode="0" winrt_org="GiderosMobile" html5_symbols="0" mouseToTouch="1" ios_bundle="com.yourdomain." osx_org="GiderosMobile" win_domain="giderosmobile.com" orientation="1" osx_signingId="">
+ <properties html5_pack="0" osx_installerId="" architecture="7" app_name="Bushido Battle" iosDevice="0" win_domain="giderosmobile.com" backgroundColor="#000000" windowHeight="0" version_code="1" mouseTouchOrder="0" html5_mem="256" html5_fbinstant="0" android_template="0" fps="60" html5_symbols="0" html5_crash="" osx_org="GiderosMobile" osx_signingId="" scaleMode="3" html5_fbload="50" windowWidth="0" logicalWidth="1200" osx_bundle="com.yourdomain." winrt_org="GiderosMobile" splash_v_image="" logicalHeight="1920" exportMode="0" retinaDisplay="0" html5_host="" html5_wasm="0" build_number="1" osx_category="5" touchToMouse="1" encryptCode="0" packageName="com.yourdomain.yourapp" orientation="1" ios_bundle="com.yourdomain." encryptAssets="0" disableSplash="1" autorotation="0" version="1.0" osx_domain="giderosmobile.com" vsync="0" app_icon="other/Icon.png" splashScaleMode="0" win_org="GiderosMobile" mouseToTouch="1" winrt_package="com.yourdomain.yourapp" tv_icon="" splash_h_image="">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -24,7 +24,6 @@
   </exports>
  </properties>
  <folder name="classes">
-  <file name="assets/classes/textedit.lua"/>
   <file name="assets/classes/BasicGui.lua"/>
   <file name="assets/classes/Button.lua"/>
   <file name="assets/classes/Camera.lua"/>
@@ -61,6 +60,7 @@
   <file name="assets/classes/scenemanager.lua"/>
   <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
   <file name="assets/classes/textButton.lua"/>
+  <file name="assets/classes/textedit.lua"/>
  </folder>
  <folder name="fonts">
   <file name="assets/fonts/IMMORTAL.ttf"/>
@@ -170,9 +170,9 @@
  <file name="assets/fbapp-config.json"/>
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
- <file name="assets/todo.lua" excludeFromPackage="1" excludeFromExecution="1"/>
- <dependency to="assets/classes/devMacros.lua" from="assets/init.lua"/>
- <dependency to="assets/classes/CharacterAnimation.lua" from="assets/classes/Character.lua"/>
- <dependency to="assets/classes/socket.lua" from="assets/classes/SceneConnect.lua"/>
- <dependency to="assets/classes/textButton.lua" from="assets/classes/SceneJoinServer.lua"/>
+ <file name="assets/todo.lua" excludeFromExecution="1" excludeFromPackage="1"/>
+ <dependency from="assets/init.lua" to="assets/classes/devMacros.lua"/>
+ <dependency from="assets/classes/Character.lua" to="assets/classes/CharacterAnimation.lua"/>
+ <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
+ <dependency from="assets/classes/SceneJoinServer.lua" to="assets/classes/textButton.lua"/>
 </project>

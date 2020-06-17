@@ -8,11 +8,15 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 --]]
 
 Hero = Core.class(Character)
+Hero.__classname= "Hero"
 
 function Hero:init(entry, id)
 	--[[Holding the player's stats
 		entry = 1 for heroes. id is the slot [1..4]
 	--]]
+	
+	--DEBUG(self:getClass())
+
 
 	ASSERT_EQUAL(self.entry, 1)    -- Heroes are 1, monsters are > 1
 	ASSERT_TRUE(0 < id and id < 5, "Hero id not in 1..4. Value is "..id) -- [1..4]

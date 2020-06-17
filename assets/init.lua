@@ -9,6 +9,10 @@ MUSIC_VOLUME @ 0.1
 EFFECTS @ true
 EFFECTS_VOLUME @ 1
 
+ANIMATION_SLOWDOWN = 1
+
+COVER = -5 -- if cover on line of sight is less than COVER then can't see through at all
+
 -- Sockets are not supported in HTML. Load sockets and unite manually if not HTML
 SOCKETS = (application:getDeviceInfo() ~= "Web")
 if SOCKETS then

@@ -459,9 +459,9 @@ function WorldMap:line(from, to)
 end
 
 function WorldMap:lineOfCover(from, to)
-	-- Check tile.cover values until they go below -5 or we reach to
-	-- Return totalCover, to if totalCover >= -5
-	-- Return totalCover, <coordinates of blocker> if totalCover < -5 with 
+	-- Check tile.cover values until they go below COVER or we reach to
+	-- Return totalCover, to.c, to.r if totalCover >= COVER (valid line of sight)
+	-- Return totalCover, <coordinates of blocker> if totalCover < COVER (no line of sight)
 
 	local totalCover = 0
 	local line = self:line(from, to)
@@ -483,7 +483,7 @@ function WorldMap:lineOfCover(from, to)
 		totalCover = totalCover + tile.cover
 		--DEBUG("LIGHT", c, r, tile.cover, totalCover)
 
-		if totalCover < -5 then 
+		if totalCover < COVER then 
 			--DEBUG("Blocked", totalCover, c, r)
 			return totalCover, c, r
 		end

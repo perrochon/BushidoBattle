@@ -170,6 +170,11 @@ function CharacterAnimation:jump()
 end
 
 function CharacterAnimation:die(fadeOut)
+	if self.dead then
+		DEBUG("Second kill")
+		return
+	end
+	
 	self:go("DIE")
 	self.dead = true
 	self:setHealth(nil)

@@ -88,6 +88,15 @@ function ASSERT_TRUE(...)
 	return true
 end
 
+function ASSERT_FALSE(...)
+	local condition = unpack(arg)
+	if condition then
+		print(debugInfo(), "ASSERT_TRUE fail", unpack(arg))
+		return false
+	end
+	return true
+end
+
 --ASSERT_EQUAL(1,1,"1 and 1")
 --ASSERT_EQUAL(1,0,"1 and 0")
 --ASSERT_NOT_EQUAL(1,1,"1 and 1")

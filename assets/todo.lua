@@ -6,6 +6,7 @@ next
 
 TODO
 	- Bugs
+		- Lobby buttons sometimes no longer works in map
 		- Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
 		- Change Hero Name in HTML not working anymore
 		- Navigation funky. Also, need to be able to look at Loot.
@@ -64,6 +65,8 @@ TODO
 	- Achievements Screen with 
 		- Scores, per level? XP?
 	- Refactor
+		- Factor out common code in ScenePlay BasicAttack and RangedAttack
+		- Macro Functions https://wiki.giderosmobile.com/index.php/Macro_Functions
 		- Remove monster tilemap logic
 		- access .info, instead of copying it all over.... Maybe call it .i or .p
 		- Make Character a sprite, instead of having a sprite (will still have a sprite, of course)

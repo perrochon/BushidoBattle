@@ -1,8 +1,11 @@
 --!NEED:test.lua
 
 Character = Core.class()
+Character.__classname= "Character" -- http://forum.giderosmobile.com/discussion/7837/problems-with-getclass/p1
 
 function Character:init(entry, id)
+
+	--DEBUG(self:getClass())
 
 	self.entry = entry  -- position/key in manual, and the world's monster array. 1 is a hero, the rest are monsters
 	self.id = id
@@ -92,8 +95,10 @@ function Character:moveTo(c, r)
 	self.mc:walk()
 	
 
- 	local tween = GTween.new(self.mc, MOVE_SPEED, animate, properties)
-	tween.onComplete = function(event) self.mc:idle() end
+ 	local tween = GTween.new(self.mc, MOVE_SPEED * ANIMATION_SLOWDOWN, animate, properties)
+	tween.onComplete = function(event) 
+			self.mc:idle() 
+		end
 	
 	return tween
 end

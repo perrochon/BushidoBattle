@@ -122,9 +122,9 @@ function ScenePlay:init()
 		self:addChild(self.cs)
 	end
 	
-	if self.client then
-		self:enableArrows(false)
-	end
+	--if self.client then
+		--self:enableArrows(false)
+	--end
 
 	--respond to the compass directions
 	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:checkMove(heroes[currentHero], 0, -1) end)
@@ -137,7 +137,6 @@ function ScenePlay:init()
 	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, 1)  end)
 	self.main.center:addEventListener("click", function()
 		if ScenePlay:cheater(4) then self.main:displayCheats() end
-		if not heroes[currentHero].heroTurn  then return end
 		self:checkMove(heroes[currentHero], 0, 0)
 	end)
 
@@ -167,10 +166,8 @@ function ScenePlay:init()
 		elseif event.keyCode == KeyCode.Z or event.keyCode == KeyCode.NUM_1 then
 			self:checkMove(heroes[currentHero], -1, 1)
 		elseif event.keyCode == KeyCode.Q or event.keyCode == KeyCode.NUM_7 then
-			self:checkMove(heroes[currentHero], -1, -1)
-			
+			self:checkMove(heroes[currentHero], -1, -1)		
 		elseif event.keyCode == KeyCode.SPACE or event.keyCode == KeyCode.NUM_5 then
-			if not heroes[currentHero].heroTurn  then return end
 			self:checkMove(heroes[currentHero], 0, 0)
 		elseif event.keyCode == KeyCode.M then
 			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
@@ -178,45 +175,48 @@ function ScenePlay:init()
 		elseif event.keyCode == KeyCode.N then
 			self.world.camera:setScale(self.world.camera:getScaleX()*0.8,self.world.camera:getScaleY()*0.8) 
 			self.world.camera:centerAnchor()
+		elseif event.keyCode == KeyCode.P then
+			ANIMATION_SLOWDOWN = ANIMATION_SLOWDOWN + 1
+			DEBUG("ANIMATION_SLOWDOWN", ANIMATION_SLOWDOWN)
+		elseif event.keyCode == KeyCode.O then
+			ANIMATION_SLOWDOWN = (ANIMATION_SLOWDOWN - 1)<>1
 		end
 	end)
 	
 	--set the default action to move
 	self.activeAction = "move"
 	self.main.move:updateVisualState(true)
-	 --respond to the action buttons
-	 self.main.look:addEventListener("click", function() 
-	   self.activeAction = "look"
-	   self.main.look:updateVisualState(true)
-	   self.main.move:updateVisualState(false)
-	   self.main.ranged:updateVisualState(false)
-	   self.main.melee:updateVisualState(false)
-	 end)
-	 self.main.move:addEventListener("click", function() 
-	   self.activeAction = "move"
-	   self.main.move:updateVisualState(true)
-	   self.main.look:updateVisualState(false)
-	   self.main.ranged:updateVisualState(false)
-	   self.main.melee:updateVisualState(false)
-	 end)
-	 self.main.melee:addEventListener("click", function() 
-	   self.activeAction = "attack"
-	   heroes[currentHero].weapon = heroes[currentHero].weapons[1]
-	   self.main.melee:updateVisualState(true)
-	   self.main.move:updateVisualState(false)
-	   self.main.look:updateVisualState(false)
-	   self.main.ranged:updateVisualState(false)
-	 end)
-	 self.main.ranged:addEventListener("click", function() 
-	   self.activeAction = "attack"
-	   heroes[currentHero].weapon = heroes[currentHero].weapons[2]
-	   self.main.ranged:updateVisualState(true)
-	   self.main.move:updateVisualState(false)
-	   self.main.look:updateVisualState(false)
-	   self.main.melee:updateVisualState(false)
-	 end)	
-	 
-	 
+	--respond to the action buttons
+	self.main.look:addEventListener("click", function() 
+	  self.activeAction = "look"
+	  self.main.look:updateVisualState(true)
+	  self.main.move:updateVisualState(false)
+	  self.main.ranged:updateVisualState(false)
+	  self.main.melee:updateVisualState(false)
+	end)
+	self.main.move:addEventListener("click", function() 
+	  self.activeAction = "move"
+	  self.main.move:updateVisualState(true)
+	  self.main.look:updateVisualState(false)
+	  self.main.ranged:updateVisualState(false)
+	  self.main.melee:updateVisualState(false)
+	end)
+	self.main.melee:addEventListener("click", function() 
+	  self.activeAction = "attack"
+	  heroes[currentHero].weapon = heroes[currentHero].weapons[1]
+	  self.main.melee:updateVisualState(true)
+	  self.main.move:updateVisualState(false)
+	  self.main.look:updateVisualState(false)
+	  self.main.ranged:updateVisualState(false)
+	end)
+	self.main.ranged:addEventListener("click", function() 
+	  self.activeAction = "attack"
+	  heroes[currentHero].weapon = heroes[currentHero].weapons[2]
+	  self.main.ranged:updateVisualState(true)
+	  self.main.move:updateVisualState(false)
+	  self.main.look:updateVisualState(false)
+	 self.main.melee:updateVisualState(false)
+	end)
 
 	--respond to mouse and touch events. Add this on top of the world
 	local nav = MapNavigation.new(self.world)
@@ -238,23 +238,26 @@ function ScenePlay:checkMove(hero, dc, dr)
 	--[[move the hero if the tile isn't blocked
 	--]]
 
+	--DEBUG("Hero", hero.name, hero.turn, hero.active, dc, dr, hero.c + dc, hero.r + dr, self.activeAction)
 	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
 	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
+	if not hero.turn or not hero.active then return end
 
-	local pass = dc == 0 and dr == 0
-	-- first we need the tile key and layer for where the hero wants to move
-	--DEBUG(hero, dc, dr, pass)
-	--DEBUG("Hero", hero.name, dc, dr, pass, hero.c + dc, hero.r + dr, self.activeAction)
+	if dc == 0 and dr == 0 then 
+		self:heroesTurnOver(hero)
+		return
+	end
 	
-	if not hero.turn then return end
-
+	-- first we need the tile key and layer for where the hero wants to move
+	--DEBUG(hero, dc, dr)
+	
 	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
 	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	if self.activeAction == "look" and not pass then 
+	if self.activeAction == "look" then 
 		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 		return
-	elseif self.activeAction == "attack" and not pass then 
+	elseif self.activeAction == "attack" then 
 		if layer == LAYER_MONSTERS then
 			self:attackMonster(hero.c + dc, hero.r + dr)
 			return
@@ -270,7 +273,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 	end
 
 	if self.activeAction == "move" then
-		if layer == LAYER_MONSTERS and not pass then -- LAYER_MONSTERS contains the hero itself...
+		if layer == LAYER_MONSTERS then -- LAYER_MONSTERS contains the hero itself...
 			-- allow them to bump and melee attack when moving			
 			self.activeAction = "attack"
 			hero.weapon = hero.weapons[1]
@@ -305,9 +308,8 @@ function ScenePlay:checkMove(hero, dc, dr)
 			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
 			self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
 		else
-			heroes[currentHero].heroTurn = true
-			self:enableArrows()
-			self:heroesTurnOver()
+			self:heroPlayed(hero)
+			self:heroesTurnOver(hero)
 		end
 	end
 end
@@ -337,13 +339,13 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 			m = self.monsters:getMonster(monsterIdx)
 			m.hp = monsterHp
 			m.HPbar = monsterHpBar
-			self:removeDeadMonsters(heroIdx)
+			--self:removeDeadMonsters()
 		end
 		
 		if self.client then 
-			heroes[3-localHero].heroTurn = false
-			heroes[currentHero].heroTurn = true
-			self:enableArrows(true)
+			--heroes[3-localHero].heroTurn = false
+			--heroes[currentHero].heroTurn = true
+			--self:enableArrows(true)
 			
 			-- for debugging - wait a little, then client hero decides to do nothing
 			if CLIENT_REST then
@@ -351,8 +353,8 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 			end
 			
 		else
-			heroes[3-localHero].heroTurn = false
-			self:heroesTurnOver()
+			--self:heroPlayed(hero)
+			--self:heroesTurnOver(heroes[3-localHero])
 		end
 		
 	else -- this is a local call - ignoring parameters
@@ -361,9 +363,9 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 
 		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
 		
-		heroes[3-localHero].heroTurn = true
-		heroes[currentHero].heroTurn = false
-		self:enableArrows(false)
+		--heroes[3-localHero].heroTurn = true
+		--heroes[currentHero].heroTurn = false
+		--self:enableArrows(false)
 	end
  end
 
@@ -443,14 +445,16 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 	end 
  end
 
-function ScenePlay:removeDeadMonsters(heroIdx)
+function ScenePlay:removeDeadMonsters()
+
+	DEBUG("Removing Dead Monsters")
 
 	--find the monster being attacked and their index in monsters.list 
 	for id, m in pairs(self.monsters.list) do
 		if m.hp < 1 then		
-			self.msg:add(heroes[heroIdx].name, " killed the " .. m.name, MSG_DEATH)
-			heroes[heroIdx].xp = heroes[currentHero].xp + m.xp
-			heroes[heroIdx].kills = heroes[heroIdx].kills + 1
+			self.msg:add(m.killer.name, " killed the " .. m.name, MSG_DEATH)
+			m.killer.xp = m.killer.xp + m.xp
+			m.killer.kills = m.killer.kills + 1
 			
 			if m.entry == 4 then
 				for id, m in pairs(self.monsters.list) do
@@ -472,13 +476,41 @@ function ScenePlay:removeDeadMonsters(heroIdx)
 	end
 end
 
+function ScenePlay:heroPlayed(hero)
 
-function ScenePlay:heroesTurnOver()
-	--[[puts in one place all the things we want to keep track of after the heroes' turn is done 
+	DEBUG(hero.name, hero.turn)
+	hero.turn = false	
+
+	-- check if all heroes did their turn
+	local allHeroes = true
+	for i = 1,4 do
+		if heroes[i].active and heroes[i].turn then
+			allHeroes = false
+		end
+	end
+	if not allHeroes then return end
+	
+	-- Disable input arrows
+	self:enableArrows(false)
+end
+
+function ScenePlay:heroesTurnOver(hero)
+	--[[ This hero's turn is done. If all heroes are done, prepare for monster turn
 	--]]
 		
-	-- check if the players won 
+	DEBUG(hero.name, hero.turn)
+	hero.done = true
 	
+	-- check if all heroes did their turn
+	local allHeroes = true
+	for i = 1,4 do
+		if heroes[i].active and not heroes[i].done then
+			allHeroes = false
+		end
+	end
+	if not allHeroes then return end
+		
+	-- check if the players won 
 	local targets = 0
 	for i, m in pairs(self.monsters.list) do
 		if m.entry ~= 2 then targets = targets + 1 end
@@ -546,8 +578,12 @@ function ScenePlay:monsterTurnOver()
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
 
-	-- enable hero again
-	heroes[currentHero].heroTurn  = true
+	-- enable heroes again
+	for i = 1,4 do
+		if heroes[i].active then
+			heroes[i].turn = true
+		end
+	end
 	self:enableArrows(true)
 
 	-- Push everything to client
@@ -632,7 +668,9 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	--if ASSERT_TRUE(attacker.entry == 1 and defender.entry == 1, "Hero attacking hero") then return end
+	DEBUG("Basic Attack", attacker:getClass(), defender:getClass())
+
+	ASSERT_FALSE(attacker:getClass() == "Hero" and defender:getClass() == "Hero", "Hero attacking hero")
 
 	-- this is the weapon
 	local weapon = attacker.weapon
@@ -640,8 +678,14 @@ function ScenePlay:basicAttack(attacker, defender)
 	attacker.mc:attack() -- TODO ANIMATION request the correct attack animation attackRange(), attackMelee()
 
 	if weapon.projectile then
+	
+		if attacker:getClass() == "Hero" then 
+			self:heroPlayed(attacker)
+		end
+	
 		self:rangedAttack(weapon, attacker, defender)
 	else
+		DEBUG("Melee Impact", attacker:getClass(), defender:getClass())
 		--roll for the attack using the weapon and all modifiers
 		local roll, crit = self:roll(weapon.modifier)
 		if roll < defender.defense[weapon.defense] then
@@ -661,15 +705,16 @@ function ScenePlay:basicAttack(attacker, defender)
 			self.sounds:play("melee-hit")
 			self:rollDamage(weapon, attacker, defender, crit)
 		end
-		if heroes[currentHero].heroTurn  then 		
+		
+		if attacker:getClass() == "Hero" then 		
 			if self.remote then
 				DEBUG("Basic Attack", "Hero", attacker.heroIdx, attacker.c, attacker.r, "Monster", defender.id, defender.hp)	
 				self:syncTurn(attacker.heroIdx, attacker.c, attacker.r, defender.id, defender.hp, defender.HPbar) 
-				self:removeDeadMonsters(localHero)
+				--self:removeDeadMonsters()
 			else
-				self:removeDeadMonsters(localHero)
-				heroes[currentHero].heroTurn = false
-				self:heroesTurnOver()
+				self:removeDeadMonsters()
+				self:heroPlayed(attacker)
+				self:heroesTurnOver(attacker)
 			end
 		else
 			attacker.done = true
@@ -684,9 +729,13 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 
 	local p = nil
 	local cover, endC, endR = self.world:lineOfCover(attacker, defender)
+	local blocked = cover < COVER
+	
 	-- TODO: FIX projectile angle to move direction defender, not direction obstacle
 	p = Projectile.new(weapon.projectile, attacker.c, attacker.r, endC, endR)
-
+	
+	DEBUG("Ranged Attack", attacker:getClass(), defender:getClass())
+	
 	--[[
 	if blockedC then 
 		-- launch a projectile that hits something along the way
@@ -703,9 +752,12 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	self.world.camera:addChild(p)
 
 	p:addEventListener("complete", function(event)
+
+		DEBUG("Ranged Impact", attacker:getClass(), defender:getClass())
+
 		event:stopPropagation()
-		if blockedX then
-			local key, layer, tile = self.world:getTileInfo(blockedX, blockedY)
+		if blocked then
+			local key, layer, tile = self.world:getTileInfo(endC, endR)
 			self.sounds:play(weapon.projectile .. "-miss")	
 			if attacker.tactics == "player" then
 				if layer == LAYER_MONSTERS then
@@ -735,16 +787,15 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 				self:rollDamage(weapon, attacker, defender, crit)
 			end
 		end
-
-		if heroes[currentHero].heroTurn  then 		
+		
+		if attacker:getClass() == "Hero" then 		
 			if self.remote then
 				DEBUG("Range Attack", "Hero", attacker.heroIdx, attacker.c, attacker.r, "Monster", defender.id, defender.hp)	
 				self:syncTurn(attacker.heroIdx, attacker.c, attacker.r, defender.id, defender.hp, defender.HPbar) 
-				self:removeDeadMonsters(localHero)
+				--self:removeDeadMonsters()
 			else
-				self:removeDeadMonsters(localHero)
-				heroes[currentHero].heroTurn = false
-				self:heroesTurnOver()
+				self:removeDeadMonsters()
+				self:heroesTurnOver(attacker)
 			end
 		else
 			attacker.done = true
@@ -783,6 +834,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	if defender.hp <= 0 then
 		defender.hp = 0
 		defender.mc:die(defender.entry > 1) -- Monsters fade out
+		defender.killer = attacker
 	end
 
 end

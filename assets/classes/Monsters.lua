@@ -15,12 +15,15 @@ if not json then
 end
 
 Monster = Core.class(Character)
+Monster.__classname= "Monster"
 
 function Monster:init(entry, id)
 	--[[variable to hold the monster's stats
 		entry is the monster # that is created.  The # in the MANUAL and in the tileset
 	--]]
 	
+	--DEBUG(self:getClass())
+
 	ASSERT_TRUE(self.entry > 1) -- Heroes are 1, monsters are > 1
 
 	-- TODO REFACTOR superclass should call this
