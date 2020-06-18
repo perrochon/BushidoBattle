@@ -342,16 +342,16 @@ function Cyclopedia:init()
 			texturePack = "images/loot.png",
 			textureIndex = "images/loot.txt",
 			-- Amulets: Omamori, blue Kanai-Anzen (protects), purple kaiun (luck), green yaku-yoke (avoid evil)
-			[1] = {name = "mon", sprite = "6.png", value = 1,},
-			[2] = {name = "shu", sprite = "7.png", value = 6,},
-			[3] = {name = "bu", sprite = "8.png", value = 72,},
-			[4] = {name = "ryo", sprite = "9.png", value = 1728,},
-			[5] = {name = "yen", sprite = "10.png", value = 12096,},
-			[6] = {name = "red omamori", sprite = "1.png", value = 500,},
-			[7] = {name = "yaku-yoke", sprite = "2.png", value = 500,},
-			[8] = {name = "yellow omamori", sprite = "3.png", value = 500,},
-			[9] = {name = "kanai-anzen", sprite = "4.png", value = 500,},
-			[10] = {name = "kaiun", sprite = "5.png", value = 500,},
+			[1] = {name = "mon", sprite = "6.png", value = 1,}, -- yellow
+			[2] = {name = "shu", sprite = "7.png", value = 6,}, -- red
+			[3] = {name = "bu", sprite = "8.png", value = 72,}, -- blue
+			[4] = {name = "ryo", sprite = "9.png", value = 1728,}, -- green
+			[5] = {name = "yen", sprite = "10.png", value = 12096,}, -- purple
+			[6] = {name = "red omamori", sprite = "1.png", value = 500,}, -- red
+			[7] = {name = "yaku-yoke", sprite = "2.png", value = 500,}, -- green
+			[8] = {name = "yellow omamori", sprite = "3.png", value = 500,}, -- yellow 
+			[9] = {name = "kanai-anzen", sprite = "4.png", value = 500,}, -- blue
+			[10] = {name = "kaiun", sprite = "5.png", value = 500,}, -- purple
 			},
 		["bars"] = {},
 			-- health bars are generated in loadSprites()

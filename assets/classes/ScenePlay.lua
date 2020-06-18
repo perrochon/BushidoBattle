@@ -36,12 +36,15 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 
 
 ScenePlay = Core.class(Sprite)
+
+activeAction = "" -- TODO FIX ugly global because MapNavigation needs to know and Main Screen sets, but they are siblings
+
  
 function ScenePlay:init()
 
 	application:setBackgroundColor(COLOR_LTBLACK)	
 	self.sounds = Sounds.new(SCENE_PLAY)
-
+	
 	-- read the level file
 	self.mapData= MapData.new(currentMapFileName) 
 
@@ -180,29 +183,30 @@ function ScenePlay:init()
 			DEBUG("ANIMATION_SLOWDOWN", ANIMATION_SLOWDOWN)
 		elseif event.keyCode == KeyCode.O then
 			ANIMATION_SLOWDOWN = (ANIMATION_SLOWDOWN - 1)<>1
+			DEBUG("ANIMATION_SLOWDOWN", ANIMATION_SLOWDOWN)
 		end
 	end)
 	
 	--set the default action to move
-	self.activeAction = "move"
+	activeAction = "move"
 	self.main.move:updateVisualState(true)
 	--respond to the action buttons
 	self.main.look:addEventListener("click", function() 
-	  self.activeAction = "look"
+	  activeAction = "look"
 	  self.main.look:updateVisualState(true)
 	  self.main.move:updateVisualState(false)
 	  self.main.ranged:updateVisualState(false)
 	  self.main.melee:updateVisualState(false)
 	end)
 	self.main.move:addEventListener("click", function() 
-	  self.activeAction = "move"
+	  activeAction = "move"
 	  self.main.move:updateVisualState(true)
 	  self.main.look:updateVisualState(false)
 	  self.main.ranged:updateVisualState(false)
 	  self.main.melee:updateVisualState(false)
 	end)
 	self.main.melee:addEventListener("click", function() 
-	  self.activeAction = "attack"
+	  activeAction = "attack"
 	  heroes[currentHero].weapon = heroes[currentHero].weapons[1]
 	  self.main.melee:updateVisualState(true)
 	  self.main.move:updateVisualState(false)
@@ -210,7 +214,7 @@ function ScenePlay:init()
 	  self.main.ranged:updateVisualState(false)
 	end)
 	self.main.ranged:addEventListener("click", function() 
-	  self.activeAction = "attack"
+	  activeAction = "attack"
 	  heroes[currentHero].weapon = heroes[currentHero].weapons[2]
 	  self.main.ranged:updateVisualState(true)
 	  self.main.move:updateVisualState(false)
@@ -238,7 +242,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 	--[[move the hero if the tile isn't blocked
 	--]]
 
-	--DEBUG("Hero", hero.name, hero.turn, hero.active, dc, dr, hero.c + dc, hero.r + dr, self.activeAction)
+	--DEBUG("Hero", hero.name, hero.turn, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
 	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
 	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
 	if not hero.turn or not hero.active then return end
@@ -254,16 +258,16 @@ function ScenePlay:checkMove(hero, dc, dr)
 	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
 	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 
-	if self.activeAction == "look" then 
+	if activeAction == "look" then 
 		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 		return
-	elseif self.activeAction == "attack" then 
+	elseif activeAction == "attack" then 
 		if layer == LAYER_MONSTERS then
 			self:attackMonster(hero.c + dc, hero.r + dr)
 			return
 		else -- change mode to "move" on the fly
 			-- self.msg:add("Not a monster", MSG_DESCRIPTION)
-			self.activeAction = "move"
+			activeAction = "move"
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(true)
 			self.main.look:updateVisualState(false)
@@ -272,10 +276,10 @@ function ScenePlay:checkMove(hero, dc, dr)
 		end
 	end
 
-	if self.activeAction == "move" then
+	if activeAction == "move" then
 		if layer == LAYER_MONSTERS then -- LAYER_MONSTERS contains the hero itself...
 			-- allow them to bump and melee attack when moving			
-			self.activeAction = "attack"
+			activeAction = "attack"
 			hero.weapon = hero.weapons[1]
 			self.main.melee:updateVisualState(true)
 			self.main.move:updateVisualState(false)
@@ -286,7 +290,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 		elseif layer == LAYER_ENVIRONMENT then
 			-- check for blocked tiles
 			if tile.blocked then
-				--DEBUG(self.activeAction, hero.x + dc, hero.r + dr, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+				--DEBUG(activeAction, hero.x + dc, hero.r + dr, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
 				self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
 			return
 			else
@@ -295,21 +299,25 @@ function ScenePlay:checkMove(hero, dc, dr)
 		end
 
 		-- we move
-		self.world:moveHero(hero, dc, dr)
-		self.sounds:play("hero-steps")		
-		local loot = self.loots:check(hero.c, hero.r)
-		if loot then
-			self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
-			hero.money = hero.money + loot.value
-			self.world.camera:removeChild(loot)
-		end
-
-		if self.remote then
-			DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
-			self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
-		else
-			self:heroPlayed(hero)
+		local tween = self.world:moveHero(hero, dc, dr)
+		self:heroPlayed(hero)
+		self.sounds:play("hero-steps")
+		
+		tween.onComplete = function(event) 
+			hero.mc:idle() 
+			local loot = self.loots:check(hero.c, hero.r)
+			if loot then
+				self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
+				hero.money = hero.money + loot.value
+				self.world.camera:removeChild(loot)
+			end
 			self:heroesTurnOver(hero)
+		end
+		
+		if self.remote then
+			--DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
+			--self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
+		else
 		end
 	end
 end
@@ -923,29 +931,10 @@ end
 	local keyFrom, layerFrom, tileFrom = self.world:getTileInfo(from.c, from.r)
 	local keyTo, layerTo, tileTo = self.world:getTileInfo(to.c, to.r)
 
-	--DEBUG("Line from", manual:getEntry("layers", layerFrom), keyFrom, from.c, from.r, "to", manual:getEntry("layers", layerTo), keyTo, to.c, to.r)
-	
-	--ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero")
+	DEBUG("Line", c(from), manual:getEntry("layers", layerFrom), c(to), keyFrom, manual:getEntry("layers", layerTo), keyTo)
 
-	--[[
-	local hero = nil
-	for key, value in ipairs(heroes) do
-		DEBUG("Looking for hero", key, value.c, value.r)
-		if value.c == from.c and value.r == from.r then
-			hero = value
-		end
-	end
-	if not ASSERT_TRUE(hero, "Layers say there is a hero, but no hero has these coordinates") then return end
-	--]]
-
-	-- TODO FIX PARTY need to use something like code above when we support parties
-	hero = heroes[currentHero]
-	--ASSERT_TRUE(hero.c == from.c and hero.r == from.r, "Line not originating at local hero")
-
-	from.c, from.r = hero.c, hero.r
-	
 	-- Look
-	if self.activeAction == "look" then
+	if activeAction == "look" then
 		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
 		return
 	end
@@ -956,6 +945,34 @@ end
 		return
 	end
 	
+	ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero")
+
+	local hero = nil
+	for k, v in ipairs(heroes) do
+		DEBUG("Looking for hero", k, v.c, v.r)
+		if v.active and v.c == from.c and v.r == from.r then
+			DEBUG("found", v.name)
+			hero = v
+			break
+		end
+	end
+	if not ASSERT_FALSE(hero == nil, "No active hero has these coordinates") then return end
+	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
+	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
+	if not hero.turn or not hero.active then return end
+
+	if dc == 0 and dr == 0 then 
+		self:heroesTurnOver(hero)
+		return
+	end
+
+	-- TODO FIX PARTY need to use something like code above when we support parties
+	hero = heroes[currentHero]
+	--ASSERT_TRUE(hero.c == from.c and hero.r == from.r, "Line not originating at local hero")
+
+	from.c, from.r = hero.c, hero.r
+	
+	
 	-- Now we know that we either walk, melee or range, and to/from are distinct
 
 	-- Target a monster
@@ -965,7 +982,7 @@ end
 	
 		-- Can they melee/range, let them melee/range
 		if distance < hero.weapons[1].reach then
-			self.activeAction = "attack"
+			activeAction = "attack"
 			hero.weapon = hero.weapons[1]
 			self.main.melee:updateVisualState(true)
 			self.main.move:updateVisualState(false)
@@ -974,7 +991,7 @@ end
 			self:attackMonster(to.c, to.r)
 			return
 		elseif distance < hero.weapons[2].reach then
-			self.activeAction = "attack"
+			activeAction = "attack"
 			hero.weapon = hero.weapons[2]
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(false)
@@ -983,7 +1000,7 @@ end
 			self:attackMonster(to.c, to.r)
 			return
 		else -- change mode to "move" on the fly
-			self.activeAction = "move"
+			activeAction = "move"
 			self.main.melee:updateVisualState(false)
 			self.main.move:updateVisualState(true)
 			self.main.look:updateVisualState(false)
@@ -998,83 +1015,5 @@ end
 	
 	--DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
 	self:checkMove(hero, dc, dr)
-
-
---[[
-		if self.activeAction == "attack" then
-			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
-			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(heroes[currentHero].c - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].r - y) <= heroes[currentHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
-			local inReach = distance({x=event.from.c,y=event.from.r},{x=event.to.r,y=event.to.r}) < heroes[currentHero].weapon.reach
-			if layer == LAYER_MONSTERS and inReach then
-				self:checkMove(heroes[currentHero], event.to.c - heroes[currentHero].c, event.to.r - heroes[currentHero].r)
-			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
-				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
-			end
-		elseif self.activeAction == "look" then
-			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
-		elseif self.activeAction == "move" then
-			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(heroes[currentHero].c - event.to.c)
-			local deltaY = math.abs(heroes[currentHero].r - event.to.r)
-			local dx, dy = 0, 0
-			if deltaX > 0 or deltaY > 0 then
-				--calculate the optimal dx, dy 
-				if deltaX > deltaY then
-					if event.to.c > heroes[currentHero].c then dx, dy = 1, 0 else dx, dy = -1, 0 end
-				else
-					if event.to.r > heroes[currentHero].r then dx, dy = 0, 1 else dx, dy = 0, -1 end
-				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].c, heroes[currentHero].r, dx, dy))
-				self:checkMove(heroes[currentHero],dx, dy)
-			end
-		end
---]]
---[[
-
-
-	if visibleMapTouched then
-		--find the tile that was touched
-		--local key, layer, tile = self.world:getTileInfo(x, y)
-		local key, layer, tile = self.world:getTileInfo(x, y)
-		
-		--DEBUG("Touch at " .. event.c .. ", " .. event.r .. " / " .. x .. ", " .. y )
-		
-		if self.activeAction == "attack" then
-			--calculate the reach, check if it's the monster layer and make sure it wasn't the hero who was clicked
-			-- FIX remove commented line below, as the next one seems to work
-			--local inReach = math.abs(heroes[currentHero].c - x) <= heroes[currentHero].weapon.reach and math.abs(heroes[currentHero].r - y) <= heroes[currentHero].weapon.reach and
-			--				layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
-			local inReach = distance(heroes[currentHero], event) < heroes[currentHero].weapon.reach and
-							layer == LAYER_MONSTERS and not (heroes[currentHero].c == x and heroes[currentHero].r == y)
-			if inReach then
-				self:checkMove(heroes[currentHero], x - heroes[currentHero].c, y - heroes[currentHero].r)
-			elseif (not tile.tactics == "player") and layer == LAYER_MONSTERS then
-				self.msg:add(tile.name .. "is out of range", MSG_DESCRIPTION)	
-			end
-		elseif self.activeAction == "look" then
-			self.msg:add("A " .. tile.name, MSG_DESCRIPTION)	
-		elseif self.activeAction == "move" then
-			--if a move action is selected, move the hero towards the tile 
-			local deltaX = math.abs(heroes[currentHero].c - x)
-			local deltaY = math.abs(heroes[currentHero].r - y)
-			local dx, dy = 0, 0
-			if deltaX > 0 or deltaY > 0 then
-				--calculate the optimal dx, dy 
-				if deltaX > deltaY then
-					if x > heroes[currentHero].c then dx, dy = 1, 0 else dx, dy = -1, 0 end
-				else
-					if y > heroes[currentHero].r then dx, dy = 0, 1 else dx, dy = 0, -1 end
-				end
-				--DEBUG(("Hero is at %d,%d walking %d,%d"):format(heroes[currentHero].c, heroes[currentHero].r, dx, dy))
-				self:checkMove(heroes[currentHero],dx, dy)
-			end
-		end
-	else
-		--DEBUG(("Touch outside visible map at %d,%d"):format(event.c, event.r))
-	end
-	
-	--]]
 end
 

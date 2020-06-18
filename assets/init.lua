@@ -2,7 +2,7 @@
 This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
 (C) 2010 - 2020 Louis Perrochon
 ]]
-VERSION = "0.8.2"
+VERSION = "0.8.3"
 
 MUSIC @ true
 MUSIC_VOLUME @ 0.1
@@ -23,7 +23,7 @@ else
 end
 
 -- Logical App size that we will letterbox
-APP_HEIGHT @ 1188
+APP_HEIGHT @ 1188 -- TODO is this really what we want?
 APP_WIDTH @ 1920
 BUTTON_MARGIN @ 50
 MENU_MARGIN @ 200

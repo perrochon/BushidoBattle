@@ -3,6 +3,8 @@ RELEASE NOTES
 
 next 
 	- Loot! Woot!
+	- Map Navigation upgrades (pahts, attack when in range)
+	- Hero name input works in HTML again (using non-native input now)
 
 TODO
 	- Bugs
@@ -35,7 +37,7 @@ TODO
 		- Make full res animations of heroes for hero selection screen
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
-		- Render shortest path, if walk, and line if can shoot
+		- Navigation: Fat-finger offset for touch would be set in OnTouch event, just read in click
 		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 		- Music / Sounds refresh. Find a set of new sounds and revise all of it
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
@@ -65,6 +67,7 @@ TODO
 	- Achievements Screen with 
 		- Scores, per level? XP?
 	- Refactor
+		- libpng warning: iCCP: known incorrect sRGB profile
 		- Factor out common code in ScenePlay BasicAttack and RangedAttack
 		- Macro Functions https://wiki.giderosmobile.com/index.php/Macro_Functions
 		- Remove monster tilemap logic

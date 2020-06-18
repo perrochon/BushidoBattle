@@ -253,6 +253,7 @@ function WorldMap:moveHero(hero, dc, dr)
 		self:shiftWorld2()
 	end
 	
+	return tween
 end
 
 function WorldMap:adjustLight(hero, dc, dr)
@@ -531,8 +532,10 @@ function WorldMap:clearMarkers()
 	end
 end
 
-function WorldMap:shortestPath(from, to)
-	--self:clearMarkers()
+function WorldMap:shortestPath(from, to, draw)
+	-- if draw then put markers on the map
+
+	self:clearMarkers()
 	--self:setMarker(from, "s")
 	--self:setMarker(to, "e")
 
@@ -569,12 +572,14 @@ function WorldMap:shortestPath(from, to)
  		if current.c == to.c and current.r == to.r then
 			--DEBUG("Found Target", from.c, from.r, "-", current.c, current.r, "-", current.dc, current.dr)
 			
-			local walker, s = current, 0
-			while walker.c ~= from.c or walker.r ~= from.r and s < 100 do
-				walker = walker.incoming
-				--DEBUG(s, ":", from.c, from.r, "-", current.c, current.r, "-",  walker.c, walker.r)
-				--self:setMarker(walker, "f")
-				s = s + 1
+			if draw then
+				local walker, s = current, 0
+				while walker.incoming.c ~= from.c or walker.incoming.r ~= from.r and s < 100 do
+					walker = walker.incoming
+					--DEBUG(s, ":", from.c, from.r, "-", current.c, current.r, "-",  walker.c, walker.r)
+					self:setMarker(walker, "f")
+					s = s + 1
+				end
 			end
 			
 			return current.dc, current.dr

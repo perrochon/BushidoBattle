@@ -91,7 +91,7 @@ end
 function ASSERT_FALSE(...)
 	local condition = unpack(arg)
 	if condition then
-		print(debugInfo(), "ASSERT_TRUE fail", unpack(arg))
+		print(debugInfo(), "ASSERT_FALSE fail", unpack(arg))
 		return false
 	end
 	return true
@@ -119,6 +119,22 @@ end
 
 function stringToBoolean(string)
 	if string=="true" then return true elseif string=="false" then return false else return nil end
+end
+
+function c(a,b)
+	-- prettyprint coordinates
+	if not b then
+		local s = ""
+		if a.c and a.r then
+			s = s..("(%d,%d)"):format(a.c, a.r)
+		end
+		if a.x and a.y then
+			s = s..("(%d,%d)"):format(a.x, a.y)
+		end
+		return s
+	else
+		return ("(%d,%d)"):format(a, b)
+	end
 end
 
 function dump(t,indent)
