@@ -44,9 +44,11 @@ function Sounds:play(name, volume)
 		end
 		--play repeats of however many sounds there are for that named sound
 		sound = self.sounds[name][math.random(1, #self.sounds[name])]:play(0, repeats)
-		sound:setVolume(volume)
+		if sounds then 
+			sound:setVolume(volume)
+		end
 		if string.sub(name, 1, 5) == "music" then
-			return sound
+			return sound -- TODO FIX why not return it all the time. If it's not used, it drops off the stack
 		end
 	end
 end

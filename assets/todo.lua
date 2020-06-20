@@ -11,11 +11,14 @@ TODO
 		- Lobby buttons sometimes no longer works in map
 		- Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
 		- Change Hero Name in HTML not working anymore
-		- Navigation funky. Also, need to be able to look at Loot.
+		- Navigation
+			need to be able to look at Loot.
+			route on environment that is non-blocking
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
 		- BFS 
+			-berserkers stack on other monsters (bfs firs steps are not checked for collisions)
 			-cut of BFS based on time spent (i.e. 1s/number of monsters)
 			-to monster/env tile searches whole board. Why? 
 				Find closest spot? Even when right next to hero. Cut off?

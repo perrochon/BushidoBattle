@@ -71,7 +71,7 @@ function save( filename, dataTable )
 	local path = filename..".json"
 	--Encode table into Json string
 	local JsonString = json.encode( dataTable )
-	DEBUG(JsonString)
+	--DEBUG(JsonString)
 	-- io.open opens a file at path. Creates one if doesn't exist
 	local file = io.open( path, "w" )
 	if file then

@@ -550,17 +550,21 @@ function WorldMap:shortestPath(from, to, draw)
 	from.dr = 0
 	from.steps = 0 
 	from.incoming = from
+	--from.score = distance(from, to) / 1.41 + from.steps
+	local dc,dr = from.c - to.c, from.r - to.r
+	from.score = from.steps + (-dc<>dc)<>(-dr<>dr)
 	table.insert(queue, from)
 	found[self:index(from.c, from.r)] = true	
-	--DEBUG("Starting with", from.c, from.r, from.dc, from.dr, to.c, to.r, from.incoming.c, from.incoming.r, #queue)
-
-	while #queue > 0 and iterations < 100 do
+	--DEBUG("Starting with", c(from), c(to), c(from.incoming), #queue)
+	
+	while #queue > 0 and iterations < 300 do
 	
 		-- Sort by possible shortest path. 
 		table.sort(queue, function (p1, p2)
-			local d1 = distance(p1, to)/1.41 + p1.steps
-			local d2 = distance(p2, to)/1.41 + p2.steps
-			return d1 < d2
+				
+			--local d1 = distance(p1, to)/1.41 + p1.steps
+			--local d2 = distance(p2, to)/1.41 + p2.steps
+			return p1.score < p2.score 
 		end) 
 
 		current = queue[1]
@@ -587,7 +591,10 @@ function WorldMap:shortestPath(from, to, draw)
 		
 		for dr = -1, 1 do
 			for dc = -1 , 1 do
-				next = {c = current.c + dc, r = current.r + dr, steps = current.steps + 1}
+				local penalty = 0
+				if dc ~= 0 and dr ~= 0 then penalty = 0.1 end
+				next = {c = current.c + dc, r = current.r + dr}
+				
 				if not found[self:index(next.c, next.r)] 
 					and (dr or dc) 
 					and next.c > 1 and next.c < LAYER_COLUMNS 
@@ -595,23 +602,29 @@ function WorldMap:shortestPath(from, to, draw)
 					
 					found[self:index(next.c, next.r)] = true	
 
-					key, layer, tile = self:getTileInfo(next.c, next.r)
+					local key, layer, tile = self:getTileInfo(next.c, next.r)
+					local blocked = (layer == LAYER_ENVIRONMENT and tile.blocked)
+					
+					key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
+					blocked = blocked or tile.cover < -5
 
-					local blocked  = (layer == LAYER_ENVIRONMENT and tile.blocked)
-	
-					if current.dc ~= 0 or current.dr ~= 0  then -- carry forward on original direction
-						next.dc = current.dc
-						next.dr = current.dr
-					else -- first set of nodes, set initial direction
-						next.dc = dc
-						next.dr = dr					
-						-- A monster next to source stops this path of exploration...
-						blocked = blocked or (layer == LAYER_MONSTERS)
-					end
-					
-					next.incoming = current
-					
 					if not blocked then
+						next.steps = current.steps + 1
+						--next.score = distance(next, to) / 1.41 + next.steps
+						local cc,rr = next.c - to.c, next.r - to.r
+						next.score = from.steps + (-cc<>cc)<>(-rr<>rr) + penalty
+	
+						if current.dc ~= 0 or current.dr ~= 0  then -- carry forward on original direction
+							next.dc = current.dc
+							next.dr = current.dr
+						else -- first set of nodes, set initial direction
+							next.dc = dc
+							next.dr = dr					
+							-- A monster next to source stops this path of exploration...
+							blocked = blocked or (layer == LAYER_MONSTERS)
+						end
+					
+						next.incoming = current
 						table.insert(queue, next)
 						--DEBUG("ADDING", next.c, next.r, "|", next.dc, next.dr, "|", next.incoming.c, next.incoming.r)
 					end

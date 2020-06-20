@@ -5,11 +5,11 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 VERSION = "0.8.3"
 
 MUSIC @ true
-MUSIC_VOLUME @ 0.1
-EFFECTS @ true
-EFFECTS_VOLUME @ 1
+MUSIC_VOLUME @ 0
+EFFECTS @ false
+EFFECTS_VOLUME @ 0
 
-ANIMATION_SLOWDOWN = 1
+ANIMATION_SLOWDOWN = .5
 
 COVER = -5 -- if cover on line of sight is less than COVER then can't see through at all
 
@@ -149,10 +149,50 @@ MONSTER_MOVED @ "monsterMoved"
 SYNC_STATE @ "syncState"
 AUTO_CONNECT @ true
 
-
+-- Significant time is spent in distance, and it's time users are waiting for monsters to move
+-- Options: cache distance results, get rid of pow, cache function lookup, replace by Macro
 function distance(o1, o2)
 	if not o1 or not o2 then return nil end
 	return math.floor(10*math.sqrt(math.pow(tonumber(o1.c) - tonumber(o2.c),2) + math.pow(tonumber(o1.r) - tonumber(o2.r),2)))/10
 end
 
+--[[
+DISTANCE @ (|
+	local t = ...
+	local r = {}
+	table.insert(r, "local c1 = "..t[2]..".c")
+	table.insert(r, "local r1 = "..t[2]..".r")
+	table.insert(r, "local c2 = "..t[3]..".c")
+	table.insert(r, "local r2 = "..t[3]..".r")
+	table.insert(r, "local "..t[1].." = math.floor(10*math.sqrt(math.pow(tonumber(c1) - tonumber(c2),2) + math.pow(tonumber(r1) - tonumber(r2),2)))/10")
+	print (table.concat(r, " ")) -- DEBUG
+	return table.concat(r, " ")
+|)
 
+local o1 = {c = 1, r = 2}
+local o2 = {c = 3, r = 4}
+local to = {c = 0, r = 0}
+print(distance(o1, o2), distance(o1, to), distance(o2, to))
+
+DISTANCE(d1 o1 o2)
+DISTANCE(d2 o1 to)
+DISTANCE(d3 o2 to)
+print(d1, d2, d3)
+
+local queue = {}
+table.insert(queue, o1)
+table.insert(queue, o2)
+
+table.sort(queue, function (p1, p2)
+	local d1 = distance(p1, to)/1.41
+	local d2 = distance(p2, to)/1.41
+	return d1 < d2
+end) 
+
+table.sort(queue, function (p1, p2)
+	DISTANCE(d1 p1 to)
+	DISTANCE(d2 p2 to)
+	return d1 < d2
+end) 
+
+--]]
