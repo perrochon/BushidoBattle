@@ -1,6 +1,6 @@
 CharacterAnimation = Core.class(Sprite)
 
-MOVE_SPEED @ 0.5
+MOVE_SPEED @ 1
 
 function CharacterAnimation:init(character)
 

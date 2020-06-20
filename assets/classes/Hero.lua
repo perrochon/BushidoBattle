@@ -25,7 +25,7 @@ function Hero:init(entry, id)
 	self.name = self.info.names[self.id]
 	-- We also overwrite self.sprite and self.mc in loadSprite() below
 	self:loadSprite()
-	DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
 
 	-- Additional Player fields
 	self:setActive(false) 
