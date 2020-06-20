@@ -544,7 +544,7 @@ function ScenePlay:heroesTurnOver(hero)
 	for id, m in pairs(self.monsters.list) do
 		m.done = false
 		self.monsters:updateState(m, id, self.remote)
-		if (m.hp > 0) then -- redundant, as we remove dead monsters now explicitely
+		if (m.hp >= 1) then -- redundant, as we remove dead monsters now explicitely
 			--DEBUG("Playing " .. m.name .. " at " .. m.c .. " " .. m.r)
 			self:monsterAI(m)
 		end	
@@ -839,7 +839,7 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	
 	--DEBUG(attacker.name, "hits", defender.name, defender.hp)
 	
-	if defender.hp <= 0 then
+	if defender.hp < 1 then
 		defender.hp = 0
 		defender.mc:die(defender.entry > 1) -- Monsters fade out
 		defender.killer = attacker
