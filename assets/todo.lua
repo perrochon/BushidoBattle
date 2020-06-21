@@ -3,7 +3,7 @@ RELEASE NOTES
 
 next 
 	- Loot! Woot!
-	- Map Navigation upgrades (pahts, attack when in range)
+	- Map Navigation upgrades (paths, attack when in range)
 	- Hero name input works in HTML again (using non-native input now)
 
 TODO
@@ -83,6 +83,8 @@ TODO
 		- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010
 	- (low) HTML (Web) Sockets
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1 (search for "sockets")
+	- Music
+		- https://soundimage.org/wp-content/uploads/2020/03/Ancient-Game-Open.mp3
 	- Shaders (for on the fly color changes)
 		- https://www.khronos.org/opengl/wiki/GLSL_:_common_mistakes
 		- http://forum.giderosmobile.com/discussion/6154/get-pixel-information-from-bitmap-or-texture#latest
