@@ -1,5 +1,5 @@
 <project>
- <properties html5_pack="0" osx_installerId="" architecture="7" app_name="Bushido Battle" iosDevice="0" win_domain="giderosmobile.com" backgroundColor="#000000" windowHeight="0" version_code="1" mouseTouchOrder="0" html5_mem="256" html5_fbinstant="0" android_template="0" fps="60" html5_symbols="0" html5_crash="" osx_org="GiderosMobile" osx_signingId="" scaleMode="3" html5_fbload="50" windowWidth="0" logicalWidth="1200" osx_bundle="com.yourdomain." winrt_org="GiderosMobile" splash_v_image="" logicalHeight="1920" exportMode="0" retinaDisplay="0" html5_host="" html5_wasm="0" build_number="1" osx_category="5" touchToMouse="1" encryptCode="0" packageName="com.yourdomain.yourapp" orientation="1" ios_bundle="com.yourdomain." encryptAssets="0" disableSplash="1" autorotation="0" version="1.0" osx_domain="giderosmobile.com" vsync="0" app_icon="other/Icon.png" splashScaleMode="0" win_org="GiderosMobile" mouseToTouch="1" winrt_package="com.yourdomain.yourapp" tv_icon="" splash_h_image="">
+ <properties retinaDisplay="0" html5_symbols="0" osx_domain="giderosmobile.com" splash_v_image="" html5_fbload="50" win_org="GiderosMobile" logicalWidth="1200" orientation="1" architecture="7" autorotation="0" packageName="com.yourdomain.yourapp" version="1.0" tv_icon="" osx_signingId="" html5_pack="0" iosDevice="0" encryptCode="0" html5_mem="256" logicalHeight="1920" build_number="1" html5_fbinstant="0" html5_host="" winrt_org="GiderosMobile" mouseToTouch="1" osx_bundle="com.yourdomain." fps="60" html5_wasm="0" osx_installerId="" splash_h_image="" app_icon="other/Icon.png" ios_bundle="com.yourdomain." osx_org="GiderosMobile" android_template="0" windowHeight="0" winrt_package="com.yourdomain.yourapp" version_code="1" app_name="Bushido Battle" windowWidth="0" disableSplash="1" mouseTouchOrder="0" exportMode="0" scaleMode="3" encryptAssets="0" touchToMouse="1" win_domain="giderosmobile.com" splashScaleMode="0" html5_crash="" osx_category="5" backgroundColor="#000000" vsync="0">
   <imageScales/>
   <plugins>
    <plugin name="JSON" enabled="1"/>
@@ -8,18 +8,18 @@
   </plugins>
   <exports>
    <export name="APK">
-    <property value="" name="androidPath"/>
-    <property value="" name="androidSdk"/>
-    <property value="28" name="androidTarget"/>
-    <property value="" name="androidTools"/>
-    <property value="0" name="buildAab"/>
-    <property value="0" name="buildApk"/>
-    <property value="0" name="deployApk"/>
-    <property value="" name="javaPath"/>
-    <property value="" name="keyAlias"/>
-    <property value="" name="keyStore"/>
-    <property value="com.zwsi.bushidobattle" name="packageName"/>
-    <property value="1" name="timestampApk"/>
+    <property name="androidPath" value=""/>
+    <property name="androidSdk" value=""/>
+    <property name="androidTarget" value="28"/>
+    <property name="androidTools" value=""/>
+    <property name="buildAab" value="0"/>
+    <property name="buildApk" value="0"/>
+    <property name="deployApk" value="0"/>
+    <property name="javaPath" value=""/>
+    <property name="keyAlias" value=""/>
+    <property name="keyStore" value=""/>
+    <property name="packageName" value="com.zwsi.bushidobattle"/>
+    <property name="timestampApk" value="1"/>
    </export>
   </exports>
  </properties>
@@ -51,27 +51,18 @@
   <file name="assets/classes/SceneStartServer.lua"/>
   <file name="assets/classes/SceneVictory.lua"/>
   <file name="assets/classes/Sounds.lua"/>
-  <file name="assets/classes/Tests.lua" excludeFromExecution="1"/>
-  <file name="assets/classes/Unite.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/Tests.lua"/>
+  <file excludeFromExecution="1" name="assets/classes/Unite.lua"/>
   <file name="assets/classes/WorldMap.lua"/>
   <file name="assets/classes/dataSaver.lua"/>
   <file name="assets/classes/devMacros.lua"/>
   <file name="assets/classes/gtween.lua"/>
   <file name="assets/classes/scenemanager.lua"/>
-  <file name="assets/classes/socket.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/classes/socket.lua"/>
   <file name="assets/classes/textButton.lua"/>
   <file name="assets/classes/textedit.lua"/>
  </folder>
  <folder name="fonts">
-  <file name="assets/fonts/IMMORTAL.ttf"/>
-  <file name="assets/fonts/immortal_XL.png"/>
-  <file name="assets/fonts/immortal_XL.txt"/>
-  <file name="assets/fonts/immortal_large.png"/>
-  <file name="assets/fonts/immortal_large.txt"/>
-  <file name="assets/fonts/immortal_medium.png"/>
-  <file name="assets/fonts/immortal_medium.txt"/>
-  <file name="assets/fonts/immortal_small.png"/>
-  <file name="assets/fonts/immortal_small.txt"/>
   <file name="assets/fonts/nuku1.ttf"/>
  </folder>
  <folder name="images">
@@ -142,15 +133,15 @@
  </folder>
  <folder name="maps">
   <file name="assets/maps/map00.lua"/>
-  <file name="assets/maps/map01.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map02.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map03.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map04.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map05.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map06.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map07.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map08.lua" excludeFromExecution="1"/>
-  <file name="assets/maps/map09.lua" excludeFromExecution="1"/>
+  <file excludeFromExecution="1" name="assets/maps/map01.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map02.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map03.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map04.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map05.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map06.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map07.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map08.lua"/>
+  <file excludeFromExecution="1" name="assets/maps/map09.lua"/>
  </folder>
  <folder name="sounds">
   <file name="assets/sounds/Ninja-Game-Intro.mp3"/>
@@ -170,7 +161,7 @@
  <file name="assets/fbapp-config.json"/>
  <file name="assets/init.lua"/>
  <file name="assets/main.lua"/>
- <file name="assets/todo.lua" excludeFromExecution="1" excludeFromPackage="1"/>
+ <file excludeFromExecution="1" name="assets/todo.lua" excludeFromPackage="1"/>
  <dependency from="assets/init.lua" to="assets/classes/devMacros.lua"/>
  <dependency from="assets/classes/Character.lua" to="assets/classes/CharacterAnimation.lua"/>
  <dependency from="assets/classes/SceneConnect.lua" to="assets/classes/socket.lua"/>
