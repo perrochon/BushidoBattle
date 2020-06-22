@@ -8,7 +8,7 @@ next
 
 TODO
 	- Bugs
-		- Lobby buttons sometimes no longer works in map
+		- ? Lobby buttons sometimes no longer works in map
 		- Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
 		- Change Hero Name in HTML not working anymore
 		- Navigation
