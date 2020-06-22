@@ -612,7 +612,7 @@ function ScenePlay:monsterAI(monster)
 		if monster.seesHero then
 			--move towards the hero
 			self.sounds:play("monster-steps")
-			dx, dy = self.world:shortestPath({c = monster.c, r = monster.r}, {c = monster.target.c, r = monster.target.r})
+			dx, dy = self.world:shortestPath(monster, monster.target, false, true)
 		else
 			--move randomly in one of eight directions
 			local directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}, {-1, -1}, {-1, 1}, {1, -1}}
@@ -1011,7 +1011,7 @@ end
 
 	-- All that's left is moving towards to
 
-	local dc, dr = self.world:shortestPath(from, to)
+	local dc, dr = self.world:shortestPath(from, to, false, false)
 	
 	--DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
 	self:checkMove(hero, dc, dr)

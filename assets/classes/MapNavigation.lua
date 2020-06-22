@@ -96,10 +96,10 @@ function MapNavigation:updateVisualStatus()
 				self.line:endPath()                            -- end the path
 				self.world.camera:addChild(self.line)          -- add the shape to the stage
 			else
-				self.world:shortestPath(self.from, self.to, true)
+				self.world:shortestPath(self.from, self.to, true, false)
 			end
 		else
-				self.world:shortestPath(self.from, self.to, true)
+				self.world:shortestPath(self.from, self.to, true, false)
 		end
 	end
 end

@@ -532,8 +532,9 @@ function WorldMap:clearMarkers()
 	end
 end
 
-function WorldMap:shortestPath(from, to, draw)
+function WorldMap:shortestPath(from, to, draw, darkness)
 	-- if draw then put markers on the map
+	-- if darkness can route through darkness
 
 	self:clearMarkers()
 	--self:setMarker(from, "s")
@@ -556,8 +557,15 @@ function WorldMap:shortestPath(from, to, draw)
 	table.insert(queue, from)
 	found[self:index(from.c, from.r)] = true	
 	--DEBUG("Starting with", c(from), c(to), c(from.incoming), #queue)
+
+	local maxQueue = #queue
 	
-	while #queue > 0 and iterations < 300 do
+	while #queue > 0 and iterations < 200 do
+		-- TODO FIX Better cut off criteria. 
+		-- Test Peasant Mob Map to make sure peasants march. 200 seems to be enough
+	
+		maxQueue = #queue<>maxQueue
+	
 	
 		-- Sort by possible shortest path. 
 		table.sort(queue, function (p1, p2)
@@ -605,8 +613,10 @@ function WorldMap:shortestPath(from, to, draw)
 					local key, layer, tile = self:getTileInfo(next.c, next.r)
 					local blocked = (layer == LAYER_ENVIRONMENT and tile.blocked)
 					
-					key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
-					blocked = blocked or tile.cover < -5
+					if not darkness then
+						key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
+						blocked = blocked or tile.cover < -5
+					end
 
 					if not blocked then
 						next.steps = current.steps + 1
@@ -634,7 +644,7 @@ function WorldMap:shortestPath(from, to, draw)
 	end
 
 	-- naive
-	--DEBUG("Giving up BFS after", iterations) -- TODO
+	DEBUG("Giving up BFS after", iterations, maxQueue, c(from), c(to)) -- TODO
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		

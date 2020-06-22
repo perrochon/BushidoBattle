@@ -1,10 +1,34 @@
 --[[
 RELEASE NOTES
 
+- Release on Android
+	- Export to Android
+	- Update in Notepad
+		- compileSdkVersion to 28
+		- buildToolsVersion in app/build.gradle to "28.0.3"
+		- versionCode to YYMMDDHH (makes it bigger than the last)
+		- Not sure why Gideros doesn't do that despite setting
+	- Rename old folder in Android, move new exported folder in it's place
+	- Open in Android Studio
+	- Deploy to phone and test
+	- Generate Signed Bundle
+		- Keystore: E:\KeyStore, key name: key0
+	- Open Play Console
+		- Create release
+		- Update Version number
+
 next 
 	- Loot! Woot!
 	- Map Navigation upgrades (paths, attack when in range)
 	- Hero name input works in HTML again (using non-native input now)
+
+known issues 
+	- 2-player mode broken ("connect")
+
+major next features
+	- Parties (more than one hero)
+	- Fix 2-player mode
+	- Spending Loot
 
 TODO
 	- Bugs
