@@ -2,14 +2,14 @@
 This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
 (C) 2010 - 2020 Louis Perrochon
 ]]
-VERSION = "0.8.3"
+VERSION = "0.8.4"
 
 MUSIC @ true
 MUSIC_VOLUME @ 0
 EFFECTS @ false
 EFFECTS_VOLUME @ 0
 
-ANIMATION_SLOWDOWN = .5
+ANIMATION_SLOWDOWN = 0.5
 
 COVER = -5 -- if cover on line of sight is less than COVER then can't see through at all
 
