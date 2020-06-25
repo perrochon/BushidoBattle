@@ -508,6 +508,8 @@ function ScenePlay:heroesTurnOver(hero)
 		
 	DEBUG(hero.name, hero.turn)
 	hero.done = true
+
+	DEBUG ("Saving Hero") hero:save() -- TODO FIX HEROSAVE
 	
 	-- check if all heroes did their turn
 	local allHeroes = true
@@ -523,11 +525,13 @@ function ScenePlay:heroesTurnOver(hero)
 	for i, m in pairs(self.monsters.list) do
 		if m.entry ~= 2 then targets = targets + 1 end
 	end
+
+
 	
 	--DEBUG("Targets left", targets)
 	
 	if targets == 0 or self.cheat == "V" then
-		heroes[currentHero]:save(currentHeroFileName)
+		heroes[currentHero]:save()
 		sceneManager:changeScene(SCENE_VICTORY, TRANSITION_TIME, TRANSITION)
 	end
 	
@@ -582,7 +586,7 @@ function ScenePlay:monsterTurnOver()
 	--after all the monsters attacked, check if the hero lost
 	if heroes[currentHero].hp < 1 or self.cheat == "D" then
 		self.msg:add("you died", MSG_DEATH)
-		heroes[currentHero]:save(currentHeroFileName)
+		heroes[currentHero]:save()
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
 

@@ -12,7 +12,7 @@ function SceneVictory:init()
 
 	--hero.level = hero.level + 1
 	--hero.maxHP = hero.maxHP + 20
-	--hero:save(currenHeroFileName)
+	--hero:save()
 
 	self.time = 0	--cycles of time that have passed
 	self.a = 0		--setAlpha value for the words on this screen

@@ -31,7 +31,7 @@ function SceneChooseHero:init()
 		else
 			hero = Hero.new(1,i) 
 			--DEBUG(i, "made " .. hero.name .. " level " .. hero.level)
-			hero:save(heroFileName)
+			hero:save()
 			self.panels[i] = self:displayHero(hero, i)
 		end
 			--]]
