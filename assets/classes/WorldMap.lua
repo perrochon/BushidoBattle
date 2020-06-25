@@ -582,6 +582,7 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 		--self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
+			-- TODO FIX Move this into the loop and test next instead of current (avoids adding nodes)
 			--DEBUG("Found Target", from.c, from.r, "-", current.c, current.r, "-", current.dc, current.dr)
 			
 			if draw then
@@ -612,6 +613,11 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 
 					local key, layer, tile = self:getTileInfo(next.c, next.r)
 					local blocked = (layer == LAYER_ENVIRONMENT and tile.blocked)
+
+					-- A monster next to source stops this path of exploration...
+					if current.steps == 0 then
+						blocked = blocked or (layer == LAYER_MONSTERS)
+					end
 					
 					if not darkness then
 						key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
@@ -620,21 +626,19 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 
 					if not blocked then
 						next.steps = current.steps + 1
+						next.incoming = current
 						--next.score = distance(next, to) / 1.41 + next.steps
 						local cc,rr = next.c - to.c, next.r - to.r
 						next.score = from.steps + (-cc<>cc)<>(-rr<>rr) + penalty
 	
-						if current.dc ~= 0 or current.dr ~= 0  then -- carry forward on original direction
+						if current.steps > 0  then -- carry forward on original direction
 							next.dc = current.dc
 							next.dr = current.dr
 						else -- first set of nodes, set initial direction
 							next.dc = dc
 							next.dr = dr					
-							-- A monster next to source stops this path of exploration...
-							blocked = blocked or (layer == LAYER_MONSTERS)
 						end
 					
-						next.incoming = current
 						table.insert(queue, next)
 						--DEBUG("ADDING", next.c, next.r, "|", next.dc, next.dr, "|", next.incoming.c, next.incoming.r)
 					end
