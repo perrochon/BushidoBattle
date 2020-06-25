@@ -153,7 +153,7 @@ function MapNavigation:onMouseDown(event)
 	self.focus = false
 	self.hero = nil
 	
-	if self.look or layer == LAYER_MONSTERS then -- we consume click (else let it through to camera below)
+	if self.look or layer == LAYER_MONSTERS or (layer == LAYER_ENVIRONMENT and not tile.blocked) then -- we consume click (else let it through to camera below)
 		self.focus = true
 		self.last = copy(e)
 		self.from = copy(e)
@@ -187,7 +187,7 @@ function MapNavigation:onMouseMove(event)
 		local key, layer, tile = self.world:getTileInfo(e.c, e.r)	
 		--DEBUG("Move on Map", c(e), manual:getEntry("layers", layer), key, tile.name)
 		
-		if self.look or layer == LAYER_MONSTERS or layer == LAYER_TERRAIN then -- we consume click (else let it through to camera below)
+		if self.look or layer == LAYER_MONSTERS or layer == LAYER_TERRAIN or (layer == LAYER_ENVIRONMENT and not tile.blocked) then -- we consume click (else let it through to camera below)
 			self.to = copy(e)
 			self:updateStatus()
 		elseif layer == LAYER_ENVIRONMENT then
