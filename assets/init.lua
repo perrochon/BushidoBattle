@@ -9,7 +9,8 @@ MUSIC_VOLUME @ 0
 EFFECTS @ false
 EFFECTS_VOLUME @ 0
 
-ANIMATION_SLOWDOWN = 0.5
+MOVE_SPEED @ 0.5
+ANIMATION_SLOWDOWN = 1 	
 
 COVER = -5 -- if cover on line of sight is less than COVER then can't see through at all
 

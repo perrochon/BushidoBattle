@@ -1,7 +1,5 @@
 CharacterAnimation = Core.class(Sprite)
 
-MOVE_SPEED @ 1
-
 function CharacterAnimation:init(character)
 
 	self.scale = character.scale
