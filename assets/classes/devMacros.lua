@@ -23,7 +23,7 @@ LEVEL_INFO @ 2
 LEVEL_ERROR @ 1
 LEVEL_NONE @ 0
 
-OUTPUT_LEVEL @ LEVEL_INFO
+OUTPUT_LEVEL @ LEVEL_DEBUG
 
 function DEBUG(...)
 	if OUTPUT_LEVEL >= LEVEL_DEBUG then
@@ -138,6 +138,7 @@ function c(a,b)
 end
 
 function dump(t,indent)
+	
     local names = {}
     if not indent then indent = "" end
     for n,g in pairs(t) do
@@ -147,11 +148,11 @@ function dump(t,indent)
     for i,n in pairs(names) do
         local v = t[n]
         if type(v) == "table" then
-            if(v==t) then -- prevent endless loop if table contains reference to itself
+            if (v==t) or string.len(indent) > 20 then -- prevent endless loops 
                 print(indent..tostring(n)..": <-")
             else
                 print(indent..tostring(n)..":")
-                dump(v,indent.."   ")
+                dump(v,indent.."    ")
             end
         else
             if type(v) == "function" then
