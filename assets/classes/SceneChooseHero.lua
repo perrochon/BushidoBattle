@@ -41,23 +41,27 @@ function SceneChooseHero:init()
 
 	self.timer = Timer.new(2000)
 	self.timer:addEventListener(Event.TIMER, function ()
+	
+		local hero = heroes[math.random(4)]		
+		if hero.hp < 1 then return end
+		
 		if math.random(5) == 1 then
-			heroes[math.random(4)].mc:flip()
+			hero.mc:flip()
 		end
 		if math.random(4) == 1 then
-			heroes[math.random(4)].mc:jump()
+			hero.mc:jump()
 		else
 			if math.random(2) == 1 then
-				heroes[math.random(4)].mc:attack1()
+				hero.mc:attack1()
 			else
-				heroes[math.random(4)].mc:attack2()
+				hero.mc:attack2()
 			end
 		end
 		if math.random(30) == 1 then
-			heroes[1].mc:jump()
-			heroes[2].mc:jump()
-			heroes[3].mc:jump()
-			heroes[4].mc:jump()
+			hero.mc:jump()
+			hero.mc:jump()
+			hero.mc:jump()
+			hero.mc:jump()
 		end
 		self.timer:setDelay(math.random(5000))
 	end)
