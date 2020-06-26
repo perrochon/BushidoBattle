@@ -62,14 +62,13 @@ end
 
 -- TODO FIX HEROSAVE instead of removal list, only save what we need, update load to rebuild with those fields
 function Hero:save()
-	DEBUG("Saving hero", self.name, self.fileName, self.mc, self.killer)
+	--DEBUG("Saving hero", self.name, self.fileName, self.mc, self.killer)
 	local mc = self.mc
 	local killer = self.killer
 	local light = self.light
 	self.mc = nil
 	self.killer = nil
 	self.light = nil
-	DEBUG("Hero.mc", self.mc)
 	dataSaver.save(self.fileName, self)
 	self.mc = mc
 	self.killer = killer

@@ -96,14 +96,16 @@ end
 
 function CharacterAnimation:setHealth(hpBar)
 
-	--DEBUG(self.name, hpBar, self.bar)
+	DEBUG(self.name, hpBar, self.bar or "nil")
 
 	if self.bar then
 		self:removeChild(self.bar)
 		self.bar = nil
 	end
 
-	if self.dead or not hpBar or hpBar == 0 or hpBar > 10 then return end
+	if self.dead or hpBar == 0 then return end
+
+	if not ASSERT_TRUE(hpBar >= 1 and hpBar <= 10, self.name, "bad hpBar value", hpBar or "nil") then return end
 
 	local bars = manual.lists["bars"]
 	self.bar = Bitmap.new(bars[hpBar])
@@ -176,7 +178,7 @@ function CharacterAnimation:die(fadeOut)
 	self:go("DIE")
 	self.dead = true
 	self:setHealth(nil)
-	
+
 	if fadeOut then
 		local animate = {}
 		animate.alpha = 0

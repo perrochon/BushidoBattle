@@ -59,8 +59,11 @@ function Character:loadSprite()
 end
 
 function Character:setHealth(health)
-	self.hp = health
+	self.hp = math.floor(health)<>0
 	self.HPbar = 10 - math.floor((self.hp / self.maxHP) * 10)
+	
+	ASSERT_TRUE(self.HPbar >= 1 and self.HPbar <= 11, self.name, "bad hpBar value", self.HPbar or "nil")
+
 	self.mc:setHealth(self.HPbar)
 end
 

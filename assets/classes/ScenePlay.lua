@@ -86,7 +86,7 @@ function ScenePlay:init()
 		if heroes[i].active then
 			heroes[i].turn = true
 		end
-		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 end -- DEBUG buff heroes for testing map
+		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 heroes[i].maxHP = 10000 end -- DEBUG buff heroes for testing map
 	end
 	
 	-- load monsters 
@@ -243,8 +243,8 @@ function ScenePlay:checkMove(hero, dc, dr)
 	--]]
 
 	--DEBUG("Hero", hero.name, hero.turn, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
-	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
-	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
+	--ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
+	--ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
 	if not hero.turn or not hero.active then return end
 
 	if dc == 0 and dr == 0 then 
@@ -455,7 +455,7 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 
 function ScenePlay:removeDeadMonsters()
 
-	DEBUG("Removing Dead Monsters")
+	--DEBUG("Removing Dead Monsters")
 
 	--find the monster being attacked and their index in monsters.list 
 	for id, m in pairs(self.monsters.list) do
@@ -486,7 +486,7 @@ end
 
 function ScenePlay:heroPlayed(hero)
 
-	DEBUG(hero.name, hero.turn)
+	--DEBUG(hero.name, hero.turn)
 	hero.turn = false	
 
 	-- check if all heroes did their turn
@@ -506,10 +506,10 @@ function ScenePlay:heroesTurnOver(hero)
 	--[[ This hero's turn is done. If all heroes are done, prepare for monster turn
 	--]]
 		
-	DEBUG(hero.name, hero.turn)
+	--DEBUG(hero.name, hero.turn)
 	hero.done = true
 
-	DEBUG ("Saving Hero") hero:save() -- TODO FIX HEROSAVE
+	--DEBUG ("Saving Hero") hero:save() -- TODO FIX HEROSAVE
 	
 	-- check if all heroes did their turn
 	local allHeroes = true
@@ -586,6 +586,7 @@ function ScenePlay:monsterTurnOver()
 	--after all the monsters attacked, check if the hero lost
 	if heroes[currentHero].hp < 1 or self.cheat == "D" then
 		self.msg:add("you died", MSG_DEATH)
+		heroes[currentHero].mc:setActive(false)	
 		heroes[currentHero]:save()
 		sceneManager:changeScene(SCENE_DEATH, TRANSITION_TIME, TRANSITION)
 	end
@@ -680,7 +681,7 @@ function ScenePlay:basicAttack(attacker, defender)
 		Changes defender.hp, .HPbar
 	--]]
 	
-	DEBUG("Basic Attack", attacker:getClass(), defender:getClass())
+	--DEBUG("Basic Attack", attacker:getClass(), defender:getClass())
 
 	ASSERT_FALSE(attacker:getClass() == "Hero" and defender:getClass() == "Hero", "Hero attacking hero")
 
@@ -697,7 +698,7 @@ function ScenePlay:basicAttack(attacker, defender)
 	
 		self:rangedAttack(weapon, attacker, defender)
 	else
-		DEBUG("Melee Impact", attacker:getClass(), defender:getClass())
+		--DEBUG("Melee Impact", attacker:getClass(), defender:getClass())
 		--roll for the attack using the weapon and all modifiers
 		local roll, crit = self:roll(weapon.modifier)
 		if roll < defender.defense[weapon.defense] then
@@ -746,7 +747,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	-- TODO: FIX projectile angle to move direction defender, not direction obstacle
 	p = Projectile.new(weapon.projectile, attacker.c, attacker.r, endC, endR)
 	
-	DEBUG("Ranged Attack", attacker:getClass(), defender:getClass())
+	--DEBUG("Ranged Attack", attacker:getClass(), defender:getClass())
 	
 	--[[
 	if blockedC then 
@@ -765,7 +766,7 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 
 	p:addEventListener("complete", function(event)
 
-		DEBUG("Ranged Impact", attacker:getClass(), defender:getClass())
+		--DEBUG("Ranged Impact", attacker:getClass(), defender:getClass())
 
 		event:stopPropagation()
 		if blocked then
@@ -839,12 +840,12 @@ function ScenePlay:rollDamage(weapon, attacker, defender, crit)
 	if defender.berserk then roll = roll / 2 end
 	
 	--adjust the defender's hp except for any resistances
-	defender:setHealth(defender.hp - roll + defender.resist[weapon.type])
+	DEBUG(defender.hp, roll, defender.resist[weapon.type],math.floor(defender.hp - roll + defender.resist[weapon.type]))
+	defender:setHealth(math.floor(defender.hp - roll + defender.resist[weapon.type]))
 	
 	--DEBUG(attacker.name, "hits", defender.name, defender.hp)
 	
 	if defender.hp < 1 then
-		defender.hp = 0
 		defender.mc:die(defender.entry > 1) -- Monsters fade out
 		defender.killer = attacker
 	end

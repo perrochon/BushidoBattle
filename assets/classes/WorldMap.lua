@@ -648,7 +648,7 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 	end
 
 	-- naive
-	DEBUG("Giving up BFS after", iterations, maxQueue, c(from), c(to)) -- TODO
+	--DEBUG("Giving up BFS after", iterations, maxQueue, c(from), c(to)) -- TODO
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		
