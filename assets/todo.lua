@@ -34,10 +34,8 @@ TODO
 	- Bugs
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- BFS 
-			-cut of BFS based on time spent (i.e. 1s/number of monsters)
-			-to monster/env tile searches whole board. Why? 
-				Find closest spot? Even when right next to hero. Cut off?
-			- if BFS times out / fails on less than 1000 iterations (because no path), then move anyway
+			- cut of BFS based on time spent (i.e. 1s/number of monsters)
+			- BFS cuts off too early when not found and big detour required, but not clear if want to go do 10,000 cutoff...
 			- Rewrite BFS with an array of map size? 
 				Only worth it if re-used, still updating 1000+ objects on each search...
 				10 monsters, 100 fields searched is still 1000
@@ -50,24 +48,23 @@ TODO
 		- Fix naming of file names for attack. Barbarians are wrong, for example
 		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
-		- Load monster graphics into cyclopedia
-		- New graphics for monsters, environment, terrain, projectiles
-		- Jump in gladiator?
+		- New graphics for projectiles
 		- Swizzle full res Samurai_02
 		- Make full res animations of heroes for hero selection screen
+	- Navigation
+		- Fat-finger offset for touch would be set in OnTouch event, just read in click
 	- Game Logic
 		- Need another tactics, for soldiers with single melee weapon(barbarians, trolls)
-		- Navigation: Fat-finger offset for touch would be set in OnTouch event, just read in click
-		- shortest path optimization? distance 1.4 can be done in 1 step... so need to multiply with sqrt 2.
 		- Music / Sounds refresh. Find a set of new sounds and revise all of it
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 		- (low) limit ranged attacks in number (no unlimited javelins)
 		- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
 		- Don't have monsters shoot into walls. If path is fully blocked, then better move, or don't shoot
 	- Loot
+		- Ways to spend it
+		- Scenario end based on loot (dropped or found)
 	- Fog of war
-		- Hero shouldn't know shortest route through dark areas, i.e. darkness blocks heroes, not monsters
-		- Block line of sight at walls?
+		- (low) block line of sight at walls?
 		- Better way of doing fog of war, that works with smooth animation, and multiple players
 	- (1.0) Multiple Heroes / Remote
 		- Better placement of multiple heroes. For now, they all go on top of each other...
@@ -87,15 +84,12 @@ TODO
 	- Achievements Screen with 
 		- Scores, per level? XP?
 	- Refactor
+		- access .info, instead of copying it all over.... Maybe call it .i or .p
 		- libpng warning: iCCP: known incorrect sRGB profile
 		- Factor out common code in ScenePlay BasicAttack and RangedAttack
-		- Macro Functions https://wiki.giderosmobile.com/index.php/Macro_Functions
-		- Remove monster tilemap logic
-		- access .info, instead of copying it all over.... Maybe call it .i or .p
 		- Make Character a sprite, instead of having a sprite (will still have a sprite, of course)
 		- (low) move keyboard zoom to Camera itself, so it can zoom other stuff, too.
 		-- Look in directory and see how many maps we have instead of hard coding number
-		- (medium) TODO FIX in the code base
 		- (medium) factor out remaining data and constants from init.lua to separate files
 		- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010
 		- (low) Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
