@@ -305,7 +305,7 @@ function ScenePlay:checkMove(hero, dc, dr)
 		
 		tween.onComplete = function(event) 
 			hero.mc:idle() 
-			local loot = self.loots:check(hero.c, hero.r)
+			local loot = self.loots:check(hero.c, hero.r, true)
 			if loot then
 				self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
 				hero.money = hero.money + loot.value
@@ -937,6 +937,13 @@ end
 	local keyTo, layerTo, tileTo = self.world:getTileInfo(to.c, to.r)
 
 	DEBUG("Line", c(from), manual:getEntry("layers", layerFrom), c(to), keyFrom, manual:getEntry("layers", layerTo), keyTo)
+
+	-- Check for loot
+	local loot = self.loots:check(to.c, to.r, false)
+	if loot then
+		self.msg:add("A " .. loot.name, MSG_DESCRIPTION)
+		return
+	end
 
 	-- Look
 	if activeAction == "look" then

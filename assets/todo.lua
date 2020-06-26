@@ -32,11 +32,8 @@ major next features
 
 TODO
 	- Bugs
-		- Bug with health bar in Menagerie
-		- Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
-		- (low) Change Hero Name in Player portrait keyboard
 		- Navigation
-			need to be able to look at Loot.
+			- FromMarker sometimes doesn't disappear
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
@@ -49,6 +46,7 @@ TODO
 				Only worth it if re-used, still updating 1000+ objects on each search...
 				10 monsters, 100 fields searched is still 1000
 				Instead of boolean found use int, and increment on every search, then no need to clean out
+		- (low) Change Hero Name in Player portrait keyboard
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
@@ -103,6 +101,7 @@ TODO
 		- (medium) TODO FIX in the code base
 		- (medium) factor out remaining data and constants from init.lua to separate files
 		- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010
+		- (low) Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
 	- (low) HTML (Web) Sockets
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1 (search for "sockets")
 	- Music

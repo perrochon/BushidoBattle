@@ -45,10 +45,12 @@ function Loots:add(loot)
 	table.insert(self.list, loot)
 end
 
-function Loots:check(c, r)
+function Loots:check(c, r, pickup)
 	for k,v in pairs(self.list) do
 		if c == v.c and r == v.r then
-			table.remove(self.list, k)
+			if pickup then
+				table.remove(self.list, k)
+			end
 			return v
 		end
 	end
