@@ -78,7 +78,7 @@ function MapNavigation:updateVisualStatus()
 	end
 	self.world:clearMarkers()
 
-	self.fromMarker:setVisible(self.hero and not self.look)
+	self.fromMarker:setVisible(self.hero and not self.look and self.focus)
 	self.toMarker:setVisible(self.focus)
 	self.fromMarker:setPosition(self.from.x, self.from.y)	
 	self.toMarker:setPosition(self.to.x, self.to.y)

@@ -938,16 +938,15 @@ end
 
 	DEBUG("Line", c(from), manual:getEntry("layers", layerFrom), c(to), keyFrom, manual:getEntry("layers", layerTo), keyTo)
 
-	-- Check for loot
-	local loot = self.loots:check(to.c, to.r, false)
-	if loot then
-		self.msg:add("A " .. loot.name, MSG_DESCRIPTION)
-		return
-	end
-
 	-- Look
 	if activeAction == "look" then
-		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
+		-- Check for loot
+		local loot = self.loots:check(to.c, to.r, false)
+		if loot then
+			self.msg:add("A " .. loot.name, MSG_DESCRIPTION)
+		else
+			self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
+		end
 		return
 	end
 

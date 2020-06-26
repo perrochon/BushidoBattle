@@ -32,8 +32,6 @@ major next features
 
 TODO
 	- Bugs
-		- Navigation
-			- FromMarker sometimes doesn't disappear
 		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- Hero reset button not greyed out if hero is dead...
