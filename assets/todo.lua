@@ -32,9 +32,7 @@ major next features
 
 TODO
 	- Bugs
-		- Barracks level very slow due to lots of berserkers pathfinding
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
-		- Hero reset button not greyed out if hero is dead...
 		- BFS 
 			-cut of BFS based on time spent (i.e. 1s/number of monsters)
 			-to monster/env tile searches whole board. Why? 
@@ -48,6 +46,7 @@ TODO
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
+		- Hero reset button not greyed out if hero is dead...
 		- Fix naming of file names for attack. Barbarians are wrong, for example
 		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
