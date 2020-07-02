@@ -34,7 +34,6 @@ TODO
 	- Bugs
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 		- BFS 
-			- cut of BFS based on time spent (i.e. 1s/number of monsters)
 			- BFS cuts off too early when not found and big detour required, but not clear if want to go do 10,000 cutoff...
 			- Rewrite BFS with an array of map size? 
 				Only worth it if re-used, still updating 1000+ objects on each search...

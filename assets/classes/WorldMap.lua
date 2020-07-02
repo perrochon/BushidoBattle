@@ -160,7 +160,7 @@ function WorldMap:getTileInfo(c, r, layer)
 			-- get tile information from constants
 			tile = manual:getEntry(manual:getEntry("layers", layer), array[i])
 		else
-			tile = self.level.tiles[array[i]] -- FIX replace with getFunction
+			tile = self.level.tiles[array[i]]
 		end
 		if tile ~= nil then
 			--DEBUG(c, r, layer, array[i], tile.id, tile.name, tile.blocked)
@@ -180,7 +180,7 @@ function WorldMap:getTileInfo(c, r, layer)
 					--DEBUG(c, r, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile			
 				else
-					local tile = self.level.tiles[array[i]] -- FIX replace with getFunction
+					local tile = self.level.tiles[array[i]]
 					--DEBUG(c, r, n, tile.id, tile.name, tile.blocked)
 					return array[i], n, tile
 				end
@@ -191,7 +191,7 @@ function WorldMap:getTileInfo(c, r, layer)
 	end
 end
 
---[[ TODO FIX Not currently used, but updating light could use it
+--[[ TODO LIGHTFIX Not currently used, but updating light might use it - leave in code for now
 function WorldMap:changeTile(layerId, entry, x, y)
 	--Change both the self.mapArrays entry and the tile in self.mapLayers
 	local array = self.mapArrays[layerId]
@@ -266,7 +266,7 @@ function WorldMap:adjustLight(hero, dc, dr)
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0
 
-	--[[ -- TODO FIX This doesn't look good with smooth scrolling, need different solution or remove
+	--[[ -- TODO LIGHTFIX This doesn't look as good with smooth scrolling, need different solution or remove
 	--set all previously lit tiles to 3
 	for r = hero.r - hero.light.radius, hero.r + hero.light.radius do
 		for c = hero.c - hero.light.radius, hero.c + hero.light.radius do
@@ -560,8 +560,10 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 
 	local maxQueue = #queue
 	
-	while #queue > 0 and iterations < 300 do
-		-- TODO FIX Better cut off criteria. 
+	local start = os.timer()
+	local timeOut = 0.02 -- in seconds, 0.01 is 10ms, which is enough on windows and Pixel 3
+	
+	while #queue > 0 and (os.timer() - start) < timeOut do
 		-- Test Peasant Mob Map to make sure peasants march. 200 seems to be enough
 	
 		maxQueue = #queue<>maxQueue
@@ -595,6 +597,7 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 				end
 			end
 			
+			--DEBUG("Found after", math.floor((os.timer() - start) * 1000000)/1000, iterations, maxQueue, c(from), c(to)) -- TODO
 			return current.dc, current.dr
 		end
 		
@@ -648,7 +651,9 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 	end
 
 	-- naive
-	DEBUG("Giving up BFS after", iterations, maxQueue, c(from), c(to)) -- TODO
+	local elapsed = math.floor((os.timer() - start) * 1000000)/1000
+	--DEBUG("Giving up BFS after", elapsed, iterations, #queue, maxQueue, c(from), c(to)) -- TODO
+	ASSERT_FALSE(elapsed > timeOut * 1000, "BFS timed out")
 	local dc = (to.c - from.c)>0 and 1 or (to.c - from.c)<0 and -1 or 0
 	local dr = (to.r - from.r)>0 and 1 or (to.r - from.r)<0 and -1 or 0
 		
