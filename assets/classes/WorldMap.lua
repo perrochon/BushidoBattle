@@ -585,13 +585,13 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 
  		if current.c == to.c and current.r == to.r then
 			-- TODO FIX Move this into the loop and test next instead of current (avoids adding nodes)
-			--DEBUG("Found Target", from.c, from.r, "-", current.c, current.r, "-", current.dc, current.dr)
+			-- DEBUG("Found Target", c(from), c(current), current.dc, current.dr)
 			
 			if draw then
 				local walker, s = current, 0
 				while walker.incoming.c ~= from.c or walker.incoming.r ~= from.r and s < 100 do
 					walker = walker.incoming
-					--DEBUG(s, ":", from.c, from.r, "-", current.c, current.r, "-",  walker.c, walker.r)
+					--DEBUG(s, ":", c(from), c(current), walker.c, walker.r)
 					self:setMarker(walker, "f")
 					s = s + 1
 				end

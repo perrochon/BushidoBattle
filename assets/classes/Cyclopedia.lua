@@ -111,7 +111,7 @@ function Cyclopedia:init()
 			texturePack = "images/characters.png",
 			textureIndex = "images/characters.txt",
 			[1] = {entry = 1, name = "hero", 
-					names = {"One", "Two", "Three", "Four", "TODO FIX DELETE ME",},
+					names = {"One", "Two", "Three", "Four", "TODO HEROFIX DELETE ME",},
 					sprites = {25,26,24,15}, dx = 0, dy = 0, scale = 1,
 					xp = 0, hp = 600, 
 					defense = {AC = 16, Fort = 16, Refl = 14, Will = 12},

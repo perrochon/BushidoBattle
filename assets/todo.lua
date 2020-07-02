@@ -27,19 +27,14 @@ known issues
 
 major next features
 	- Parties (more than one hero)
-	- Fix 2-player mode
+	- Support remote play (again)
 	- Spending Loot
+
+Priority
 
 TODO
 	- Bugs
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
-		- BFS 
-			- BFS cuts off too early when not found and big detour required, but not clear if want to go do 10,000 cutoff...
-			- Rewrite BFS with an array of map size? 
-				Only worth it if re-used, still updating 1000+ objects on each search...
-				10 monsters, 100 fields searched is still 1000
-				Instead of boolean found use int, and increment on every search, then no need to clean out
-		- (low) Change Hero Name in Player portrait keyboard
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base
 	- Graphics
@@ -48,6 +43,7 @@ TODO
 		- Use range attack animation for sprites that have it (heroes...)
 		- Make Ninjas throw Shurikens... (or whatever they have). Graphics and words
 		- New graphics for projectiles
+		- (low) Projectile direction/angle to move direction defender, not direction obstacle
 		- Swizzle full res Samurai_02
 		- Make full res animations of heroes for hero selection screen
 	- Navigation
@@ -58,26 +54,27 @@ TODO
 		- (low) Diagonal moves only possible when one side open? Not if both sides are blocked (requires maze map fix)
 		- (low) limit ranged attacks in number (no unlimited javelins)
 		- (low) ranged attack friendly fire (for monsters). Hit a monster if it's in the way...
-		- Don't have monsters shoot into walls. If path is fully blocked, then better move, or don't shoot
+		- (low) Don't have monsters shoot into walls. If path is fully blocked, then better move, or don't shoot
 	- Loot
 		- Ways to spend it
 		- Scenario end based on loot (dropped or found)
 	- Fog of war
 		- (low) block line of sight at walls?
-		- Better way of doing fog of war, that works with smooth animation, and multiple players
-	- (1.0) Multiple Heroes / Remote
+		- (low) Better way of doing fog of war, that works with smooth animation, and multiple players
+	- (1.0) Multiple Heroes / Remote / HEROFIX
 		- Better placement of multiple heroes. For now, they all go on top of each other...
 		-- options: define in map, pile up, find empty spot close, either here, or in character:setPosition
 		-- Problems is we haven't loaded maps when we place heroes, and WorldMap.new wants the heroes array
 		- Mark heroes that still have a turn
 		- Scale difficulty. More monsters? Less HP?
 		- Monster AI with multiple heroes
-	- (1.0) Remote Play
-		- fix basic mechanism. Let anyone move any hero. Once all heroes are moved once (or pass), monsters move.
+	- (1.0) Remote Play / HEROFIX
+		- Fix basic mechanism. Let anyone move any hero. Once all heroes are moved once (or pass), monsters move.
 		- auto connect all the way to Battle...Dependency: new connection protocol. May be tricky with >2 players
 		- Ensure same map on client
 		- >2 devices
 		- remote attack update
+		- Let 2nd player play monsters
 	- Settings Screen with 
 		- AutoConnect, sounds, music, (fog of war?)
 	- Achievements Screen with 
@@ -92,6 +89,12 @@ TODO
 		- (medium) factor out remaining data and constants from init.lua to separate files
 		- (low) use --!NEED:test.lua and --!NOEXEC http://forum.giderosmobile.com/discussion/comment/63010/#Comment_63010
 		- (low) Hero Name Input: http://forum.giderosmobile.com/discussion/comment/29504/
+	- (low) BFS 
+			- (low) Rewrite BFS with an array of map size? 
+				Only worth it if re-used, still updating 1000+ objects on each search...
+				10 monsters, 100 fields searched is still 1000
+				Instead of boolean found use int, and increment on every search, then no need to clean out
+		- (low) Change Hero Name in Player portrait keyboard
 	- (low) HTML (Web) Sockets
 		- http://forum.giderosmobile.com/discussion/6880/gideros-2017-3-1-is-out-now/p1 (search for "sockets")
 	- Music

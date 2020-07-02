@@ -82,7 +82,7 @@ function ScenePlay:init()
 
 	for i = 1,4 do
 		heroes[i].mc:faceEast()
-		heroes[i]:setPosition(c,r) -- TODO FIX This piles heroes on top of each other.
+		heroes[i]:setPosition(c,r) -- TODO HEROFIX This piles heroes on top of each other.
 		if heroes[i].active then
 			heroes[i].turn = true
 		end
@@ -509,7 +509,7 @@ function ScenePlay:heroesTurnOver(hero)
 	--DEBUG(hero.name, hero.turn)
 	hero.done = true
 
-	--DEBUG ("Saving Hero") hero:save() -- TODO FIX HEROSAVE
+	--DEBUG ("Saving Hero") hero:save()
 	
 	-- check if all heroes did their turn
 	local allHeroes = true
@@ -744,7 +744,6 @@ function ScenePlay:rangedAttack(weapon, attacker, defender)
 	local cover, endC, endR = self.world:lineOfCover(attacker, defender)
 	local blocked = cover < COVER
 	
-	-- TODO: FIX projectile angle to move direction defender, not direction obstacle
 	p = Projectile.new(weapon.projectile, attacker.c, attacker.r, endC, endR)
 	
 	--DEBUG("Ranged Attack", attacker:getClass(), defender:getClass())

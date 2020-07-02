@@ -48,7 +48,7 @@ function Sounds:play(name, volume)
 			sound:setVolume(volume)
 		end
 		if string.sub(name, 1, 5) == "music" then
-			return sound -- TODO FIX why not return it all the time. If it's not used, it drops off the stack
+			return sound -- TODO Why not return it all the time. If it's not used, it drops off the stack
 		end
 	end
 end

@@ -114,7 +114,7 @@ function CharacterAnimation:setHealth(hpBar)
 
 end
 
--- FIX should the below live in character.lua? How to to SceneSprite, though.
+-- FIX should the below live in character.lua? If yes, how to do SceneSprite, though.
 function CharacterAnimation:faceWest()
 	self.mc:setScaleX(-self.scale)
 end

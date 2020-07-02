@@ -94,7 +94,7 @@ function MapData:spawnsFromMap()
 		local type = v.type % 100
 		found[tonumber(type)] = found[tonumber(type)] and found[tonumber(type)] + 1 or 1
 	end
-	-- FIX pull names of monsters from manual
+	-- TODO FIX pull names of monsters from manual
 	INFO("  Number of spawns", "Hero", found[1],"Peasants", found[2], "Soldiers", found[3],"Samurais", found[4],"Wolves", found[5])
 	--DEBUG(json.encode(spawns))
 	return spawns
@@ -134,7 +134,8 @@ function MapData:layerFromMap(number)
 					-- Documentation on tile flipping: http://doc.mapeditor.org/en/stable/reference/tmx-map-format/#tile-flipping
 					gid64 = int64.new(gid)
 					-- Read flipping flags
-					if gid64[31] ~= gid64[28] then flip = flip | TileMap.FLIP_HORIZONTAL end -- TODO FIX there must be a better way for condition
+					-- TODO FIX there must be a better way for these bitwise comparison if/then's
+					if gid64[31] ~= gid64[28] then flip = flip | TileMap.FLIP_HORIZONTAL end
 					if gid64[30] ~= gid64[28] then flip = flip | TileMap.FLIP_VERTICAL end
 					if gid64[29] ~= gid64[28] then flip = flip | TileMap.FLIP_DIAGONAL end							
 					-- Clear the flags from gid so other information is healthy

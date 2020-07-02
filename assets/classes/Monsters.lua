@@ -76,7 +76,7 @@ function Monsters:init(mapData)
 --creates the Monsters variable self.list, a table of all the monsters
 
     self.list = {}
-	local id = 1 -- FIX we are inserting at the end, why do we need i?
+	local id = 1 -- number the monsters
 	
 	--DEBUG(json.encode(mapData.spawns))
 
