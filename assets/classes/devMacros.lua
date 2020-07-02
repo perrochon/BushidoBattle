@@ -132,6 +132,8 @@ function c(a,b)
 			s = s..("(%d,%d)"):format(a.x, a.y)
 		end
 		return s
+	elseif not a then
+		return "(nil)"
 	else
 		return ("(%d,%d)"):format(a, b)
 	end

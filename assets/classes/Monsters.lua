@@ -194,9 +194,7 @@ function Monsters:updateState(monster, id, remote)
 
 	--check if the hero can been seen
 	do
-		local hero
-		hero = heroes[currentHero] -- TODO HEROFIX Choose closest, active hero instead of currentHero
-		
+		local hero = ScenePlay:closestHero(monster, false)		
 		monster.seesHero = distance(monster, hero) < monster.see or monster.berserk
 		monster.target = monster.seesHero and hero or nil
 	end

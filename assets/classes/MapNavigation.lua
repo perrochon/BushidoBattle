@@ -107,21 +107,52 @@ end
 function MapNavigation:updateStatus()
 
 	-- are we originating from a hero who still has a turn? 
+	self.hero = ScenePlay:closestHero(self.from)
+	
+	if self.hero then
+		self.from.c = self.hero.c
+		self.from.r = self.hero.r			
+		self.from.x = (self.hero.c - 0.5) * TILE_WIDTH
+		self.from.y = (self.hero.r - 0.5) * TILE_HEIGHT
+	else
+		self.from.c = self.to.c
+		self.from.r = self.to.r
+		self.from.x = (self.to.c - 0.5) * TILE_WIDTH
+		self.from.y = (self.to.r - 0.5) * TILE_HEIGHT
+	end
+
+--[[	
 	-- Check currentHero first
-	self.hero = nil
-	local hero = heroes[currentHero]
-	if hero.turn and hero.c == self.from.c and hero.c == self.from.r then
+	if hero.active and hero.turn and hero.c == self.from.c and hero.r == self.from.r then
 		self.hero = hero
+		return
+	end
+	local hero = heroes[currentHero]
+	if hero.active and hero.turn and hero.c == self.from.c and hero.r == self.from.r then
+		self.hero = hero
+		return
 	else
 		for _, v in ipairs(heroes) do
-			--DEBUG("Finding hero with a turn", hero.name, c(hero))
+			--DEBUG("Looking for any hero at from location", hero.name, c(hero))
+			if v.c == self.from.c and v.r == self.from.r and v.active and v.turn then
+				self.hero = v
+				self.from.c = v.c
+				self.from.r = v.r			
+				self.from.x = (v.c - 0.5) * TILE_WIDTH
+				self.from.y = (v.r - 0.5) * TILE_HEIGHT
+				return
+			end
+		end
+		for _, v in ipairs(heroes) do
+			--DEBUG("Finding any hero with a turn", hero.name, c(hero))
+			-- TODO find closest hero, not first one with a turn
 			if v.active and v.turn then
 				self.hero = v
 				self.from.c = v.c
 				self.from.r = v.r			
 				self.from.x = (v.c - 0.5) * TILE_WIDTH
 				self.from.y = (v.r - 0.5) * TILE_HEIGHT
-				break
+				return
 			end
 		end
 		if not self.hero then
@@ -131,6 +162,7 @@ function MapNavigation:updateStatus()
 			self.from.y = (self.to.r - 0.5) * TILE_HEIGHT
 		end
 	end
+--]]
 
 end
 
@@ -143,7 +175,7 @@ function MapNavigation:onMouseDown(event)
 	--DEBUG("Down on", c(e), visibleMapTouched)
 
 	if not visibleMapTouched then return end
-
+	
 	--find the tile that was touched
 	local key, layer, tile = self.world:getTileInfo(e.c, e.r)	
 	--DEBUG("Down on tile", c(e), manual:getEntry("layers", layer), key, tile.name)

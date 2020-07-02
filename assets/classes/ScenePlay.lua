@@ -924,6 +924,24 @@ function ScenePlay:roll(modifier, maximum, die, crit)
 	end
 end
 
+function ScenePlay:closestHero(from, turnOnly)
+	local lastDistance = math.huge
+	local hero = nil
+	for _, v in ipairs(heroes) do
+		if v.active then 
+			DEBUG("Checking", c(from), turnOnly, v.id, c(v), v.active, v.turn, distance(from, v))
+			if not turnOnly or v.turn then
+				if distance(from, v)< lastDistance then		
+					hero = v
+					lastDistance = distance(from, v)
+				end
+			end
+		end
+	end
+	DEBUG("Closest is", c(hero), hero.name)
+	return hero
+end
+
 function ScenePlay:cheater(want)
 
 	if self.remote then return end -- no cheat codes on remote play (for now)
@@ -966,12 +984,7 @@ end
 		return
 	end
 
-	-- Click on hero (same, or different) -> Look, no matter the currently active action
-	if keyTo == 1 then
-		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION) -- TODO print hero name
-		return
-	end
-	
+	-- we are not looking	
 	ASSERT_TRUE(layerFrom == LAYER_MONSTERS and keyFrom == 1, "Line doesn't start on a hero")
 
 	local hero = nil
@@ -980,6 +993,7 @@ end
 		if v.active and v.c == from.c and v.r == from.r then
 			DEBUG("found", v.name)
 			hero = v
+			self:setCurrentHero(v.id)
 			break
 		end
 	end
