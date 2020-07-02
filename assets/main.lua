@@ -19,8 +19,11 @@ heroes = {} -- We support 4 heroes that will go in this array
 -- Reset all heroes
 Hero.resetAllHeroes()
 currentHero = 1 -- currently playing hero
-localHero = currentHero -- The map centers around her
-heroes[currentHero]:setActive(true)
+heroes[1]:setCurrent(true)
+
+--localHero = currentHero -- The map centers around her -- TODO remove all commented out references to localHero
+heroes[1]:setActive(true)
+heroes[2]:setActive(true)
 
 --define the scenes
 sceneManager = SceneManager.new({

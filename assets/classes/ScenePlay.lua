@@ -153,7 +153,17 @@ function ScenePlay:init()
 
 	-- respond to keys pressed (mainly for easier testing on desktop)
 	self:addEventListener(Event.KEY_DOWN, function(event)
-		if event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
+		local alt = application:getKeyboardModifiers() == KeyCode.MODIFIER_ALT
+		DEBUG("Key Down", shift, event.keyCode, event.realCode)			
+		if alt and event.keyCode == KeyCode.NUM_1 then
+			self:setCurrentHero(1)
+		elseif alt and event.keyCode == KeyCode.NUM_2 then
+			self:setCurrentHero(2)
+		elseif alt and event.keyCode == KeyCode.NUM_3 then
+			self:setCurrentHero(3)
+		elseif alt and event.keyCode == KeyCode.NUM_4 then
+			self:setCurrentHero(4)
+		elseif event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
 			self:checkMove(heroes[currentHero], 0, -1)
 		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
 			self:checkMove(heroes[currentHero], 0, 1)
@@ -230,6 +240,13 @@ function ScenePlay:init()
 	
 	self.ready = true
 	if self.remote then self:syncState() end
+end
+
+function ScenePlay:setCurrentHero(idx)
+	heroes[currentHero]:setCurrent(false)
+	currentHero = idx
+	heroes[idx]:setCurrent(true)
+	self.world:shiftWorld2(heroes[idx])
 end
 
 function ScenePlay:placeLoot(entry, c, r)	
@@ -338,7 +355,7 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 	--DEBUG_C(SYNC_TURN, "Hero:", heroIdx, x, y, "Monster", monsterIdx, monsterHp, monsterHpBar, sender)	
 
 	if sender then -- this is an incoming remote call
-		if not ASSERT_NOT_EQUAL(heroIdx, localHero, "Remote trying to update local hero") then return end
+		--if not ASSERT_NOT_EQUAL(heroIdx, localHero, "Remote trying to update local hero") then return end
 		DEBUG_C(SYNC_TURN, "Updating remote hero's move locally.")
 		
 		self.world:moveHero(heroes[heroIdx], x-heroes[heroIdx].x, y-heroes[heroIdx].r)
@@ -366,10 +383,10 @@ function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, 
 		end
 		
 	else -- this is a local call - ignoring parameters
-		if not ASSERT_EQUAL(heroIdx, localHero, "Trying to update remote hero's position remotely") then return end
+		--if not ASSERT_EQUAL(heroIdx, localHero, "Trying to update remote hero's position remotely") then return end
 		DEBUG_C(SYNC_TURN, "Updating local move on remote.")
 
-		serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
+		--serverlink:callMethod(SYNC_TURN, localHero, x, y, monsterIdx, monsterHp, monsterHpBar)
 		
 		--heroes[3-localHero].heroTurn = true
 		--heroes[currentHero].heroTurn = false
@@ -951,7 +968,7 @@ end
 
 	-- Click on hero (same, or different) -> Look, no matter the currently active action
 	if keyTo == 1 then
-		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
+		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION) -- TODO print hero name
 		return
 	end
 	

@@ -12,7 +12,8 @@ Hero.__classname= "Hero"
 
 function Hero:init(entry, id)
 	--[[Holding the player's stats
-		entry = 1 for heroes. id is the slot [1..4]
+		entry = 1 for heroes. 
+		id will be used for the slot in hero selection [1..4]
 	--]]
 	
 	--DEBUG(self:getClass())
@@ -47,7 +48,10 @@ end
 
 function Hero:setActive(active)
 	self.active = active
-	self.mc:setActive(active)
+end
+
+function Hero:setCurrent(current)
+	self.mc:setCurrent(current)
 end
 
 function Hero:loadSprite()

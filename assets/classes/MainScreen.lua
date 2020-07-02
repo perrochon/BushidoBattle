@@ -37,17 +37,17 @@ function MainScreen:init()
 	self.tagLine:setPosition(HALFX, 190 ) -- halfway
 	self:addChild(self.tagLine)
 
-	local level = TextField.new(FONT_SMALL, self.hero.name)
-	level:setTextColor(COLOR_LTGREY)	
-	level:setAnchorPoint(0.5,0.5)
-	level:setPosition(HALFX, 250) 
-	self:addChild(level)
+	self.name = TextField.new(FONT_SMALL, self.hero.name)
+	self.name:setTextColor(COLOR_LTGREY)	
+	self.name:setAnchorPoint(0.5,0.5)
+	self.name:setPosition(HALFX, 250) 
+	self:addChild(self.name)
 
-	level = TextField.new(FONT_SMALL, "Level: " .. self.hero.level)
-	level:setTextColor(COLOR_LTGREY)	
-	level:setAnchorPoint(0.5,0.5)
-	level:setPosition(HALFX, 300) 
-	self:addChild(level)
+	self.level = TextField.new(FONT_SMALL, "Level: " .. self.hero.level)
+	self.level:setTextColor(COLOR_LTGREY)	
+	self.level:setAnchorPoint(0.5,0.5)
+	self.level:setPosition(HALFX, 300) 
+	self:addChild(self.level)
 
 	self.kills = TextField.new(FONT_SMALL, "Kills: " .. self.hero.kills)
 	self.kills:setTextColor(COLOR_LTGREY)	
@@ -74,12 +74,30 @@ function MainScreen:init()
 	self:addChild(self.money)
 
 	self.xy = TextField.new(FONT_SMALL, self.hero.c .. ",".. self.hero.r)
-	self.xy :setTextColor(COLOR_DKGREY)	
+	self.xy :setTextColor(COLOR_DKGREY)
 	self.xy :setPosition(FG_X, MAXY - version:getHeight()) 
 	self:addChild(self.xy)
+	
+	local heroBg = Pixel.new(COLOR_LTGREY, 1, 120, 120)
+	heroBg:setPosition(FG_X + 100, 300)
+	heroBg:setAnchorPosition(60,60)
+	self:addChild(heroBg)
 
-	self:addEventListener(Event.ENTER_FRAME, function(event) -- TODO maybe don't need to do on each frame?
-		self.kills:setText("Kills: " .. self.hero.kills )
+	self.view = Viewport.new()
+	self.view:setClip(-50,-70,100,100)
+	self.view:setContent(heroes[currentHero].mc.mc)
+	self.view:setPosition(FG_X + 100, 320)
+	self.view:setTransform(Matrix.new(2,0,0,2)) -- this matrix doubles x,y scale
+	self:addChild(self.view)
+
+	
+	self:addEventListener(Event.ENTER_FRAME, function(event) 
+		-- TODO maybe don't need to do on each frame? Do when any of the below change only
+		self.hero = heroes[currentHero]
+		self.view:setContent(heroes[currentHero].mc.mc)
+		self.name:setText(self.hero.name)
+		self.level:setText("Level: " .. self.hero.level)
+		self.kills:setText("Kills: " .. self.hero.kills)
 		self.xp:setText("Experience: " .. self.hero.xp)
 		self.hp:setText("Health: " .. self.hero.hp)
 		self.money:setText("Money: " .. self.hero.money)
@@ -120,7 +138,6 @@ function MainScreen:init()
 	self:addChild(compass)
 
 	local iconTexture = Texture.new("images/texturepack-icons-144px.png", true)
-
 	
 	-- Mode Buttons
 	local up = Bitmap.new(TextureRegion.new(iconTexture, 0, 0, 144, 144))

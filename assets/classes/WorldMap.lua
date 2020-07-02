@@ -47,7 +47,7 @@ function WorldMap:init(level, monsters) -- TODO rename self.level because of con
 	self.camera:addChild(self.mapLayers[LAYER_LIGHT]) 
 	--self:debugMapInfo(LAYER_LIGHT)	
 
-    self:shiftWorld(heroes[localHero])
+    self:shiftWorld(heroes[currentHero])
 
 	self:addChild(self.camera)
 end
@@ -100,7 +100,7 @@ function WorldMap:addLight()
 		Returns a table of size LAYER_COLUMNS * LAYER_ROWS
 	--]]
 	
-	local hero = heroes[localHero] 	-- TODO HEROFIX loop through all active heroes
+	local hero = heroes[currentHero] 	-- TODO HEROFIX loop through all active heroes
 
 	--this is the array filled with darkness of unexplored tiles
 	local lArray = self:newArray(LIGHT_UNEXPLORED)
@@ -225,7 +225,7 @@ function WorldMap:shiftWorld2()
 		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
 	--]]
 	
-	self.camera:centerPoint(heroes[localHero].mc:getX(), heroes[localHero].mc:getY())
+	self.camera:centerPoint(heroes[currentHero].mc:getX(), heroes[currentHero].mc:getY())
 	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
 	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
@@ -241,10 +241,10 @@ function WorldMap:moveHero(hero, dc, dr)
 
 	--DEBUG("Moving Hero", hero.name, hero.c, hero.r, dc, dr, "to", hero.c+dc, hero.r+dr)
 	
-	if hero.id == localHero then 
-		--move the torchlight
-		self:adjustLight(hero, dc, dr)
-	end
+	--if hero.id == localHero then 
+	--move the torchlight TODO HEROLIGHT HEROFIX
+	self:adjustLight(hero, dc, dr)
+	--end
 
 	--for purposes of moving around the map, the hero is just another monster
 	local tween = self:moveMonster(hero, dc, dr)
@@ -261,7 +261,7 @@ function WorldMap:adjustLight(hero, dc, dr)
 		Uses the hero's old position and the hero.light.radius to create darkness there, and the new position to light up
 	--]]	
 	
-	ASSERT_EQUAL(hero.id, localHero, "Trying to adjust light for the wrong hero")
+	DEBUG(hero.name, hero.id)
 		
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0

@@ -75,19 +75,19 @@ function CharacterAnimation:init(character)
 	
 end
 
-function CharacterAnimation:setActive(active)
+function CharacterAnimation:setCurrent(current)
 
-	if active then
-		if not self.activeMarker then
-			self.activeMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
-			self.activeMarker:setAlpha(0.5)
-			self.activeMarker:setAnchorPoint(0.5,0.5)
-			self:addChildAt(self.activeMarker,1)	
+	if current then
+		if not self.currentMarker then
+			self.currentMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
+			self.currentMarker:setAlpha(0.5)
+			self.currentMarker:setAnchorPoint(0.5,0.5)
+			self:addChildAt(self.currentMarker,1)	
 		end
-		self.activeMarker:setVisible(true)
+		self.currentMarker:setVisible(true)
 	else
-		if self.activeMarker then
-			self.activeMarker:setVisible(false)
+		if self.currentMarker then
+			self.currentMarker:setVisible(false)
 		end
 	end
 
