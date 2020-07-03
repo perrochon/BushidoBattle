@@ -34,6 +34,7 @@ Priority
 
 TODO
 	- Bugs
+		- Update maps to allow for 4 heroes starting placement (need 4 spots horizontally)
 		- ResetAllHeroes with a mode that keeps important parameters (xp, kills)
 	- FIX in the code base
 	- TODO (w/o FIX) in the code base

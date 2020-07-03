@@ -82,7 +82,7 @@ function ScenePlay:init()
 
 	for i = 1,4 do
 		heroes[i].mc:faceEast()
-		heroes[i]:setPosition(c,r) -- TODO HEROFIX This piles heroes on top of each other.
+		heroes[i]:setPosition(c+i-1,r) -- TODO HEROFIX This piles heroes on top of each other.
 		if heroes[i].active then
 			heroes[i].turn = true
 		end
