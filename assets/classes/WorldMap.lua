@@ -231,6 +231,12 @@ function WorldMap:shiftWorld2()
 	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
 end
 
+function WorldMap:shiftWorld3()
+
+	-- Need to manually tween camera because gtween not compatible with camera?
+
+end
+
 
 function WorldMap:moveHero(hero, dc, dr)
 	--[[change the mapArrays and mapLayers location of a hero and 
@@ -261,7 +267,7 @@ function WorldMap:adjustLight(hero, dc, dr)
 		Uses the hero's old position and the hero.light.radius to create darkness there, and the new position to light up
 	--]]	
 	
-	DEBUG(hero.name, hero.id)
+	--DEBUG(hero.name, hero.id)
 		
 	local lArray = self.mapArrays[LAYER_LIGHT]
 	local i = 0

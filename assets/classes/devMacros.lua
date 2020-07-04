@@ -114,11 +114,21 @@ time_ for i = 1, 1e8 do x = x + i end _time
 --]]
 
 function boolToString(value)
- return value == true and "true" or value == false and "false"
+ return value == true and "true" or "false"
 end
 
 function stringToBoolean(string)
 	if string=="true" then return true elseif string=="false" then return false else return nil end
+end
+
+function h()
+	local s = "|" .. currentHero .. "| "
+	for k, v in ipairs(heroes) do
+		if v.active then
+			s = s ..("%s %s %s | "):format(v.name, c(v), boolToString(v.done))
+		end
+	end
+	return s
 end
 
 function c(a,b)

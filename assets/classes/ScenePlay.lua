@@ -84,7 +84,7 @@ function ScenePlay:init()
 		heroes[i].mc:faceEast()
 		heroes[i]:setPosition(c+i-1,r) -- TODO HEROFIX This piles heroes on top of each other.
 		if heroes[i].active then
-			heroes[i].turn = true
+			heroes[i]:setDone(false)
 		end
 		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 heroes[i].maxHP = 10000 end -- DEBUG buff heroes for testing map
 	end
@@ -153,6 +153,7 @@ function ScenePlay:init()
 
 	-- respond to keys pressed (mainly for easier testing on desktop)
 	self:addEventListener(Event.KEY_DOWN, function(event)
+		self.world:shiftWorld3()
 		local alt = application:getKeyboardModifiers() == KeyCode.MODIFIER_ALT
 		DEBUG("Key Down", shift, event.keyCode, event.realCode)			
 		if alt and event.keyCode == KeyCode.NUM_1 then
@@ -246,7 +247,7 @@ function ScenePlay:setCurrentHero(idx)
 	heroes[currentHero]:setCurrent(false)
 	currentHero = idx
 	heroes[idx]:setCurrent(true)
-	self.world:shiftWorld2(heroes[idx])
+	self.world:shiftWorld2()
 end
 
 function ScenePlay:placeLoot(entry, c, r)	
@@ -259,10 +260,10 @@ function ScenePlay:checkMove(hero, dc, dr)
 	--[[move the hero if the tile isn't blocked
 	--]]
 
-	--DEBUG("Hero", hero.name, hero.turn, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
-	--ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
-	--ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
-	if not hero.turn or not hero.active then return end
+	DEBUG(h(), hero.id, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
+	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
+	ASSERT_FALSE(hero.done, "Not hero's turn: "..hero.name)
+	if not hero.active or hero.done then return end
 
 	if dc == 0 and dr == 0 then 
 		self:heroesTurnOver(hero)
@@ -503,13 +504,13 @@ end
 
 function ScenePlay:heroPlayed(hero)
 
-	--DEBUG(hero.name, hero.turn)
-	hero.turn = false	
+	DEBUG(h())
+	hero:setDone(true)	
 
 	-- check if all heroes did their turn
 	local allHeroes = true
 	for i = 1,4 do
-		if heroes[i].active and heroes[i].turn then
+		if heroes[i].active and not heroes[i].done then
 			allHeroes = false
 		end
 	end
@@ -523,10 +524,12 @@ function ScenePlay:heroesTurnOver(hero)
 	--[[ This hero's turn is done. If all heroes are done, prepare for monster turn
 	--]]
 		
-	--DEBUG(hero.name, hero.turn)
-	hero.done = true
+	--DEBUG(h(), hero.id)
+	hero:setDone(true)
 
 	--DEBUG ("Saving Hero") hero:save()
+	
+	DEBUG(h())
 	
 	-- check if all heroes did their turn
 	local allHeroes = true
@@ -611,7 +614,7 @@ function ScenePlay:monsterTurnOver()
 	-- enable heroes again
 	for i = 1,4 do
 		if heroes[i].active then
-			heroes[i].turn = true
+			heroes[i]:setDone(false)
 		end
 	end
 	self:enableArrows(true)
@@ -929,8 +932,8 @@ function ScenePlay:closestHero(from, turnOnly)
 	local hero = nil
 	for _, v in ipairs(heroes) do
 		if v.active then 
-			DEBUG("Checking", c(from), turnOnly, v.id, c(v), v.active, v.turn, distance(from, v))
-			if not turnOnly or v.turn then
+			--DEBUG("Checking", c(from), turnOnly, v.id, c(v), v.active, v.done, distance(from, v))
+			if not turnOnly or not v.done then
 				if distance(from, v)< lastDistance then		
 					hero = v
 					lastDistance = distance(from, v)
@@ -938,7 +941,7 @@ function ScenePlay:closestHero(from, turnOnly)
 			end
 		end
 	end
-	DEBUG("Closest is", c(hero), hero.name)
+	--DEBUG("Closest is", c(hero), hero.name)
 	return hero
 end
 
@@ -969,9 +972,10 @@ end
 	
 	local keyFrom, layerFrom, tileFrom = self.world:getTileInfo(from.c, from.r)
 	local keyTo, layerTo, tileTo = self.world:getTileInfo(to.c, to.r)
+	DEBUG("onLine", c(from), manual:getEntry("layers", layerFrom), keyFrom, "to", c(to), manual:getEntry("layers", layerTo), keyTo)
 
-	DEBUG("Line", c(from), manual:getEntry("layers", layerFrom), c(to), keyFrom, manual:getEntry("layers", layerTo), keyTo)
-
+	DEBUG(h())
+	
 	-- Look
 	if activeAction == "look" then
 		-- Check for loot
@@ -989,9 +993,9 @@ end
 
 	local hero = nil
 	for k, v in ipairs(heroes) do
-		DEBUG("Looking for hero", k, v.c, v.r)
+		--DEBUG("Looking for hero", k, v.c, v.r)
 		if v.active and v.c == from.c and v.r == from.r then
-			DEBUG("found", v.name)
+			--DEBUG("found", v.name)
 			hero = v
 			self:setCurrentHero(v.id)
 			break
@@ -999,8 +1003,8 @@ end
 	end
 	if not ASSERT_FALSE(hero == nil, "No active hero has these coordinates") then return end
 	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
-	ASSERT_TRUE(hero.turn, "Not hero's turn: "..hero.name)
-	if not hero.turn or not hero.active then return end
+	ASSERT_FALSE(hero.done, "Not hero's turn: "..hero.name)
+	if hero.done or not hero.active then DEBUG("Ignoring") return end
 
 	if dc == 0 and dr == 0 then 
 		self:heroesTurnOver(hero)

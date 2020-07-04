@@ -75,24 +75,6 @@ function CharacterAnimation:init(character)
 	
 end
 
-function CharacterAnimation:setCurrent(current)
-
-	if current then
-		if not self.currentMarker then
-			self.currentMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
-			self.currentMarker:setAlpha(0.5)
-			self.currentMarker:setAnchorPoint(0.5,0.5)
-			self:addChildAt(self.currentMarker,1)	
-		end
-		self.currentMarker:setVisible(true)
-	else
-		if self.currentMarker then
-			self.currentMarker:setVisible(false)
-		end
-	end
-
-end
-
 
 function CharacterAnimation:setHealth(hpBar)
 

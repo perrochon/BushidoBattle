@@ -27,6 +27,19 @@ function Hero:init(entry, id)
 	-- We also overwrite self.sprite and self.mc in loadSprite() below
 	self:loadSprite()
 	--DEBUG(self.entry, self.id, self.name, self.sprite, self.xp, self.hp, self.see, self.alone)
+	
+	self.doneMarker = Bitmap.new(Texture.new("images/done.png"))
+	self.doneMarker:setAlpha(0.5)
+	self.doneMarker:setAnchorPoint(0.5,0.5)
+	self.doneMarker:setVisible(false)
+	self.mc:addChildAt(self.doneMarker,1)
+	self.notdoneMarker = Bitmap.new(Texture.new("images/notdone.png"))
+	self.notdoneMarker:setAlpha(0.5)
+	self.notdoneMarker:setAnchorPoint(0.5,0.5)
+	self.notdoneMarker:setVisible(false)
+	self.mc:addChildAt(self.notdoneMarker,1)	
+
+
 
 	-- Additional Player fields
 	self:setActive(false) 
@@ -50,10 +63,6 @@ function Hero:setActive(active)
 	self.active = active
 end
 
-function Hero:setCurrent(current)
-	self.mc:setCurrent(current)
-end
-
 function Hero:loadSprite()
 	local info = manual:getEntry("monsters", self.info.sprites[self.id])
 	self.sprite =  info.sprite
@@ -68,13 +77,19 @@ end
 function Hero:save()
 	--DEBUG("Saving hero", self.name, self.fileName, self.mc, self.killer)
 	local mc = self.mc
+	local doneMarker = self.doneMarker
+	local notdoneMarker = self.notdoneMarker
 	local killer = self.killer
 	local light = self.light
 	self.mc = nil
+	self.doneMarker = nil
+	self.notdoneMarker = nil
 	self.killer = nil
 	self.light = nil
 	dataSaver.save(self.fileName, self)
 	self.mc = mc
+	self.doneMarker = doneMarker
+	self.notdoneMarker = notdoneMarker
 	self.killer = killer
 	self.light = light
 end
@@ -96,3 +111,27 @@ function Hero.resetAllHeroes()
 		heroes[i] = hero
 	end
 end
+
+function Hero:setCurrent(current)
+	if current then
+		if not self.currentMarker then
+			self.currentMarker = Bitmap.new(Texture.new("images/glow120x120.png"))
+			self.currentMarker:setAlpha(0.5)
+			self.currentMarker:setAnchorPoint(0.5,0.5)
+			self.mc:addChildAt(self.currentMarker,1)	
+		end
+		self.currentMarker:setVisible(true)
+	else
+		if self.currentMarker then
+			self.currentMarker:setVisible(false)
+		end
+	end
+
+end
+
+function Hero:setDone(done)
+	self.done = done
+	self.doneMarker:setVisible(done)
+	self.notdoneMarker:setVisible(not done)
+end
+

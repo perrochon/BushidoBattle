@@ -123,18 +123,18 @@ function MapNavigation:updateStatus()
 
 --[[	
 	-- Check currentHero first
-	if hero.active and hero.turn and hero.c == self.from.c and hero.r == self.from.r then
+	if hero.active and not hero.done and hero.c == self.from.c and hero.r == self.from.r then
 		self.hero = hero
 		return
 	end
 	local hero = heroes[currentHero]
-	if hero.active and hero.turn and hero.c == self.from.c and hero.r == self.from.r then
+	if hero.active and not hero.done and hero.c == self.from.c and hero.r == self.from.r then
 		self.hero = hero
 		return
 	else
 		for _, v in ipairs(heroes) do
 			--DEBUG("Looking for any hero at from location", hero.name, c(hero))
-			if v.c == self.from.c and v.r == self.from.r and v.active and v.turn then
+			if v.c == self.from.c and v.r == self.from.r and v.active and not v.done then
 				self.hero = v
 				self.from.c = v.c
 				self.from.r = v.r			
@@ -146,7 +146,7 @@ function MapNavigation:updateStatus()
 		for _, v in ipairs(heroes) do
 			--DEBUG("Finding any hero with a turn", hero.name, c(hero))
 			-- TODO find closest hero, not first one with a turn
-			if v.active and v.turn then
+			if v.active and not v.done then
 				self.hero = v
 				self.from.c = v.c
 				self.from.r = v.r			
@@ -252,7 +252,7 @@ function MapNavigation:onMouseUp(event)
 		local result = Event.new("line")
 		result.from = copy(self.from)
 		result.to = copy(self.to)
-		DEBUG("Line", c(result.from), c(result.to))
+		--DEBUG("Line", c(result.from), c(result.to))
 		self:dispatchEvent(result)
 		event:stopPropagation()
 	end
