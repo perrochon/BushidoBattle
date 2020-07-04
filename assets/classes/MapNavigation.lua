@@ -107,6 +107,7 @@ end
 function MapNavigation:updateStatus()
 
 	-- are we originating from a hero who still has a turn? 
+	
 	self.hero = ScenePlay:closestHero(self.from)
 	
 	if self.hero then

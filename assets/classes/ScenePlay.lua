@@ -538,7 +538,8 @@ function ScenePlay:heroesTurnOver(hero)
 			allHeroes = false
 		end
 	end
-	if not allHeroes then return end
+	-- TODO PARTYFIX Monsters after each hero's turn?
+	--if not allHeroes then return end
 		
 	-- check if the players won 
 	local targets = 0
@@ -1006,7 +1007,7 @@ end
 	ASSERT_FALSE(hero.done, "Not hero's turn: "..hero.name)
 	if hero.done or not hero.active then DEBUG("Ignoring") return end
 
-	if dc == 0 and dr == 0 then 
+	if from.c == to.c and from.r == to.r then 
 		self:heroesTurnOver(hero)
 		return
 	end
