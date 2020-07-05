@@ -159,7 +159,12 @@ end
 
 function distance(o1, o2)
 	if not o1 or not o2 then return nil end
-	return math.sqrt((o1.c - o2.c)*(o1.c - o2.c) + (o1.r - o2.r)*(o1.r - o2.r))
+	if o1.c and o1.r and o2.c and o2.r then
+		return math.sqrt((o1.c - o2.c)*(o1.c - o2.c) + (o1.r - o2.r)*(o1.r - o2.r))
+	elseif o1.x and o1.y and o2.x and o2.y then
+		return math.sqrt((o1.x - o2.x)*(o1.x - o2.x) + (o1.y - o2.y)*(o1.y - o2.y))
+	end
+	return nil
 end
 
 DISTANCE @ (|
