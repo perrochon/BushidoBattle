@@ -60,12 +60,12 @@ function WorldMap:init(level, monsters) -- TODO rename self.level because of con
 		local toX, toY = self:computeCameraCenter()		
 		--local dx = (toX - self.lastCamera.x) -- TODO FIX get current camera...
 		--local dy = (toY - self.lastCamera.y) 
-		local dx = (toX - self.camera.anchorX) / 20
-		local dy = (toY - self.camera.anchorY) / 20
+		local dx = (toX - self.camera.anchorX) / 15
+		local dy = (toY - self.camera.anchorY) / 15
 		
-		DEBUG(c(toX - self.camera.anchorX,toY - self.camera.anchorY), c(dx, dy))
+		--DEBUG(c(toX - self.camera.anchorX,toY - self.camera.anchorY), c(dx, dy))
 		
-		if (-dx<>dx) > 1 or (-dy<>dy) > 1 then
+		if (-dx<>dx) > .5 or (-dy<>dy) > .5 then
 			self.camera:centerPoint(self.camera.anchorX + dx, self.camera.anchorY + dy)
 		else
 			self.tweenCamera = false
@@ -508,23 +508,32 @@ function WorldMap:lineOfCover(from, to)
 end
 
 
-function WorldMap:setMarker(point, type, grade)
-
+function WorldMap:setMarker(point, type, steps, score)
 	if not self.path then
 		self.path = Sprite.new()
 		self.camera:addChild(self.path)
 	end
 	
 	local types = { 
-		["s"] = {color = COLOR_BLUE, alpha = 0.7},
-		["e"] = {color = COLOR_GREEN, alpha = 0.7},
-		["f"] = {color = COLOR_RED, alpha = 1},
+		["s"] = {color = COLOR_BLUE, alpha = 0.7, size = 50},
+		["e"] = {color = COLOR_GREEN, alpha = 0.7, size = 50},
+		["p"] = {color = COLOR_RED, alpha = 1, size = 20},
+		["f"] = {color = COLOR_YELLOW, alpha = 1, size = 30},		
 		}
 
 	local color
-	if grade then
+	if steps then
+		local marker = Pixel.new(COLOR_GREY, 1, 45,45)
+		marker:setAnchorPoint(0.5,0.5)
+		marker:setPosition((point.c - 0.5) * TILE_WIDTH - 25, (point.r - 0.5) * TILE_HEIGHT - 25)
+		self.path:addChild(marker)
+		local s = TextEdit.new(FONT_DEBUG, tostring(steps),{flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
+		s:setTextColor(COLOR_YELLOW)
+		s:setPosition((point.c - 0.5) * TILE_WIDTH - 25, (point.r - 0.5) * TILE_HEIGHT - 25)
+		self.path:addChild(s)
+
 		f = 25
-		grade = grade * f
+		local grade = steps * f
 		local r = grade><256
 		local g = ((grade-256)<>0) >< 256
 		local b = ((grade-512)<>0) >< 256
@@ -533,10 +542,22 @@ function WorldMap:setMarker(point, type, grade)
 	else
 		color = types[type].color
 	end
-	local marker = Pixel.new(color, types[type].alpha, 20, 20)
+	local marker = Pixel.new(color, types[type].alpha, types[type].size,types[type].size)
 	marker:setAnchorPoint(0.5,0.5)
 	marker:setPosition((point.c - 0.5) * TILE_WIDTH, (point.r - 0.5) * TILE_HEIGHT)
 	self.path:addChild(marker)
+	
+	if score then
+		local marker = Pixel.new(COLOR_GREY, 1, 45,45)
+		marker:setAnchorPoint(0.5,0.5)
+		marker:setPosition((point.c - 0.5) * TILE_WIDTH - 25, (point.r - 0.5) * TILE_HEIGHT + 25)
+		self.path:addChild(marker)
+		local s = TextEdit.new(FONT_DEBUG, tostring(score),{flags = FontBase.TLF_REF_MEDIAN |FontBase.TLF_CENTER|FontBase.TLF_NOWRAP})
+		s:setTextColor(COLOR_YELLOW)
+		s:setPosition((point.c - 0.5) * TILE_WIDTH - 25, (point.r - 0.5) * TILE_HEIGHT + 25)
+		self.path:addChild(s)
+	end
+	
 end
 
 function WorldMap:clearMarkers()
@@ -556,9 +577,6 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 
 	queue = {}
 	found = {}
-	for i = 1, LAYER_COLUMNS * LAYER_ROWS do
-		found[i] = false
-	end
 	iterations = 0
 	
 	from.dc = 0
@@ -569,14 +587,14 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 	local dc,dr = from.c - to.c, from.r - to.r
 	from.score = from.steps + (-dc<>dc)<>(-dr<>dr)
 	table.insert(queue, from)
-	found[self:index(from.c, from.r)] = true	
+	found[self:index(from.c, from.r)] = from	
 	--DEBUG("Starting with", c(from), c(to), c(from.incoming), #queue)
 
 	local maxQueue = #queue
 	
 	local start = os.timer()
 	local timeOut = 0.02 -- in seconds, 0.01 is 10ms, which is enough on windows and Pixel 3
-	
+		
 	while #queue > 0 and (os.timer() - start) < timeOut do
 		-- Test Peasant Mob Map to make sure peasants march. 200 seems to be enough
 	
@@ -595,7 +613,6 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 		table.remove(queue, 1)
 		iterations = iterations + 1
 		--DEBUG("Visiting", current.c, current.r, current.dc, current.dr, current.steps, to.c, to.r, #queue)			
-		--self:setMarker(current, "f", current.steps + 1)
 
  		if current.c == to.c and current.r == to.r then
 			-- TODO FIX Move this into the loop and test next instead of current (avoids adding nodes)
@@ -617,47 +634,74 @@ function WorldMap:shortestPath(from, to, draw, darkness)
 		
 		for dr = -1, 1 do
 			for dc = -1 , 1 do
-				local penalty = 0
-				if dc ~= 0 and dr ~= 0 then penalty = 0.1 end
-				next = {c = current.c + dc, r = current.r + dr}
-				
-				if not found[self:index(next.c, next.r)] 
-					and (dr or dc) 
-					and next.c > 1 and next.c < LAYER_COLUMNS 
-					and next.r > 1 and next.r < LAYER_ROWS then
-					
-					found[self:index(next.c, next.r)] = true	
+				if (dr ~= 0 or dc ~= 0) 
+				and current.c + dc > 1 and current.c + dc < LAYER_COLUMNS 
+				and current.r + dr > 1 and current.r + dr < LAYER_ROWS then
 
-					local key, layer, tile = self:getTileInfo(next.c, next.r)
-					local blocked = (layer == LAYER_ENVIRONMENT and tile.blocked)
+					--DEBUG("Checking", c(current.c + dc,current.r + dr))
 
-					-- A monster next to source stops this path of exploration...
-					if current.steps == 0 then
-						blocked = blocked or (layer == LAYER_MONSTERS)
-					end
-					
-					if not darkness then
-						key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
-						blocked = blocked or tile.cover < -5
+					local penalty = 0
+					if dc ~= 0 and dr ~= 0 then penalty = 0.01 end
+
+					-- Search queue if we have that new node already
+					next = nil
+					for k,v in pairs(found) do
+						if current.c + dc == v.c and current.r + dr == v.r then
+							next = v
+							--DEBUG("Found", c(v))
+							break
+						end	
 					end
 
-					if not blocked then
-						next.steps = current.steps + 1
-						next.incoming = current
-						--next.score = distance(next, to) / 1.41 + next.steps
-						local cc,rr = next.c - to.c, next.r - to.r
-						next.score = from.steps + (-cc<>cc)<>(-rr<>rr) + penalty
-	
-						if current.steps > 0  then -- carry forward on original direction
-							next.dc = current.dc
-							next.dr = current.dr
-						else -- first set of nodes, set initial direction
-							next.dc = dc
-							next.dr = dr					
+					if next == nil then 
+						next = {c = current.c + dc, r = current.r + dr}
+						
+						local key, layer, tile = self:getTileInfo(next.c, next.r)
+						local blocked = (layer == LAYER_ENVIRONMENT and tile.blocked)
+
+						-- A monster next to source stops this path of exploration...
+						if current.steps == 0 then
+							blocked = blocked or (layer == LAYER_MONSTERS)
 						end
-					
-						table.insert(queue, next)
-						--DEBUG("ADDING", next.c, next.r, "|", next.dc, next.dr, "|", next.incoming.c, next.incoming.r)
+						
+						if not darkness then
+							key, layer, tile = self:getTileInfo(next.c, next.r, LAYER_LIGHT)
+							blocked = blocked or tile.cover < -5
+						end
+
+						next.score = math.huge
+						next.steps = math.huge
+						
+						if blocked then 
+							--DEBUG("Blocked", c(next))
+							next = nil 
+						else
+							table.insert(queue, next)
+							found[self:index(next.c, next.r)] = next
+							--DEBUG("Adding", c(next))
+						end												
+					end
+						
+					if next then 
+						
+						if current.steps + 1 + penalty < next.steps then
+							next.steps = current.steps + 1 + penalty
+							local cc,rr = next.c - to.c, next.r - to.r
+							next.score = next.steps + (-cc<>cc)<>(-rr<>rr) 
+							next.incoming = current
+		
+							if current.steps > 0  then -- carry forward on original direction
+								next.dc = current.dc
+								next.dr = current.dr
+							else -- first set of nodes, set initial direction
+								next.dc = dc
+								next.dr = dr					
+							end
+						
+							--self:setMarker(next, "f", next.steps, next.score)
+
+							--DEBUG("Updating", c(next), next.dc, next.dr, next.steps, next.score, c(next.incoming))
+						end
 					end
 				end
 			end

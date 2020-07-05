@@ -105,6 +105,7 @@ FONT_XL @ \TTFont.new("fonts/nuku1.ttf", 200)\
 FONT_LARGE @ \TTFont.new("fonts/nuku1.ttf", 140)\
 FONT_MEDIUM @ \TTFont.new("fonts/nuku1.ttf", 90)\
 FONT_SMALL @ \TTFont.new("fonts/nuku1.ttf", 50)\
+FONT_DEBUG @ \TTFont.new("fonts/nuku1.ttf", 30)\
 
 -- Terrain Size
 TILE_WIDTH @ 100
