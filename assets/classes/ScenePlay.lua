@@ -153,7 +153,6 @@ function ScenePlay:init()
 
 	-- respond to keys pressed (mainly for easier testing on desktop)
 	self:addEventListener(Event.KEY_DOWN, function(event)
-		self.world:shiftWorld3()
 		local alt = application:getKeyboardModifiers() == KeyCode.MODIFIER_ALT
 		DEBUG("Key Down", shift, event.keyCode, event.realCode)			
 		if alt and event.keyCode == KeyCode.NUM_1 then
@@ -247,7 +246,6 @@ function ScenePlay:setCurrentHero(idx)
 	heroes[currentHero]:setCurrent(false)
 	currentHero = idx
 	heroes[idx]:setCurrent(true)
-	self.world:shiftWorld2()
 end
 
 function ScenePlay:placeLoot(entry, c, r)	
@@ -1008,7 +1006,7 @@ end
 	if hero.done or not hero.active then DEBUG("Ignoring") return end
 
 	if from.c == to.c and from.r == to.r then 
-		self:heroesTurnOver(hero)
+		-- self:heroesTurnOver(hero) -- Clicking on a hero
 		return
 	end
 

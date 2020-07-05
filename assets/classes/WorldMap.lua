@@ -47,9 +47,52 @@ function WorldMap:init(level, monsters) -- TODO rename self.level because of con
 	self.camera:addChild(self.mapLayers[LAYER_LIGHT]) 
 	--self:debugMapInfo(LAYER_LIGHT)	
 
-    self:shiftWorld(heroes[currentHero])
-
 	self:addChild(self.camera)
+	local x,y = self:computeCameraCenter()
+	self.camera:centerPoint(self:computeCameraCenter())
+	self.tweenCamera = true
+	
+	self:addEventListener(Event.ENTER_FRAME, function(event) 
+
+		if not self.tweenCamera then return end -- not tweening camera
+		if self.camera.isFocus then self.tweenCamera = false return end -- stop tweening on drag/scale
+	
+		local toX, toY = self:computeCameraCenter()		
+		--local dx = (toX - self.lastCamera.x) -- TODO FIX get current camera...
+		--local dy = (toY - self.lastCamera.y) 
+		local dx = (toX - self.camera.anchorX) / 20
+		local dy = (toY - self.camera.anchorY) / 20
+		
+		DEBUG(c(toX - self.camera.anchorX,toY - self.camera.anchorY), c(dx, dy))
+		
+		if (-dx<>dx) > 1 or (-dy<>dy) > 1 then
+			self.camera:centerPoint(self.camera.anchorX + dx, self.camera.anchorY + dy)
+		else
+			self.tweenCamera = false
+		end
+	end)
+end
+
+CURRENT_HERO_WEIGHT = 5
+function WorldMap:computeCameraCenter()
+	-- Compute weighted middle of all active heroes
+	
+	local x = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getX()
+	local y = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getY()
+	local count = CURRENT_HERO_WEIGHT
+	
+	for k, v in ipairs(heroes) do
+		if v.active then 
+			x = x + v.mc:getX()
+			y = y + v.mc:getY()
+			count = count + 1
+		end
+	end
+
+	x = x / count
+	y = y / count
+	
+	return x, y
 end
 
 function WorldMap:index(c, r) --index of cell (c,r)
@@ -207,37 +250,6 @@ function WorldMap:clearTile(c, r, layerId)
 	self.mapLayers[layerId]:clearTile(c, r)
 end
 
-function WorldMap:shiftWorld(hero)
-	--[[Moves the camera to the hero's location
-		May require more complexity with multiple heroes
-		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
-	--]]
-	
-	self.camera:centerPoint(hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT)
-	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
-	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
-	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
-end
-
-function WorldMap:shiftWorld2()
-	--[[Moves the camera to the hero's location
-		May require more complexity with multiple heroes
-		May need changes after user testing. E.g. if user pans the map, should we not re-center on hero?
-	--]]
-	
-	self.camera:centerPoint(heroes[currentHero].mc:getX(), heroes[currentHero].mc:getY())
-	--DEBUG("Hero:", hero.c * TILE_WIDTH, hero.r * TILE_HEIGHT, hero.c, hero.r, 
-	--      "camera:", self.camera.anchorX, self.camera.anchorY, 
-	--		"Position", self.camera:getPosition(), "Scale:", self.camera:getScale()) 
-end
-
-function WorldMap:shiftWorld3()
-
-	-- Need to manually tween camera because gtween not compatible with camera?
-
-end
-
-
 function WorldMap:moveHero(hero, dc, dr)
 	--[[change the mapArrays and mapLayers location of a hero and 
 		if it's the local hero, shift the TileMap and the light
@@ -252,13 +264,9 @@ function WorldMap:moveHero(hero, dc, dr)
 	self:adjustLight(hero, dc, dr)
 	--end
 
+	self.tweenCamera = true
 	--for purposes of moving around the map, the hero is just another monster
-	local tween = self:moveMonster(hero, dc, dr)
-	
-	tween.onChange = function()
-		self:shiftWorld2()
-	end
-	
+	local tween = self:moveMonster(hero, dc, dr)		
 	return tween
 end
 
