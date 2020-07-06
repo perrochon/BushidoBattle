@@ -73,7 +73,7 @@ function WorldMap:init(level, monsters) -- TODO rename self.level because of con
 	end)
 end
 
-CURRENT_HERO_WEIGHT = 5
+CURRENT_HERO_WEIGHT @ 5
 function WorldMap:computeCameraCenter()
 	-- Compute weighted middle of all active heroes
 	
