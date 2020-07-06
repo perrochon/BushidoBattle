@@ -38,7 +38,6 @@ This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.ph
 ScenePlay = Core.class(Sprite)
 
 activeAction = "" -- TODO FIX ugly global because MapNavigation needs to know and Main Screen sets, but they are siblings
-
  
 function ScenePlay:init()
 
@@ -130,17 +129,17 @@ function ScenePlay:init()
 	--end
 
 	--respond to the compass directions
-	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:checkMove(heroes[currentHero], 0, -1) end)
-	self.main.south:addEventListener("click", function() ScenePlay:cheater(1) self:checkMove(heroes[currentHero], 0, 1)  end)
-	self.main.west:addEventListener("click", function() ScenePlay:cheater(2) self:checkMove(heroes[currentHero], -1, 0)  end)
-	self.main.east:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, 0)  end)
-	self.main.northwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], -1, -1)  end)
-	self.main.northeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, -1)  end)
-	self.main.southwest:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], -1, 1)  end)
-	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:checkMove(heroes[currentHero], 1, 1)  end)
+	self.main.north:addEventListener("click", function() ScenePlay:cheater(0) self:go(0, -1) end)
+	self.main.south:addEventListener("click", function() ScenePlay:cheater(1) self:go(0, 1)  end)
+	self.main.west:addEventListener("click", function() ScenePlay:cheater(2) self:go(-1, 0)  end)
+	self.main.east:addEventListener("click", function() ScenePlay:cheater(3) self:go(1, 0)  end)
+	self.main.northwest:addEventListener("click", function() ScenePlay:cheater(3) self:go(-1, -1)  end)
+	self.main.northeast:addEventListener("click", function() ScenePlay:cheater(3) self:go(1, -1)  end)
+	self.main.southwest:addEventListener("click", function() ScenePlay:cheater(3) self:go(-1, 1)  end)
+	self.main.southeast:addEventListener("click", function() ScenePlay:cheater(3) self:go(1, 1)  end)
 	self.main.center:addEventListener("click", function()
 		if ScenePlay:cheater(4) then self.main:displayCheats() end
-		self:checkMove(heroes[currentHero], 0, 0)
+		self:heroesTurnOver(heroes[currentHero])
 	end)
 
 	self.cheat = ""
@@ -164,24 +163,24 @@ function ScenePlay:init()
 		elseif alt and event.keyCode == KeyCode.NUM_4 then
 			self:setCurrentHero(4)
 		elseif event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
-			self:checkMove(heroes[currentHero], 0, -1)
+			self:go(0, -1)
 		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
-			self:checkMove(heroes[currentHero], 0, 1)
+			self:go(0, 1)
 		elseif event.keyCode == KeyCode.LEFT or event.keyCode == KeyCode.A or event.keyCode == KeyCode.NUM_4 then
-			self:checkMove(heroes[currentHero], -1, 0)
+			self:go(-1, 0)
 		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D or event.keyCode == KeyCode.NUM_6 then
-			self:checkMove(heroes[currentHero], 1, 0)
+			self:go(1, 0)
 			
 		elseif event.keyCode == KeyCode.C or event.keyCode == KeyCode.NUM_3 then
-			self:checkMove(heroes[currentHero], 1, 1)
+			self:go(1, 1)
 		elseif event.keyCode == KeyCode.E or event.keyCode == KeyCode.NUM_9 then
-			self:checkMove(heroes[currentHero], 1, -1)
+			self:go(1, -1)
 		elseif event.keyCode == KeyCode.Z or event.keyCode == KeyCode.NUM_1 then
-			self:checkMove(heroes[currentHero], -1, 1)
+			self:go(-1, 1)
 		elseif event.keyCode == KeyCode.Q or event.keyCode == KeyCode.NUM_7 then
-			self:checkMove(heroes[currentHero], -1, -1)		
+			self:go(-1, -1)		
 		elseif event.keyCode == KeyCode.SPACE or event.keyCode == KeyCode.NUM_5 then
-			self:checkMove(heroes[currentHero], 0, 0)
+			self:heroesTurnOver(heroes[currentHero])
 		elseif event.keyCode == KeyCode.M then
 			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
 			self.world.camera:centerAnchor()
@@ -252,90 +251,6 @@ function ScenePlay:placeLoot(entry, c, r)
 	local coin = Loot.new(entry, c, r)
 	self.world.camera:addChildAt(coin,3)
 	self.loots:add(coin)
-end
-
-function ScenePlay:checkMove(hero, dc, dr)
-	--[[move the hero if the tile isn't blocked
-	--]]
-
-	DEBUG(h(), hero.id, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
-	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
-	ASSERT_FALSE(hero.done, "Not hero's turn: "..hero.name)
-	if not hero.active or hero.done then return end
-
-	if dc == 0 and dr == 0 then 
-		self:heroesTurnOver(hero)
-		return
-	end
-	
-	-- first we need the tile key and layer for where the hero wants to move
-	--DEBUG(hero, dc, dr)
-	
-	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
-	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
-
-	if activeAction == "look" then 
-		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
-		return
-	elseif activeAction == "attack" then 
-		if layer == LAYER_MONSTERS then
-			self:attackMonster(hero.c + dc, hero.r + dr)
-			return
-		else -- change mode to "move" on the fly
-			-- self.msg:add("Not a monster", MSG_DESCRIPTION)
-			activeAction = "move"
-			self.main.melee:updateVisualState(false)
-			self.main.move:updateVisualState(true)
-			self.main.look:updateVisualState(false)
-			self.main.ranged:updateVisualState(false)
-			-- drop out of two ifs and continue with move
-		end
-	end
-
-	if activeAction == "move" then
-		if layer == LAYER_MONSTERS then -- LAYER_MONSTERS contains the hero itself...
-			-- allow them to bump and melee attack when moving			
-			activeAction = "attack"
-			hero.weapon = hero.weapons[1]
-			self.main.melee:updateVisualState(true)
-			self.main.move:updateVisualState(false)
-			self.main.look:updateVisualState(false)
-			self.main.ranged:updateVisualState(false)
-			self:attackMonster(hero.c + dc, hero.r + dr)
-			return
-		elseif layer == LAYER_ENVIRONMENT then
-			-- check for blocked tiles
-			if tile.blocked then
-				--DEBUG(activeAction, hero.x + dc, hero.r + dr, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
-				self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
-			return
-			else
-				-- drop out of two if's and continue move
-			end
-		end
-
-		-- we move
-		local tween = self.world:moveHero(hero, dc, dr)
-		self:heroPlayed(hero)
-		self.sounds:play("hero-steps")
-		
-		tween.onComplete = function(event) 
-			hero.mc:idle() 
-			local loot = self.loots:check(hero.c, hero.r, true)
-			if loot then
-				self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
-				hero.money = hero.money + loot.value
-				self.world.camera:removeChild(loot)
-			end
-			self:heroesTurnOver(hero)
-		end
-		
-		if self.remote then
-			--DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
-			--self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
-		else
-		end
-	end
 end
  
 function ScenePlay:syncTurn(heroIdx, x, y, monsterIdx, monsterHp, monsterHpBar, sender)
@@ -959,6 +874,93 @@ function ScenePlay:cheater(want)
 	end
 end
 
+function ScenePlay:go(dc, dr)
+	-- one tile moves of currentHero (used by keyboard and button click events)	
+	local c,r = heroes[currentHero].c, heroes[currentHero].r
+	self:onLine({from = { c = c, r = r }, to = { c = c + dc, r = r + dr }})
+end
+
+--[[
+	DEBUG(h(), hero.id, hero.active, dc, dr, hero.c + dc, hero.r + dr, activeAction)
+	ASSERT_TRUE(hero.active, "Hero not active: "..hero.name)
+	ASSERT_FALSE(hero.done, "Not hero's turn: "..hero.name)
+	if not hero.active or hero.done then return end
+
+	if dc == 0 and dr == 0 then 
+		self:heroesTurnOver(hero)
+		return
+	end
+	
+	-- first we need the tile key and layer for where the hero wants to move
+	--DEBUG(hero, dc, dr)
+	
+	local entry, layer, tile = self.world:getTileInfo(hero.c + dc, hero.r + dr)
+	--DEBUG("Tile", entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+
+	if activeAction == "look" then 
+		self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
+		return
+	elseif activeAction == "attack" then 
+		if layer == LAYER_MONSTERS then
+			self:attackMonster(hero.c + dc, hero.r + dr)
+			return
+		else -- change mode to "move" on the fly
+			-- self.msg:add("Not a monster", MSG_DESCRIPTION)
+			activeAction = "move"
+			self.main.melee:updateVisualState(false)
+			self.main.move:updateVisualState(true)
+			self.main.look:updateVisualState(false)
+			self.main.ranged:updateVisualState(false)
+			-- drop out of two ifs and continue with move
+		end
+	end
+
+	if activeAction == "move" then
+		if layer == LAYER_MONSTERS then -- LAYER_MONSTERS contains the hero itself...
+			-- allow them to bump and melee attack when moving			
+			activeAction = "attack"
+			hero.weapon = hero.weapons[1]
+			self.main.melee:updateVisualState(true)
+			self.main.move:updateVisualState(false)
+			self.main.look:updateVisualState(false)
+			self.main.ranged:updateVisualState(false)
+			self:attackMonster(hero.c + dc, hero.r + dr)
+			return
+		elseif layer == LAYER_ENVIRONMENT then
+			-- check for blocked tiles
+			if tile.blocked then
+				--DEBUG(activeAction, hero.x + dc, hero.r + dr, entry, layer, tile.id, tile.name, tile.blocked, tile.cover)
+				self.msg:add("A " .. tile.name, MSG_DESCRIPTION) 
+			return
+			else
+				-- drop out of two if's and continue move
+			end
+		end
+
+		-- we move
+		local tween = self.world:moveHero(hero, dc, dr)
+		self:heroPlayed(hero)
+		self.sounds:play("hero-steps")
+		
+		tween.onComplete = function(event) 
+			hero.mc:idle() 
+			local loot = self.loots:check(hero.c, hero.r, true)
+			if loot then
+				self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
+				hero.money = hero.money + loot.value
+				self.world.camera:removeChild(loot)
+			end
+			self:heroesTurnOver(hero)
+		end
+		
+		if self.remote then
+			--DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
+			--self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
+		else
+		end
+	end
+	
+	--]]
 
  function ScenePlay:onLine(event)
 	--[[respond to the user click/touch event on the map.
@@ -1012,6 +1014,7 @@ end
 
 	if layerTo == LAYER_MONSTERS and keyTo ==1 then
 		-- line (from a hero) to another hero
+		self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
 		return
 	end
 	
@@ -1057,13 +1060,49 @@ end
 			self.main.ranged:updateVisualState(false)
 			-- no return, drop out of two ifs and continue with move
 		end
+	elseif layerTo == LAYER_ENVIRONMENT then
+		-- check for blocked tiles
+		if tileTo.blocked then
+			-- Check for loot
+			local loot = self.loots:check(to.c, to.r, false)
+			if loot then
+				self.msg:add("A " .. loot.name, MSG_DESCRIPTION)
+			else
+				self.msg:add("A " .. tileTo.name, MSG_DESCRIPTION)
+			end
+			return
+		else
+			-- drop out of two if's and continue move
+		end
 	end
 
 	-- All that's left is moving towards to
 
 	local dc, dr = self.world:shortestPath(from, to, false, false)
-	
+		
 	--DEBUG(("Hero is at %d,%d walking %d,%d"):format(hero.c, hero.r, dc, dr))
-	self:checkMove(hero, dc, dr)
+	--self:checkMove(hero, dc, dr)
+	
+	-- we move
+	local tween = self.world:moveHero(hero, dc, dr)
+	self:heroPlayed(hero)
+	self.sounds:play("hero-steps")
+	
+	tween.onComplete = function(event) 
+		hero.mc:idle() 
+		local loot = self.loots:check(hero.c, hero.r, true)
+		if loot then
+			self.msg:add("Picked up a " .. loot.name, MSG_DESCRIPTION)
+			hero.money = hero.money + loot.value
+			self.world.camera:removeChild(loot)
+		end
+		self:heroesTurnOver(hero)
+	end
+	
+	if self.remote then
+		--DEBUG("MOVE", "Hero", hero.id, hero.x, hero.r, "Monster", nil, nil)
+		--self:syncTurn(hero.heroIdx, hero.x, hero.r, 0, 0, 0) 
+	else
+	end
 end
 
