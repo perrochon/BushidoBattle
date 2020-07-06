@@ -1006,9 +1006,15 @@ end
 	if hero.done or not hero.active then DEBUG("Ignoring") return end
 
 	if from.c == to.c and from.r == to.r then 
-		-- self:heroesTurnOver(hero) -- Clicking on a hero
+		-- Clicking on a hero
 		return
 	end
+
+	if layerTo == LAYER_MONSTERS and keyTo ==1 then
+		-- line (from a hero) to another hero
+		return
+	end
+	
 
 	-- TODO FIX PARTY need to use something like code above when we support parties
 	hero = heroes[currentHero]
