@@ -18,9 +18,8 @@ RELEASE NOTES
 		- Update Version number
 
 next 
-	- Loot! Woot!
-	- Map Navigation upgrades (paths, attack when in range)
-	- Hero name input works in HTML again (using non-native input now)
+	- Routing fixes
+	- parties
 
 known issues 
 	- 2-player mode broken ("connect")
