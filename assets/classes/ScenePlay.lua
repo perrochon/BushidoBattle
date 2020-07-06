@@ -156,12 +156,16 @@ function ScenePlay:init()
 		DEBUG("Key Down", shift, event.keyCode, event.realCode)			
 		if alt and event.keyCode == KeyCode.NUM_1 then
 			self:setCurrentHero(1)
+			self.world.tweenCamera = true
 		elseif alt and event.keyCode == KeyCode.NUM_2 then
 			self:setCurrentHero(2)
+			self.world.tweenCamera = true
 		elseif alt and event.keyCode == KeyCode.NUM_3 then
 			self:setCurrentHero(3)
+			self.world.tweenCamera = true
 		elseif alt and event.keyCode == KeyCode.NUM_4 then
 			self:setCurrentHero(4)
+			self.world.tweenCamera = true
 		elseif event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
 			self:go(0, -1)
 		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
@@ -973,9 +977,8 @@ end
 	
 	local keyFrom, layerFrom, tileFrom = self.world:getTileInfo(from.c, from.r)
 	local keyTo, layerTo, tileTo = self.world:getTileInfo(to.c, to.r)
-	DEBUG("onLine", c(from), manual:getEntry("layers", layerFrom), keyFrom, "to", c(to), manual:getEntry("layers", layerTo), keyTo)
-
-	DEBUG(h())
+	--DEBUG("onLine", c(from), manual:getEntry("layers", layerFrom), keyFrom, "to", c(to), manual:getEntry("layers", layerTo), keyTo)
+	--DEBUG(h())
 	
 	-- Look
 	if activeAction == "look" then
@@ -999,6 +1002,7 @@ end
 			--DEBUG("found", v.name)
 			hero = v
 			self:setCurrentHero(v.id)
+			self.world.tweenCamera = true
 			break
 		end
 	end
