@@ -48,7 +48,7 @@ function WorldMap:init(level, monsters) -- TODO rename self.level because of con
 	--self:debugMapInfo(LAYER_LIGHT)	
 
 	self:addChild(self.camera)
-	local x,y = self:computeCameraCenter()
+	--local x,y = self:computeCameraCenter()
 	self.camera:centerPoint(self:computeCameraCenter())
 	self.tweenCamera = true
 	
@@ -77,22 +77,26 @@ CURRENT_HERO_WEIGHT @ 5
 function WorldMap:computeCameraCenter()
 	-- Compute weighted middle of all active heroes
 	
-	local x = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getX()
-	local y = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getY()
-	local count = CURRENT_HERO_WEIGHT
-	
-	for k, v in ipairs(heroes) do
-		if v.active then 
-			x = x + v.mc:getX()
-			y = y + v.mc:getY()
-			count = count + 1
+	if true then
+		return heroes[currentHero].mc:getX(), heroes[currentHero].mc:getY()
+	else
+		local x = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getX()
+		local y = CURRENT_HERO_WEIGHT * heroes[currentHero].mc:getY()
+		local count = CURRENT_HERO_WEIGHT
+		
+		for k, v in ipairs(heroes) do
+			if v.active then 
+				x = x + v.mc:getX()
+				y = y + v.mc:getY()
+				count = count + 1
+			end
 		end
-	end
 
-	x = x / count
-	y = y / count
-	
-	return x, y
+		x = x / count
+		y = y / count
+		
+		return x, y
+	end
 end
 
 function WorldMap:index(c, r) --index of cell (c,r)

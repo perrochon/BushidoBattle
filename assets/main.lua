@@ -17,11 +17,13 @@ numberOfMaps = 9
 heroes = {} -- We support 4 heroes that will go in this array
 
 -- Reset all heroes
+-- TODO FIX why all set active here? Why set current
 Hero.resetAllHeroes()
 heroes[1]:setActive(true)
 heroes[2]:setActive(true)
-currentHero = 1 -- currently playing hero
+heroes[4]:setActive(true)
 heroes[1]:setCurrent(true)
+currentHero = 1
 
 --localHero = currentHero -- The map centers around her -- TODO remove all commented out references to localHero
 

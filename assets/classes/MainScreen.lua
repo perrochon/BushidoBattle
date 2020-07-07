@@ -83,18 +83,25 @@ function MainScreen:init()
 	heroBg:setAnchorPosition(60,60)
 	self:addChild(heroBg)
 
-	self.view = Viewport.new()
-	self.view:setClip(-50,-70,100,100)
-	self.view:setContent(heroes[currentHero].mc.mc)
-	self.view:setPosition(FG_X + 100, 320)
-	self.view:setTransform(Matrix.new(2,0,0,2)) -- this matrix doubles x,y scale
-	self:addChild(self.view)
+	local heroBg1 = Pixel.new(COLOR_LTGREY, 1, 120, 120)
+	local heroBg2 = Pixel.new(COLOR_DKGREY, 1, 120, 120)
+	self.pic = Button.new(heroBg1, heroBg2)
+	self.pic:setPosition(FG_X + 100, 300)
+	self.pic:setAnchorPosition(60,60)
+	self:addChild(self.pic)
 
+	self.pic_ = Viewport.new()
+	self.pic_:setClip(-50,-70,100,100)
+	self.pic_:setContent(heroes[currentHero].mc.mc)
+	self.pic_:setPosition(FG_X + 100, 320)
+	self.pic_:setTransform(Matrix.new(2,0,0,2)) -- this matrix doubles x,y scale
+	self:addChild(self.pic_)
 	
+
 	self:addEventListener(Event.ENTER_FRAME, function(event) 
 		-- TODO maybe don't need to do on each frame? Do when any of the below change only
 		self.hero = heroes[currentHero]
-		self.view:setContent(heroes[currentHero].mc.mc)
+		self.pic_:setContent(heroes[currentHero].mc.mc)
 		self.name:setText(self.hero.name)
 		self.level:setText("Level: " .. self.hero.level)
 		self.kills:setText("Kills: " .. self.hero.kills)
