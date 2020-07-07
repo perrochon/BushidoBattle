@@ -79,17 +79,21 @@ function Hero:save()
 	local mc = self.mc
 	local doneMarker = self.doneMarker
 	local notdoneMarker = self.notdoneMarker
+	local currentMarker = self.currentMarker
 	local killer = self.killer
 	local light = self.light
 	self.mc = nil
 	self.doneMarker = nil
 	self.notdoneMarker = nil
+	self.currentMarker = nil
 	self.killer = nil
 	self.light = nil
+	dump(self, "  ")
 	dataSaver.save(self.fileName, self)
 	self.mc = mc
 	self.doneMarker = doneMarker
 	self.notdoneMarker = notdoneMarker
+	self.currentMarker = currentMarker
 	self.killer = killer
 	self.light = light
 end
