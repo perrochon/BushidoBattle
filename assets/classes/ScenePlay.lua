@@ -86,6 +86,7 @@ function ScenePlay:init()
 			heroes[i]:setDone(false)
 		end
 		if currentMapFileName == "maps/map00" then	heroes[i].hp = 10000 heroes[i].maxHP = 10000 end -- DEBUG buff heroes for testing map
+		heroes[i]:save()
 	end
 	
 	-- load monsters 
@@ -114,6 +115,12 @@ function ScenePlay:init()
 	--get everything on the screen
 	self:addChild(self.world)
 	self:addChild(self.msg)
+	
+	--respond to mouse and touch events. Add this on top of the world
+	local nav = MapNavigation.new(self.world)
+	self:addChild(nav)
+	nav:addEventListener("line", self.onLine, self)
+
 	self.main = MainScreen.new()
 	self:addChild(self.main)
 	
@@ -168,13 +175,12 @@ function ScenePlay:init()
 			self.world.tweenCamera = true
 		elseif event.keyCode == KeyCode.UP or event.keyCode == KeyCode.W or event.keyCode == KeyCode.NUM_8 then
 			self:go(0, -1)
-		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_2 then
+		elseif event.keyCode == KeyCode.DOWN or event.keyCode == KeyCode.X or event.keyCode == KeyCode.NUM_2 then
 			self:go(0, 1)
 		elseif event.keyCode == KeyCode.LEFT or event.keyCode == KeyCode.A or event.keyCode == KeyCode.NUM_4 then
 			self:go(-1, 0)
 		elseif event.keyCode == KeyCode.RIGHT or event.keyCode == KeyCode.D or event.keyCode == KeyCode.NUM_6 then
 			self:go(1, 0)
-			
 		elseif event.keyCode == KeyCode.C or event.keyCode == KeyCode.NUM_3 then
 			self:go(1, 1)
 		elseif event.keyCode == KeyCode.E or event.keyCode == KeyCode.NUM_9 then
@@ -183,8 +189,10 @@ function ScenePlay:init()
 			self:go(-1, 1)
 		elseif event.keyCode == KeyCode.Q or event.keyCode == KeyCode.NUM_7 then
 			self:go(-1, -1)		
-		elseif event.keyCode == KeyCode.SPACE or event.keyCode == KeyCode.NUM_5 then
+		elseif event.keyCode == KeyCode.S or event.keyCode == KeyCode.NUM_5 then
 			self:heroesTurnOver(heroes[currentHero])
+		elseif event.keyCode == KeyCode.SPACE then
+			self:nextActiveHero()
 		elseif event.keyCode == KeyCode.M then
 			self.world.camera:setScale(self.world.camera:getScaleX()*1.2,self.world.camera:getScaleY()*1.2) 
 			self.world.camera:centerAnchor()
@@ -232,14 +240,16 @@ function ScenePlay:init()
 	  self.main.ranged:updateVisualState(true)
 	  self.main.move:updateVisualState(false)
 	  self.main.look:updateVisualState(false)
-	 self.main.melee:updateVisualState(false)
+	   self.main.melee:updateVisualState(false)
 	end)
-
-	--respond to mouse and touch events. Add this on top of the world
-	local nav = MapNavigation.new(self.world)
-	self:addChild(nav)
 	
-	nav:addEventListener("line", self.onLine, self)
+	local world = self.world
+	
+	-- TODO How to switch heroes on MainScreen...
+	self.main.pic:addEventListener("click", function(event)
+		ScenePlay:nextActiveHero()
+		world.tweenCamera = true
+	end)	
 	
 	self.ready = true
 	if self.remote then self:syncState() end
@@ -249,6 +259,18 @@ function ScenePlay:setCurrentHero(idx)
 	heroes[currentHero]:setCurrent(false)
 	currentHero = idx
 	heroes[idx]:setCurrent(true)
+end
+
+function ScenePlay:nextActiveHero()
+	-- changes currentHero to next active hero. If no active heroes, leaves it unchanged.
+	local idx = currentHero
+	for h = 1, 3 do
+		idx = ((idx) % 4) + 1
+		if heroes[idx].active then
+			self:setCurrentHero(idx)
+			break
+		end
+	end
 end
 
 function ScenePlay:placeLoot(entry, c, r)	
@@ -1002,7 +1024,6 @@ end
 			--DEBUG("found", v.name)
 			hero = v
 			self:setCurrentHero(v.id)
-			self.world.tweenCamera = true
 			break
 		end
 	end
